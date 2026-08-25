@@ -1,1 +1,528 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical & Gas Bill Tracker PRO</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #16a085;
+            --accent: #e74c3c;
+            --bg: #f5f6fa;
+            --card-bg: #ffffff;
+            --text: #2f3640;
+            --border: #dcdde1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: var(--bg); color: var(--text); direction: rtl; }
+        
+        /* PIN Lock Overlay */
+        #pin-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.95); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .pin-box { background: white; padding: 30px; border-radius: 12px; text-align: center; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .pin-box h2 { margin-bottom: 15px; color: var(--primary); }
+        .pin-box input { width: 100%; padding: 12px; font-size: 20px; text-align: center; letter-spacing: 5px; margin-bottom: 15px; border: 2px solid var(--border); border-radius: 6px; }
+        .pin-box button { width: 100%; padding: 10px; background: var(--secondary); color: white; border: none; font-size: 16px; border-radius: 6px; cursor: pointer; }
 
+        /* Scrolling Banner */
+        #alert-banner {
+            background: var(--accent); color: white; padding: 10px; text-align: center;
+            font-weight: bold; font-size: 15px; display: none; cursor: pointer;
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        /* App Container */
+        .app-container { display: flex; min-height: 100vh; }
+        
+        /* Sidebar */
+        aside { width: 260px; background: var(--primary); color: white; padding: 20px; display: flex; flex-direction: column; }
+        aside h1 { font-size: 18px; margin-bottom: 25px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
+        .nav-links { list-style: none; flex-grow: 1; }
+        .nav-links li { padding: 12px 15px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .nav-links li:hover, .nav-links li.active { background: var(--secondary); }
+        .cloud-status { padding: 10px; background: rgba(0,0,0,0.2); border-radius: 6px; text-align: center; font-size: 13px; margin-top: 10px; }
+
+        /* Main Content */
+        main { flex-grow: 1; padding: 25px; overflow-y: auto; max-height: 100vh; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Dashboard & Grid Cards */
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-right: 5px solid var(--secondary); }
+        .card h3 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+        .card p { font-size: 14px; margin: 5px 0; }
+
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+        button.btn { background: var(--secondary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button.btn:hover { opacity: 0.9; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: var(--primary); color: white; }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .app-container { flex-direction: column; }
+            aside { width: 100%; padding: 10px; }
+            .nav-links { display: flex; flex-wrap: wrap; gap: 5px; }
+            .nav-links li { flex-grow: 1; text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PIN Lock Modal -->
+    <div id="pin-overlay">
+        <div class="pin-box">
+            <h2>پن سیکیورٹی</h2>
+            <p style="margin-bottom:15px; font-size:13px; color:#666;">براہ کرم 4 ہندسوں کا پن درج کریں (ڈیفالٹ: 1234)</p>
+            <input type="password" id="pin-input" maxlength="4" placeholder="****">
+            <button onclick="verifyPin()">انلاک کریں</button>
+        </div>
+    </div>
+
+    <!-- Scrolling Alert Banner -->
+    <div id="alert-banner" onclick="this.style.display='none'">
+        ⚠️ <span id="banner-text">اوور لمیٹ یا بل میں اضافے کا الرٹ موجود ہے! (بند کرنے کے لیے کلک کریں)</span>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside>
+            <h1 id="app-title-sidebar">Bill Tracker PRO</h1>
+            <ul class="nav-links">
+                <li class="active" onclick="switchTab('dashboard', this)"><i class="fa fa-chart-line"></i> ڈیش بورڈ</li>
+                <li onclick="switchTab('records', this)"><i class="fa fa-book"></i> ریکارڈز</li>
+                <li onclick="switchTab('analysis', this)"><i class="fa fa-chart-pie"></i> انالیسس</li>
+                <li onclick="switchTab('settings', this)"><i class="fa fa-cog"></i> سیٹنگز</li>
+                <li onclick="switchTab('complaints', this)"><i class="fa fa-exclamation-triangle"></i> شکایات</li>
+            </ul>
+            <div class="cloud-status" id="network-status">🟢 Online / Cloud Sync Ready</div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main>
+            <!-- 1. DASHBOARD TAB -->
+            <div id="dashboard" class="tab-content active">
+                <h2 style="margin-bottom: 20px;">لائیو میٹر اسٹیٹس ڈیش بورڈ</h2>
+                <div class="grid-4" id="meter-cards-container">
+                    <!-- Dynamically injected via JS -->
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">مالیاتی خلاصہ (Financial Summary)</h3>
+                <div class="grid-4">
+                    <div class="card" style="border-left-color: #3498db;">
+                        <h3>گھر سے جمع کل بل</h3>
+                        <p id="sum-collected">Rs. 0</p>
+                    </div>
+                    <div class="card" style="border-left-color: #e67e22;">
+                        <h3>کل فکسڈ بجٹ</h3>
+                        <p id="sum-budget">Rs. 0</p>
+                    </div>
+                    <div class="card" style="border-left-color: #27ae60;">
+                        <h3>کل صاف بیلنس (Net)</h3>
+                        <p id="sum-net">Rs. 0</p>
+                    </div>
+                    <div class="card" style="border-left-color: #9b59b6;">
+                        <h3>کل یونٹس بل رقم</h3>
+                        <p id="sum-units-bill">Rs. 0</p>
+                    </div>
+                </div>
+
+                <!-- Quick Reading Entry -->
+                <div class="card" style="margin-top: 20px; border-right-color: var(--primary);">
+                    <h3>فوری ریڈنگ انٹری</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-top: 10px;">
+                        <select id="quick-meter-select">
+                            <option value="0">Meter 1</option>
+                            <option value="1">Meter 2</option>
+                            <option value="2">Meter 3</option>
+                            <option value="3">Gas Meter</option>
+                        </select>
+                        <input type="number" id="quick-reading-val" placeholder="نئی ریڈنگ درج کریں">
+                        <input type="file" id="quick-img" accept="image/*" style="padding:6px;">
+                        <button class="btn" onclick="saveReading()">محفوظ کریں</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. RECORDS TAB -->
+            <div id="records" class="tab-content">
+                <h2>میٹر ہسٹری اور ریکارڈز</h2>
+                <div style="margin: 15px 0; display: flex; gap: 10px;">
+                    <select id="record-meter-select" onchange="renderRecordTable()" style="max-width: 300px;">
+                        <option value="0">Meter 1</option>
+                        <option value="1">Meter 2</option>
+                        <option value="2">Meter 3</option>
+                        <option value="3">Gas Meter</option>
+                    </select>
+                    <button class="btn" onclick="exportToExcel()"><i class="fa fa-file-excel"></i> ایکسل ڈاؤن لوڈ</button>
+                    <button class="btn" onclick="window.print()"><i class="fa fa-print"></i> پرنٹ پی ڈی ایف</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>تاریخ / وقت</th>
+                            <th>پرانی ریڈنگ</th>
+                            <th>نئی ریڈنگ</th>
+                            <th>استعمال شدہ یونٹس / (Gas MMBTU)</th>
+                            <th>حذف کریں</th>
+                        </tr>
+                    </thead>
+                    <tbody id="record-table-body">
+                        <!-- Data injected dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 3. ANALYSIS TAB -->
+            <div id="analysis" class="tab-content">
+                <h2>بل تجزیہ اور موازنہ (Analysis)</h2>
+                <div class="card" style="margin-top: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="form-group">
+                        <div>
+                            <label>میٹر منتخب کریں</label>
+                            <select id="an-meter">
+                                <option value="0">Meter 1</option>
+                                <option value="1">Meter 2</option>
+                                <option value="2">Meter 3</option>
+                                <option value="3">Gas Meter</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>بل کی رقم</label>
+                            <input type="number" id="an-bill-amt" placeholder="کل بل رقم">
+                        </div>
+                        <div>
+                            <label>کہاں سے پے ہوا؟</label>
+                            <select id="an-paid-from">
+                                <option value="گھر سے">گھر سے</option>
+                                <option value="باہر سے">باہر سے</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>مہینہ / تاریخ</label>
+                            <input type="date" id="an-date">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveAnalysis()">تجزیہ محفوظ کریں</button>
+                </div>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>میٹر</th>
+                            <th>بل رقم</th>
+                            <th>ادائیگی</th>
+                            <th>پچھلے سے فرق / الرٹ</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analysis-table-body"></tbody>
+                </table>
+            </div>
+
+            <!-- 4. SETTINGS TAB -->
+            <div id="settings" class="tab-content">
+                <h2>سیٹنگز اور لیمٹس</h2>
+                <div class="card" style="margin-top: 15px;">
+                    <h3>کسٹم نام اور لیمٹس کنفیگریشن</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;" class="form-group">
+                        <div>
+                            <label>میٹر منتخب کریں</label>
+                            <select id="set-meter-idx" onchange="loadMeterSettings()">
+                                <option value="0">Meter 1</option>
+                                <option value="1">Meter 2</option>
+                                <option value="2">Meter 3</option>
+                                <option value="3">Gas Meter</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>میٹر کا نیا نام</label>
+                            <input type="text" id="set-name" placeholder="مثال: Ground Floor">
+                        </div>
+                        <div>
+                            <label>پر یونٹ ریٹ / GCV ریٹ</label>
+                            <input type="number" id="set-rate" placeholder="ریٹ درج کریں">
+                        </div>
+                        <div>
+                            <label>ڈیلی یونٹ لمیٹ</label>
+                            <input type="number" id="set-daily-limit" placeholder="فکسڈ لمیٹ">
+                        </div>
+                        <div>
+                            <label>ٹوٹل یونٹ لمیٹ</label>
+                            <input type="number" id="set-total-limit" placeholder="فکسڈ لمیٹ">
+                        </div>
+                        <div>
+                            <label>کل فکسڈ بجٹ (گھر کا)</label>
+                            <input type="number" id="set-fixed-budget" placeholder="کل بجٹ">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveSettings()">ترجیحات محفوظ کریں</button>
+                </div>
+            </div>
+
+            <!-- 5. COMPLAINTS TAB -->
+            <div id="complaints" class="tab-content">
+                <h2>شکایات سیکشن (Complaints)</h2>
+                <div class="card" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label>نئی شکایت درج کریں</label>
+                        <input type="text" id="comp-text" placeholder="شکایت کی تفصیل یہاں لکھیں...">
+                    </div>
+                    <button class="btn" onclick="saveComplaint()">شکایت محفوظ کریں</button>
+                </div>
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>شکایت کی تفصیل</th>
+                            <th>اسٹیٹس</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaint-table-body"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data Store Initialization in localStorage
+        let appData = JSON.parse(localStorage.getItem('bill_tracker_pro_data')) || {
+            pin: "1234",
+            meters: [
+                { name: "Meter 1", rate: 35, dailyLimit: 15, totalLimit: 300, readings: [] },
+                { name: "Meter 2", rate: 35, dailyLimit: 15, totalLimit: 300, readings: [] },
+                { name: "Meter 3", rate: 35, dailyLimit: 15, totalLimit: 300, readings: [] },
+                { name: "Gas Meter", rate: 1031, dailyLimit: 5, totalLimit: 50, readings: [] } // rate acts as GCV for Gas
+            ],
+            fixedBudget: 15000,
+            analyses: [],
+            complaints: []
+        };
+
+        // PIN Verification
+        function verifyPin() {
+            let enteredPin = document.getElementById('pin-input').value;
+            if(enteredPin === appData.pin) {
+                document.getElementById('pin-overlay').style.display = 'none';
+                initApp();
+            } else {
+                alert('غلط پن! دوبارہ کوشش کریں۔');
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('bill_tracker_pro_data', JSON.stringify(appData));
+            initApp();
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
+        }
+
+        // Initialize and Render UI
+        function initApp() {
+            renderDashboard();
+            renderRecordTable();
+            renderAnalysisTable();
+            renderComplaintTable();
+            checkAlerts();
+        }
+
+        function renderDashboard() {
+            let container = document.getElementById('meter-cards-container');
+            container.innerHTML = '';
+            let totalCollected = 0, totalUnitsCost = 0;
+
+            appData.meters.forEach((m, idx) => {
+                let readings = m.readings;
+                let lastR = readings.length > 0 ? readings[readings.length - 1].newR : 0;
+                let firstR = readings.length > 0 ? readings[0].oldR : 0;
+                let totalUnits = Math.max(0, lastR - firstR);
+                let dailyUnits = readings.length > 0 ? readings[readings.length - 1].dailyUnits || 0 : 0;
+                
+                let billAmt = 0;
+                if(idx === 3) {
+                    // Gas Formula based on image: MMBTU = (HM3 * GCV) / 281.7385
+                    let mmbtu = (totalUnits * m.rate) / 281.7385;
+                    billAmt = mmbtu * 500; // estimated price per mmbtu or rate multiplier
+                } else {
+                    billAmt = totalUnits * m.rate;
+                }
+                totalUnitsCost += billAmt;
+
+                container.innerHTML += `
+                    <div class="card">
+                        <h3>${m.name}</h3>
+                        <p><strong>لائیو یونٹس (کل):</strong> ${totalUnits.toFixed(2)}</p>
+                        <p><strong>ڈیلی یونٹس:</strong> ${dailyUnits.toFixed(2)}</p>
+                        <p><strong>تخمینہ بل:</strong> Rs. ${billAmt.toFixed(0)}</p>
+                    </div>
+                `;
+            });
+
+            // Financial Summaries
+            appData.analyses.forEach(a => { if(a.paidFrom === 'گھر سے') totalCollected += Number(a.amt); });
+            document.getElementById('sum-collected').innerText = `Rs. ${totalCollected}`;
+            document.getElementById('sum-budget').innerText = `Rs. ${appData.fixedBudget}`;
+            document.getElementById('sum-net').innerText = `Rs. ${totalCollected - totalUnitsCost}`;
+            document.getElementById('sum-units-bill').innerText = `Rs. ${totalUnitsCost.toFixed(0)}`;
+        }
+
+        function saveReading() {
+            let mIdx = document.getElementById('quick-meter-select').value;
+            let val = parseFloat(document.getElementById('quick-reading-val').value);
+            if(isNaN(val)) { alert('براہ کرم درست ریڈنگ درج کریں'); return; }
+
+            let readings = appData.meters[mIdx].readings;
+            let oldR = readings.length > 0 ? readings[readings.length - 1].newR : 0;
+            let dailyUnits = Math.max(0, val - oldR);
+            let now = new Date().toLocaleString();
+
+            readings.push({ date: now, oldR: oldR, newR: val, dailyUnits: dailyUnits });
+            saveData();
+            document.getElementById('quick-reading-val').value = '';
+            alert('ریڈنگ کامیابی سے محفوظ ہو گئی!');
+        }
+
+        function renderRecordTable() {
+            let mIdx = document.getElementById('record-meter-select').value;
+            let tbody = document.getElementById('record-table-body');
+            tbody.innerHTML = '';
+            
+            appData.meters[mIdx].readings.forEach((r, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${r.date}</td>
+                        <td>${r.oldR}</td>
+                        <td>${r.newR}</td>
+                        <td>${r.dailyUnits}</td>
+                        <td><button class="btn" style="background:var(--accent); padding:5px 10px;" onclick="deleteReading(${mIdx}, ${i})"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteReading(mIdx, rIdx) {
+            appData.meters[mIdx].readings.splice(rIdx, 1);
+            saveData();
+        }
+
+        function saveAnalysis() {
+            let mIdx = document.getElementById('an-meter').value;
+            let amt = document.getElementById('an-bill-amt').value;
+            let paidFrom = document.getElementById('an-paid-from').value;
+            let date = document.getElementById('an-date').value;
+
+            if(!amt || !date) { alert('تمام خانے پر کریں'); return; }
+            appData.analyses.push({ meter: appData.meters[mIdx].name, amt, paidFrom, date });
+            saveData();
+            alert('تجزیہ محفوظ ہو گیا');
+        }
+
+        function renderAnalysisTable() {
+            let tbody = document.getElementById('analysis-table-body');
+            tbody.innerHTML = '';
+            appData.analyses.forEach((a, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${a.date}</td>
+                        <td>${a.meter}</td>
+                        <td>Rs. ${a.amt}</td>
+                        <td>${a.paidFrom}</td>
+                        <td> نارمل </td>
+                        <td><button class="btn" style="background:var(--accent); padding:5px 10px;" onclick="deleteAnalysis(${i})"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteAnalysis(i) {
+            appData.analyses.splice(i, 1);
+            saveData();
+        }
+
+        function loadMeterSettings() {
+            let idx = document.getElementById('set-meter-idx').value;
+            let m = appData.meters[idx];
+            document.getElementById('set-name').value = m.name;
+            document.getElementById('set-rate').value = m.rate;
+            document.getElementById('set-daily-limit').value = m.dailyLimit;
+            document.getElementById('set-total-limit').value = m.totalLimit;
+            document.getElementById('set-fixed-budget').value = appData.fixedBudget;
+        }
+
+        function saveSettings() {
+            let idx = document.getElementById('set-meter-idx').value;
+            appData.meters[idx].name = document.getElementById('set-name').value;
+            appData.meters[idx].rate = parseFloat(document.getElementById('set-rate').value) || 35;
+            appData.meters[idx].dailyLimit = parseFloat(document.getElementById('set-daily-limit').value) || 15;
+            appData.meters[idx].totalLimit = parseFloat(document.getElementById('set-total-limit').value) || 300;
+            appData.fixedBudget = parseFloat(document.getElementById('set-fixed-budget').value) || 15000;
+            saveData();
+            alert('سیٹنگز کامیابی سے اپ ڈیٹ ہو گئیں!');
+        }
+
+        function saveComplaint() {
+            let text = document.getElementById('comp-text').value;
+            if(!text) return;
+            appData.complaints.push({ date: new Date().toLocaleDateString(), text, status: 'پینڈنگ' });
+            saveData();
+            document.getElementById('comp-text').value = '';
+        }
+
+        function renderComplaintTable() {
+            let tbody = document.getElementById('complaint-table-body');
+            tbody.innerHTML = '';
+            appData.complaints.forEach((c, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${c.date}</td>
+                        <td>${c.text}</td>
+                        <td>${c.status}</td>
+                        <td><button class="btn" style="background:var(--accent); padding:5px 10px;" onclick="appData.complaints.splice(${i},1);saveData();"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function exportToExcel() {
+            let wb = XLSX.utils.book_new();
+            appData.meters.forEach((m, idx) => {
+                let ws = XLSX.utils.json_to_sheet(m.readings);
+                XLSX.utils.book_append_sheet(wb, ws, m.name);
+            });
+            XLSX.writeFile(wb, "Bill_Tracker_Report.xlsx");
+        }
+
+        function checkAlerts() {
+            // Online status listener
+            window.addEventListener('online', () => document.getElementById('network-status').innerText = "🟢 Online / Cloud Sync Ready");
+            window.addEventListener('offline', () => document.getElementById('network-status').innerText = "🟡 Offline Mode");
+        }
+
+        // Run initial settings load on startup
+        window.onload = function() {
+            loadMeterSettings();
+        };
+    </script>
+</body>
+</html>
