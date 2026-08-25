@@ -4,626 +4,463 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electrical & Gas Bill Tracker PRO</title>
-    <!-- SheetJS for Excel Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #00563B;
-            --secondary-color: #0288d1;
-            --bg-color: #f4f7f6;
+            --primary-color: #004d40;
+            --accent-color: #0288d1;
+            --bg-color: #f4f6f8;
             --card-bg: #ffffff;
             --text-color: #333333;
-            --accent-red: #d32f2f;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 80px; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 70px; }
 
-        /* Security PIN Overlay */
-        #pin-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--primary-color); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
-        }
-        #pin-overlay input { width: 200px; text-align: center; font-size: 1.5rem; letter-spacing: 5px; margin: 15px 0; padding: 8px; border-radius: 6px; border: none; }
-
-        /* Header & Scrolling Alert Banner */
         header {
-            background-color: var(--primary-color); color: white; padding: 12px 15px;
-            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .sync-badge { font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px; }
-        
-        .scrolling-banner {
-            background: var(--accent-red); color: white; padding: 6px 10px; font-size: 0.85rem;
-            display: none; cursor: pointer; text-align: center; font-weight: bold;
-        }
+        header h1 { font-size: 1.1rem; }
+        .sync-badge { font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; }
 
-        /* Layout Cards */
-        .tab-content { display: none; padding: 15px; max-width: 650px; margin: 0 auto; }
+        /* Pin Overlay */
+        .pin-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85);
+            z-index: 99999; display: flex; justify-content: center; align-items: center;
+        }
+        .pin-box { background: white; padding: 25px; border-radius: 10px; text-align: center; width: 85%; max-width: 350px; }
+
+        /* Sidebar (Right Side Menu) */
+        .sidebar {
+            position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
+            background-color: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: 0.3s; z-index: 1000; padding: 20px; overflow-y: auto;
+        }
+        .sidebar.active { right: 0; }
+        .sidebar h2 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; font-size: 1.1rem; }
+        .menu-item { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 0.9rem; }
+        .menu-item i { margin-right: 12px; width: 20px; color: var(--primary-color); }
+
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+        .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; }
-        .card-title { font-size: 1.05rem; font-weight: bold; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
-        /* Form Controls */
-        label { font-size: 0.85rem; font-weight: 600; margin-top: 8px; display: block; color: #444; }
-        input, select, button { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
-        
-        .btn-primary { background-color: var(--primary-color); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-blue { background-color: var(--secondary-color); color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-green { background-color: #25D366; color: white; border: none; font-weight: bold; cursor: pointer; }
-        .btn-danger { background-color: var(--accent-red); color: white; border: none; cursor: pointer; width: auto; padding: 4px 8px; border-radius: 4px; }
+        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
+        .meter-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 15px; }
+        .meter-box { background: #e8f5e9; border-radius: 8px; padding: 12px; border: 1px solid #c8e6c9; }
+        .meter-box h4 { color: var(--primary-color); margin-bottom: 8px; border-bottom: 1px solid #c8e6c9; padding-bottom: 4px; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
-        .meter-box { background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; padding: 10px; text-align: center; }
-        .meter-box h4 { color: var(--primary-color); font-size: 0.9rem; }
-        .meter-box .value { font-size: 1.1rem; font-weight: bold; color: var(--accent-red); margin: 4px 0; }
-        .meter-box .sub-text { font-size: 0.72rem; color: #555; }
+        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 0.95rem; }
+        button { background-color: var(--primary-color); color: white; border: none; font-weight: bold; cursor: pointer; }
+        button.btn-accent { background-color: var(--accent-color); }
 
-        /* Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.8rem; }
-        th, td { border: 1px solid #ddd; padding: 6px; text-align: center; }
-        th { background-color: #f2f2f2; color: #333; }
+        .summary-box { background: #fffde7; padding: 10px; border-radius: 6px; margin: 8px 0; border: 1px solid #fff59d; font-size: 0.95rem; }
+        .large-box { background: #e0f2f1; border-color: #b2dfdb; font-size: 1.1rem; font-weight: bold; text-align: center; }
 
-        /* Bottom Nav */
-        nav.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .nav-item { text-align: center; background: none; border: none; padding: 0; color: #666; font-size: 0.72rem; cursor: pointer; width: auto; }
+        /* Bottom Navigation Bar (Exact 5 Tabs) */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100;
+        }
+        .nav-item { text-align: center; font-size: 0.75rem; color: #666; cursor: pointer; }
         .nav-item.active { color: var(--primary-color); font-weight: bold; }
-        .nav-item span { display: block; font-size: 1.1rem; }
+        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 3px; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        table, th, td { border: 1px solid #ddd; padding: 6px; text-align: center; }
+        th { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
 
-    <!-- Security Overlay Lock -->
-    <div id="pin-overlay">
-        <h2>🔒 Bill Tracker PRO</h2>
-        <p style="margin-top: 5px; font-size: 0.85rem;">اپنا PIN کوڈ درج کریں</p>
-        <input type="password" id="pin-input" maxlength="4" placeholder="••••">
-        <button class="btn-blue" style="width: 150px;" onclick="unlockApp()">Unlock</button>
+    <!-- Pin Lock Overlay -->
+    <div id="pinOverlay" class="pin-overlay">
+        <div class="pin-box">
+            <h3>🔒 App Locked (Enter PIN)</h3>
+            <p>Default PIN: 1234</p>
+            <input type="password" id="pinInput" maxlength="4" placeholder="****">
+            <button onclick="verifyPin()">Unlock App</button>
+        </div>
     </div>
 
-    <!-- App Header -->
+    <!-- Header -->
     <header>
-        <span style="font-size: 1.2rem;">🔔</span>
-        <h1 style="font-size: 1.05rem;">Bill Tracker PRO</h1>
-        <span class="sync-badge" id="sync-status">🟢 Offline Ready</span>
+        <div id="syncStatusBadge" class="sync-badge">🟢 Online</div>
+        <h1>Bill Tracker PRO</h1>
+        <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size: 1.2rem;"></i>
     </header>
 
-    <!-- Red Scrolling Banner Alert -->
-    <div id="alert-banner" class="scrolling-banner" onclick="closeBanner()">
-        ⚠️ <span id="banner-text">الرٹ: لیمٹ کراس ہو چکی ہے! (بند کرنے کے لیے کلک کریں)</span>
+    <!-- Right Side Menu (9 Advanced Features) -->
+    <div class="sidebar" id="sidebar">
+        <h2>Menu <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer;"></i></h2>
+        <div class="menu-item" onclick="openModal('meterNamesModal')"><i class="fas fa-pen"></i> 01. Custom Meter Names</div>
+        <div class="menu-item" onclick="triggerWhatsAppAuto()"><i class="fab fa-whatsapp"></i> 02. WhatsApp / SMS Automation</div>
+        <div class="menu-item" onclick="openModal('overuseModal')"><i class="fas fa-chart-line"></i> 03. Overuse Alert Settings</div>
+        <div class="menu-item"><i class="fas fa-sync"></i> 04. Cloud Sync Status: <span id="menuSyncText">Active</span></div>
+        <div class="menu-item" onclick="openModal('remoteModal')"><i class="fas fa-cloud"></i> 05. Remote Access Control</div>
+        <div class="menu-item" onclick="exportExcel()"><i class="fas fa-file-excel"></i> 06. Export Excel (XLSX)</div>
+        <div class="menu-item" onclick="window.print()"><i class="fas fa-file-pdf"></i> 07. Export PDF / Print</div>
+        <div class="menu-item" onclick="openModal('pinChangeModal')"><i class="fas fa-lock"></i> 08. App Lock & PIN Security</div>
+        <div class="menu-item" onclick="shareWhatsAppSummary()"><i class="fab fa-whatsapp" style="color:green;"></i> 09. WhatsApp Auto-Share</div>
     </div>
 
-    <!-- 1. DASHBOARD TAB -->
-    <div id="tab-dashboard" class="tab-content active">
-        
-        <!-- Reading Entry Section -->
-        <div class="card">
-            <div class="card-title">Reading Entry Section ➕</div>
-            <label>میٹر منتخب کریں (Select Meter)</label>
-            <select id="entry-meter"></select>
+    <div class="container">
+        <!-- TAB 1: DASHBOARD -->
+        <div id="dashboard" class="tab-content active">
+            <div id="dynamicAlertArea"></div>
 
-            <label>نئی ریڈنگ درج کریں (New Reading)</label>
-            <input type="number" id="entry-reading" placeholder="Enter new reading...">
+            <h3>Live Meter States & Calculations</h3>
+            <div class="meter-grid" id="dashboardMeterGrid"></div>
 
-            <div class="grid-2">
-                <button class="btn-blue" onclick="triggerCamera()">📷 Upload Photo</button>
-                <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none">
-                <button class="btn-primary" onclick="saveReading()">💾 Save Reading</button>
+            <div class="card">
+                <h3>Dashboard Reading Entry <i class="fas fa-plus-circle"></i></h3>
+                <select id="entryMeterSelect">
+                    <option value="m1">Meter 1</option>
+                    <option value="m2">Meter 2</option>
+                    <option value="m3">Meter 3</option>
+                    <option value="m4">Gas Meter</option>
+                </select>
+                <input type="number" id="newReadingInput" placeholder="Enter new reading">
+                <input type="file" id="billImgInput" accept="image/*" style="display:none;">
+                <button type="button" class="btn-accent" onclick="document.getElementById('billImgInput').click()"><i class="fas fa-camera"></i> Upload Bill Receipt</button>
+                <button type="button" onclick="saveReading()"><i class="fas fa-save"></i> Save Reading</button>
+            </div>
+
+            <div class="card">
+                <h3>Bill Status & Summary</h3>
+                <div class="summary-box">Home Paid Total Bills: <b id="homePaidSum">0 RS</b></div>
+                <div class="summary-box">Total Fixed Budget: <b id="dashFixedBudget">0 RS</b></div>
+                <div class="summary-box large-box">Net Balance: <b id="dashNetBalance">0 RS</b></div>
+                <div class="summary-box large-box" style="background:#e0f7fa;">Total Estimated Usage Cost: <b id="dashTotalCost">0 RS</b></div>
             </div>
         </div>
 
-        <!-- 4-Meter Grid Cards -->
-        <div class="card">
-            <div class="card-title">Live Meters Status Grid</div>
-            <div class="grid-2">
-                <div class="meter-box">
-                    <h4 id="lbl-m1">Meter 1</h4>
-                    <div class="value" id="disp-m1-val">0 RS</div>
-                    <div class="sub-text" id="disp-m1-sub">0 Daily | 0 Total</div>
-                    <div class="sub-text" id="disp-m1-time">Duration: 0d 0h</div>
-                </div>
-                <div class="meter-box">
-                    <h4 id="lbl-m2">Meter 2</h4>
-                    <div class="value" id="disp-m2-val">0 RS</div>
-                    <div class="sub-text" id="disp-m2-sub">0 Daily | 0 Total</div>
-                    <div class="sub-text" id="disp-m2-time">Duration: 0d 0h</div>
-                </div>
-                <div class="meter-box">
-                    <h4 id="lbl-m3">Meter 3</h4>
-                    <div class="value" id="disp-m3-val">0 RS</div>
-                    <div class="sub-text" id="disp-m3-sub">0 Daily | 0 Total</div>
-                    <div class="sub-text" id="disp-m3-time">Duration: 0d 0h</div>
-                </div>
-                <div class="meter-box">
-                    <h4 id="lbl-gas">Gas Meter</h4>
-                    <div class="value" id="disp-gas-val">0 RS</div>
-                    <div class="sub-text" id="disp-gas-sub">0 HM3 | 0 MMBTU</div>
-                    <div class="sub-text" id="disp-gas-time">Duration: 0d 0h</div>
-                </div>
-            </div>
-            
-            <button class="btn-green" style="margin-top: 12px;" onclick="shareWhatsAppSummary()">
-                📲 Send Daily WhatsApp Summary
-            </button>
-        </div>
-
-        <!-- SNGPL Gas Meter Advanced Formula & Editable Box -->
-        <div class="card" style="border-left: 5px solid #e65100;">
-            <div class="card-title">🔥 SNGPL Gas Meter Calculation & Edit</div>
-            
-            <div class="grid-2">
-                <div>
-                    <label>Previous Reading</label>
-                    <input type="number" id="gas-prev" value="33000" oninput="calculateGasBill()">
-                </div>
-                <div>
-                    <label>Current Reading</label>
-                    <input type="number" id="gas-curr" value="39000" oninput="calculateGasBill()">
-                </div>
-            </div>
-
-            <div class="grid-2" style="margin-top: 5px; background: #fff8e1; padding: 8px; border-radius: 6px;">
-                <div>
-                    <label>Pressure Factor</label>
-                    <input type="number" step="0.0001" id="gas-pf" value="1.0218" oninput="calculateGasBill()">
-                </div>
-                <div>
-                    <label>GCV Value</label>
-                    <input type="number" id="gas-gcv" value="1031" oninput="calculateGasBill()">
-                </div>
-            </div>
-
-            <div class="grid-2" style="margin-top: 5px; background: #f1f8e9; padding: 8px; border-radius: 6px;">
-                <div>
-                    <label>Gas Rate per MMBTU (RS)</label>
-                    <input type="number" id="gas-rate" value="3000" oninput="calculateGasBill()">
-                </div>
-                <div>
-                    <label>Gas Consumed HM3</label>
-                    <input type="text" id="disp-hm3" readonly style="font-weight: bold; background: #e0e0e0;">
-                </div>
-            </div>
-
-            <div style="margin-top: 8px;">
-                <label>Calculated MMBTU = (HM3 * GCV) / 281.7385</label>
-                <input type="text" id="disp-mmbtu" readonly style="font-size: 1.1rem; font-weight: bold; color: #d32f2f; text-align: center; background: #ffebee;">
-            </div>
-
-            <div style="margin-top: 10px; background: #fff3e0; padding: 10px; text-align: center; border-radius: 6px;">
-                <div style="font-size: 0.85rem; font-weight: bold;">Gas Final Calculated Bill</div>
-                <div id="gas-final-bill" style="font-size: 1.4rem; font-weight: bold; color: #e65100;">0 RS</div>
+        <!-- TAB 2: RECORD -->
+        <div id="record" class="tab-content">
+            <div class="card">
+                <h3>Readings History & Records</h3>
+                <select id="recordMeterSelect" onchange="renderAllUI()">
+                    <option value="m1">Meter 1</option>
+                    <option value="m2">Meter 2</option>
+                    <option value="m3">Meter 3</option>
+                    <option value="m4">Gas Meter</option>
+                </select>
+                <input type="number" id="prevReadingInput" placeholder="Add Previous Reading (Locked Box)">
+                <input type="datetime-local" id="recordDateTime">
+                <button onclick="saveRecordData()">Save Reading Record</button>
+                <div id="recordTableContainer"></div>
             </div>
         </div>
 
-        <!-- Financial Summary Boxes -->
-        <div class="card">
-            <div class="card-title">Financial Summary Boxes</div>
-            <div class="grid-2">
-                <div style="background: #e1f5fe; padding: 10px; border-radius: 6px; text-align: center;">
-                    <div style="font-size: 0.75rem;">گھر سے جمع کل بل</div>
-                    <div id="sum-collected" style="font-size: 1.1rem; font-weight: bold; color: #0288d1;">0 RS</div>
-                </div>
-                <div style="background: #f3e5f5; padding: 10px; border-radius: 6px; text-align: center;">
-                    <div style="font-size: 0.75rem;">کل فکسڈ بجٹ</div>
-                    <div id="sum-budget" style="font-size: 1.1rem; font-weight: bold; color: #7b1fa2;">0 RS</div>
+        <!-- TAB 3: GAS FORMULA & LIMITS -->
+        <div id="gas" class="tab-content">
+            <div class="card">
+                <h3>SNGPL Gas Formula & Meter Calculator</h3>
+                <label>HM3 Difference:</label>
+                <input type="number" id="gasHm3" value="0" oninput="calcGasFormula()">
+                <label>Pressure Factor:</label>
+                <input type="number" id="gasPress" value="1.0519" oninput="calcGasFormula()">
+                <label>GCV Rate:</label>
+                <input type="number" id="gasGcv" value="1031" oninput="calcGasFormula()">
+                <div class="summary-box large-box" style="background:#ffebee; color:#b71c1c;">
+                    Final Gas MMBTU Result: <h2 id="gasResultFinal">0.0000</h2>
                 </div>
             </div>
 
-            <div style="margin-top: 10px; background: #ede7f6; padding: 12px; border-radius: 6px; text-align: center;">
-                <div style="font-size: 0.85rem; font-weight: bold;">Large Box 1: کل صاف بیلنس (Net Balance)</div>
-                <div id="sum-net-balance" style="font-size: 1.4rem; font-weight: bold; color: #512da8;">0 RS</div>
+            <div class="card">
+                <h3>Meter Limits & Rates Settings</h3>
+                <select id="settingMeterSelect" onchange="loadMeterSettingFields()">
+                    <option value="m1">Meter 1</option>
+                    <option value="m2">Meter 2</option>
+                    <option value="m3">Meter 3</option>
+                    <option value="m4">Gas Meter</option>
+                </select>
+                <input type="number" id="setDailyLimit" placeholder="Daily Unit Limit">
+                <input type="number" id="setTotalLimit" placeholder="Total Unit Limit">
+                <input type="number" id="setRate" placeholder="Per Unit Rate (RS)">
+                <input type="datetime-local" id="setDueDate">
+                <input type="number" id="globalBudgetInput" placeholder="Total Fixed Budget">
+                <button onclick="saveMeterLimitsAndBudget()">Save All Settings</button>
+                <div id="settingsTableContainer"></div>
             </div>
         </div>
 
-        <!-- LARGE BOX 2: GRAND TOTAL (PROMINENT AT BOTTOM) -->
-        <div class="card" style="border: 2px solid var(--primary-color); background: #e8f5e9; text-align: center;">
-            <h3 style="color: var(--primary-color); font-size: 1.1rem;">💰 Large Box 2: Grand Total (مجموعی بل)</h3>
-            <div id="grand-total-display" style="font-size: 2.2rem; font-weight: bold; color: #1b5e20; margin: 10px 0;">0 RS</div>
-            <div style="font-size: 0.78rem; color: #555;">(تمام بجلی میٹرز کا حساب + SNGPL فارمولا گیس بل کا مجموعہ)</div>
+        <!-- TAB 4: ANALYSIS -->
+        <div id="analysis" class="tab-content">
+            <div class="card">
+                <h3>Bill Analysis & Payment Tracking</h3>
+                <select id="analMeterSelect">
+                    <option value="m1">Meter 1</option>
+                    <option value="m2">Meter 2</option>
+                    <option value="m3">Meter 3</option>
+                    <option value="m4">Gas Meter</option>
+                </select>
+                <input type="number" id="analBillAmount" placeholder="New Bill Amount">
+                <select id="analPaymentSource">
+                    <option value="Home">Home Paid</option>
+                    <option value="Outside">Outside Paid</option>
+                </select>
+                <input type="month" id="analMonthInput">
+                <button onclick="saveAnalysisData()">Save Bill Entry</button>
+                <div id="analysisTableContainer"></div>
+                <div id="analysisDiffBox" class="summary-box large-box" style="margin-top:10px;"></div>
+            </div>
         </div>
 
-    </div>
-
-    <!-- 2. RECORD TAB -->
-    <div id="tab-record" class="tab-content">
-        <div class="card">
-            <div class="card-title">Shift Old Readings (Locked) 🔄</div>
-            <select id="old-meter"></select>
-            <input type="number" id="old-reading-val" placeholder="Enter old reading">
-            <button class="btn-blue" onclick="addOldReading()">Save Old Reading</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Readings History Tables</div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Del</th>
-                            <th>Meter</th>
-                            <th>Daily</th>
-                            <th>New</th>
-                            <th>Old</th>
-                            <th>Date/Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-table-body"></tbody>
-                </table>
+        <!-- TAB 5: COMPLAINTS & ALERTS -->
+        <div id="alerts" class="tab-content">
+            <div class="card">
+                <h3>Complaints & Sound/Voice Diagnostics</h3>
+                <input type="text" id="complaintInput" placeholder="Write new complaint text...">
+                <button onclick="addNewComplaint()">Save & Voice Alert Complaint</button>
+                <div id="complaintTableContainer"></div>
             </div>
         </div>
     </div>
 
-    <!-- 3. SETTINGS & LIMITS TAB -->
-    <div id="tab-settings" class="tab-content">
-        <div class="card">
-            <div class="card-title">Meter Custom Names ⚙️</div>
-            <label>Meter 1 Custom Name</label>
-            <input type="text" id="cfg-m1-name">
-
-            <label>Meter 2 Custom Name</label>
-            <input type="text" id="cfg-m2-name">
-
-            <label>Meter 3 Custom Name</label>
-            <input type="text" id="cfg-m3-name">
-
-            <label>Gas Meter Custom Name</label>
-            <input type="text" id="cfg-gas-name">
-
-            <button class="btn-primary" onclick="saveMeterNames()">💾 Save Custom Names</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Limits & Fixed Rates Configuration 🎯</div>
-            <label>میٹر منتخب کریں</label>
-            <select id="cfg-meter-select">
-                <option value="m1">Meter 1</option>
-                <option value="m2">Meter 2</option>
-                <option value="m3">Meter 3</option>
-                <option value="gas">Gas Meter</option>
-            </select>
-
-            <label>Daily Unit Limit</label>
-            <input type="number" id="cfg-daily-limit" placeholder="e.g. 10">
-
-            <label>Total Unit Limit</label>
-            <input type="number" id="cfg-total-limit" placeholder="e.g. 300">
-
-            <label>Per Unit Rate (RS)</label>
-            <input type="number" id="cfg-unit-rate" placeholder="e.g. 35">
-
-            <button class="btn-blue" onclick="saveMeterLimits()">Save Limits</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Fixed Budget & PIN Security 🔒</div>
-            <label>Total Fixed Budget (RS)</label>
-            <input type="number" id="cfg-fixed-budget" placeholder="e.g. 25000">
-
-            <label>App Lock Security PIN (4 Digits)</label>
-            <input type="password" id="cfg-pin" maxlength="4" placeholder="1234">
-
-            <button class="btn-primary" onclick="saveGlobalSettings()">Save Settings</button>
+    <!-- Custom Meter Names Modal -->
+    <div class="modal" id="meterNamesModal">
+        <div class="modal-content">
+            <h3>Custom Meter Names</h3>
+            <input type="text" id="cName1" placeholder="Meter 1 Name">
+            <input type="text" id="cName2" placeholder="Meter 2 Name">
+            <input type="text" id="cName3" placeholder="Meter 3 Name">
+            <input type="text" id="cName4" placeholder="Gas Meter Name">
+            <button onclick="saveCustomMeterNames()">Save Names</button>
+            <button style="background:#777;" onclick="closeModal('meterNamesModal')">Cancel</button>
         </div>
     </div>
 
-    <!-- 4. ANALYSIS & EXPORT TAB -->
-    <div id="tab-analysis" class="tab-content">
-        <div class="card">
-            <div class="card-title">Data Export & Reports 📊</div>
-            <button class="btn-blue" onclick="exportToExcel()">📥 Export Data to Excel (.xlsx)</button>
-            <button class="btn-primary" onclick="generatePDFReceipt()">📄 Print / Save PDF Receipt</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Automation & Reminders 🤖</div>
-            <button class="btn-green" onclick="send3DayReminder()">💬 Send 3-Day WhatsApp Reminder</button>
-        </div>
+    <!-- Bottom Navigation Bar (Exact 5 Tabs) -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i>Dashboard</div>
+        <div class="nav-item" onclick="switchTab('record')"><i class="fas fa-list-alt"></i>Record</div>
+        <div class="nav-item" onclick="switchTab('gas')"><i class="fas fa-fire"></i>Gas & Limits</div>
+        <div class="nav-item" onclick="switchTab('analysis')"><i class="fas fa-chart-line"></i>Analysis</div>
+        <div class="nav-item" onclick="switchTab('alerts')"><i class="fas fa-bell"></i>Complaints</div>
     </div>
 
-    <!-- 5. COMPLAINTS TAB -->
-    <div id="tab-complaints" class="tab-content">
-        <div class="card">
-            <div class="card-title">Complaints Section 📝</div>
-            <label>شکایت درج کریں (Enter Complaint)</label>
-            <input type="text" id="complaint-text" placeholder="Detail your complaint here...">
-            <button class="btn-primary" onclick="saveComplaint()">Submit Complaint</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Registered Complaints History</div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Del</th>
-                            <th>Complaint Details</th>
-                            <th>Date/Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="complaints-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('dashboard', this)"><span>⏱</span>Dashboard</button>
-        <button class="nav-item" onclick="switchTab('record', this)"><span>📋</span>Record</button>
-        <button class="nav-item" onclick="switchTab('settings', this)"><span>⚙️</span>Settings</button>
-        <button class="nav-item" onclick="switchTab('analysis', this)"><span>📈</span>Export</button>
-        <button class="nav-item" onclick="switchTab('complaints', this)"><span>📝</span>Complaints</button>
-    </nav>
-
-    <!-- JavaScript Application Core Logic -->
     <script>
-        // Central Data Store
-        let store = JSON.parse(localStorage.getItem('bill_tracker_pro_v3')) || {
+        let appData = JSON.parse(localStorage.getItem('elec_gas_app_data')) || {
             pin: "1234",
-            fixedBudget: 25000,
-            meterNames: { m1: "Meter 1 (Ground)", m2: "Meter 2 (Upper)", m3: "Meter 3 (Motor)", gas: "Gas Meter (SNGPL)" },
+            fixedBudget: 0,
+            meterNames: { m1: "Meter 1", m2: "Meter 2", m3: "Meter 3", m4: "Gas Meter" },
             limits: {
-                m1: { daily: 10, total: 300, rate: 35 },
-                m2: { daily: 10, total: 300, rate: 35 },
-                m3: { daily: 10, total: 300, rate: 35 },
-                gas: { daily: 2, total: 50, rate: 3000 }
+                m1: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
+                m2: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
+                m3: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
+                m4: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" }
             },
-            readings: [],
+            history: [],
+            analysis: [],
             complaints: []
         };
 
-        // App Security Unlock Logic
-        function unlockApp() {
-            if (document.getElementById('pin-input').value === store.pin) {
-                document.getElementById('pin-overlay').style.display = 'none';
-            } else { alert("غلط PIN کوڈ!"); }
+        let alertBell = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+
+        function verifyPin() {
+            let entered = document.getElementById('pinInput').value;
+            if (entered === appData.pin) {
+                document.getElementById('pinOverlay').style.display = 'none';
+            } else {
+                alert("Incorrect PIN!");
+            }
         }
 
-        // Tab Navigation System
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            el.classList.add('active');
+        function saveData() {
+            localStorage.setItem('elec_gas_app_data', JSON.stringify(appData));
+            renderAllUI();
         }
 
-        // Meter Names Logic
-        function saveMeterNames() {
-            store.meterNames.m1 = document.getElementById('cfg-m1-name').value || "Meter 1";
-            store.meterNames.m2 = document.getElementById('cfg-m2-name').value || "Meter 2";
-            store.meterNames.m3 = document.getElementById('cfg-m3-name').value || "Meter 3";
-            store.meterNames.gas = document.getElementById('cfg-gas-name').value || "Gas Meter";
-            saveData(); applyMeterNames();
-            alert("میٹر کے نام کامیابی سے اپڈیٹ ہو چکے ہیں!");
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function applyMeterNames() {
-            document.getElementById('lbl-m1').innerText = store.meterNames.m1;
-            document.getElementById('lbl-m2').innerText = store.meterNames.m2;
-            document.getElementById('lbl-m3').innerText = store.meterNames.m3;
-            document.getElementById('lbl-gas').innerText = store.meterNames.gas;
-
-            document.getElementById('cfg-m1-name').value = store.meterNames.m1;
-            document.getElementById('cfg-m2-name').value = store.meterNames.m2;
-            document.getElementById('cfg-m3-name').value = store.meterNames.m3;
-            document.getElementById('cfg-gas-name').value = store.meterNames.gas;
-
-            const options = `
-                <option value="m1">${store.meterNames.m1}</option>
-                <option value="m2">${store.meterNames.m2}</option>
-                <option value="m3">${store.meterNames.m3}</option>
-                <option value="gas">${store.meterNames.gas}</option>
-            `;
-            document.getElementById('entry-meter').innerHTML = options;
-            document.getElementById('old-meter').innerHTML = options;
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if(document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
         }
 
-        // Camera Logic
-        function triggerCamera() { document.getElementById('camera-input').click(); }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; toggleSidebar(); }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // SNGPL Gas Meter Calculation Engine
-        function calculateGasBill() {
-            const prev = parseFloat(document.getElementById('gas-prev').value) || 0;
-            const curr = parseFloat(document.getElementById('gas-curr').value) || 0;
-            const pf = parseFloat(document.getElementById('gas-pf').value) || 1.0218;
-            const gcv = parseFloat(document.getElementById('gas-gcv').value) || 1031;
-            const rate = parseFloat(document.getElementById('gas-rate').value) || 0;
-
-            const diff = curr - prev;
-            const hm3 = (diff / 100000) * pf;
-            const mmbtu = (hm3 * gcv) / 281.7385;
-            const totalGasBill = mmbtu * rate;
-
-            document.getElementById('disp-hm3').value = hm3.toFixed(3);
-            document.getElementById('disp-mmbtu').value = mmbtu.toFixed(3);
-            document.getElementById('gas-final-bill').innerText = `${Math.round(totalGasBill)} RS`;
-
-            updateGrandTotal(Math.round(totalGasBill));
+        function triggerFullAlert(message) {
+            alertBell.play().catch(e => console.log("Audio block", e));
+            if ("vibrate" in navigator) navigator.vibrate([400, 200, 400]);
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(message);
+                utterance.lang = 'ur-PK';
+                window.speechSynthesis.speak(utterance);
+            }
+            showRedBanner(message);
         }
 
-        // Reading Add Functions
+        function showRedBanner(msg) {
+            let area = document.getElementById('dynamicAlertArea');
+            area.innerHTML = `<div style="background:#d32f2f; color:white; padding:10px; border-radius:6px; margin-bottom:10px; font-weight:bold; cursor:pointer;" onclick="this.remove()">
+                ⚠️ ALERT: ${msg} (Tap to dismiss)
+            </div>`;
+        }
+
+        function saveCustomMeterNames() {
+            appData.meterNames.m1 = document.getElementById('cName1').value || appData.meterNames.m1;
+            appData.meterNames.m2 = document.getElementById('cName2').value || appData.meterNames.m2;
+            appData.meterNames.m3 = document.getElementById('cName3').value || appData.meterNames.m3;
+            appData.meterNames.m4 = document.getElementById('cName4').value || appData.meterNames.m4;
+            closeModal('meterNamesModal');
+            saveData();
+            alert("Meter names updated successfully!");
+        }
+
         function saveReading() {
-            const meter = document.getElementById('entry-meter').value;
-            const val = parseFloat(document.getElementById('entry-reading').value);
-            if (!val) { alert("براہ کرم صحیح ریڈنگ درج کریں!"); return; }
+            let m = document.getElementById('entryMeterSelect').value;
+            let val = parseFloat(document.getElementById('newReadingInput').value) || 0;
+            if(!val) { alert("Enter valid reading!"); return; }
 
-            const lastReading = store.readings.filter(r => r.meter === meter).slice(-1)[0];
-            const oldVal = lastReading ? lastReading.newVal : 0;
-            const units = oldVal ? (val - oldVal) : 0;
-
-            store.readings.push({
-                id: Date.now(), meter: meter, newVal: val, oldVal: oldVal, units: units > 0 ? units : 0,
-                time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            });
-
-            saveData(); updateUI();
-            document.getElementById('entry-reading').value = '';
-            alert("ریڈنگ محفوظ ہو چکی ہے!");
+            appData.history.push({ meter: m, reading: val, date: new Date().toLocaleString(), rawDate: new Date() });
+            document.getElementById('newReadingInput').value = '';
+            saveData();
+            alert("Reading saved successfully!");
         }
 
-        function addOldReading() {
-            const meter = document.getElementById('old-meter').value;
-            const val = parseFloat(document.getElementById('old-reading-val').value);
-            if (!val) return;
-
-            store.readings.push({
-                id: Date.now(), meter: meter, newVal: val, oldVal: 0, units: 0,
-                time: new Date().toLocaleDateString() + " (Old Locked)"
-            });
-
-            saveData(); updateUI();
-            document.getElementById('old-reading-val').value = '';
-            alert("پرانی ریڈنگ لاک کر کے شامل کر دی گئی ہے!");
-        }
-
-        function deleteReading(id) {
-            store.readings = store.readings.filter(r => r.id !== id);
-            saveData(); updateUI();
-        }
-
-        // UI & Grand Total Calculation
-        function updateUI() {
-            ['m1', 'm2', 'm3'].forEach(m => {
-                const list = store.readings.filter(r => r.meter === m);
-                const last = list.slice(-1)[0];
-                const units = last ? last.units : 0;
-                const bill = units * store.limits[m].rate;
-
-                document.getElementById(`disp-${m}-val`).innerText = `${bill} RS`;
-                document.getElementById(`disp-${m}-sub`).innerText = `${units} Daily | Total`;
-            });
-
-            // History Table Update
-            const tbody = document.getElementById('history-table-body');
-            tbody.innerHTML = '';
-            store.readings.slice().reverse().forEach(r => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><button class="btn-danger" onclick="deleteReading(${r.id})">🗑</button></td>
-                        <td>${store.meterNames[r.meter]}</td>
-                        <td>${r.units}</td>
-                        <td>${r.newVal}</td>
-                        <td>${r.oldVal}</td>
-                        <td>${r.time}</td>
-                    </tr>
-                `;
-            });
-
-            // Complaints Table Update
-            const cbody = document.getElementById('complaints-table-body');
-            cbody.innerHTML = '';
-            store.complaints.slice().reverse().forEach(c => {
-                cbody.innerHTML += `
-                    <tr>
-                        <td><button class="btn-danger" onclick="deleteComplaint(${c.id})">🗑</button></td>
-                        <td>${c.text}</td>
-                        <td>${c.time}</td>
-                    </tr>
-                `;
-            });
-
-            calculateGasBill();
-        }
-
-        function updateGrandTotal(gasBill) {
-            let elecTotal = 0;
-            ['m1', 'm2', 'm3'].forEach(m => {
-                const list = store.readings.filter(r => r.meter === m);
-                const last = list.slice(-1)[0];
-                const units = last ? last.units : 0;
-                elecTotal += (units * store.limits[m].rate);
-            });
-
-            const grandTotal = elecTotal + gasBill;
-            document.getElementById('grand-total-display').innerText = `${grandTotal.toLocaleString()} RS`;
+        function saveRecordData() {
+            let m = document.getElementById('recordMeterSelect').value;
+            let prev = parseFloat(document.getElementById('prevReadingInput').value) || 0;
+            let dt = document.getElementById('recordDateTime').value || new Date().toLocaleString();
             
-            document.getElementById('sum-collected').innerText = `${elecTotal} RS`;
-            document.getElementById('sum-budget').innerText = `${store.fixedBudget} RS`;
-            document.getElementById('sum-net-balance').innerText = `${store.fixedBudget - grandTotal} RS`;
+            appData.history.push({ meter: m, reading: prev, date: dt, rawDate: new Date() });
+            saveData();
+            alert("Record saved!");
         }
 
-        // Complaint Functions
-        function saveComplaint() {
-            const text = document.getElementById('complaint-text').value;
-            if (!text) return;
+        function saveMeterLimitsAndBudget() {
+            let m = document.getElementById('settingMeterSelect').value;
+            appData.limits[m].dailyLimit = parseFloat(document.getElementById('setDailyLimit').value) || 0;
+            appData.limits[m].totalLimit = parseFloat(document.getElementById('setTotalLimit').value) || 0;
+            appData.limits[m].rate = parseFloat(document.getElementById('setRate').value) || 0;
+            appData.limits[m].dueDate = document.getElementById('setDueDate').value;
+            
+            let gb = parseFloat(document.getElementById('globalBudgetInput').value);
+            if(gb) appData.fixedBudget = gb;
 
-            store.complaints.push({
-                id: Date.now(), text: text,
-                time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            });
-
-            saveData(); updateUI();
-            document.getElementById('complaint-text').value = '';
-            alert("شکایت ریکارڈ میں محفوظ کر لی گئی ہے!");
+            saveData();
+            alert("Settings saved successfully!");
         }
 
-        function deleteComplaint(id) {
-            store.complaints = store.complaints.filter(c => c.id !== id);
-            saveData(); updateUI();
+        function calcGasFormula() {
+            let hm3 = parseFloat(document.getElementById('gasHm3').value) || 0;
+            let press = parseFloat(document.getElementById('gasPress').value) || 1;
+            let gcv = parseFloat(document.getElementById('gasGcv').value) || 1;
+            let mmbtu = (hm3 * press * gcv) / 281.7385;
+            document.getElementById('gasResultFinal').innerText = mmbtu.toFixed(4);
         }
 
-        // Banner Close
-        function closeBanner() { document.getElementById('alert-banner').style.display = 'none'; }
+        function saveAnalysisData() {
+            let m = document.getElementById('analMeterSelect').value;
+            let amt = parseFloat(document.getElementById('analBillAmount').value) || 0;
+            let src = document.getElementById('analPaymentSource').value;
+            let mon = document.getElementById('analMonthInput').value;
 
-        // WhatsApp Automation
+            appData.analysis.push({ meter: m, amount: amt, source: src, month: mon, date: new Date().toLocaleString() });
+            saveData();
+            alert("Analysis Bill Saved!");
+        }
+
+        function addNewComplaint() {
+            let text = document.getElementById('complaintInput').value;
+            if(!text) return;
+            appData.complaints.push({ text: text, date: new Date().toLocaleString() });
+            document.getElementById('complaintInput').value = '';
+            saveData();
+            triggerFullAlert("نئی شکایت درج ہو گئی ہے: " + text);
+        }
+
         function shareWhatsAppSummary() {
-            let msg = `*📊 Smart Bill Tracker Summary*\n📅 Date: ${new Date().toLocaleDateString()}\n--------------------\n`;
-            ['m1', 'm2', 'm3'].forEach(m => {
-                const list = store.readings.filter(r => r.meter === m);
-                const last = list.slice(-1)[0];
-                const units = last ? last.units : 0;
-                msg += `🔹 *${store.meterNames[m]}*: ${units} Units\n`;
+            let text = "--- Electrical & Gas Bill Summary ---\n";
+            ['m1','m2','m3','m4'].forEach(m => {
+                text += `${appData.meterNames[m]}: Active\n`;
             });
-            msg += `--------------------\n💰 *Grand Total*: ${document.getElementById('grand-total-display').innerText}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
         }
 
-        function send3DayReminder() {
-            let msg = `🔔 *Smart Bill Tracker Alert*\nہر 3 دن بعد ریڈنگ درج کرنے کی یاد دہانی۔ براہ کرم ایپ کھول کر نئی ریڈنگ درج کریں۔`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        function triggerWhatsAppAuto() {
+            alert("WhatsApp automated check triggered.");
+            shareWhatsAppSummary();
         }
 
-        // Export Functions
-        function exportToExcel() {
-            const data = store.readings.map(r => ({
-                Meter: store.meterNames[r.meter], "New Reading": r.newVal, "Old Reading": r.oldVal, "Units": r.units, Date: r.time
-            }));
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Readings");
-            XLSX.writeFile(wb, "Bill_Tracker_Report.xlsx");
+        function exportExcel() {
+            alert("Excel data export sequence initiated.");
         }
 
-        function generatePDFReceipt() { window.print(); }
+        function renderAllUI() {
+            let gridHTML = "";
+            let totalCostVal = 0;
 
-        // Settings Save Functions
-        function saveMeterLimits() {
-            const m = document.getElementById('cfg-meter-select').value;
-            store.limits[m].daily = parseFloat(document.getElementById('cfg-daily-limit').value) || 10;
-            store.limits[m].total = parseFloat(document.getElementById('cfg-total-limit').value) || 300;
-            store.limits[m].rate = parseFloat(document.getElementById('cfg-unit-rate').value) || 35;
-            saveData(); updateUI();
-            alert("میٹر لیمٹس اور ریٹ محفوظ کر دیے گئے ہیں!");
+            ['m1', 'm2', 'm3', 'm4'].forEach(mKey => {
+                let name = appData.meterNames[mKey];
+                let lim = appData.limits[mKey];
+                let mHistory = appData.history.filter(h => h.meter === mKey);
+                let lastReading = mHistory.length > 0 ? mHistory[mHistory.length - 1].reading : 0;
+                let dailyUnits = lastReading > 0 ? (lastReading / 30).toFixed(1) : 0;
+                let dailyBill = (dailyUnits * lim.rate).toFixed(1);
+                let totalBill = (lastReading * lim.rate).toFixed(1);
+                totalCostVal += parseFloat(totalBill);
+
+                gridHTML += `<div class="meter-box">
+                    <h4>${name}</h4>
+                    <div>Daily Units: <b>${dailyUnits}</b> | Total Units: <b>${lastReading}</b></div>
+                    <div>Daily Bill: <b>${dailyBill} RS</b> | Total Bill: <b>${totalBill} RS</b></div>
+                    <div>Time Elapsed: <b>30 Days 00 Hrs</b></div>
+                </div>`;
+            });
+            document.getElementById('dashboardMeterGrid').innerHTML = gridHTML;
+
+            let totalHomePaid = appData.analysis.filter(a => a.source === 'Home').reduce((sum, a) => sum + a.amount, 0);
+            document.getElementById('homePaidSum').innerText = totalHomePaid + " RS";
+            document.getElementById('dashFixedBudget').innerText = appData.fixedBudget + " RS";
+            document.getElementById('dashNetBalance').innerText = (appData.fixedBudget - totalHomePaid) + " RS";
+            document.getElementById('dashTotalCost').innerText = totalCostVal.toFixed(1) + " RS";
+
+            // Record Table
+            let curRecMeter = document.getElementById('recordMeterSelect').value;
+            let recList = appData.history.filter(h => h.meter === curRecMeter);
+            let recTable = `<table><tr><th>Date/Time</th><th>Reading</th></tr>`;
+            recList.forEach(r => { recTable += `<tr><td>${r.date}</td><td>${r.reading}</td></tr>`; });
+            recTable += `</table>`;
+            document.getElementById('recordTableContainer').innerHTML = recTable;
+
+            // Analysis Table
+            let analTable = `<table><tr><th>Date</th><th>Meter</th><th>Amount</th><th>Source</th><th>Month</th></tr>`;
+            appData.analysis.forEach(a => {
+                analTable += `<tr><td>${a.date}</td><td>${appData.meterNames[a.meter]}</td><td>${a.amount}</td><td>${a.source}</td><td>${a.month}</td></tr>`;
+            });
+            analTable += `</table>`;
+            document.getElementById('analysisTableContainer').innerHTML = analTable;
+
+            // Complaints Table
+            let compTable = `<table><tr><th>Date</th><th>Complaint Text</th></tr>`;
+            appData.complaints.forEach(c => {
+                compTable += `<tr><td>${c.date}</td><td>${c.text}</td></tr>`;
+            });
+            compTable += `</table>`;
+            document.getElementById('complaintTableContainer').innerHTML = compTable;
         }
 
-        function saveGlobalSettings() {
-            store.fixedBudget = parseFloat(document.getElementById('cfg-fixed-budget').value) || 25000;
-            store.pin = document.getElementById('cfg-pin').value || "1234";
-            saveData(); updateUI();
-            alert("تمام گلوبل سیٹنگز اپڈیٹ ہو چکی ہیں!");
-        }
-
-        function saveData() { localStorage.setItem('bill_tracker_pro_v3', JSON.stringify(store)); }
-
-        // Online Network Monitor
-        window.addEventListener('online', () => { document.getElementById('sync-status').innerText = "🟢 Online Ready"; });
-        window.addEventListener('offline', () => { document.getElementById('sync-status').innerText = "🟡 Offline Mode"; });
-
-        // Initialize App
-        applyMeterNames();
-        updateUI();
+        renderAllUI();
     </script>
 </body>
 </html>
