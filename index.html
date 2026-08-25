@@ -19,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 80px; }
 
-        /* App Lock Overlay */
+        /* Security PIN Overlay */
         #pin-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--primary-color); z-index: 9999;
@@ -27,7 +27,7 @@
         }
         #pin-overlay input { width: 200px; text-align: center; font-size: 1.5rem; letter-spacing: 5px; margin: 15px 0; padding: 8px; border-radius: 6px; border: none; }
 
-        /* Header & Banner */
+        /* Header & Scrolling Alert Banner */
         header {
             background-color: var(--primary-color); color: white; padding: 12px 15px;
             display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
@@ -39,13 +39,13 @@
             display: none; cursor: pointer; text-align: center; font-weight: bold;
         }
 
-        /* Layout & Cards */
+        /* Layout Cards */
         .tab-content { display: none; padding: 15px; max-width: 650px; margin: 0 auto; }
         .tab-content.active { display: block; }
         .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e0e0e0; }
         .card-title { font-size: 1.05rem; font-weight: bold; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
-        /* Inputs & Buttons */
+        /* Form Controls */
         label { font-size: 0.85rem; font-weight: 600; margin-top: 8px; display: block; color: #444; }
         input, select, button { width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
         
@@ -75,7 +75,7 @@
 </head>
 <body>
 
-    <!-- App Lock Overlay -->
+    <!-- Security Overlay Lock -->
     <div id="pin-overlay">
         <h2>🔒 Bill Tracker PRO</h2>
         <p style="margin-top: 5px; font-size: 0.85rem;">اپنا PIN کوڈ درج کریں</p>
@@ -83,16 +83,16 @@
         <button class="btn-blue" style="width: 150px;" onclick="unlockApp()">Unlock</button>
     </div>
 
-    <!-- Header -->
+    <!-- App Header -->
     <header>
         <span style="font-size: 1.2rem;">🔔</span>
         <h1 style="font-size: 1.05rem;">Bill Tracker PRO</h1>
         <span class="sync-badge" id="sync-status">🟢 Offline Ready</span>
     </header>
 
-    <!-- Scrolling Alert Banner -->
+    <!-- Red Scrolling Banner Alert -->
     <div id="alert-banner" class="scrolling-banner" onclick="closeBanner()">
-        ⚠️ <span id="banner-text">الرٹ: لیمٹ کراس ہو چکی ہے! (بند کرنے کے لیے یہاں کلک کریں)</span>
+        ⚠️ <span id="banner-text">الرٹ: لیمٹ کراس ہو چکی ہے! (بند کرنے کے لیے کلک کریں)</span>
     </div>
 
     <!-- 1. DASHBOARD TAB -->
@@ -114,7 +114,7 @@
             </div>
         </div>
 
-        <!-- 4 Meter Grid Cards -->
+        <!-- 4-Meter Grid Cards -->
         <div class="card">
             <div class="card-title">Live Meters Status Grid</div>
             <div class="grid-2">
@@ -149,9 +149,9 @@
             </button>
         </div>
 
-        <!-- SNGPL Gas Meter Advanced Calculation & Manual Edit Box -->
+        <!-- SNGPL Gas Meter Advanced Formula & Editable Box -->
         <div class="card" style="border-left: 5px solid #e65100;">
-            <div class="card-title">🔥 SNGPL Gas Meter Formula & Calculation</div>
+            <div class="card-title">🔥 SNGPL Gas Meter Calculation & Edit</div>
             
             <div class="grid-2">
                 <div>
@@ -177,7 +177,7 @@
 
             <div class="grid-2" style="margin-top: 5px; background: #f1f8e9; padding: 8px; border-radius: 6px;">
                 <div>
-                    <label>Rate per MMBTU (RS)</label>
+                    <label>Gas Rate per MMBTU (RS)</label>
                     <input type="number" id="gas-rate" value="3000" oninput="calculateGasBill()">
                 </div>
                 <div>
@@ -192,7 +192,7 @@
             </div>
 
             <div style="margin-top: 10px; background: #fff3e0; padding: 10px; text-align: center; border-radius: 6px;">
-                <div style="font-size: 0.85rem; font-weight: bold;">Gas Estimated Bill</div>
+                <div style="font-size: 0.85rem; font-weight: bold;">Gas Final Calculated Bill</div>
                 <div id="gas-final-bill" style="font-size: 1.4rem; font-weight: bold; color: #e65100;">0 RS</div>
             </div>
         </div>
@@ -217,11 +217,11 @@
             </div>
         </div>
 
-        <!-- LARGE BOX 2: GRAND TOTAL (PROMINENT AT LAST) -->
+        <!-- LARGE BOX 2: GRAND TOTAL (PROMINENT AT BOTTOM) -->
         <div class="card" style="border: 2px solid var(--primary-color); background: #e8f5e9; text-align: center;">
             <h3 style="color: var(--primary-color); font-size: 1.1rem;">💰 Large Box 2: Grand Total (مجموعی بل)</h3>
             <div id="grand-total-display" style="font-size: 2.2rem; font-weight: bold; color: #1b5e20; margin: 10px 0;">0 RS</div>
-            <div style="font-size: 0.78rem; color: #555;">(تمام بجلی کے میٹرز + SNGPL فارمولا گیس بل کا فائنل مجموعہ)</div>
+            <div style="font-size: 0.78rem; color: #555;">(تمام بجلی میٹرز کا حساب + SNGPL فارمولا گیس بل کا مجموعہ)</div>
         </div>
 
     </div>
@@ -357,9 +357,9 @@
         <button class="nav-item" onclick="switchTab('complaints', this)"><span>📝</span>Complaints</button>
     </nav>
 
-    <!-- JavaScript Application Engine -->
+    <!-- JavaScript Application Core Logic -->
     <script>
-        // Central Store
+        // Central Data Store
         let store = JSON.parse(localStorage.getItem('bill_tracker_pro_v3')) || {
             pin: "1234",
             fixedBudget: 25000,
@@ -374,14 +374,14 @@
             complaints: []
         };
 
-        // App Lock Logic
+        // App Security Unlock Logic
         function unlockApp() {
             if (document.getElementById('pin-input').value === store.pin) {
                 document.getElementById('pin-overlay').style.display = 'none';
             } else { alert("غلط PIN کوڈ!"); }
         }
 
-        // Navigation Engine
+        // Tab Navigation System
         function switchTab(tabId, el) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -389,14 +389,14 @@
             el.classList.add('active');
         }
 
-        // Meter Names Management
+        // Meter Names Logic
         function saveMeterNames() {
             store.meterNames.m1 = document.getElementById('cfg-m1-name').value || "Meter 1";
             store.meterNames.m2 = document.getElementById('cfg-m2-name').value || "Meter 2";
             store.meterNames.m3 = document.getElementById('cfg-m3-name').value || "Meter 3";
             store.meterNames.gas = document.getElementById('cfg-gas-name').value || "Gas Meter";
             saveData(); applyMeterNames();
-            alert("میٹر کے تمام نئے نام اپڈیٹ ہو چکے ہیں!");
+            alert("میٹر کے نام کامیابی سے اپڈیٹ ہو چکے ہیں!");
         }
 
         function applyMeterNames() {
@@ -408,4 +408,222 @@
             document.getElementById('cfg-m1-name').value = store.meterNames.m1;
             document.getElementById('cfg-m2-name').value = store.meterNames.m2;
             document.getElementById('cfg-m3-name').value = store.meterNames.m3;
-      
+            document.getElementById('cfg-gas-name').value = store.meterNames.gas;
+
+            const options = `
+                <option value="m1">${store.meterNames.m1}</option>
+                <option value="m2">${store.meterNames.m2}</option>
+                <option value="m3">${store.meterNames.m3}</option>
+                <option value="gas">${store.meterNames.gas}</option>
+            `;
+            document.getElementById('entry-meter').innerHTML = options;
+            document.getElementById('old-meter').innerHTML = options;
+        }
+
+        // Camera Logic
+        function triggerCamera() { document.getElementById('camera-input').click(); }
+
+        // SNGPL Gas Meter Calculation Engine
+        function calculateGasBill() {
+            const prev = parseFloat(document.getElementById('gas-prev').value) || 0;
+            const curr = parseFloat(document.getElementById('gas-curr').value) || 0;
+            const pf = parseFloat(document.getElementById('gas-pf').value) || 1.0218;
+            const gcv = parseFloat(document.getElementById('gas-gcv').value) || 1031;
+            const rate = parseFloat(document.getElementById('gas-rate').value) || 0;
+
+            const diff = curr - prev;
+            const hm3 = (diff / 100000) * pf;
+            const mmbtu = (hm3 * gcv) / 281.7385;
+            const totalGasBill = mmbtu * rate;
+
+            document.getElementById('disp-hm3').value = hm3.toFixed(3);
+            document.getElementById('disp-mmbtu').value = mmbtu.toFixed(3);
+            document.getElementById('gas-final-bill').innerText = `${Math.round(totalGasBill)} RS`;
+
+            updateGrandTotal(Math.round(totalGasBill));
+        }
+
+        // Reading Add Functions
+        function saveReading() {
+            const meter = document.getElementById('entry-meter').value;
+            const val = parseFloat(document.getElementById('entry-reading').value);
+            if (!val) { alert("براہ کرم صحیح ریڈنگ درج کریں!"); return; }
+
+            const lastReading = store.readings.filter(r => r.meter === meter).slice(-1)[0];
+            const oldVal = lastReading ? lastReading.newVal : 0;
+            const units = oldVal ? (val - oldVal) : 0;
+
+            store.readings.push({
+                id: Date.now(), meter: meter, newVal: val, oldVal: oldVal, units: units > 0 ? units : 0,
+                time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            });
+
+            saveData(); updateUI();
+            document.getElementById('entry-reading').value = '';
+            alert("ریڈنگ محفوظ ہو چکی ہے!");
+        }
+
+        function addOldReading() {
+            const meter = document.getElementById('old-meter').value;
+            const val = parseFloat(document.getElementById('old-reading-val').value);
+            if (!val) return;
+
+            store.readings.push({
+                id: Date.now(), meter: meter, newVal: val, oldVal: 0, units: 0,
+                time: new Date().toLocaleDateString() + " (Old Locked)"
+            });
+
+            saveData(); updateUI();
+            document.getElementById('old-reading-val').value = '';
+            alert("پرانی ریڈنگ لاک کر کے شامل کر دی گئی ہے!");
+        }
+
+        function deleteReading(id) {
+            store.readings = store.readings.filter(r => r.id !== id);
+            saveData(); updateUI();
+        }
+
+        // UI & Grand Total Calculation
+        function updateUI() {
+            ['m1', 'm2', 'm3'].forEach(m => {
+                const list = store.readings.filter(r => r.meter === m);
+                const last = list.slice(-1)[0];
+                const units = last ? last.units : 0;
+                const bill = units * store.limits[m].rate;
+
+                document.getElementById(`disp-${m}-val`).innerText = `${bill} RS`;
+                document.getElementById(`disp-${m}-sub`).innerText = `${units} Daily | Total`;
+            });
+
+            // History Table Update
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+            store.readings.slice().reverse().forEach(r => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><button class="btn-danger" onclick="deleteReading(${r.id})">🗑</button></td>
+                        <td>${store.meterNames[r.meter]}</td>
+                        <td>${r.units}</td>
+                        <td>${r.newVal}</td>
+                        <td>${r.oldVal}</td>
+                        <td>${r.time}</td>
+                    </tr>
+                `;
+            });
+
+            // Complaints Table Update
+            const cbody = document.getElementById('complaints-table-body');
+            cbody.innerHTML = '';
+            store.complaints.slice().reverse().forEach(c => {
+                cbody.innerHTML += `
+                    <tr>
+                        <td><button class="btn-danger" onclick="deleteComplaint(${c.id})">🗑</button></td>
+                        <td>${c.text}</td>
+                        <td>${c.time}</td>
+                    </tr>
+                `;
+            });
+
+            calculateGasBill();
+        }
+
+        function updateGrandTotal(gasBill) {
+            let elecTotal = 0;
+            ['m1', 'm2', 'm3'].forEach(m => {
+                const list = store.readings.filter(r => r.meter === m);
+                const last = list.slice(-1)[0];
+                const units = last ? last.units : 0;
+                elecTotal += (units * store.limits[m].rate);
+            });
+
+            const grandTotal = elecTotal + gasBill;
+            document.getElementById('grand-total-display').innerText = `${grandTotal.toLocaleString()} RS`;
+            
+            document.getElementById('sum-collected').innerText = `${elecTotal} RS`;
+            document.getElementById('sum-budget').innerText = `${store.fixedBudget} RS`;
+            document.getElementById('sum-net-balance').innerText = `${store.fixedBudget - grandTotal} RS`;
+        }
+
+        // Complaint Functions
+        function saveComplaint() {
+            const text = document.getElementById('complaint-text').value;
+            if (!text) return;
+
+            store.complaints.push({
+                id: Date.now(), text: text,
+                time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            });
+
+            saveData(); updateUI();
+            document.getElementById('complaint-text').value = '';
+            alert("شکایت ریکارڈ میں محفوظ کر لی گئی ہے!");
+        }
+
+        function deleteComplaint(id) {
+            store.complaints = store.complaints.filter(c => c.id !== id);
+            saveData(); updateUI();
+        }
+
+        // Banner Close
+        function closeBanner() { document.getElementById('alert-banner').style.display = 'none'; }
+
+        // WhatsApp Automation
+        function shareWhatsAppSummary() {
+            let msg = `*📊 Smart Bill Tracker Summary*\n📅 Date: ${new Date().toLocaleDateString()}\n--------------------\n`;
+            ['m1', 'm2', 'm3'].forEach(m => {
+                const list = store.readings.filter(r => r.meter === m);
+                const last = list.slice(-1)[0];
+                const units = last ? last.units : 0;
+                msg += `🔹 *${store.meterNames[m]}*: ${units} Units\n`;
+            });
+            msg += `--------------------\n💰 *Grand Total*: ${document.getElementById('grand-total-display').innerText}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function send3DayReminder() {
+            let msg = `🔔 *Smart Bill Tracker Alert*\nہر 3 دن بعد ریڈنگ درج کرنے کی یاد دہانی۔ براہ کرم ایپ کھول کر نئی ریڈنگ درج کریں۔`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Export Functions
+        function exportToExcel() {
+            const data = store.readings.map(r => ({
+                Meter: store.meterNames[r.meter], "New Reading": r.newVal, "Old Reading": r.oldVal, "Units": r.units, Date: r.time
+            }));
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Readings");
+            XLSX.writeFile(wb, "Bill_Tracker_Report.xlsx");
+        }
+
+        function generatePDFReceipt() { window.print(); }
+
+        // Settings Save Functions
+        function saveMeterLimits() {
+            const m = document.getElementById('cfg-meter-select').value;
+            store.limits[m].daily = parseFloat(document.getElementById('cfg-daily-limit').value) || 10;
+            store.limits[m].total = parseFloat(document.getElementById('cfg-total-limit').value) || 300;
+            store.limits[m].rate = parseFloat(document.getElementById('cfg-unit-rate').value) || 35;
+            saveData(); updateUI();
+            alert("میٹر لیمٹس اور ریٹ محفوظ کر دیے گئے ہیں!");
+        }
+
+        function saveGlobalSettings() {
+            store.fixedBudget = parseFloat(document.getElementById('cfg-fixed-budget').value) || 25000;
+            store.pin = document.getElementById('cfg-pin').value || "1234";
+            saveData(); updateUI();
+            alert("تمام گلوبل سیٹنگز اپڈیٹ ہو چکی ہیں!");
+        }
+
+        function saveData() { localStorage.setItem('bill_tracker_pro_v3', JSON.stringify(store)); }
+
+        // Online Network Monitor
+        window.addEventListener('online', () => { document.getElementById('sync-status').innerText = "🟢 Online Ready"; });
+        window.addEventListener('offline', () => { document.getElementById('sync-status').innerText = "🟡 Offline Mode"; });
+
+        // Initialize App
+        applyMeterNames();
+        updateUI();
+    </script>
+</body>
+</html>
