@@ -1,466 +1,535 @@
 <!DOCTYPE html>
-<html lang="ur" dir="ltr">
+<html lang="ur" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electrical & Gas Bill Tracker PRO</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #004d40;
-            --accent-color: #0288d1;
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 70px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Utility & Gas Manager</title>
+  <style>
+    :root {
+      --primary: #1e3c72;
+      --secondary: #2a5298;
+      --accent: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+    }
 
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        header h1 { font-size: 1.1rem; }
-        .sync-badge { font-size: 0.8rem; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); padding-bottom: 60px; color: #333; }
 
-        /* Pin Overlay */
-        .pin-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85);
-            z-index: 99999; display: flex; justify-content: center; align-items: center;
-        }
-        .pin-box { background: white; padding: 25px; border-radius: 10px; text-align: center; width: 85%; max-width: 350px; }
+    /* Red Banner Alert */
+    #alertBanner {
+      display: none;
+      background: var(--danger);
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #alertBanner marquee { vertical-align: middle; }
 
-        /* Sidebar (Right Side Menu) */
-        .sidebar {
-            position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
-            background-color: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-            transition: 0.3s; z-index: 1000; padding: 20px; overflow-y: auto;
-        }
-        .sidebar.active { right: 0; }
-        .sidebar h2 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; font-size: 1.1rem; }
-        .menu-item { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 0.9rem; }
-        .menu-item i { margin-right: 12px; width: 20px; color: var(--primary-color); }
+    /* Header & Navigation */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav { display: flex; background: #fff; border-bottom: 1px solid #ddd; overflow-x: auto; }
+    nav button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: none;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+    }
+    nav button.active { border-bottom: 3px solid var(--primary); color: var(--primary); }
 
-        .container { padding: 15px; max-width: 600px; margin: auto; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+    .container { padding: 15px; max-width: 1100px; margin: auto; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-        .card { background: var(--card-bg); border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; }
-        .meter-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 15px; }
-        .meter-box { background: #e8f5e9; border-radius: 8px; padding: 12px; border: 1px solid #c8e6c9; }
-        .meter-box h4 { color: var(--primary-color); margin-bottom: 8px; border-bottom: 1px solid #c8e6c9; padding-bottom: 4px; }
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .card { background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-right: 5px solid var(--primary); }
+    .card.gas { border-right-color: #fd7e14; }
+    .card h4 { margin-bottom: 10px; color: var(--primary); }
+    .card p { font-size: 14px; margin: 4px 0; }
 
-        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; font-size: 0.95rem; }
-        button { background-color: var(--primary-color); color: white; border: none; font-weight: bold; cursor: pointer; }
-        button.btn-accent { background-color: var(--accent-color); }
+    /* Gas Calculation Box - Matching Bill Picture */
+    .gas-bill-box {
+      background: #fff;
+      border: 2px solid #333;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-family: monospace;
+    }
+    .bill-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ccc; padding: 6px 0; }
+    .bill-title { font-weight: bold; }
 
-        .summary-box { background: #fffde7; padding: 10px; border-radius: 6px; margin: 8px 0; border: 1px solid #fff59d; font-size: 0.95rem; }
-        .large-box { background: #e0f2f1; border-color: #b2dfdb; font-size: 1.1rem; font-weight: bold; text-align: center; }
+    /* Form Inputs & Tables */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
+    input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    .btn { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .btn-danger { background: var(--danger); }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; font-size: 13px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #f2f2f2; }
 
-        /* Bottom Navigation Bar (Exact 5 Tabs) */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100;
-        }
-        .nav-item { text-align: center; font-size: 0.75rem; color: #666; cursor: pointer; }
-        .nav-item.active { color: var(--primary-color); font-weight: bold; }
-        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 3px; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        table, th, td { border: 1px solid #ddd; padding: 6px; text-align: center; }
-        th { background-color: #f2f2f2; }
-    </style>
+    /* Custom Native Popup Modal (Replaces Browser Prompt/Alert) */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 350px;
+      text-align: right;
+    }
+    .modal-buttons { display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end; }
+  </style>
 </head>
 <body>
 
-    <!-- Pin Lock Overlay -->
-    <div id="pinOverlay" class="pin-overlay">
-        <div class="pin-box">
-            <h3>🔒 App Locked (Enter PIN)</h3>
-            <p>Default PIN: 1234</p>
-            <input type="password" id="pinInput" maxlength="4" placeholder="****">
-            <button onclick="verifyPin()">Unlock App</button>
-        </div>
+<!-- Alert Banner -->
+<div id="alertBanner" onclick="dismissAlert()">
+  <marquee id="alertText">انتباہ: لیمٹ کراس ہو چکی ہے!</marquee>
+</div>
+
+<header>
+  <h2>Smart Meter Dashboard</h2>
+  <span id="cloudStatus">🟢 Online</span>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('dashboard')">ڈیش بورڈ</button>
+  <button onclick="switchTab('record')">ریکارڈ ٹیب</button>
+  <button onclick="switchTab('settings')">سیٹنگز / لیمٹس</button>
+  <button onclick="switchTab('analysis')">انالیسس</button>
+  <button onclick="switchTab('complaints')">شکایات</button>
+</nav>
+
+<div class="container">
+
+  <!-- DASHBOARD TAB -->
+  <div id="dashboard" class="tab-content active">
+    <h3>لائیو میٹر اسٹیٹس</h3>
+    <div class="grid" id="meterCards"></div>
+
+    <h3>ریڈنگ انٹری</h3>
+    <div class="card" style="border-right-color: var(--secondary);">
+      <div class="form-group">
+        <label>میٹر منتخب کریں:</label>
+        <select id="entryMeterSelect"></select>
+      </div>
+      <div class="form-group">
+        <label>نئی ریڈنگ درج کریں:</label>
+        <input type="number" id="newReadingInput" placeholder="0000">
+      </div>
+      <button class="btn" onclick="saveReading()">Save Reading</button>
     </div>
 
-    <!-- Header -->
-    <header>
-        <div id="syncStatusBadge" class="sync-badge">🟢 Online</div>
-        <h1>Bill Tracker PRO</h1>
-        <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size: 1.2rem;"></i>
-    </header>
-
-    <!-- Right Side Menu (9 Advanced Features) -->
-    <div class="sidebar" id="sidebar">
-        <h2>Menu <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer;"></i></h2>
-        <div class="menu-item" onclick="openModal('meterNamesModal')"><i class="fas fa-pen"></i> 01. Custom Meter Names</div>
-        <div class="menu-item" onclick="triggerWhatsAppAuto()"><i class="fab fa-whatsapp"></i> 02. WhatsApp / SMS Automation</div>
-        <div class="menu-item" onclick="openModal('overuseModal')"><i class="fas fa-chart-line"></i> 03. Overuse Alert Settings</div>
-        <div class="menu-item"><i class="fas fa-sync"></i> 04. Cloud Sync Status: <span id="menuSyncText">Active</span></div>
-        <div class="menu-item" onclick="openModal('remoteModal')"><i class="fas fa-cloud"></i> 05. Remote Access Control</div>
-        <div class="menu-item" onclick="exportExcel()"><i class="fas fa-file-excel"></i> 06. Export Excel (XLSX)</div>
-        <div class="menu-item" onclick="window.print()"><i class="fas fa-file-pdf"></i> 07. Export PDF / Print</div>
-        <div class="menu-item" onclick="openModal('pinChangeModal')"><i class="fas fa-lock"></i> 08. App Lock & PIN Security</div>
-        <div class="menu-item" onclick="shareWhatsAppSummary()"><i class="fab fa-whatsapp" style="color:green;"></i> 09. WhatsApp Auto-Share</div>
+    <h3 style="margin-top:20px;">مالیاتی خلاصہ (Financial Summary)</h3>
+    <div class="grid">
+      <div class="card"><p>گھر سے جمع کل بل:</p><h3 id="sumHomeBills">Rs. 0</h3></div>
+      <div class="card"><p>کل فکسڈ بجٹ:</p><h3 id="sumFixedBudget">Rs. 0</h3></div>
+      <div class="card" style="grid-column: span 2; background: #e8f5e9;"><p>کل صاف بیلنس (Net Balance):</p><h2 id="sumNetBalance">Rs. 0</h2></div>
     </div>
 
-    <div class="container">
-        <!-- TAB 1: DASHBOARD -->
-        <div id="dashboard" class="tab-content active">
-            <div id="dynamicAlertArea"></div>
-
-            <h3>Live Meter States & Calculations</h3>
-            <div class="meter-grid" id="dashboardMeterGrid"></div>
-
-            <div class="card">
-                <h3>Dashboard Reading Entry <i class="fas fa-plus-circle"></i></h3>
-                <select id="entryMeterSelect">
-                    <option value="m1">Meter 1</option>
-                    <option value="m2">Meter 2</option>
-                    <option value="m3">Meter 3</option>
-                    <option value="m4">Gas Meter</option>
-                </select>
-                <input type="number" id="newReadingInput" placeholder="Enter new reading">
-                <input type="file" id="billImgInput" accept="image/*" style="display:none;">
-                <button type="button" class="btn-accent" onclick="document.getElementById('billImgInput').click()"><i class="fas fa-camera"></i> Upload Bill Receipt</button>
-                <button type="button" onclick="saveReading()"><i class="fas fa-save"></i> Save Reading</button>
-            </div>
-
-            <div class="card">
-                <h3>Bill Status & Summary</h3>
-                <div class="summary-box">Home Paid Total Bills: <b id="homePaidSum">0 RS</b></div>
-                <div class="summary-box">Total Fixed Budget: <b id="dashFixedBudget">0 RS</b></div>
-                <div class="summary-box large-box">Net Balance: <b id="dashNetBalance">0 RS</b></div>
-                <div class="summary-box large-box" style="background:#e0f7fa;">Total Estimated Usage Cost: <b id="dashTotalCost">0 RS</b></div>
-            </div>
-        </div>
-
-        <!-- TAB 2: RECORD -->
-        <div id="record" class="tab-content">
-            <div class="card">
-                <h3>Readings History & Records</h3>
-                <select id="recordMeterSelect" onchange="renderAllUI()">
-                    <option value="m1">Meter 1</option>
-                    <option value="m2">Meter 2</option>
-                    <option value="m3">Meter 3</option>
-                    <option value="m4">Gas Meter</option>
-                </select>
-                <input type="number" id="prevReadingInput" placeholder="Add Previous Reading (Locked Box)">
-                <input type="datetime-local" id="recordDateTime">
-                <button onclick="saveRecordData()">Save Reading Record</button>
-                <div id="recordTableContainer"></div>
-            </div>
-        </div>
-
-        <!-- TAB 3: GAS FORMULA & LIMITS -->
-        <div id="gas" class="tab-content">
-            <div class="card">
-                <h3>SNGPL Gas Formula & Meter Calculator</h3>
-                <label>HM3 Difference:</label>
-                <input type="number" id="gasHm3" value="0" oninput="calcGasFormula()">
-                <label>Pressure Factor:</label>
-                <input type="number" id="gasPress" value="1.0519" oninput="calcGasFormula()">
-                <label>GCV Rate:</label>
-                <input type="number" id="gasGcv" value="1031" oninput="calcGasFormula()">
-                <div class="summary-box large-box" style="background:#ffebee; color:#b71c1c;">
-                    Final Gas MMBTU Result: <h2 id="gasResultFinal">0.0000</h2>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Meter Limits & Rates Settings</h3>
-                <select id="settingMeterSelect" onchange="loadMeterSettingFields()">
-                    <option value="m1">Meter 1</option>
-                    <option value="m2">Meter 2</option>
-                    <option value="m3">Meter 3</option>
-                    <option value="m4">Gas Meter</option>
-                </select>
-                <input type="number" id="setDailyLimit" placeholder="Daily Unit Limit">
-                <input type="number" id="setTotalLimit" placeholder="Total Unit Limit">
-                <input type="number" id="setRate" placeholder="Per Unit Rate (RS)">
-                <input type="datetime-local" id="setDueDate">
-                <input type="number" id="globalBudgetInput" placeholder="Total Fixed Budget">
-                <button onclick="saveMeterLimitsAndBudget()">Save All Settings</button>
-                <div id="settingsTableContainer"></div>
-            </div>
-        </div>
-
-        <!-- TAB 4: ANALYSIS -->
-        <div id="analysis" class="tab-content">
-            <div class="card">
-                <h3>Bill Analysis & Payment Tracking</h3>
-                <select id="analMeterSelect">
-                    <option value="m1">Meter 1</option>
-                    <option value="m2">Meter 2</option>
-                    <option value="m3">Meter 3</option>
-                    <option value="m4">Gas Meter</option>
-                </select>
-                <input type="number" id="analBillAmount" placeholder="New Bill Amount">
-                <select id="analPaymentSource">
-                    <option value="Home">Home Paid</option>
-                    <option value="Outside">Outside Paid</option>
-                </select>
-                <input type="month" id="analMonthInput">
-                <button onclick="saveAnalysisData()">Save Bill Entry</button>
-                <div id="analysisTableContainer"></div>
-                <div id="analysisDiffBox" class="summary-box large-box" style="margin-top:10px;"></div>
-            </div>
-        </div>
-
-        <!-- TAB 5: COMPLAINTS & ALERTS -->
-        <div id="alerts" class="tab-content">
-            <div class="card">
-                <h3>Complaints & Sound/Voice Diagnostics</h3>
-                <input type="text" id="complaintInput" placeholder="Write new complaint text...">
-                <button onclick="addNewComplaint()">Save & Voice Alert Complaint</button>
-                <div id="complaintTableContainer"></div>
-            </div>
-        </div>
+    <!-- GAS BILL SPECIAL BOX (AS PER IMAGE) -->
+    <h3>گیس بل کیلکولیشن (Gas Calculation Box)</h3>
+    <div class="gas-bill-box">
+      <div class="bill-row">
+        <span><b>Dates:</b> Current: <span id="gCurrDate">--</span></span>
+        <span>Previous: <span id="gPrevDate">--</span></span>
+        <span><b>Difference:</b> <span id="gDiffDate">0</span> Days</span>
+      </div>
+      <div class="bill-row">
+        <span><b>Reading:</b> Current: <span id="gCurrRead">0</span></span>
+        <span>Previous: <span id="gPrevRead">0</span></span>
+        <span><b>Difference:</b> <span id="gDiffRead">0</span></span>
+      </div>
+      <div class="bill-row">
+        <span>Pres. / factor: <b>1.0218</b></span>
+        <span>Gas Consumed HM3: <b id="gHM3">0.000</b></span>
+      </div>
+      <div class="bill-row">
+        <span>GCV: <b>1031</b></span>
+        <span>MMBTU: <b id="gMMBTU">0.000</b></span>
+      </div>
+      <div class="bill-row" style="border:none; padding-top:10px;">
+        <span style="font-size:16px;"><b>گیس کا فائنل بل:</b></span>
+        <span style="font-size:18px; color:var(--danger); font-weight:bold;" id="gasFinalBill">Rs. 0</span>
+      </div>
+      <button class="btn" style="margin-top:10px; width:100%;" onclick="openGasEditModal()">Edit Gas Parameters</button>
     </div>
+  </div>
 
-    <!-- Custom Meter Names Modal -->
-    <div class="modal" id="meterNamesModal">
-        <div class="modal-content">
-            <h3>Custom Meter Names</h3>
-            <input type="text" id="cName1" placeholder="Meter 1 Name">
-            <input type="text" id="cName2" placeholder="Meter 2 Name">
-            <input type="text" id="cName3" placeholder="Meter 3 Name">
-            <input type="text" id="cName4" placeholder="Gas Meter Name">
-            <button onclick="saveCustomMeterNames()">Save Names</button>
-            <button style="background:#777;" onclick="closeModal('meterNamesModal')">Cancel</button>
-        </div>
+  <!-- RECORD TAB -->
+  <div id="record" class="tab-content">
+    <h3>ریکارڈ مینجمنٹ</h3>
+    <div class="form-group">
+      <label>میٹر منتخب کریں:</label>
+      <select id="recordMeterSelect" onchange="renderRecordTable()"></select>
     </div>
-
-    <!-- Bottom Navigation Bar (Exact 5 Tabs) -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-tachometer-alt"></i>Dashboard</div>
-        <div class="nav-item" onclick="switchTab('record')"><i class="fas fa-list-alt"></i>Record</div>
-        <div class="nav-item" onclick="switchTab('gas')"><i class="fas fa-fire"></i>Gas & Limits</div>
-        <div class="nav-item" onclick="switchTab('analysis')"><i class="fas fa-chart-line"></i>Analysis</div>
-        <div class="nav-item" onclick="switchTab('alerts')"><i class="fas fa-bell"></i>Complaints</div>
+    <div class="form-group">
+      <label>پرانی ریڈنگ (Lock Table Reading):</label>
+      <input type="number" id="oldReadingInput">
     </div>
+    <button class="btn" onclick="saveOldReading()">Save Lock Reading</button>
 
-    <script>
-        let appData = JSON.parse(localStorage.getItem('elec_gas_app_data')) || {
-            pin: "1234",
-            fixedBudget: 0,
-            meterNames: { m1: "Meter 1", m2: "Meter 2", m3: "Meter 3", m4: "Gas Meter" },
-            limits: {
-                m1: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
-                m2: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
-                m3: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" },
-                m4: { dailyLimit: 0, totalLimit: 0, rate: 0, dueDate: "" }
-            },
-            history: [],
-            analysis: [],
-            complaints: []
-        };
+    <table id="historyTable">
+      <thead>
+        <tr>
+          <th>Date/Time</th>
+          <th>Old Reading</th>
+          <th>New Reading</th>
+          <th>Daily Units</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="card" style="margin-top:10px;" id="recordSummaryBox"></div>
+  </div>
 
-        let alertBell = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+  <!-- SETTINGS TAB -->
+  <div id="settings" class="tab-content">
+    <h3>سیٹنگز اور فکسڈ لیمٹس</h3>
+    <div class="form-group">
+      <label>میٹر منتخب کریں:</label>
+      <select id="settingMeterSelect"></select>
+    </div>
+    <div class="form-group"><label>Daily Unit Limit:</label><input type="number" id="setDailyLimit"></div>
+    <div class="form-group"><label>Total Unit Limit:</label><input type="number" id="setTotalLimit"></div>
+    <div class="form-group"><label>Per Unit Rate:</label><input type="number" id="setUnitRate"></div>
+    <div class="form-group"><label>Due Date:</label><input type="datetime-local" id="setDueDate"></div>
+    <button class="btn" onclick="saveMeterSettings()">Save Limits</button>
 
-        function verifyPin() {
-            let entered = document.getElementById('pinInput').value;
-            if (entered === appData.pin) {
-                document.getElementById('pinOverlay').style.display = 'none';
-            } else {
-                alert("Incorrect PIN!");
-            }
-        }
+    <hr style="margin:20px 0;">
+    <div class="form-group"><label>کل فکسڈ بجٹ (Total Fixed Budget):</label><input type="number" id="setGlobalBudget"></div>
+    <button class="btn" onclick="saveGlobalBudget()">Save Budget</button>
 
-        function saveData() {
-            localStorage.setItem('elec_gas_app_data', JSON.stringify(appData));
-            renderAllUI();
-        }
+    <h4 style="margin-top:20px;">تمام فکسڈ لیمٹس ٹیبل</h4>
+    <table id="settingsTable">
+      <thead>
+        <tr><th>Meter</th><th>Daily Limit</th><th>Total Limit</th><th>Rate</th><th>Due Date</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
+  <!-- ANALYSIS TAB -->
+  <div id="analysis" class="tab-content">
+    <h3>بل تجزیہ (Analysis)</h3>
+    <div class="form-group"><label>میٹر:</label><select id="analysisMeterSelect"></select></div>
+    <div class="form-group"><label>ادا شدہ بل (Amount):</label><input type="number" id="anBillAmount"></div>
+    <div class="form-group">
+      <label>ادائیگی کا ذریعہ:</label>
+      <select id="anPaymentSource"><option>گھر سے پے ہوا</option><option>باہر سے پے ہوا</option></select>
+    </div>
+    <div class="form-group"><label>مہینہ / تاریخ:</label><input type="month" id="anMonth"></div>
+    <button class="btn" onclick="saveAnalysis()">Save Analysis</button>
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            if(document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
-        }
+    <table id="analysisTable">
+      <thead>
+        <tr><th>Date/Month</th><th>Old Bill</th><th>New Bill</th><th>Payment</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="card" style="margin-top:10px;" id="analysisDiffBox"></div>
+  </div>
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; toggleSidebar(); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+  <!-- COMPLAINTS TAB -->
+  <div id="complaints" class="tab-content">
+    <h3>شکایات کا سیکشن</h3>
+    <div class="form-group"><label>شکایت درج کریں:</label><input type="text" id="complaintInput"></div>
+    <button class="btn" onclick="saveComplaint()">Submit Complaint</button>
+    <table id="complaintTable" style="margin-top:15px;">
+      <thead><tr><th>ID</th><th>Complaint</th><th>Date</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-        function triggerFullAlert(message) {
-            alertBell.play().catch(e => console.log("Audio block", e));
-            if ("vibrate" in navigator) navigator.vibrate([400, 200, 400]);
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                let utterance = new SpeechSynthesisUtterance(message);
-                utterance.lang = 'ur-PK';
-                window.speechSynthesis.speak(utterance);
-            }
-            showRedBanner(message);
-        }
+</div>
 
-        function showRedBanner(msg) {
-            let area = document.getElementById('dynamicAlertArea');
-            area.innerHTML = `<div style="background:#d32f2f; color:white; padding:10px; border-radius:6px; margin-bottom:10px; font-weight:bold; cursor:pointer;" onclick="this.remove()">
-                ⚠️ ALERT: ${msg} (Tap to dismiss)
-            </div>`;
-        }
+<!-- NATIVE CUSTOM MODAL CONTAINER -->
+<div class="modal-overlay" id="customModal">
+  <div class="modal-content">
+    <h4 id="modalTitle">توجہ فرمائیں</h4>
+    <p id="modalBody" style="margin:10px 0; font-size:14px;"></p>
+    <div id="modalInputContainer"></div>
+    <div class="modal-buttons">
+      <button class="btn btn-danger" onclick="closeModal()">بند کریں</button>
+      <button class="btn" id="modalConfirmBtn" style="display:none;">تکمیل</button>
+    </div>
+  </div>
+</div>
 
-        function saveCustomMeterNames() {
-            appData.meterNames.m1 = document.getElementById('cName1').value || appData.meterNames.m1;
-            appData.meterNames.m2 = document.getElementById('cName2').value || appData.meterNames.m2;
-            appData.meterNames.m3 = document.getElementById('cName3').value || appData.meterNames.m3;
-            appData.meterNames.m4 = document.getElementById('cName4').value || appData.meterNames.m4;
-            closeModal('meterNamesModal');
-            saveData();
-            alert("Meter names updated successfully!");
-        }
+<script>
+  // DEFAULT DATA STRUCTURE (STORED IN LOCALSTORAGE)
+  let appData = JSON.parse(localStorage.getItem('smartBillData')) || {
+    meters: {
+      'Meter 1': { name: 'Meter 1', dailyLimit: 10, totalLimit: 300, rate: 30, dueDate: '', readings: [], lockOldReading: 0 },
+      'Meter 2': { name: 'Meter 2', dailyLimit: 10, totalLimit: 300, rate: 30, dueDate: '', readings: [], lockOldReading: 0 },
+      'Meter 3': { name: 'Meter 3', dailyLimit: 10, totalLimit: 300, rate: 30, dueDate: '', readings: [], lockOldReading: 0 },
+      'Gas Meter': { name: 'Gas Meter', dailyLimit: 5, totalLimit: 100, rate: 80, dueDate: '', readings: [], lockOldReading: 0 }
+    },
+    gasParams: { presFactor: 1.0218, gcv: 1031 },
+    fixedBudget: 30000,
+    analysisRecords: [],
+    complaints: []
+  };
 
-        function saveReading() {
-            let m = document.getElementById('entryMeterSelect').value;
-            let val = parseFloat(document.getElementById('newReadingInput').value) || 0;
-            if(!val) { alert("Enter valid reading!"); return; }
+  function saveData() {
+    localStorage.setItem('smartBillData', JSON.stringify(appData));
+    updateUI();
+  }
 
-            appData.history.push({ meter: m, reading: val, date: new Date().toLocaleString(), rawDate: new Date() });
-            document.getElementById('newReadingInput').value = '';
-            saveData();
-            alert("Reading saved successfully!");
-        }
+  // TAB SWITCHING
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+  }
 
-        function saveRecordData() {
-            let m = document.getElementById('recordMeterSelect').value;
-            let prev = parseFloat(document.getElementById('prevReadingInput').value) || 0;
-            let dt = document.getElementById('recordDateTime').value || new Date().toLocaleString();
-            
-            appData.history.push({ meter: m, reading: prev, date: dt, rawDate: new Date() });
-            saveData();
-            alert("Record saved!");
-        }
+  // CUSTOM MODAL POPUP SYSTEM (No External JS Domain Display)
+  function showModal(title, body, onConfirm = null, showInput = false) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalBody').innerText = body;
+    const container = document.getElementById('modalInputContainer');
+    container.innerHTML = showInput ? '<input type="text" id="modalInput" style="width:100%; padding:5px; margin-top:5px;">' : '';
+    
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    if (onConfirm) {
+      confirmBtn.style.display = 'block';
+      confirmBtn.onclick = () => { onConfirm(); closeModal(); };
+    } else {
+      confirmBtn.style.display = 'none';
+    }
+    document.getElementById('customModal').style.display = 'flex';
+  }
 
-        function saveMeterLimitsAndBudget() {
-            let m = document.getElementById('settingMeterSelect').value;
-            appData.limits[m].dailyLimit = parseFloat(document.getElementById('setDailyLimit').value) || 0;
-            appData.limits[m].totalLimit = parseFloat(document.getElementById('setTotalLimit').value) || 0;
-            appData.limits[m].rate = parseFloat(document.getElementById('setRate').value) || 0;
-            appData.limits[m].dueDate = document.getElementById('setDueDate').value;
-            
-            let gb = parseFloat(document.getElementById('globalBudgetInput').value);
-            if(gb) appData.fixedBudget = gb;
+  function closeModal() {
+    document.getElementById('customModal').style.display = 'none';
+  }
 
-            saveData();
-            alert("Settings saved successfully!");
-        }
+  // VOICE AND SOUND ALERTS
+  function triggerAlert(msg) {
+    document.getElementById('alertText').innerText = msg;
+    document.getElementById('alertBanner').style.display = 'block';
+    if ('vibrate' in navigator) navigator.vibrate([200, 100, 200]);
+    
+    // Urdu Voice System
+    if ('speechSynthesis' in window) {
+      let utterance = new SpeechSynthesisUtterance(msg);
+      utterance.lang = 'ur-PK';
+      window.speechSynthesis.speak(utterance);
+    }
+  }
 
-        function calcGasFormula() {
-            let hm3 = parseFloat(document.getElementById('gasHm3').value) || 0;
-            let press = parseFloat(document.getElementById('gasPress').value) || 1;
-            let gcv = parseFloat(document.getElementById('gasGcv').value) || 1;
-            let mmbtu = (hm3 * press * gcv) / 281.7385;
-            document.getElementById('gasResultFinal').innerText = mmbtu.toFixed(4);
-        }
+  function dismissAlert() {
+    document.getElementById('alertBanner').style.display = 'none';
+  }
 
-        function saveAnalysisData() {
-            let m = document.getElementById('analMeterSelect').value;
-            let amt = parseFloat(document.getElementById('analBillAmount').value) || 0;
-            let src = document.getElementById('analPaymentSource').value;
-            let mon = document.getElementById('analMonthInput').value;
+  // INITIALIZE DROPDOWNS
+  function populateDropdowns() {
+    const keys = Object.keys(appData.meters);
+    ['entryMeterSelect', 'recordMeterSelect', 'settingMeterSelect', 'analysisMeterSelect'].forEach(id => {
+      const select = document.getElementById(id);
+      select.innerHTML = '';
+      keys.forEach(k => {
+        let opt = document.createElement('option');
+        opt.value = k;
+        opt.innerText = appData.meters[k].name;
+        select.appendChild(opt);
+      });
+    });
+  }
 
-            appData.analysis.push({ meter: m, amount: amt, source: src, month: mon, date: new Date().toLocaleString() });
-            saveData();
-            alert("Analysis Bill Saved!");
-        }
+  // SAVE READING ENTRY
+  function saveReading() {
+    let meterKey = document.getElementById('entryMeterSelect').value;
+    let readingVal = parseFloat(document.getElementById('newReadingInput').value);
+    
+    if (isNaN(readingVal)) {
+      showModal("خرابی", "براہ کرم درست ریڈنگ درج کریں۔");
+      return;
+    }
 
-        function addNewComplaint() {
-            let text = document.getElementById('complaintInput').value;
-            if(!text) return;
-            appData.complaints.push({ text: text, date: new Date().toLocaleString() });
-            document.getElementById('complaintInput').value = '';
-            saveData();
-            triggerFullAlert("نئی شکایت درج ہو گئی ہے: " + text);
-        }
+    let meter = appData.meters[meterKey];
+    let prevReading = meter.readings.length > 0 ? meter.readings[meter.readings.length - 1].newVal : meter.lockOldReading;
+    let dailyUnits = readingVal - prevReading;
 
-        function shareWhatsAppSummary() {
-            let text = "--- Electrical & Gas Bill Summary ---\n";
-            ['m1','m2','m3','m4'].forEach(m => {
-                text += `${appData.meterNames[m]}: Active\n`;
-            });
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
-        }
+    meter.readings.push({
+      dateTime: new Date().toLocaleString(),
+      oldVal: prevReading,
+      newVal: readingVal,
+      units: dailyUnits > 0 ? dailyUnits : 0
+    });
 
-        function triggerWhatsAppAuto() {
-            alert("WhatsApp automated check triggered.");
-            shareWhatsAppSummary();
-        }
+    if (dailyUnits > meter.dailyLimit && meter.dailyLimit > 0) {
+      triggerAlert(`${meter.name} کی ڈیلی یونٹ لمیٹ کراس ہو گئی ہے!`);
+    }
 
-        function exportExcel() {
-            alert("Excel data export sequence initiated.");
-        }
+    saveData();
+    document.getElementById('newReadingInput').value = '';
+    showModal("کامیابی", "ریڈنگ محفوظ کر لی گئی ہے۔");
+  }
 
-        function renderAllUI() {
-            let gridHTML = "";
-            let totalCostVal = 0;
+  // UPDATE UI FUNCTION
+  function updateUI() {
+    // Render Dashboard Cards
+    let cardsContainer = document.getElementById('meterCards');
+    cardsContainer.innerHTML = '';
+    
+    let totalAllUnitsBill = 0;
 
-            ['m1', 'm2', 'm3', 'm4'].forEach(mKey => {
-                let name = appData.meterNames[mKey];
-                let lim = appData.limits[mKey];
-                let mHistory = appData.history.filter(h => h.meter === mKey);
-                let lastReading = mHistory.length > 0 ? mHistory[mHistory.length - 1].reading : 0;
-                let dailyUnits = lastReading > 0 ? (lastReading / 30).toFixed(1) : 0;
-                let dailyBill = (dailyUnits * lim.rate).toFixed(1);
-                let totalBill = (lastReading * lim.rate).toFixed(1);
-                totalCostVal += parseFloat(totalBill);
+    Object.keys(appData.meters).forEach(key => {
+      let m = appData.meters[key];
+      let totUnits = m.readings.reduce((a, b) => a + b.units, 0);
+      let totBill = totUnits * m.rate;
+      totalAllUnitsBill += totBill;
 
-                gridHTML += `<div class="meter-box">
-                    <h4>${name}</h4>
-                    <div>Daily Units: <b>${dailyUnits}</b> | Total Units: <b>${lastReading}</b></div>
-                    <div>Daily Bill: <b>${dailyBill} RS</b> | Total Bill: <b>${totalBill} RS</b></div>
-                    <div>Time Elapsed: <b>30 Days 00 Hrs</b></div>
-                </div>`;
-            });
-            document.getElementById('dashboardMeterGrid').innerHTML = gridHTML;
+      let card = document.createElement('div');
+      card.className = `card ${key === 'Gas Meter' ? 'gas' : ''}`;
+      card.innerHTML = `
+        <h4>${m.name}</h4>
+        <p>Daily Units: <b>${m.readings.length > 0 ? m.readings[m.readings.length - 1].units : 0}</b></p>
+        <p>Total Units: <b>${totUnits}</b></p>
+        <p>Daily Bill: <b>Rs. ${(m.readings.length > 0 ? m.readings[m.readings.length - 1].units : 0) * m.rate}</b></p>
+        <p>Total Bill: <b>Rs. ${totBill}</b></p>
+      `;
+      cardsContainer.appendChild(card);
+    });
 
-            let totalHomePaid = appData.analysis.filter(a => a.source === 'Home').reduce((sum, a) => sum + a.amount, 0);
-            document.getElementById('homePaidSum').innerText = totalHomePaid + " RS";
-            document.getElementById('dashFixedBudget').innerText = appData.fixedBudget + " RS";
-            document.getElementById('dashNetBalance').innerText = (appData.fixedBudget - totalHomePaid) + " RS";
-            document.getElementById('dashTotalCost').innerText = totalCostVal.toFixed(1) + " RS";
+    // Summary Calculations
+    document.getElementById('sumFixedBudget').innerText = `Rs. ${appData.fixedBudget}`;
+    let paidHome = appData.analysisRecords.filter(r => r.source === 'گھر سے پے ہوا').reduce((a, b) => a + b.amount, 0);
+    document.getElementById('sumHomeBills').innerText = `Rs. ${paidHome}`;
+    document.getElementById('sumNetBalance').innerText = `Rs. ${appData.fixedBudget - totalAllUnitsBill}`;
 
-            // Record Table
-            let curRecMeter = document.getElementById('recordMeterSelect').value;
-            let recList = appData.history.filter(h => h.meter === curRecMeter);
-            let recTable = `<table><tr><th>Date/Time</th><th>Reading</th></tr>`;
-            recList.forEach(r => { recTable += `<tr><td>${r.date}</td><td>${r.reading}</td></tr>`; });
-            recTable += `</table>`;
-            document.getElementById('recordTableContainer').innerHTML = recTable;
+    // Gas Specific Calculations (Formula as per bill image)
+    let gMeter = appData.meters['Gas Meter'];
+    if (gMeter.readings.length > 0) {
+      let last = gMeter.readings[gMeter.readings.length - 1];
+      let diff = last.newVal - last.oldVal;
+      let hm3 = (diff * appData.gasParams.presFactor) / 100000;
+      let mmbtu = (hm3 * appData.gasParams.gcv) / 281.7385;
+      
+      document.getElementById('gCurrRead').innerText = last.newVal;
+      document.getElementById('gPrevRead').innerText = last.oldVal;
+      document.getElementById('gDiffRead').innerText = diff;
+      document.getElementById('gHM3').innerText = hm3.toFixed(3);
+      document.getElementById('gMMBTU').innerText = mmbtu.toFixed(3);
+      document.getElementById('gasFinalBill').innerText = `Rs. ${(mmbtu * gMeter.rate).toFixed(2)}`;
+    }
 
-            // Analysis Table
-            let analTable = `<table><tr><th>Date</th><th>Meter</th><th>Amount</th><th>Source</th><th>Month</th></tr>`;
-            appData.analysis.forEach(a => {
-                analTable += `<tr><td>${a.date}</td><td>${appData.meterNames[a.meter]}</td><td>${a.amount}</td><td>${a.source}</td><td>${a.month}</td></tr>`;
-            });
-            analTable += `</table>`;
-            document.getElementById('analysisTableContainer').innerHTML = analTable;
+    renderSettingsTable();
+    renderRecordTable();
+  }
 
-            // Complaints Table
-            let compTable = `<table><tr><th>Date</th><th>Complaint Text</th></tr>`;
-            appData.complaints.forEach(c => {
-                compTable += `<tr><td>${c.date}</td><td>${c.text}</td></tr>`;
-            });
-            compTable += `</table>`;
-            document.getElementById('complaintTableContainer').innerHTML = compTable;
-        }
+  function renderRecordTable() {
+    let key = document.getElementById('recordMeterSelect').value || 'Meter 1';
+    let meter = appData.meters[key];
+    let tbody = document.querySelector('#historyTable tbody');
+    tbody.innerHTML = '';
 
-        renderAllUI();
-    </script>
+    meter.readings.forEach((r, idx) => {
+      let tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r.dateTime}</td>
+        <td>${r.oldVal}</td>
+        <td>${r.newVal}</td>
+        <td>${r.units}</td>
+        <td><button class="btn btn-danger" onclick="deleteReading('${key}', ${idx})">Delete</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function deleteReading(key, idx) {
+    appData.meters[key].readings.splice(idx, 1);
+    saveData();
+  }
+
+  function renderSettingsTable() {
+    let tbody = document.querySelector('#settingsTable tbody');
+    tbody.innerHTML = '';
+    Object.keys(appData.meters).forEach(k => {
+      let m = appData.meters[k];
+      let tr = document.createElement('tr');
+      tr.innerHTML = `<td>${m.name}</td><td>${m.dailyLimit}</td><td>${m.totalLimit}</td><td>Rs. ${m.rate}</td><td>${m.dueDate || '-'}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function saveMeterSettings() {
+    let key = document.getElementById('settingMeterSelect').value;
+    appData.meters[key].dailyLimit = parseFloat(document.getElementById('setDailyLimit').value) || 0;
+    appData.meters[key].totalLimit = parseFloat(document.getElementById('setTotalLimit').value) || 0;
+    appData.meters[key].rate = parseFloat(document.getElementById('setUnitRate').value) || 0;
+    appData.meters[key].dueDate = document.getElementById('setDueDate').value;
+    saveData();
+    showModal("کامیابی", "میٹر کی سیٹنگز محفوظ ہو گئی ہیں۔");
+  }
+
+  function saveGlobalBudget() {
+    appData.fixedBudget = parseFloat(document.getElementById('setGlobalBudget').value) || 0;
+    saveData();
+    showModal("کامیابی", "فکسڈ بجٹ محفوظ کر لیا گیا ہے۔");
+  }
+
+  function saveComplaint() {
+    let val = document.getElementById('complaintInput').value;
+    if (!val) return;
+    appData.complaints.push({ id: appData.complaints.length + 1, text: val, date: new Date().toLocaleDateString() });
+    document.getElementById('complaintInput').value = '';
+    saveData();
+    renderComplaints();
+  }
+
+  function renderComplaints() {
+    let tbody = document.querySelector('#complaintTable tbody');
+    tbody.innerHTML = '';
+    appData.complaints.forEach(c => {
+      let tr = document.createElement('tr');
+      tr.innerHTML = `<td>${c.id}</td><td>${c.text}</td><td>${c.date}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ONLINE/OFFLINE CLOUD STATUS DETECTOR
+  window.addEventListener('online', () => document.getElementById('cloudStatus').innerText = '🟢 Online');
+  window.addEventListener('offline', () => document.getElementById('cloudStatus').innerText = '🟡 Offline Mode');
+
+  // INIT ON LOAD
+  populateDropdowns();
+  updateUI();
+  renderComplaints();
+</script>
 </body>
 </html>
