@@ -893,3 +893,681 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Work Tracker & Alert System</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196F3;
+            --dark: #333;
+            --light: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            padding: 15px;
+            padding-bottom: 100px;
+            color: var(--dark);
+            text-align: right;
+        }
+
+        .header-title {
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -3px 12px rgba(0,0,0,0.15);
+            z-index: 999999 !important;
+            pointer-events: auto !important;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #666666;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 33%;
+            padding: 6px 0;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn span:first-child { font-size: 20px; }
+        .nav-btn.active { color: var(--primary); }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #2E7D32;
+            border-bottom: 2px solid #E8F5E9;
+            padding-bottom: 8px;
+        }
+
+        .alert-header-text {
+            color: #c62828 !important;
+            border-bottom-color: #ffebee !important;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .task-card {
+            background: #e8f5e9;
+            border: 2px dashed #4CAF50;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .task-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .task-points {
+            font-size: 16px;
+            color: #388e3c;
+            margin-top: 5px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-tick { background-color: var(--primary); }
+        .btn-cross { background-color: var(--danger); }
+        .btn-shared { background-color: var(--info); }
+        .btn-skip { background-color: #78909C; }
+        .btn-alarm { background-color: var(--warning); }
+        .btn-complain { background-color: var(--danger); }
+
+        .duty-box {
+            background: #fff3e0;
+            border-right: 5px solid var(--warning);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .alert-pending {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .alert-pending ul {
+            margin: 8px 0 0 0;
+            padding-right: 20px;
+        }
+
+        .alert-item {
+            background: #fff3e0;
+            border-right: 5px solid var(--warning);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alert-item.danger {
+            background: #ffebee;
+            border-right-color: var(--danger);
+        }
+
+        .complain-list {
+            margin-top: 15px;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .complain-card {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th { background-color: #4CAF50; color: white; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .badge-excellent { background-color: var(--primary); }
+        .badge-good { background-color: var(--info); }
+        .badge-bad { background-color: var(--danger); }
+
+        .tab-section { display: none; }
+        .tab-section.active { display: block; }
+        
+        .active-alarm-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Title -->
+    <div class="header-title">
+        <h1>🏠 Home Work Tracker</h1>
+    </div>
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <div id="tab-dashboard" class="tab-section active">
+        <!-- Date & Auto Day Selection Box -->
+        <div class="card">
+            <h3>📅 تاریخ اور دن (Date & Day Selection)</h3>
+            <div class="row">
+                <div class="col">
+                    <label>تاریخ منتخب کریں:</label>
+                    <input type="date" id="dutyDate" onchange="updateDayName()">
+                </div>
+                <div class="col">
+                    <label>آج کا دن (خود بخود اپ ڈیٹ ہوگا):</label>
+                    <input type="text" id="dutyDay" readonly style="background-color: #e8f5e9; font-weight: bold; color: #1b5e20;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Duty Selection -->
+        <div class="card">
+            <h3>👥 ڈیوٹی ممبرز (Duty Selection)</h3>
+            <div class="row">
+                <div class="col">
+                    <label>سینیئر (Senior):</label>
+                    <select id="seniorSelect" onchange="updateDutyBox()">
+                        <option value="عدنان">عدنان (Senior 1)</option>
+                        <option value="علی">علی (Senior 2)</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>ہیلپر (Helper):</label>
+                    <select id="helperSelect" onchange="updateDutyBox()">
+                        <option value="سادیہ">سادیہ (Helper 1)</option>
+                        <option value="ذیشان">ذیشان (Helper 2)</option>
+                        <option value="حمزہ">حمزہ (Helper 3)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Task -->
+        <div class="card">
+            <h3>📋 جاری کام (Active Task)</h3>
+            <div class="task-card">
+                <div class="task-title" id="taskTitle">Step 1: برتن دھونا</div>
+                <div class="task-points" id="taskPoints">⭐ [ +15 Points ]</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-tick" onclick="nextTask('tick')">✓ ہو گیا (Tick)</button>
+                <button class="btn btn-cross" onclick="nextTask('cross')">✗ نہیں کیا (Cross)</button>
+                <button class="btn btn-shared" onclick="nextTask('shared')">🤝 دونوں نے کیا</button>
+                <button class="btn btn-skip" onclick="nextTask('skip')">⛔ نہیں کرنا تھا</button>
+            </div>
+        </div>
+
+        <!-- 24 Hours Duty Status -->
+        <div class="card">
+            <h3>⏱️ 24 گھنٹے ڈیوٹی اسٹیٹس اور ادھورے کام</h3>
+            <div class="duty-box">
+                <div><strong>آج کے 2 ڈیوٹی ممبرز:</strong> <span id="dutyMembersDisplay">عدنان (Senior) + سادیہ (Helper)</span></div>
+                <small>💡 نوٹ: ہیلپر ہر 24 گھنٹے بعد خود بخود روٹیٹ ہوگا۔</small>
+
+                <div class="alert-pending" id="pendingTaskAlert">
+                    <strong>⚠️ الرٹ: سادیہ نے پچھلی ڈیوٹی میں یہ 5 کام نہیں کیے تھے:</strong>
+                    <ul>
+                        <li>1. برتن دھونا (Step 1)</li>
+                        <li>2. صحن کی صفائی (Step 2)</li>
+                        <li>3. کپڑے استری کرنا (Step 3)</li>
+                        <li>4. چائے بنانا (Step 4)</li>
+                        <li>5. کچرا باہر پھینکنا (Step 5)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leave Box -->
+        <div class="card">
+            <h3>🏖️ چھٹی کی درخواست (Leave Box)</h3>
+            <div class="row">
+                <div class="col">
+                    <label>ممبر کا نام:</label>
+                    <select>
+                        <option>عدنان</option>
+                        <option>سادیہ</option>
+                        <option>ذیشان</option>
+                        <option>عائشہ</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>چھٹی کی تاریخ:</label>
+                    <input type="date">
+                </div>
+                <div class="col">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-shared" style="padding: 10px;">سبمٹ چھٹی</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="card">
+            <h3>🏆 لائیو رزلٹ اور پرفارمنس بورڈ (Leaderboard)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ممبر</th>
+                        <th>پوائنٹس</th>
+                        <th>درجہ (Status)</th>
+                        <th>نتیجہ / سزا (Punishment)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>عدنان</td>
+                        <td>65</td>
+                        <td><span class="badge badge-excellent">🌟 Excellent</span></td>
+                        <td>شاندار! کوئی سزا نہیں</td>
+                    </tr>
+                    <tr>
+                        <td>ذیشان</td>
+                        <td>50</td>
+                        <td><span class="badge badge-good">👍 Good</span></td>
+                        <td>بہترین کام</td>
+                    </tr>
+                    <tr>
+                        <td>سادیہ</td>
+                        <td>20</td>
+                        <td><span class="badge badge-bad">❌ Bad</span></td>
+                        <td>🚨 سزا: اگلے دن اضافی چائے بنانا</td>
+                    </tr>
+                    <tr>
+                        <td>آسیہ</td>
+                        <td>0</td>
+                        <td><span class="badge badge-bad">❌ Bad</span></td>
+                        <td>🚨 سزا: اضافی صفائی</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================= TAB 2: ACTIVE ALERTS & ALARM ================= -->
+    <div id="tab-alerts" class="tab-section">
+        <div class="card">
+            <h3 class="alert-header-text">⏰ الارم سیٹنگ اور ڈیوٹی ریمائنڈر (Alarm System)</h3>
+            <div class="row">
+                <div class="col">
+                    <label>الارم کا وقت سیٹ کریں:</label>
+                    <input type="time" id="alarmTime">
+                </div>
+                <div class="col">
+                    <label>ممبر چنیں:</label>
+                    <select id="alarmMember">
+                        <option>عدنان</option>
+                        <option>سادیہ</option>
+                        <option>ذیشان</option>
+                        <option>عائشہ</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-alarm" onclick="setAlarm()">🔔 الارم سیٹ کریں</button>
+                </div>
+            </div>
+            <div id="alarmStatusBadge" class="active-alarm-badge">
+                ⏰ فعال الارم: <span id="alarmStatusText">--</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="alert-header-text">⚡ فعال الرٹس (Active System Alerts)</h3>
+            
+            <div class="alert-item danger">
+                <div>
+                    <strong>🕌 نماز یاد دہانی الرٹ:</strong> سادیہ نے وقت پر نماز ادا نہیں کی! <strong>(سزا: الگ سے طے ہوگی - پوائنٹ نہیں کٹیں گے)</strong>
+                </div>
+                <button class="btn btn-complain" style="width: auto;" onclick="triggerVoiceAlert('نماز الرٹ! سادیہ نماز وقت پر ادا کریں۔ پوائنٹ نہیں کٹے لیکن سزا الگ ہوگی۔')">🔊 پلے الرٹ</button>
+            </div>
+
+            <div class="alert-item">
+                <div>
+                    <strong>🥘 کچن راشن الرٹ:</strong> روزانہ کا سامان اور کچن کی چیزیں چیک نہیں کی گئیں۔
+                </div>
+                <button class="btn btn-alarm" style="width: auto;" onclick="triggerVoiceAlert('کچن اور راشن کی چیزیں فوراً چیک کریں')">🔊 پلے الرٹ</button>
+            </div>
+
+            <div class="alert-item danger">
+                <div>
+                    <strong>⚠️ ڈیوٹی اگنور الرٹ:</strong> ذیشان نے آج کی ڈیوٹی نظر انداز کر دی۔
+                </div>
+                <button class="btn btn-complain" style="width: auto;" onclick="triggerVoiceAlert('خبردار! ذیشان نے اپنی ڈیوٹی اگنور کی ہے')">🔊 پلے الرٹ</button>
+            </div>
+
+            <div class="alert-item danger">
+                <div>
+                    <strong>🚫 غیر حاضری الرٹ:</strong> آج کی ڈیوٹی کی حاضری درج نہیں کی گئی۔
+                </div>
+                <button class="btn btn-complain" style="width: auto;" onclick="triggerVoiceAlert('توجہ فرمائیں! ڈیوٹی کی حاضری درج نہیں کی گئی')">🔊 پلے الرٹ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 3: CUSTOM ALERTS ================= -->
+    <div id="tab-custom" class="tab-section">
+        <div class="card">
+            <h3 class="alert-header-text">📝 نیا کسٹم الرٹ / شکایت ایڈ کریں (Add Custom Alert & Record List)</h3>
+            <div class="row">
+                <div class="col">
+                    <label>ممبر کا نام منتخب کریں:</label>
+                    <select id="complainTarget">
+                        <option>عدنان</option>
+                        <option>سادیہ</option>
+                        <option>ذیشان</option>
+                        <option>عائشہ</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>الرٹ کی قسم (Select Alert Type):</label>
+                    <select id="complainType">
+                        <option>حاضری نہ لگانا</option>
+                        <option>ڈیوٹی اگنور کرنا</option>
+                        <option>زیادہ چھٹیاں کرنا</option>
+                        <option>نماز نہ پڑھنا (سزا الگ)</option>
+                        <option>کچن کا راشن چیک نہ کرنا</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>نئے الرٹ / شکایت کی مزید تفصیل درج کریں:</label>
+                    <textarea id="complainNote" rows="2" placeholder="الرٹ یا شکایت کا نام لکھیں..."></textarea>
+                </div>
+            </div>
+            <button class="btn btn-complain" onclick="addComplain()">🚨 نیا الرٹ ایڈ کریں (Auto Sound & Vibrate)</button>
+
+            <div class="complain-list" id="complainListContainer">
+                <h4>📋 محفوظ شدہ الرٹس اور شکایتوں کا ریکارڈ (Record List):</h4>
+                <div class="complain-card">
+                    <strong>سادیہ:</strong> کچن راشن چیک نہ کرنا — <em>(تفصیل: برتن صاف نہیں کیے گئے)</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= NAVIGATION BAR ================= -->
+    <div class="navbar">
+        <button type="button" class="nav-btn active" onclick="switchTab('tab-dashboard', this)">
+            <span>🏠</span>
+            <span>ڈیش بورڈ</span>
+        </button>
+        <button type="button" class="nav-btn" onclick="switchTab('tab-alerts', this)">
+            <span>🚨</span>
+            <span>فعال الرٹس</span>
+        </button>
+        <button type="button" class="nav-btn" onclick="switchTab('tab-custom', this)">
+            <span>📝</span>
+            <span>کسٹم الرٹ / ایڈ</span>
+        </button>
+    </div>
+
+    <script>
+        // Tab Navigation Functionality
+        function switchTab(tabId, btn) {
+            const tabs = document.querySelectorAll('.tab-section');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Set Default Date and Day on Page Load
+        window.onload = function() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            
+            document.getElementById('dutyDate').value = `${year}-${month}-${day}`;
+            updateDayName();
+        };
+
+        // Day Auto Changer Logic
+        function updateDayName() {
+            const dateInput = document.getElementById('dutyDate').value;
+            if (dateInput) {
+                const dateParts = dateInput.split('-');
+                const selectedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                const daysInUrdu = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
+                document.getElementById('dutyDay').value = daysInUrdu[selectedDate.getDay()];
+            }
+        }
+
+        // Tasks Rotation Logic
+        const tasks = [
+            { title: "Step 1: برتن دھونا", points: "⭐ [ +15 Points ]" },
+            { title: "Step 2: صحن کی صفائی", points: "⭐ [ +20 Points ]" },
+            { title: "Step 3: کپڑے استری کرنا", points: "⭐ [ +10 Points ]" },
+            { title: "Step 4: چائے بنانا", points: "⭐ [ +10 Points ]" }
+        ];
+        let currentTaskIndex = 0;
+
+        function nextTask(actionType) {
+            currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+            document.getElementById('taskTitle').innerText = tasks[currentTaskIndex].title;
+            document.getElementById('taskPoints').innerText = tasks[currentTaskIndex].points;
+        }
+
+        // Duty Members Dynamic Update
+        function updateDutyBox() {
+            const senior = document.getElementById('seniorSelect').value;
+            const helper = document.getElementById('helperSelect').value;
+            document.getElementById('dutyMembersDisplay').innerText = `${senior} (Senior) + ${helper} (Helper)`;
+            
+            document.getElementById('pendingTaskAlert').innerHTML = `
+                <strong>⚠️ الرٹ: ${helper} نے پچھلی ڈیوٹی میں یہ 5 کام نہیں کیے تھے:</strong>
+                <ul>
+                    <li>1. برتن دھونا (Step 1)</li>
+                    <li>2. صحن کی صفائی (Step 2)</li>
+                    <li>3. کپڑے استری کرنا (Step 3)</li>
+                    <li>4. چائے بنانا (Step 4)</li>
+                    <li>5. کچرا باہر پھینکنا (Step 5)</li>
+                </ul>
+            `;
+        }
+
+        // Voice Alert & Mobile Vibration Feature
+        function triggerVoiceAlert(messageText) {
+            if (navigator.vibrate) {
+                navigator.vibrate([300, 100, 300, 100, 400]);
+            }
+
+            // Audio Alert Beep
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+
+            // Text to Speech
+            if ('speechSynthesis' in window) {
+                setTimeout(() => {
+                    const speech = new SpeechSynthesisUtterance();
+                    speech.text = messageText;
+                    speech.lang = 'ur-PK';
+                    speech.rate = 0.9;
+                    window.speechSynthesis.speak(speech);
+                }, 400);
+            } else {
+                alert(messageText);
+            }
+        }
+
+        // Real-Time Alarm Checking System
+        let activeAlarmTime = null;
+        let activeAlarmMember = "";
+
+        function setAlarm() {
+            const time = document.getElementById('alarmTime').value;
+            const member = document.getElementById('alarmMember').value;
+            if (time) {
+                activeAlarmTime = time;
+                activeAlarmMember = member;
+                document.getElementById('alarmStatusBadge').style.display = 'block';
+                document.getElementById('alarmStatusText').innerText = `${member} کے لیے ${time} بجے کا الارم آن کر دیا گیا ہے۔`;
+                triggerVoiceAlert(`${member} کا ڈیوٹی الارم ${time} بجے سیٹ ہو گیا ہے`);
+            } else {
+                alert("براہ کرم وقت منتخب کریں!");
+            }
+        }
+
+        // Check alarm every 10 seconds
+        setInterval(() => {
+            if (activeAlarmTime) {
+                const now = new Date();
+                const currentHours = String(now.getHours()).padStart(2, '0');
+                const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+                const currentTime = `${currentHours}:${currentMinutes}`;
+
+                if (currentTime === activeAlarmTime) {
+                    triggerVoiceAlert(`الارم الرٹ! ${activeAlarmMember} آپ کی ڈیوٹی کا وقت ہو گیا ہے۔`);
+                    activeAlarmTime = null; // Reset alarm after firing
+                    document.getElementById('alarmStatusBadge').style.display = 'none';
+                }
+            }
+        }, 10000);
+
+        // Add Custom Alert & Save Record Action
+        function addComplain() {
+            const target = document.getElementById('complainTarget').value;
+            const type = document.getElementById('complainType').value;
+            const note = document.getElementById('complainNote').value;
+
+            const msg = `نیا الرٹ شامل ہو گیا! ${target} کا الرٹ: ${type}`;
+            triggerVoiceAlert(msg);
+
+            const container = document.getElementById('complainListContainer');
+            const newCard = document.createElement('div');
+            newCard.className = 'complain-card';
+            newCard.innerHTML = `<strong>${target}:</strong> ${type} ${note ? '— <em>(' + note + ')</em>' : ''}`;
+            container.appendChild(newCard);
+
+            document.getElementById('complainNote').value = '';
+        }
+    </script>
+</body>
+</html>
