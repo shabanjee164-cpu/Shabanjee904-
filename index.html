@@ -129,10 +129,14 @@
         .alert-pending {
             background: #ffebee;
             color: #c62828;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .alert-pending ul {
+            margin: 8px 0 0 0;
+            padding-right: 20px;
         }
 
         /* Results Table */
@@ -169,17 +173,17 @@
         <h1>🏠 Home Work Tracker</h1>
     </div>
 
-    <!-- 2. Date & Time Selection -->
+    <!-- 2. Date & Day Selection (No Time) -->
     <div class="card">
-        <h3>📅 تاریخ اور وقت کا انتخاب (Date & Time)</h3>
+        <h3>📅 تاریخ اور دن (Date & Day)</h3>
         <div class="row">
             <div class="col">
                 <label>تاریخ منتخب کریں:</label>
-                <input type="date" id="dutyDate">
+                <input type="date" id="dutyDate" onchange="updateDayName()">
             </div>
             <div class="col">
-                <label>وقت منتخب کریں:</label>
-                <input type="time" id="dutyTime">
+                <label>آج کا دن:</label>
+                <input type="text" id="dutyDay" readonly style="background-color: #e0e0e0; font-weight: bold;">
             </div>
         </div>
     </div>
@@ -222,15 +226,22 @@
         </div>
     </div>
 
-    <!-- 5. 24 Hours Duty & Personal Pending Tasks Box -->
+    <!-- 5. 24 Hours Duty & Personal 5 Skipped Tasks List -->
     <div class="card">
         <h3>⏱️ 24 گھنٹے ڈیوٹی اسٹیٹس اور ادھورے کام</h3>
         <div class="duty-box">
             <div><strong>آج کے 2 ڈیوٹی ممبرز:</strong> <span id="dutyMembersDisplay">عدنان (Senior) + سادیہ (Helper)</span></div>
-            <small>💡 نوٹ: ہیلپر ہر 24 گھنٹے بعد خود بخود روٹیٹ ہوگا ۔</small>
+            <small>💡 نوٹ: ہیلپر ہر 24 گھنٹے بعد خود بخود روٹیٹ ہوگا۔</small>
 
             <div class="alert-pending" id="pendingTaskAlert">
-                ⚠️ الرٹ: سادیہ نے پچھلی بار یہ کام نہیں کیے تھے: <strong>(صفائی کرنا، استری کرنا)</strong>
+                <strong>⚠️ الرٹ: سادیہ نے پچھلی ڈیوٹی میں یہ 5 کام نہیں کیے تھے:</strong>
+                <ul>
+                    <li>1. برتن دھونا (Step 1)</li>
+                    <li>2. صحن کی صفائی (Step 2)</li>
+                    <li>3. کپڑے استری کرنا (Step 3)</li>
+                    <li>4. چائے بنانا (Step 4)</li>
+                    <li>5. کچرا باہر پھینکنا (Step 5)</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -301,10 +312,19 @@
     </div>
 
     <script>
-        // Set Current Date & Time
-        document.getElementById('dutyDate').valueAsDate = new Date();
-        const now = new Date();
-        document.getElementById('dutyTime').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        // Set Current Date & Day Name
+        const today = new Date();
+        document.getElementById('dutyDate').valueAsDate = today;
+        updateDayName();
+
+        function updateDayName() {
+            const dateInput = document.getElementById('dutyDate').value;
+            if (dateInput) {
+                const selectedDate = new Date(dateInput);
+                const daysInUrdu = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
+                document.getElementById('dutyDay').value = daysInUrdu[selectedDate.getDay()];
+            }
+        }
 
         // Demo Tasks List
         const tasks = [
@@ -326,8 +346,17 @@
             const helper = document.getElementById('helperSelect').value;
             document.getElementById('dutyMembersDisplay').innerText = `${senior} (Senior) + ${helper} (Helper)`;
             
-            // Demo alert message for helper
-            document.getElementById('pendingTaskAlert').innerHTML = `⚠️ الرٹ: ${helper} نے پچھلی بار یہ کام نہیں کیے تھے: <strong>(صفائی کرنا، استری کرنا)</strong>`;
+            // Demo alert with 5 skipped tasks list
+            document.getElementById('pendingTaskAlert').innerHTML = `
+                <strong>⚠️ الرٹ: ${helper} نے پچھلی ڈیوٹی میں یہ 5 کام نہیں کیے تھے:</strong>
+                <ul>
+                    <li>1. برتن دھونا (Step 1)</li>
+                    <li>2. صحن کی صفائی (Step 2)</li>
+                    <li>3. کپڑے استری کرنا (Step 3)</li>
+                    <li>4. چائے بنانا (Step 4)</li>
+                    <li>5. کچرا باہر پھینکنا (Step 5)</li>
+                </ul>
+            `;
         }
     </script>
 </body>
