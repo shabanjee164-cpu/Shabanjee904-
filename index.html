@@ -1,581 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bill & Utility Tracker Pro</title>
+    <title>Home Work Tracker - Dashboard</title>
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --primary: #0284c7;
-            --primary-dark: #0369a1;
-            --accent-green: #10b981;
-            --accent-orange: #f97316;
-            --accent-red: #ef4444;
-            --accent-purple: #8b5cf6;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #cbd5e1;
+            --primary: #4CAF50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196F3;
+            --dark: #333;
+            --light: #f4f7f6;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 75px; }
-
-        /* Top Header */
-        .app-bar {
-            background: #0f172a; color: #fff; padding: 14px 16px; display: flex;
-            justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: sticky; top: 0; z-index: 100;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            padding: 15px;
+            color: var(--dark);
+            text-align: right;
         }
-        .app-title { font-size: 1.15rem; font-weight: 700; color: #38bdf8; }
-        .status-badge { background: #166534; color: #4ade80; font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
 
-        .container { padding: 12px; max-width: 650px; margin: 0 auto; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .header-title {
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-        /* General Card Layout */
         .card {
-            background: var(--card-bg); border-radius: 12px; padding: 14px; margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06); border: 1px solid var(--border);
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .card-header { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
 
-        /* Color Variations for Meter Cards */
-        .card-rent { border-left: 5px solid var(--primary); }
-        .card-mother { border-left: 5px solid var(--accent-green); }
-        .card-meter3 { border-left: 5px solid var(--accent-orange); }
-        .card-meter4 { border-left: 5px solid var(--accent-purple); }
-
-        /* Input Controls */
-        .form-group { margin-bottom: 10px; }
-        label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px; }
-        input, select, textarea {
-            width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;
+        h3 {
+            margin-top: 0;
+            color: #2E7D32;
+            border-bottom: 2px solid #E8F5E9;
+            padding-bottom: 8px;
         }
-        input:focus, select:focus { border-color: var(--primary); }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        /* Task Box */
+        .task-card {
+            background: #e8f5e9;
+            border: 2px dashed #4CAF50;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .task-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .task-points {
+            font-size: 16px;
+            color: #388e3c;
+            margin-top: 5px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
         .btn {
-            width: 100%; padding: 11px; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; color: #fff; background: var(--primary); transition: 0.2s;
-        }
-        .btn:active { transform: scale(0.98); }
-        .btn-success { background: var(--accent-green); }
-        .btn-danger { background: var(--accent-red); }
-        .btn-secondary { background: #475569; }
-
-        /* Meter Grid Format (Pic 2) */
-        .meter-grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; background: #f8fafc; padding: 10px; border-radius: 8px; margin-top: 8px; }
-        .grid-item { display: flex; flex-direction: column; }
-        .grid-item span.lbl { color: var(--text-muted); font-size: 0.72rem; }
-        .grid-item span.val { font-weight: 700; color: var(--text-main); }
-
-        /* Display Boxes */
-        .result-box-grand {
-            background: #0f172a; color: #38bdf8; text-align: center; border-radius: 12px; padding: 16px; font-weight: 700; margin-top: 12px;
-        }
-        .result-box-grand .amount { font-size: 1.7rem; color: #facc15; margin-top: 4px; }
-
-        .result-box-large {
-            background: #1e1b4b; color: #c084fc; text-align: center; border-radius: 12px; padding: 18px; margin-top: 12px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        /* Boxed Tables (Pic 3 & Pic 6) */
-        .box-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 8px; }
-        .box-table th, .box-table td { border: 1px solid var(--border); padding: 8px; text-align: center; }
-        .box-table th { background: #e2e8f0; color: var(--text-main); font-weight: 700; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-tick { background-color: var(--primary); }
+        .btn-cross { background-color: var(--danger); }
+        .btn-shared { background-color: var(--info); }
+        .btn-skip { background-color: #78909C; }
 
-        /* Navigation Bar */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #fff; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid var(--border); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 100;
+        /* Duty & Pending Box */
+        .duty-box {
+            background: #fff3e0;
+            border-right: 5px solid var(--warning);
+            padding: 15px;
+            border-radius: 8px;
         }
-        .nav-item { border: none; background: none; font-size: 0.68rem; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); font-weight: 700; }
 
-        /* Custom In-App Dialog Modal (Fixes Pic 7 Header URL issue) */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000;
+        .alert-pending {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-weight: bold;
         }
-        .modal-card { background: #fff; width: 88%; max-width: 360px; border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-title { font-weight: 700; margin-bottom: 8px; color: var(--primary); font-size: 1.05rem; }
+
+        /* Results Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th { background-color: #4CAF50; color: white; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .badge-excellent { background-color: var(--primary); }
+        .badge-good { background-color: var(--info); }
+        .badge-bad { background-color: var(--danger); }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="app-bar">
-        <div class="app-title">Smart Bill Tracker Pro</div>
-        <div class="status-badge">● Offline Secure</div>
+    <!-- 1. Header -->
+    <div class="header-title">
+        <h1>🏠 Home Work Tracker</h1>
     </div>
 
-    <div class="container">
-        <!-- 1. DASHBOARD TAB -->
-        <div id="tab-dashboard" class="tab-content active">
-            <!-- New Reading Entry Section (Top of Dashboard) -->
-            <div class="card card-rent">
-                <div class="card-header">New Reading Entry ✏️</div>
-                <div class="form-group">
-                    <label>Select Target Meter</label>
-                    <select id="entryMeterSelect">
-                        <option value="rent">Rent Meter</option>
-                        <option value="mother">Mother Meter</option>
-                        <option value="meter3">Meter 3</option>
-                        <option value="meter4">Meter 4</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>New Current Reading</label>
-                    <input type="number" id="entryReadingValue" placeholder="Enter meter reading">
-                </div>
-                <button class="btn" onclick="addNewReading()">Save Reading</button>
+    <!-- 2. Date & Time Selection -->
+    <div class="card">
+        <h3>📅 تاریخ اور وقت کا انتخاب (Date & Time)</h3>
+        <div class="row">
+            <div class="col">
+                <label>تاریخ منتخب کریں:</label>
+                <input type="date" id="dutyDate">
             </div>
-
-            <!-- Individual Meter Grid Cards -->
-            <div id="meterCardsContainer"></div>
-
-            <!-- Grand Total Result Box -->
-            <div class="result-box-grand">
-                <div>Total Bill Cost (All Electricity Meters)</div>
-                <div class="amount" id="grandTotalBill">Rs. 0</div>
-            </div>
-        </div>
-
-        <!-- 2. RECORDS TAB -->
-        <div id="tab-record" class="tab-content">
-            <div class="card">
-                <div class="card-header">Detailed Meters Record</div>
-                <div style="overflow-x: auto;">
-                    <table class="box-table">
-                        <thead>
-                            <tr>
-                                <th>Meter</th>
-                                <th>Old Rdg</th>
-                                <th>New Rdg</th>
-                                <th>Diff (Units)</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recordsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Record Summary Box -->
-            <div class="result-box-grand" style="background: var(--primary); color: #fff;">
-                <div>Total Difference Units Across All Meters</div>
-                <div class="amount" id="totalRecordUnits" style="color: #fff;">0 Units</div>
-            </div>
-        </div>
-
-        <!-- 3. GAS CALCULATION TAB -->
-        <div id="tab-gas" class="tab-content">
-            <div class="card" style="border-left: 5px solid var(--accent-red);">
-                <div class="card-header">Gas Meter Calculation Parameters</div>
-                <div class="form-group">
-                    <label>Gas Meter Difference Reading</label>
-                    <input type="number" id="gasDiffInput" value="6000" oninput="calculateGasBill()">
-                </div>
-                <div class="meter-grid-info" style="grid-template-columns: 1fr 1fr;">
-                    <div class="grid-item"><span class="lbl">Pres. / Factor</span><span class="val">0.32 / 1.0218</span></div>
-                    <div class="grid-item"><span class="lbl">Temp Factor</span><span class="val">1.0000</span></div>
-                    <div class="grid-item"><span class="lbl">Super Comp.</span><span class="val">0.0000</span></div>
-                    <div class="grid-item"><span class="lbl">GCV</span><span class="val">1,031</span></div>
-                    <div class="grid-item"><span class="lbl">Wobbe Index</span><span class="val">1,305</span></div>
-                    <div class="grid-item"><span class="lbl">Gas Consumed (HM3)</span><span class="val" id="gasHM3Val">0.061</span></div>
-                </div>
-                <div class="meter-grid-info" style="margin-top:6px; background:#fff5f5;">
-                    <div class="grid-item" style="grid-column: span 2;">
-                        <span class="lbl">Calculated MMBTU (Formula: HM3 * GCV / 281.7385)</span>
-                        <span class="val" id="gasMMBTUVal" style="color:var(--accent-red); font-size:0.95rem;">0.224 MMBTU</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="result-box-grand" style="background: #991b1b; color: #fff;">
-                <div>Final Calculated Gas Bill Result</div>
-                <div class="amount" id="gasFinalBillDisplay" style="color: #fef08a;">Rs. 0</div>
-            </div>
-        </div>
-
-        <!-- 4. ANALYSIS TAB -->
-        <div id="tab-analysis" class="tab-content">
-            <div class="card">
-                <div class="card-header">Bill History & Month Comparison</div>
-                <div style="overflow-x: auto;">
-                    <table class="box-table">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Meter</th>
-                                <th>Payment From</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="analysisTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="result-box-large">
-                <div style="font-size: 0.85rem; text-transform: uppercase;">Month-Wise Bill Variance Result</div>
-                <div id="analysisDiffDisplay" style="font-size: 1.6rem; font-weight: 700; margin-top: 6px;">Rs. 0 Difference</div>
-            </div>
-        </div>
-
-        <!-- 5. COMPLAINTS TAB -->
-        <div id="tab-complaints" class="tab-content">
-            <div class="card">
-                <div class="card-header">System Settings & Complaint Log</div>
-                <div class="form-group" style="display:flex; justify-content:space-between; align-items:center;">
-                    <label style="margin:0;">Sound Alert Bell</label>
-                    <input type="checkbox" id="soundToggle" onchange="saveAppSettings()" style="width:22px; height:22px;">
-                </div>
-                <div class="form-group" style="display:flex; justify-content:space-between; align-items:center;">
-                    <label style="margin:0;">Vibration Feedback</label>
-                    <input type="checkbox" id="vibrateToggle" onchange="saveAppSettings()" style="width:22px; height:22px;">
-                </div>
-                <hr style="margin:10px 0; border:0; border-top:1px solid #e2e8f0;">
-                <div class="form-group">
-                    <label>Complaint / Notice Title</label>
-                    <input type="text" id="complaintTitle" placeholder="Enter title">
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="complaintDesc" rows="3" placeholder="Enter details..."></textarea>
-                </div>
-                <button class="btn btn-danger" onclick="saveComplaint()">File / Update Complaint</button>
-            </div>
-            <div class="card">
-                <div class="card-header">Active Complaints Status</div>
-                <div id="complaintLogContainer" style="font-size:0.85rem; color:var(--text-muted);">No complaints recorded.</div>
-            </div>
-        </div>
-
-        <!-- 6. SETTINGS & PREVIOUS READING LOCK TAB -->
-        <div id="tab-settings" class="tab-content">
-            <div class="card">
-                <div class="card-header">Baseline Reading Lock System ⚙️</div>
-                <div class="form-group">
-                    <label>Target Meter</label>
-                    <select id="settingMeterSelect">
-                        <option value="rent">Rent Meter</option>
-                        <option value="mother">Mother Meter</option>
-                        <option value="meter3">Meter 3</option>
-                        <option value="meter4">Meter 4</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Initial Previous Reading</label>
-                    <input type="number" id="settingPrevReading" placeholder="Set baseline value">
-                </div>
-                <div class="form-group">
-                    <label>Unit Rate (Rs./Unit)</label>
-                    <input type="number" id="settingUnitRate" placeholder="e.g. 10">
-                </div>
-                <button class="btn btn-success" onclick="lockPreviousReading()">Save & Lock Initial Reading</button>
-            </div>
-
-            <!-- Multi-Device Migration Section -->
-            <div class="card">
-                <div class="card-header">Multi-Device Backup / Restore 📲</div>
-                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">Transfer all app data securely to another phone without using servers.</p>
-                <button class="btn btn-secondary" onclick="exportDataBackup()" style="margin-bottom:8px;">Export Backup (JSON)</button>
-                <input type="file" id="importFileInput" onchange="importDataBackup(event)" style="display:none;">
-                <button class="btn" onclick="document.getElementById('importFileInput').click()">Import Backup File</button>
+            <div class="col">
+                <label>وقت منتخب کریں:</label>
+                <input type="time" id="dutyTime">
             </div>
         </div>
     </div>
 
-    <!-- Custom Dialog Modal (Replaces Native Browser Alerts) -->
-    <div class="modal-overlay" id="appModal">
-        <div class="modal-card">
-            <div class="modal-title" id="modalTitle">Notice</div>
-            <div style="font-size: 0.85rem; margin-bottom: 16px; color: var(--text-main);" id="modalBody">Description text.</div>
-            <button class="btn" onclick="closeModal()">OK</button>
+    <!-- 3. Duty Member Selection -->
+    <div class="card">
+        <h3>👥 ڈیوٹی ممبرز (Duty Selection)</h3>
+        <div class="row">
+            <div class="col">
+                <label>سینیئر (Senior):</label>
+                <select id="seniorSelect" onchange="updateDutyBox()">
+                    <option value="عدنان">عدنان (Senior 1)</option>
+                    <option value="علی">علی (Senior 2)</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>ہیلپر (Helper):</label>
+                <select id="helperSelect" onchange="updateDutyBox()">
+                    <option value="سادیہ">سادیہ (Helper 1)</option>
+                    <option value="ذیشان">ذیشان (Helper 2)</option>
+                    <option value="حمزہ">حمزہ (Helper 3)</option>
+                </select>
+            </div>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <button class="nav-item active" onclick="switchTab('tab-dashboard', this)"><span>📊</span>Dashboard</button>
-        <button class="nav-item" onclick="switchTab('tab-record', this)"><span>📋</span>Record</button>
-        <button class="nav-item" onclick="switchTab('tab-analysis', this)"><span>📈</span>Analysis</button>
-        <button class="nav-item" onclick="switchTab('tab-gas', this)"><span>🔥</span>Gas</button>
-        <button class="nav-item" onclick="switchTab('tab-complaints', this)"><span>⚠️</span>Complaints</button>
-        <button class="nav-item" onclick="switchTab('tab-settings', this)"><span>⚙️</span>Settings</button>
+    <!-- 4. Active Task & Action Buttons -->
+    <div class="card">
+        <h3>📋 جاری کام (Active Task)</h3>
+        <div class="task-card">
+            <div class="task-title" id="taskTitle">Step 1: برتن دھونا</div>
+            <div class="task-points" id="taskPoints">⭐ [ +15 Points ]</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-tick" onclick="nextTask('tick')">✓ ہو گیا (Tick)</button>
+            <button class="btn btn-cross" onclick="nextTask('cross')">✗ نہیں کیا (Cross)</button>
+            <button class="btn btn-shared" onclick="nextTask('shared')">🤝 دونوں نے کیا</button>
+            <button class="btn btn-skip" onclick="nextTask('skip')">⛔ نہیں کرنا تھا</button>
+        </div>
+    </div>
+
+    <!-- 5. 24 Hours Duty & Personal Pending Tasks Box -->
+    <div class="card">
+        <h3>⏱️ 24 گھنٹے ڈیوٹی اسٹیٹس اور ادھورے کام</h3>
+        <div class="duty-box">
+            <div><strong>آج کے 2 ڈیوٹی ممبرز:</strong> <span id="dutyMembersDisplay">عدنان (Senior) + سادیہ (Helper)</span></div>
+            <small>💡 نوٹ: ہیلپر ہر 24 گھنٹے بعد خود بخود روٹیٹ ہوگا ۔</small>
+
+            <div class="alert-pending" id="pendingTaskAlert">
+                ⚠️ الرٹ: سادیہ نے پچھلی بار یہ کام نہیں کیے تھے: <strong>(صفائی کرنا، استری کرنا)</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Leave Box -->
+    <div class="card">
+        <h3>🏖️ چھٹی کی درخواست (Leave Box)</h3>
+        <div class="row">
+            <div class="col">
+                <label>ممبر کا نام:</label>
+                <select>
+                    <option>عدنان</option>
+                    <option>سادیہ</option>
+                    <option>ذیشان</option>
+                    <option>عائشہ</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>چھٹی کی تاریخ:</label>
+                <input type="date">
+            </div>
+            <div class="col">
+                <label>&nbsp;</label>
+                <button class="btn btn-shared" style="padding: 10px;">سبمٹ چھٹی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Record & Leaderboard -->
+    <div class="card">
+        <h3>🏆 لائیو رزلٹ اور پرفارمنس بورڈ (Leaderboard)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ممبر</th>
+                    <th>پوائنٹس</th>
+                    <th>درجہ (Status)</th>
+                    <th>نتیجہ / سزا (Punishment)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>عدنان</td>
+                    <td>65</td>
+                    <td><span class="badge badge-excellent">🌟 Excellent</span></td>
+                    <td>شاندار! کوئی سزا نہیں</td>
+                </tr>
+                <tr>
+                    <td>ذیشان</td>
+                    <td>50</td>
+                    <td><span class="badge badge-good">👍 Good</span></td>
+                    <td>بہترین کام</td>
+                </tr>
+                <tr>
+                    <td>سادیہ</td>
+                    <td>20</td>
+                    <td><span class="badge badge-bad">❌ Bad</span></td>
+                    <td>🚨 سزا: اگلے دن اضافی چائے بنانا</td>
+                </tr>
+                <tr>
+                    <td>آسیہ</td>
+                    <td>0</td>
+                    <td><span class="badge badge-bad">❌ Bad</span></td>
+                    <td>🚨 سزا: اضافی صفائی</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <script>
-        // Core State Management with Storage Isolation
-        const defaultState = {
-            meters: {
-                rent: { name: "Rent Meter", oldRdg: 1000, newRdg: 1000, rate: 10, lastUpdated: new Date().toISOString(), cssClass: "card-rent" },
-                mother: { name: "Mother Meter", oldRdg: 2000, newRdg: 2000, rate: 20, lastUpdated: new Date().toISOString(), cssClass: "card-mother" },
-                meter3: { name: "Meter 3", oldRdg: 500, newRdg: 500, rate: 15, lastUpdated: new Date().toISOString(), cssClass: "card-meter3" },
-                meter4: { name: "Meter 4", oldRdg: 1500, newRdg: 1500, rate: 12, lastUpdated: new Date().toISOString(), cssClass: "card-meter4" }
-            },
-            history: [],
-            analysis: [
-                { month: "2026-07", meter: "Rent Meter", source: "Home", amount: 1000 },
-                { month: "2026-07", meter: "Mother Meter", source: "Home", amount: 1500 }
-            ],
-            complaint: { title: "", desc: "", sound: true, vibrate: true },
-            gasRate: 23.5
-        };
+        // Set Current Date & Time
+        document.getElementById('dutyDate').valueAsDate = new Date();
+        const now = new Date();
+        document.getElementById('dutyTime').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-        let appData = JSON.parse(localStorage.getItem('smart_bill_data')) || defaultState;
+        // Demo Tasks List
+        const tasks = [
+            { title: "Step 1: برتن دھونا", points: "⭐ [ +15 Points ]" },
+            { title: "Step 2: صحن کی صفائی", points: "⭐ [ +20 Points ]" },
+            { title: "Step 3: کپڑے استری کرنا", points: "⭐ [ +10 Points ]" },
+            { title: "Step 4: چائے بنانا", points: "⭐ [ +10 Points ]" }
+        ];
+        let currentTaskIndex = 0;
 
-        function saveData() {
-            localStorage.setItem('smart_bill_data', JSON.stringify(appData));
-            renderAllViews();
+        function nextTask(actionType) {
+            currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
+            document.getElementById('taskTitle').innerText = tasks[currentTaskIndex].title;
+            document.getElementById('taskPoints').innerText = tasks[currentTaskIndex].points;
         }
 
-        // Navigation
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
-
-        // Custom Modal Control
-        function showModal(title, text) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalBody').innerText = text;
-            document.getElementById('appModal').style.display = 'flex';
-            if(appData.complaint.sound) { /* Trigger System Sound if configured */ }
-            if(appData.complaint.vibrate && navigator.vibrate) { navigator.vibrate(100); }
-        }
-        function closeModal() { document.getElementById('appModal').style.display = 'none'; }
-
-        // Time Calculation Helper
-        function getTimeDifferenceString(startDateStr) {
-            const start = new Date(startDateStr);
-            const now = new Date();
-            const diffMs = Math.max(0, now - start);
-            const mins = Math.floor((diffMs / (1000 * 60)) % 60);
-            const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
-            const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            return `${days}d, ${hours}h, ${mins}m`;
-        }
-
-        // Dashboard Renderer (Pic 1 & Pic 2 Requirements)
-        function renderDashboard() {
-            const container = document.getElementById('meterCardsContainer');
-            container.innerHTML = '';
-            let grandTotal = 0;
-
-            Object.keys(appData.meters).forEach(key => {
-                const m = appData.meters[key];
-                const diffUnits = Math.max(0, m.newRdg - m.oldRdg);
-                const totalCost = diffUnits * m.rate;
-                grandTotal += totalCost;
-
-                const timeStr = getTimeDifferenceString(m.lastUpdated);
-                const dailyUnits = (diffUnits > 0) ? (diffUnits / 2).toFixed(1) : 0; // Estimated baseline
-                const dailyCost = dailyUnits * m.rate;
-
-                const cardHtml = `
-                    <div class="card ${m.cssClass}">
-                        <div class="card-header">
-                            <span>${m.name}</span>
-                            <span style="color:var(--primary); font-size:0.8rem;">Rs. ${m.rate}/U</span>
-                        </div>
-                        <div class="meter-grid-info">
-                            <div class="grid-item"><span class="lbl">Time Elapsed</span><span class="val">${timeStr}</span></div>
-                            <div class="grid-item"><span class="lbl">Daily Units / Cost</span><span class="val">${dailyUnits} U / Rs. ${dailyCost}</span></div>
-                            <div class="grid-item"><span class="lbl">Total Units</span><span class="val">${diffUnits} Units</span></div>
-                            <div class="grid-item"><span class="lbl">Total Bill</span><span class="val">Rs. ${totalCost}</span></div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += cardHtml;
-            });
-
-            document.getElementById('grandTotalBill').innerText = `Rs. ${grandTotal}`;
-        }
-
-        // Save Reading Entry (Pic 1)
-        function addNewReading() {
-            const meterKey = document.getElementById('entryMeterSelect').value;
-            const newRdg = parseFloat(document.getElementById('entryReadingValue').value);
-
-            if (isNaN(newRdg)) {
-                showModal("Error", "Please enter a valid numeric reading.");
-                return;
-            }
-
-            const m = appData.meters[meterKey];
-            if (newRdg < m.oldRdg) {
-                showModal("Validation Error", "New reading cannot be lower than the baseline locked old reading.");
-                return;
-            }
-
-            m.newRdg = newRdg;
-            m.lastUpdated = new Date().toISOString();
+        function updateDutyBox() {
+            const senior = document.getElementById('seniorSelect').value;
+            const helper = document.getElementById('helperSelect').value;
+            document.getElementById('dutyMembersDisplay').innerText = `${senior} (Senior) + ${helper} (Helper)`;
             
-            // Push to History
-            appData.history.push({
-                meterKey: meterKey,
-                meterName: m.name,
-                oldRdg: m.oldRdg,
-                newRdg: newRdg,
-                diff: newRdg - m.oldRdg,
-                date: new Date().toLocaleDateString()
-            });
-
-            saveData();
-            showModal("Success", `Reading updated for ${m.name}.`);
-            document.getElementById('entryReadingValue').value = '';
+            // Demo alert message for helper
+            document.getElementById('pendingTaskAlert').innerHTML = `⚠️ الرٹ: ${helper} نے پچھلی بار یہ کام نہیں کیے تھے: <strong>(صفائی کرنا، استری کرنا)</strong>`;
         }
-
-        // Render Record Tab (Pic 3)
-        function renderRecords() {
-            const tbody = document.getElementById('recordsTableBody');
-            tbody.innerHTML = '';
-            let totalUnits = 0;
-
-            Object.keys(appData.meters).forEach(key => {
-                const m = appData.meters[key];
-                const diff = Math.max(0, m.newRdg - m.oldRdg);
-                totalUnits += diff;
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${m.name}</td>
-                        <td>${m.oldRdg}</td>
-                        <td>${m.newRdg}</td>
-                        <td><b>${diff}</b></td>
-                        <td><button class="btn btn-danger" style="padding:4px 8px; font-size:0.7rem;" onclick="resetMeter('${key}')">Reset</button></td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('totalRecordUnits').innerText = `${totalUnits} Units`;
-        }
-
-        function resetMeter(key) {
-            appData.meters[key].oldRdg = appData.meters[key].newRdg;
-            saveData();
-            showModal("Reset", "Meter baseline locked to current reading.");
-        }
-
-        // Gas Bill Calculations (Pic 5)
-        function calculateGasBill() {
-            const diff = parseFloat(document.getElementById('gasDiffInput').value) || 0;
-            const hm3 = (diff * 0.32 * 1.0218) / 100000;
-            const gcv = 1031;
-            const mmbtu = (hm3 * gcv) / 281.7385;
-            const finalBill = Math.round(mmbtu * 6500); // Standard MMBTU Slab Rate
-
-            document.getElementById('gasHM3Val').innerText = hm3.toFixed(3);
-            document.getElementById('gasMMBTUVal').innerText = `${mmbtu.toFixed(3)} MMBTU`;
-            document.getElementById('gasFinalBillDisplay').innerText = `Rs. ${finalBill.toLocaleString()}`;
-        }
-
-        // Render Analysis Tab (Pic 6)
-        function renderAnalysis() {
-            const tbody = document.getElementById('analysisTableBody');
-            tbody.innerHTML = '';
-            let totalAmount = 0;
-
-            appData.analysis.forEach(item => {
-                totalAmount += item.amount;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${item.month}</td>
-                        <td>${item.meter}</td>
-                        <td>${item.source}</td>
-                        <td>Rs. ${item.amount}</td>
-                    </tr>
-                `;
-            });
-
-            document.getElementById('analysisDiffDisplay').innerText = `Rs. ${totalAmount} Overall Total`;
-        }
-
-        // Settings & Lock System (Pic 7)
-        function lockPreviousReading() {
-            const key = document.getElementById('settingMeterSelect').value;
-            const prevRdg = parseFloat(document.getElementById('settingPrevReading').value);
-            const rate = parseFloat(document.getElementById('settingUnitRate').value);
-
-            if (!isNaN(prevRdg)) appData.meters[key].oldRdg = prevRdg;
-            if (!isNaN(prevRdg)) appData.meters[key].newRdg = prevRdg;
-            if (!isNaN(rate)) appData.meters[key].rate = rate;
-
-            appData.meters[key].lastUpdated = new Date().toISOString();
-            saveData();
-            showModal("Baseline Locked", `Previous reading for ${appData.meters[key].name} set and locked. Units will accumulate on new entries.`);
-        }
-
-        // Complaints & Notification Settings (Pic 4)
-        function saveAppSettings() {
-            appData.complaint.sound = document.getElementById('soundToggle').checked;
-            appData.complaint.vibrate = document.getElementById('vibrateToggle').checked;
-            saveData();
-        }
-
-        function saveComplaint() {
-            const title = document.getElementById('complaintTitle').value;
-            const desc = document.getElementById('complaintDesc').value;
-            if (!title) { showModal("Error", "Please enter a complaint title."); return; }
-
-            appData.complaint.title = title;
-            appData.complaint.desc = desc;
-            saveData();
-            showModal("Complaint Status", "Complaint registered and saved successfully.");
-        }
-
-        function renderComplaints() {
-            document.getElementById('soundToggle').checked = appData.complaint.sound;
-            document.getElementById('vibrateToggle').checked = appData.complaint.vibrate;
-            const container = document.getElementById('complaintLogContainer');
-            if (appData.complaint.title) {
-                container.innerHTML = `<b>Title:</b> ${appData.complaint.title}<br><b>Description:</b> ${appData.complaint.desc}`;
-            }
-        }
-
-        // Multi-Device Backup & Restore (Zero Data Leak Feature)
-        function exportDataBackup() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `smart_bill_backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
-
-        function importDataBackup(event) {
-            const fileReader = new FileReader();
-            fileReader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (importedData.meters) {
-                        appData = importedData;
-                        saveData();
-                        showModal("Import Success", "All utility data imported successfully.");
-                    }
-                } catch(err) {
-                    showModal("Import Error", "Invalid backup JSON file.");
-                }
-            };
-            fileReader.readAsText(event.target.files[0]);
-        }
-
-        // Global Dynamic UI Renderer
-        function renderAllViews() {
-            renderDashboard();
-            renderRecords();
-            calculateGasBill();
-            renderAnalysis();
-            renderComplaints();
-        }
-
-        // Initialize App
-        window.onload = function() {
-            renderAllViews();
-        };
     </script>
 </body>
 </html>
