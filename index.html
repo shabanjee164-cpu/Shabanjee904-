@@ -621,3 +621,275 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Work Tracker - Alert System</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196F3;
+            --dark: #333;
+            --light: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            padding: 15px;
+            color: var(--dark);
+            text-align: right;
+        }
+
+        .header-title {
+            text-align: center;
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #c62828;
+            border-bottom: 2px solid #ffebee;
+            padding-bottom: 8px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-alarm { background-color: var(--warning); }
+        .btn-complain { background-color: var(--danger); }
+
+        /* Alert Box Items */
+        .alert-item {
+            background: #fff3e0;
+            border-right: 5px solid var(--warning);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alert-item.danger {
+            background: #ffebee;
+            border-right-color: var(--danger);
+        }
+
+        .complain-list {
+            margin-top: 15px;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .complain-card {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header-title">
+        <h1>🚨 Alert & Complain System</h1>
+    </div>
+
+    <!-- 1. Alarm & Duty Reminder Setup -->
+    <div class="card">
+        <h3>⏰ الارم سیٹنگ اور ڈیوٹی ریمائنڈر (Alarm Setup)</h3>
+        <div class="row">
+            <div class="col">
+                <label>الارم کا وقت سیٹ کریں:</label>
+                <input type="time" id="alarmTime">
+            </div>
+            <div class="col">
+                <label>ممبر چنیں:</label>
+                <select id="alarmMember">
+                    <option>عدنان</option>
+                    <option>سادیہ</option>
+                    <option>ذیشان</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>&nbsp;</label>
+                <button class="btn btn-alarm" onclick="setAlarm()">🔔 الارم آن کریں</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Active System Alerts -->
+    <div class="card">
+        <h3>⚡ فعال الرٹس (Active System Alerts)</h3>
+        
+        <div class="alert-item danger">
+            <div>
+                <strong>🕌 نماز الرٹ:</strong> سادیہ نے وقت پر نماز ادا نہیں کی! <strong>(-10 Points)</strong>
+            </div>
+            <button class="btn btn-complain" style="width: auto;" onclick="triggerVoiceAlert('نماز الرٹ! سادیہ کے 10 پوائنٹس کم کر دیے گئے ہیں')">🔊 آواز سنیں</button>
+        </div>
+
+        <div class="alert-item">
+            <div>
+                <strong>🥘 کچن راشن الرٹ:</strong> روزانہ کا سامان اور راشن چیک نہیں کیا گیا۔
+            </div>
+            <button class="btn btn-alarm" style="width: auto;" onclick="triggerVoiceAlert('کچن اور راشن کی چیزیں فوراً چیک کریں')">🔊 آواز سنیں</button>
+        </div>
+
+        <div class="alert-item danger">
+            <div>
+                <strong>⚠️ ڈیوٹی اگنور:</strong> ذیشان نے آج کی ڈیوٹی نظر انداز کر دی۔
+            </div>
+            <button class="btn btn-complain" style="width: auto;" onclick="triggerVoiceAlert('خبردار! ذیشان نے ڈیوٹی اگنور کی ہے')">🔊 آواز سنیں</button>
+        </div>
+    </div>
+
+    <!-- 3. Add Complain Box (Last Option) -->
+    <div class="card">
+        <h3>📝 نئی شکایت درج کریں (Add Complain)</h3>
+        <div class="row">
+            <div class="col">
+                <label>کس کی شکایت درج کرنی ہے؟</label>
+                <select id="complainTarget">
+                    <option>عدنان</option>
+                    <option>سادیہ</option>
+                    <option>ذیشان</option>
+                    <option>عائشہ</option>
+                </select>
+            </div>
+            <div class="col">
+                <label>شکایت کی نوعیت (Reason):</label>
+                <select id="complainType">
+                    <option>حاضری نہ لگانا</option>
+                    <option>زیادہ چھٹیاں کرنا</option>
+                    <option>نماز نہ پڑھنا</option>
+                    <option>کچن کا راشن چیک نہ کرنا</option>
+                    <option>ڈیوٹی کا کام چھوڑنا</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>تفصیل (Optional Note):</label>
+                <textarea id="complainNote" rows="2" placeholder="مزید تفصیل درج کریں..."></textarea>
+            </div>
+        </div>
+        <button class="btn btn-complain" onclick="addComplain()">🚨 شکایت درج کریں (Vibrate & Sound)</button>
+
+        <!-- Complaints List -->
+        <div class="complain-list" id="complainListContainer">
+            <h4>📋 درج شدہ شکایتیں (Recent Complaints):</h4>
+            <div class="complain-card">
+                <strong>سادیہ:</strong> کچن راشن چیک نہ کرنا — <em>(تفصیل: برتن صاف نہیں کیے گئے)</em>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Voice Bell & Vibration Trigger Function
+        function triggerVoiceAlert(messageText) {
+            // Mobile Vibration
+            if (navigator.vibrate) {
+                navigator.vibrate([300, 100, 300, 100, 400]);
+            }
+
+            // Voice Speech Bell
+            if ('speechSynthesis' in window) {
+                const speech = new SpeechSynthesisUtterance();
+                speech.text = messageText;
+                speech.lang = 'ur-PK';
+                speech.rate = 0.9;
+                window.speechSynthesis.speak(speech);
+            } else {
+                alert(messageText);
+            }
+        }
+
+        function setAlarm() {
+            const time = document.getElementById('alarmTime').value;
+            const member = document.getElementById('alarmMember').value;
+            if (time) {
+                triggerVoiceAlert(`${member} کا ڈیوٹی الارم ${time} بجے سیٹ ہو گیا ہے`);
+            } else {
+                alert("براہ کرم وقت منتخب کریں!");
+            }
+        }
+
+        function addComplain() {
+            const target = document.getElementById('complainTarget').value;
+            const type = document.getElementById('complainType').value;
+            const note = document.getElementById('complainNote').value;
+
+            const msg = `شکایت درج ہو گئی ہے! ${target} کی شکایت: ${type}`;
+            triggerVoiceAlert(msg);
+
+            const container = document.getElementById('complainListContainer');
+            const newCard = document.createElement('div');
+            newCard.className = 'complain-card';
+            newCard.innerHTML = `<strong>${target}:</strong> ${type} ${note ? '— <em>(' + note + ')</em>' : ''}`;
+            container.appendChild(newCard);
+
+            document.getElementById('complainNote').value = '';
+        }
+    </script>
+</body>
+</html>
