@@ -755,27 +755,39 @@
         }
     </script>
 </body>
-</html>
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیٹنگز پینل</title>
+    <title>ہوم ورک ٹریکر و سیٹنگز</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
-        body { background-color: #f4f7f6; padding: 20px; margin: 0; text-align: right; }
-        .container { max-width: 700px; margin: 0 auto; }
+        body { background-color: #f4f7f6; margin: 0; padding: 20px; text-align: right; }
+        
+        /* نیویگیشن بٹنز */
+        .nav-bar { display: flex; gap: 10px; background: #2c3e50; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+        .nav-btn { background: #34495e; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold; }
+        .nav-btn.active { background: #27ae60; }
+
+        /* ٹیب کا مواد */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* کارڈز اور فارم */
+        .container { max-width: 800px; margin: 0 auto; }
         .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         h3 { color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 8px; margin-top: 0; }
         label { font-weight: bold; display: block; margin-top: 10px; margin-bottom: 5px; color: #333; }
-        input[type="text"], input[type="number"], input[type="time"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 10px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 10px; }
+        
+        /* بٹنز */
         .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; width: 100%; margin-top: 5px; }
         .btn-save { background-color: #27ae60; color: white; }
         .btn-save:hover { background-color: #219150; }
         .btn-edit { background-color: #f39c12; color: white; width: auto; padding: 5px 10px; font-size: 13px; margin-right: 5px; }
         .btn-delete { background-color: #e74c3c; color: white; width: auto; padding: 5px 10px; font-size: 13px; margin-right: 5px; }
-        .btn-skip { background-color: #7f8c8d; color: white; width: auto; padding: 5px 10px; font-size: 13px; margin-right: 5px; }
+        
         ul { list-style: none; padding: 0; margin-top: 10px; }
         li { background: #f8f9fa; border: 1px solid #e9ecef; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
         .budget-box { background: #e8f8f5; padding: 15px; border-radius: 6px; font-size: 18px; font-weight: bold; color: #16a085; text-align: center; margin-top: 10px; }
@@ -786,161 +798,201 @@
 
 <div class="container">
 
-    <!-- 1. کام اور پوائنٹس لسٹ -->
-    <div class="card">
-        <h3>1. کام اور پوائنٹس (حاضری کے لیے)</h3>
-        <label>کام کا نام:</label>
-        <input type="text" id="taskName" placeholder="کام درج کریں...">
-        <label>پوائنٹس:</label>
-        <input type="number" id="taskPoints" placeholder="پوائنٹس درج کریں...">
-        <button class="btn btn-save" onclick="addRegularTask()">سیو کریں</button>
-        <ul id="regularTaskList"></ul>
+    <!-- اصلی نیویگیشن بار -->
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="showTab('dashboard')">ڈیش بورڈ</button>
+        <button class="nav-btn" onclick="showTab('recordHistory')">ریکارڈ / ہسٹری</button>
+        <button class="nav-btn" onclick="showTab('settings')">⚙️ سیٹنگز</button>
     </div>
 
-    <!-- 2. کبھی کبھی کرنے والے کام -->
-    <div class="card">
-        <h3>2. کبھی کبھی کرنے والے کام</h3>
-        <label>کام کا نام:</label>
-        <input type="text" id="occTaskName" placeholder="مثلاً: پنکھے صاف کرنا...">
-        <button class="btn btn-save" onclick="addOccasionalTask()">سیو کریں</button>
-        <ul id="occTaskList"></ul>
+    <!-- 1. ڈیش بورڈ (صفحہ) -->
+    <div id="dashboard" class="tab-content active">
+        <div class="card">
+            <h3>ہوم ڈیش بورڈ</h3>
+            <p>روزمرہ کے کاموں اور حاضری کا جائزہ یہاں دکھائی دے گا۔</p>
+        </div>
     </div>
 
-    <!-- 3. راشن اور بجٹ مینجمنٹ -->
-    <div class="card">
-        <h3>3. راشن لسٹ اور بجٹ کیلکولیشن</h3>
-        <label>سامان کا نام:</label>
-        <input type="text" id="rationName" placeholder="سامان درج کریں...">
-        <label>قیمت (ریٹ):</label>
-        <input type="number" id="rationPrice" placeholder="قیمت (روپے) درج کریں...">
-        <button class="btn btn-save" onclick="addRationItem()">لسٹ میں شامل کریں</button>
+    <!-- 2. ریکارڈ اور ہسٹری (صفحہ) -->
+    <div id="recordHistory" class="tab-content">
+        <!-- ممبر اور تاریخ سلیکشن فارم -->
+        <div class="card">
+            <h3>حاضری و ڈیوٹی ریکارڈ فلٹر</h3>
+            <label>ممبر سلیکٹ کریں:</label>
+            <select id="filterMember">
+                <option value="">-- ممبر کا انتخاب کریں --</option>
+                <option value="علی">علی</option>
+                <option value="احمد">احمد</option>
+                <option value="سارہ">سارہ</option>
+            </select>
 
-        <h4>ماہانہ و ڈیلی لسٹ:</h4>
-        <ul id="rationList"></ul>
-        <div class="budget-box" id="totalBudget">کل بجٹ: 0 روپے</div>
+            <label>تاریخ سلیکٹ کریں:</label>
+            <input type="date" id="filterDate">
+
+            <button class="btn btn-save" onclick="searchMemberRecord()">ریکارڈ تلاش کریں</button>
+        </div>
+
+        <!-- منتخب ممبر کے کاموں کی لسٹ -->
+        <div class="card">
+            <h3>ممبر کے کاموں کی فہرست</h3>
+            <ul id="memberTasksList">
+                <li><span>پہلے ممبر اور تاریخ سلیکٹ کر کے سرچ کریں۔</span></li>
+            </ul>
+        </div>
+
+        <!-- راشن کی محفوظ شدہ ہسٹری لسٹ -->
+        <div class="card">
+            <h3>محفوظ شدہ راشن ہسٹری (تاریخ کے ساتھ)</h3>
+            <ul id="rationHistoryList"></ul>
+        </div>
     </div>
 
-    <!-- 4. حاضری / ڈیوٹی ٹائم ایڈجسٹمنٹ -->
-    <div class="card">
-        <h3>4. حاضری و ڈیوٹی ٹائم اصلاح</h3>
-        <label>ممبر کا نام:</label>
-        <input type="text" id="memberName" placeholder="ممبر کا نام...">
-        <label>صحیح ٹائم درج کریں:</label>
-        <input type="time" id="correctTime">
-        <button class="btn btn-save" onclick="correctAttendance()">حاضری سیٹ / اپ ڈیٹ کریں</button>
-        <ul id="attendanceLog"></ul>
+    <!-- 3. سیٹنگز پینل (الگ بٹن سے کھلے گا) -->
+    <div id="settings" class="tab-content">
+        
+        <!-- کام اور پوائنٹس انٹری -->
+        <div class="card">
+            <h3>1. کام اور پوائنٹس سیٹنگز</h3>
+            <label>کام کا نام:</label>
+            <input type="text" id="taskName" placeholder="کام درج کریں...">
+            <label>پوائنٹس:</label>
+            <input type="number" id="taskPoints" placeholder="پوائنٹس درج کریں...">
+            <button class="btn btn-save" onclick="addTaskSetting()">سیو کریں</button>
+            
+            <h4>موجودہ کاموں کی لسٹ:</h4>
+            <ul id="settingsTaskList"></ul>
+        </div>
+
+        <!-- کبھی کبھی کرنے والے کام -->
+        <div class="card">
+            <h3>2. کبھی کبھی کرنے والے کام</h3>
+            <label>کام کا نام:</label>
+            <input type="text" id="occTaskName" placeholder="مثلاً: پنکھے صاف کرنا...">
+            <button class="btn btn-save" onclick="addOccTaskSetting()">سیو کریں</button>
+            <ul id="settingsOccTaskList"></ul>
+        </div>
+
+        <!-- راشن اور بجٹ انٹری -->
+        <div class="card">
+            <h3>3. راشن لسٹ اور بجٹ سیٹنگز</h3>
+            <label>سامان کا نام:</label>
+            <input type="text" id="rationName" placeholder="سامان کا نام...">
+            <label>قیمت (روپے):</label>
+            <input type="number" id="rationPrice" placeholder="قیمت درج کریں...">
+            <button class="btn btn-save" onclick="addRationSetting()">سیو اور ہسٹری میں محفوظ کریں</button>
+
+            <div class="budget-box" id="totalBudget">کل بجٹ: 0 روپے</div>
+        </div>
+
     </div>
 
 </div>
 
 <script>
-    // 1. باقاعدہ کام اور پوائنٹس
-    function addRegularTask() {
+    // 1. ٹیب نیویگیشن فنکشن
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // 2. کام اور پوائنٹس کی لسٹ (سیٹنگز کے اندر لائیو اپ ڈیٹ)
+    function addTaskSetting() {
         const name = document.getElementById('taskName').value.trim();
         const points = document.getElementById('taskPoints').value.trim();
+
         if (name && points) {
-            const ul = document.getElementById('regularTaskList');
+            const ul = document.getElementById('settingsTaskList');
             const li = document.createElement('li');
             li.innerHTML = `<span><strong>${name}</strong> — ${points} پوائنٹس</span>
                 <div class="actions">
-                    <button class="btn btn-edit" onclick="editItem(this)">ایڈٹ</button>
+                    <button class="btn btn-edit" onclick="editListItem(this)">ایڈٹ</button>
+                    <button class="btn btn-delete" onclick="this.closest('li').remove()">ڈیلیٹ</button>
                 </div>`;
             ul.appendChild(li);
+
             document.getElementById('taskName').value = '';
             document.getElementById('taskPoints').value = '';
         }
     }
 
-    // 2. کبھی کبھی کرنے والے کام
-    function addOccasionalTask() {
+    // 3. کبھی کبھی کرنے والے کام کی انٹری
+    function addOccTaskSetting() {
         const name = document.getElementById('occTaskName').value.trim();
         if (name) {
-            const ul = document.getElementById('occTaskList');
+            const ul = document.getElementById('settingsOccTaskList');
             const li = document.createElement('li');
             li.innerHTML = `<span>${name} (کبھی کبھی)</span>
                 <div class="actions">
-                    <button class="btn btn-edit" onclick="editItem(this)">ایڈٹ</button>
+                    <button class="btn btn-edit" onclick="editListItem(this)">ایڈٹ</button>
+                    <button class="btn btn-delete" onclick="this.closest('li').remove()">ڈیلیٹ</button>
                 </div>`;
             ul.appendChild(li);
             document.getElementById('occTaskName').value = '';
         }
     }
 
-    // 3. راشن، قیمت اور بجٹ
-    let totalBudget = 0;
-    function addRationItem() {
+    // 4. راشن اور بجٹ (تاریخ کے ساتھ محفوظ)
+    let globalBudget = 0;
+    function addRationSetting() {
         const name = document.getElementById('rationName').value.trim();
         const price = parseFloat(document.getElementById('rationPrice').value.trim());
+        const currentDate = new Date().toISOString().split('T')[0];
 
         if (name && !isNaN(price)) {
-            const ul = document.getElementById('rationList');
+            // ہسٹری لسٹ میں شامل کریں
+            const ul = document.getElementById('rationHistoryList');
             const li = document.createElement('li');
-            li.setAttribute('data-price', price);
-            li.innerHTML = `<span><strong>${name}</strong> — <span class="price-val">${price}</span> روپے</span>
+            li.innerHTML = `<span><strong>${name}</strong> — ${price} روپے <small>(${currentDate})</small></span>
                 <div class="actions">
-                    <button class="btn btn-skip" onclick="skipRation(this)">آج سکپ کریں</button>
-                    <button class="btn btn-delete" onclick="deleteRation(this)">خریدا گیا (ڈیلیٹ)</button>
+                    <button class="btn btn-delete" onclick="this.closest('li').remove()">ڈیلیٹ</button>
                 </div>`;
             ul.appendChild(li);
 
-            totalBudget += price;
-            updateBudget();
+            globalBudget += price;
+            document.getElementById('totalBudget').innerText = `کل بجٹ: ${globalBudget} روپے`;
 
             document.getElementById('rationName').value = '';
             document.getElementById('rationPrice').value = '';
         }
     }
 
-    function deleteRation(btn) {
-        const li = btn.closest('li');
-        const price = parseFloat(li.getAttribute('data-price'));
-        if (!li.style.textDecoration.includes('line-through')) {
-            totalBudget -= price;
-            updateBudget();
+    // 5. ممبر اور تاریخ کی بنیاد پر ریکارڈ فلٹر اور ایڈٹ/ڈیلیٹ سہولت
+    function searchMemberRecord() {
+        const member = document.getElementById('filterMember').value;
+        const date = document.getElementById('filterDate').value;
+        const ul = document.getElementById('memberTasksList');
+
+        if (!member || !date) {
+            alert("براہ کرم ممبر اور تاریخ دونوں کا انتخاب کریں!");
+            return;
         }
-        li.remove();
-    }
 
-    function skipRation(btn) {
-        const li = btn.closest('li');
-        const price = parseFloat(li.getAttribute('data-price'));
-        if (!li.style.textDecoration.includes('line-through')) {
-            li.style.textDecoration = 'line-through';
-            li.style.opacity = '0.5';
-            totalBudget -= price;
-        } else {
-            li.style.textDecoration = 'none';
-            li.style.opacity = '1';
-            totalBudget += price;
-        }
-        updateBudget();
-    }
-
-    function updateBudget() {
-        document.getElementById('totalBudget').innerText = `کل بجٹ: ${totalBudget} روپے`;
-    }
-
-    // 4. حاضری کی درستگی
-    function correctAttendance() {
-        const name = document.getElementById('memberName').value.trim();
-        const time = document.getElementById('correctTime').value;
-        if (name && time) {
-            const ul = document.getElementById('attendanceLog');
-            const li = document.createElement('li');
-            li.innerHTML = `<span><strong>${name}</strong> کی حاضری ٹائم: ${time} (درست کی گئی)</span>
+        // فرضی نمونہ ریکارڈ (ریکارڈ دکھانے کے لیے)
+        ul.innerHTML = `
+            <li>
+                <span><strong>${member}</strong> — برتن دھونا (ٹائم: 09:00 AM, تاریخ: ${date})</span>
                 <div class="actions">
-                    <button class="btn btn-edit" onclick="editItem(this)">تصیح کریں</button>
-                </div>`;
-            ul.appendChild(li);
-            document.getElementById('memberName').value = '';
-            document.getElementById('correctTime').value = '';
-        }
+                    <button class="btn btn-edit" onclick="editListItem(this)">تصیح / ایڈٹ</button>
+                    <button class="btn btn-delete" onclick="this.closest('li').remove()">ڈیلیٹ</button>
+                </div>
+            </li>
+            <li>
+                <span><strong>${member}</strong> — کپڑے دھونا (ٹائم: 02:30 PM, تاریخ: ${date})</span>
+                <div class="actions">
+                    <button class="btn btn-edit" onclick="editListItem(this)">تصیح / ایڈٹ</button>
+                    <button class="btn btn-delete" onclick="this.closest('li').remove()">ڈیلیٹ</button>
+                </div>
+            </li>
+        `;
     }
 
     // جنرل ایڈٹ فنکشن
-    function editItem(btn) {
+    function editListItem(btn) {
         const span = btn.closest('li').querySelector('span');
-        const newText = prompt("نئی تفصیلات درج کریں:", span.innerText);
+        const newText = prompt("نئی معلومات درج کریں:", span.innerText);
         if (newText) span.innerText = newText;
     }
 </script>
