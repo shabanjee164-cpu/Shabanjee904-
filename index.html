@@ -756,3 +756,82 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیٹنگز</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; padding: 20px; text-align: right; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h3 { color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 8px; margin-top: 0; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .btn-edit { background-color: #ff9800; }
+        .btn-edit:hover { background-color: #e68900; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #eee; padding: 10px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h3>کام اور پوائنٹس کی سیٹنگ</h3>
+        <label>کام کا نام:</label>
+        <input type="text" id="taskName" placeholder="کام درج کریں...">
+        <label>پوائنٹس:</label>
+        <input type="number" id="taskPoints" placeholder="پوائنٹس درج کریں...">
+        <button onclick="saveTask()">سیو کریں</button>
+    </div>
+
+    <div class="card">
+        <h3>راشن کی لسٹ</h3>
+        <input type="text" id="rationItem" placeholder="راشن کا نام درج کریں...">
+        <button onclick="addRation()">لسٹ میں ایڈ کریں</button>
+        <ul id="rationList"></ul>
+    </div>
+
+    <div class="card">
+        <h3>آج کا فوری کام</h3>
+        <input type="text" id="instantTask" placeholder="فوری کام درج کریں...">
+        <button onclick="saveInstantTask()">سیو کریں</button>
+    </div>
+
+    <script>
+        function saveTask() {
+            alert("کام اور پوائنٹس سیو کر لیے گئے ہیں!");
+        }
+
+        function addRation() {
+            const item = document.getElementById('rationItem').value;
+            if (item) {
+                const li = document.createElement('li');
+                li.innerText = item;
+                
+                const editBtn = document.createElement('button');
+                editBtn.innerText = "ایڈٹ کریں";
+                editBtn.className = "btn-edit";
+                editBtn.onclick = () => editRation(li);
+                
+                li.appendChild(editBtn);
+                document.getElementById('rationList').appendChild(li);
+                document.getElementById('rationItem').value = '';
+            }
+        }
+
+        function editRation(element) {
+            const newValue = prompt("نئی ویلیو درج کریں:", element.childNodes[0].nodeValue);
+            if (newValue) {
+                element.childNodes[0].nodeValue = newValue;
+            }
+        }
+
+        function saveInstantTask() {
+            alert("فوری کام سیو ہو گیا ہے!");
+        }
+    </script>
+</body>
+</html>
