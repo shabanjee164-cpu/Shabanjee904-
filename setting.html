@@ -1,268 +1,65 @@
-<!-- setting.html -->
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings Module</title>
+    <title>Settings Button Only</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --danger: #d32f2f;
-            --bg-body: #f4f6f9;
-            --card-bg: #ffffff;
-            --radius: 12px;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-body);
-            padding: 16px;
-            direction: rtl;
-            text-align: right;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 18px;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin-bottom: 16px;
-        }
-
-        h3, h4 {
-            color: var(--primary);
-            margin-top: 0;
-            border-bottom: 2px solid #e8f5e9;
-            padding-bottom: 8px;
-        }
-
-        .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .col { flex: 1; min-width: 120px; }
-        label { font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px; }
-        
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        .btn {
+        /* سیٹنگز بٹن کا ڈیزائن */
+        .btn-settings {
+            background-color: #2e7d32; /* سبز رنگ */
+            color: #ffffff;
             border: none;
-            color: white;
-            padding: 10px 14px;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-add { background: var(--primary); width: 100%; }
-        .btn-edit { background: #f57c00; padding: 4px 8px; font-size: 12px; }
-        .btn-delete { background: var(--danger); padding: 4px 8px; font-size: 12px; }
-
-        .item-box {
-            display: flex;
-            justify-content: space-between;
+            display: inline-flex;
             align-items: center;
-            padding: 8px 12px;
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 6px;
-            margin-bottom: 6px;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.1s;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        /* ماؤس اوپر لانے پر رنگ تبدیل ہونا */
+        .btn-settings:hover {
+            background-color: #1b5e20;
+        }
+
+        /* کلک کرنے پر تھوڑا نیچے دبنا */
+        .btn-settings:active {
+            transform: scale(0.98);
+        }
+
+        /* بٹن کا آئیکن گھومنے کا اینیمیشن (Hover پر) */
+        .btn-settings:hover .icon {
+            transform: rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .icon {
+            font-size: 18px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. ADD / EDIT TASK -->
-    <div class="card">
-        <h3>⚙️ نیا کام شامل کریں</h3>
-        <div class="row">
-            <div class="col">
-                <label>کام کی قسم</label>
-                <select id="taskCategory">
-                    <option value="daily">روزانہ کا کام (Daily)</option>
-                    <option value="occasional">کبھی کبھی ہونے والا کام (Occasional)</option>
-                </select>
-            </div>
-            <div class="col">
-                <label>کام کا نام</label>
-                <input type="text" id="taskNameInput" placeholder="مثلاً: فریج کی صفائی">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label>پوائنٹس (Points)</label>
-                <input type="number" id="taskPointsInput" placeholder="مثلاً: 20">
-            </div>
-        </div>
-        <button class="btn btn-add" onclick="saveTask()">💾 محفوظ کریں (Save Task)</button>
-    </div>
-
-    <!-- 2. MEMBER TASK HISTORY & FILTER -->
-    <div class="card">
-        <h3>🔍 ممبر کارکردگی اور فلٹر</h3>
-        <div class="row">
-            <div class="col">
-                <label>ممبر چنیں</label>
-                <select id="settingMemberSelect" onchange="renderSettingTasks()"></select>
-            </div>
-            <div class="col">
-                <label>از تاریخ</label>
-                <input type="date" id="settingFromDate" onchange="renderSettingTasks()">
-            </div>
-            <div class="col">
-                <label>تا تاریخ</label>
-                <input type="date" id="settingToDate" onchange="renderSettingTasks()">
-            </div>
-        </div>
-
-        <h4 style="color: var(--primary);">📅 روزمرہ کے کام</h4>
-        <div id="dailyListContainer"></div>
-
-        <h4 style="color: #ed6c02; margin-top: 15px;">⭐ کبھی کبھی ہونے والے کام</h4>
-        <div id="occasionalListContainer"></div>
-    </div>
-
-    <!-- 3. MEMBER MANAGEMENT -->
-    <div class="card">
-        <h3>👨‍👩‍👧‍👦 ممبر مینجمنٹ (Add/Delete Members)</h3>
-        <div class="row">
-            <div class="col">
-                <input type="text" id="newMemberName" placeholder="نیا ممبر نام...">
-            </div>
-        </div>
-        <button class="btn btn-add" style="margin-bottom: 12px;" onclick="addMember()">➕ ممبر شامل کریں</button>
-        <div id="membersListContainer"></div>
-    </div>
+    <!-- صرف سیٹنگز کا بٹن -->
+    <button class="btn-settings" onclick="openSettings()">
+        <span class="icon">⚙️</span>
+        <span>سیٹنگز (Settings)</span>
+    </button>
 
     <script>
-        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['عدنان', 'علی', 'سادیہ', 'ذیشان', 'عائشہ'];
-        let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
-        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [];
-
-        window.onload = function() {
-            populateMemberDropdown();
-            renderMembers();
-            renderSettingTasks();
-        };
-
-        function populateMemberDropdown() {
-            const select = document.getElementById('settingMemberSelect');
-            select.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
-        }
-
-        /* --- TASK LOGIC --- */
-        function saveTask() {
-            const cat = document.getElementById('taskCategory').value;
-            const name = document.getElementById('taskNameInput').value.trim();
-            const pts = parseInt(document.getElementById('taskPointsInput').value);
-
-            if (!name || isNaN(pts)) return alert("تمام خانے پُر کریں!");
-
-            customTasks.push({ id: Date.now(), type: cat, name: name, points: pts });
-            localStorage.setItem('customTasks', JSON.stringify(customTasks));
-
-            document.getElementById('taskNameInput').value = '';
-            document.getElementById('taskPointsInput').value = '';
-            alert("کام سیو ہو گیا!");
-        }
-
-        function renderSettingTasks() {
-            const member = document.getElementById('settingMemberSelect').value;
-            const fromDate = document.getElementById('settingFromDate').value;
-            const toDate = document.getElementById('settingToDate').value;
-
-            const dailyBox = document.getElementById('dailyListContainer');
-            const occBox = document.getElementById('occasionalListContainer');
-            dailyBox.innerHTML = ''; occBox.innerHTML = '';
-
-            let filtered = historyLogs.filter(log => {
-                if (log.type !== 'task-action') return false;
-                let isMem = (log.data.memberSenior === member || log.data.memberHelper === member);
-                let isDate = true;
-                if (fromDate && log.rawDate < fromDate) isDate = false;
-                if (toDate && log.rawDate > toDate) isDate = false;
-                return isMem && isDate;
-            });
-
-            if (filtered.length === 0) {
-                dailyBox.innerHTML = '<p style="font-size:12px; color:#888;">کوئی ڈیٹا نہیں ملا</p>';
-                occBox.innerHTML = '<p style="font-size:12px; color:#888;">کوئی ڈیٹا نہیں ملا</p>';
-                return;
-            }
-
-            filtered.forEach(log => {
-                const html = `
-                    <div class="item-box">
-                        <div>
-                            <strong>${log.data.taskTitle}</strong>
-                            <div style="font-size:11px; color:#666;">تاریخ: ${log.rawDate} | پوائنٹس: ${log.data.points}</div>
-                        </div>
-                        <div>
-                            <button class="btn btn-edit" onclick="editLog(${log.id})">✏️</button>
-                            <button class="btn btn-delete" onclick="deleteLog(${log.id})">🗑️</button>
-                        </div>
-                    </div>
-                `;
-                if (log.data.taskCategory === 'occasional') occBox.innerHTML += html;
-                else dailyBox.innerHTML += html;
-            });
-        }
-
-        function editLog(id) {
-            let log = historyLogs.find(l => l.id === id);
-            if (!log) return;
-            let newTitle = prompt("نیا نام لکھیں:", log.data.taskTitle);
-            let newPts = prompt("نئے پوائنٹس لکھیں:", log.data.points);
-            if (newTitle && newPts) {
-                log.data.taskTitle = newTitle;
-                log.data.points = parseInt(newPts);
-                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-                renderSettingTasks();
-            }
-        }
-
-        function deleteLog(id) {
-            if (confirm("حذف کریں؟")) {
-                historyLogs = historyLogs.filter(l => l.id !== id);
-                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-                renderSettingTasks();
-            }
-        }
-
-        /* --- MEMBER LOGIC --- */
-        function addMember() {
-            const name = document.getElementById('newMemberName').value.trim();
-            if (!name) return alert("نام درج کریں!");
-            if (membersList.includes(name)) return alert("نام پہلے سے موجود ہے!");
-
-            membersList.push(name);
-            localStorage.setItem('membersList', JSON.stringify(membersList));
-            document.getElementById('newMemberName').value = '';
-            populateMemberDropdown();
-            renderMembers();
-        }
-
-        function deleteMember(name) {
-            if (confirm(`${name} کو حذف کریں؟`)) {
-                membersList = membersList.filter(m => m !== name);
-                localStorage.setItem('membersList', JSON.stringify(membersList));
-                populateMemberDropdown();
-                renderMembers();
-            }
-        }
-
-        function renderMembers() {
-            const container = document.getElementById('membersListContainer');
-            container.innerHTML = membersList.map(m => `
-                <div class="item-box">
-                    <span><strong>${m}</strong></span>
-                    <button class="btn btn-delete" onclick="deleteMember('${m}')">🗑️ حذف</button>
-                </div>
-            `).join('');
+        // بٹن پر کلک کرنے کا کام
+        function openSettings() {
+            // یہاں آپ اپنے سیٹنگز پیج کا لنک لگا سکتے ہیں
+            window.location.href = "setting.html";
         }
     </script>
+
 </body>
 </html>
