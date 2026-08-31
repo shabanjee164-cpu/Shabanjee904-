@@ -3,94 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>گھر کا کام - ڈیش بورڈ</title>
+    <title>ہوم ورک ٹریکر - ڈیش بورڈ</title>
     <style>
         :root {
-            --primary: #2e7d32;
-            --bg-body: #f4f6f9;
+            --primary: #1b5e20;
+            --dark: #2c3e50;
+            --bg: #f4f6f9;
             --card-bg: #ffffff;
-            --radius: 12px;
+            --radius: 14px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: var(--bg-body);
-            padding: 20px;
+            background-color: var(--bg);
+            color: #333;
             direction: rtl;
             text-align: right;
+            padding: 20px 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
         }
 
         .header {
-            width: 100%;
-            max-width: 500px;
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
+            padding-top: 10px;
         }
 
-        .header h2 {
+        .header h1 {
             color: var(--primary);
-            font-size: 22px;
+            font-size: 24px;
         }
 
-        /* 4 بٹنز کا گریڈ layout */
-        .dashboard-grid {
-            width: 100%;
-            max-width: 500px;
+        .header p {
+            color: #666;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* 4 بنیادی فیچرز کی گرڈ layout */
+        .nav-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 25px;
         }
 
-        .dash-card {
+        .nav-card {
             background: var(--card-bg);
-            padding: 20px 15px;
+            padding: 25px 15px;
             border-radius: var(--radius);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
             text-decoration: none;
-            color: #333;
+            color: var(--dark);
             border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .dash-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
         }
 
-        .dash-card .icon {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 8px;
+        .nav-card .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
         }
 
-        .dash-card span {
+        .nav-card span {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
         }
 
-        /* ڈیش بورڈ کے لاسٹ پر سیٹنگز کا الگ بٹن */
-        .settings-bottom-btn {
-            width: 100%;
-            max-width: 500px;
+        /* ڈیش بورڈ کے نیچے الگ سیٹنگز نیویگیشن بٹن */
+        .settings-container {
             margin-top: auto;
-            padding-top: 15px;
+            padding-top: 20px;
         }
 
-        .btn-settings-nav {
+        .btn-settings {
             width: 100%;
-            background-color: #37474f;
-            color: white;
-            padding: 14px;
-            border: none;
+            background-color: var(--dark);
+            color: #ffffff;
+            padding: 16px;
             border-radius: var(--radius);
             font-size: 16px;
             font-weight: bold;
@@ -100,48 +106,50 @@
             justify-content: center;
             gap: 10px;
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transition: background-color 0.2s;
         }
 
-        .btn-settings-nav:hover {
-            background-color: #263238;
+        .btn-settings:hover {
+            background-color: #1a252f;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>🏠 ہوم ورک ٹریکنگ ڈیش بورڈ</h2>
+        <h1>🏠 ہوم ورک ٹریکنگ ڈیش بورڈ</h1>
+        <p>خوش آمدید! اپنے تمام کام اور ممبرز یہاں سے نیویگیٹ کریں۔</p>
     </div>
 
-    <!-- ڈیش بورڈ کے 4 اہم بٹنز -->
-    <div class="dashboard-grid">
-        <a href="record.html" class="dash-card">
+    <!-- صاف ستھری مین نیویگیشن گرڈ -->
+    <div class="nav-grid">
+        <a href="record.html" class="nav-card">
             <span class="icon">📝</span>
             <span>ریکارڈ (Record)</span>
         </a>
 
-        <a href="dashboard_stats.html" class="dash-card">
+        <a href="dashboard_stats.html" class="nav-card">
             <span class="icon">📊</span>
-            <span>سمری (Dashboard)</span>
+            <span>سمری (Summary)</span>
         </a>
 
-        <a href="alerts.html" class="dash-card">
+        <a href="alerts.html" class="nav-card">
             <span class="icon">🔔</span>
             <span>الرٹس (Alerts)</span>
         </a>
 
-        <a href="members.html" class="dash-card">
+        <a href="members.html" class="nav-card">
             <span class="icon">👥</span>
             <span>ممبرز (Members)</span>
         </a>
     </div>
 
-    <!-- ڈیش بورڈ کے آخر میں بالکل الگ سیٹنگز کا بٹن -->
-    <div class="settings-bottom-btn">
-        <a href="setting.html" class="btn-settings-nav">
+    <!-- بالکل الگ سیٹنگز نیویگیشن بٹن -->
+    <div class="settings-container">
+        <a href="setting.html" class="btn-settings">
             <span>⚙️</span>
-            <span>سیٹنگز پیج پر جائیں (Settings)</span>
+            <span>سیٹنگز پیج (Settings)</span>
         </a>
     </div>
 
