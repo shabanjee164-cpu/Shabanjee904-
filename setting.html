@@ -3,63 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings Button Only</title>
+    <title>گھر کا کام - ڈیش بورڈ</title>
     <style>
-        /* سیٹنگز بٹن کا ڈیزائن */
-        .btn-settings {
-            background-color: #2e7d32; /* سبز رنگ */
-            color: #ffffff;
-            border: none;
-            padding: 10px 18px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, transform 0.1s;
+        :root {
+            --primary: #2e7d32;
+            --bg-body: #f4f6f9;
+            --card-bg: #ffffff;
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-body);
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* ماؤس اوپر لانے پر رنگ تبدیل ہونا */
-        .btn-settings:hover {
-            background-color: #1b5e20;
+        .header {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 24px;
         }
 
-        /* کلک کرنے پر تھوڑا نیچے دبنا */
-        .btn-settings:active {
-            transform: scale(0.98);
+        .header h2 {
+            color: var(--primary);
+            font-size: 22px;
         }
 
-        /* بٹن کا آئیکن گھومنے کا اینیمیشن (Hover پر) */
-        .btn-settings:hover .icon {
-            transform: rotate(45deg);
-            transition: transform 0.3s ease;
+        /* 4 بٹنز کا گریڈ layout */
+        .dashboard-grid {
+            width: 100%;
+            max-width: 500px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .icon {
-            font-size: 18px;
-            display: inline-block;
+        .dash-card {
+            background: var(--card-bg);
+            padding: 20px 15px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .dash-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .dash-card .icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .dash-card span {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        /* ڈیش بورڈ کے لاسٹ پر سیٹنگز کا الگ بٹن */
+        .settings-bottom-btn {
+            width: 100%;
+            max-width: 500px;
+            margin-top: auto;
+            padding-top: 15px;
+        }
+
+        .btn-settings-nav {
+            width: 100%;
+            background-color: #37474f;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-settings-nav:hover {
+            background-color: #263238;
         }
     </style>
 </head>
 <body>
 
-    <!-- صرف سیٹنگز کا بٹن -->
-    <button class="btn-settings" onclick="openSettings()">
-        <span class="icon">⚙️</span>
-        <span>سیٹنگز (Settings)</span>
-    </button>
+    <div class="header">
+        <h2>🏠 ہوم ورک ٹریکنگ ڈیش بورڈ</h2>
+    </div>
 
-    <script>
-        // بٹن پر کلک کرنے کا کام
-        function openSettings() {
-            // یہاں آپ اپنے سیٹنگز پیج کا لنک لگا سکتے ہیں
-            window.location.href = "setting.html";
-        }
-    </script>
+    <!-- ڈیش بورڈ کے 4 اہم بٹنز -->
+    <div class="dashboard-grid">
+        <a href="record.html" class="dash-card">
+            <span class="icon">📝</span>
+            <span>ریکارڈ (Record)</span>
+        </a>
+
+        <a href="dashboard_stats.html" class="dash-card">
+            <span class="icon">📊</span>
+            <span>سمری (Dashboard)</span>
+        </a>
+
+        <a href="alerts.html" class="dash-card">
+            <span class="icon">🔔</span>
+            <span>الرٹس (Alerts)</span>
+        </a>
+
+        <a href="members.html" class="dash-card">
+            <span class="icon">👥</span>
+            <span>ممبرز (Members)</span>
+        </a>
+    </div>
+
+    <!-- ڈیش بورڈ کے آخر میں بالکل الگ سیٹنگز کا بٹن -->
+    <div class="settings-bottom-btn">
+        <a href="setting.html" class="btn-settings-nav">
+            <span>⚙️</span>
+            <span>سیٹنگز پیج پر جائیں (Settings)</span>
+        </a>
+    </div>
 
 </body>
 </html>
