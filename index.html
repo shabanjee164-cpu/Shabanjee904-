@@ -3,61 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Management System</title>
+    <title>Smart Management System Pro - Complete Edition</title>
     <style>
         :root {
-            --primary: #2e7d32;
-            --secondary: #1976d2;
-            --danger: #d32f2f;
-            --warning: #f57c00;
-            --bg: #f4f6f9;
+            --primary: #1b5e20;
+            --primary-light: #4c8c4a;
+            --secondary: #0d47a1;
+            --danger: #c62828;
+            --warning: #ef6c00;
+            --bg: #f8f9fa;
             --card-bg: #ffffff;
-            --text: #333333;
+            --text: #212529;
+            --border: #dee2e6;
             --radius: 12px;
         }
 
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 85px;
-            direction: rtl;
-        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 90px; direction: rtl; }
 
         .app-header {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #2e7d32);
             color: white;
             text-align: center;
-            padding: 15px;
+            padding: 18px;
             font-size: 20px;
             font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        .view { display: none; }
-        .view.active { display: block; }
+        .container { max-width: 680px; margin: 0 auto; padding: 15px; }
 
         .card {
             background: var(--card-bg);
-            padding: 16px;
+            padding: 18px;
             border-radius: var(--radius);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            margin-bottom: 16px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         .card h3 {
@@ -66,353 +51,475 @@
             font-size: 16px;
             border-bottom: 2px solid #e8f5e9;
             padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .form-group { margin-bottom: 12px; }
+        .section-box {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
 
-        label {
+        .section-box label {
             font-size: 13px;
             font-weight: bold;
+            color: #374151;
+            margin-bottom: 5px;
             display: block;
-            margin-bottom: 4px;
         }
 
         input, select {
             width: 100%;
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border);
             outline: none;
             font-size: 14px;
+            background: #fff;
+            transition: all 0.2s;
         }
-
-        input:focus, select:focus { border-color: var(--primary); }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,94,32,0.1); }
 
         .row { display: flex; gap: 10px; }
         .col { flex: 1; }
 
         .btn {
-            border: none;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            width: 100%;
-            transition: 0.2s;
+            border: none; color: white; padding: 10px 16px; border-radius: 8px;
+            cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; transition: 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         }
         .btn-primary { background: var(--primary); }
-        .btn-secondary { background: var(--secondary); }
-        .btn-edit { background: var(--warning); width: auto; padding: 4px 8px; font-size: 12px; }
-        .btn-delete { background: var(--danger); width: auto; padding: 4px 8px; font-size: 12px; }
-        .btn-skip { background: #7b1fa2; width: auto; padding: 4px 8px; font-size: 12px; }
+        .btn-primary:hover { background: #2e7d32; }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #b71c1c; }
 
-        .item-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .item-details { font-size: 13px; }
-        .item-title { font-weight: bold; font-size: 14px; }
-
-        .badge {
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: white;
-        }
-        .badge-daily { background: #2e7d32; }
-        .badge-occ { background: #ed6c02; }
-
-        .actions { display: flex; gap: 4px; }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #ffffff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -3px 12px rgba(0,0,0,0.12);
-            z-index: 1000;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #666;
-            font-size: 12px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            width: 33%;
-            text-align: center;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .nav-icon { font-size: 20px; margin-bottom: 3px; }
-
-        .budget-box {
-            background: #e3f2fd;
-            border: 1px solid #90caf9;
-            padding: 12px;
+        .table-container {
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
             border-radius: 8px;
             margin-top: 10px;
+            background: #fff;
         }
-        .budget-row {
-            display: flex;
-            justify-content: space-between;
+        table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 13px;
-            margin-bottom: 4px;
+            text-align: right;
         }
-        .budget-row.total {
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #f1f8f5;
+            color: var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
             font-weight: bold;
-            font-size: 14px;
-            border-top: 1px dashed #90caf9;
-            padding-top: 4px;
         }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn {
+            background: #e9ecef; color: #333; padding: 6px 12px; font-size: 13px;
+            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .dropbtn:hover { background: #dde2e6; }
+        .dropdown-content {
+            display: none; position: absolute; right: 0; background-color: #fff;
+            min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+            z-index: 50; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+        }
+        .dropdown-content button {
+            color: #333; padding: 10px 14px; text-decoration: none; display: block;
+            background: none; border: none; width: 100%; text-align: right; cursor: pointer; font-size: 13px;
+        }
+        .dropdown-content button:hover { background-color: #f1f5f9; }
+        .show { display: block; }
+
+        .toggle-btn {
+            background: #e8f5e9; border: 1px solid #c8e6c9; color: var(--primary);
+            cursor: pointer; font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 6px;
+        }
+        
+        .summary-box {
+            background: #e8f5e9; border: 1px solid #a5d6a7; padding: 12px 16px; border-radius: 8px; margin-top: 10px;
+            display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);
+        }
+
+        .badge {
+            display: inline-block; padding: 3px 8px; font-size: 11px; font-weight: bold; border-radius: 4px;
+        }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff;
+            display: flex; justify-content: space-around; padding: 12px 0;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid var(--border);
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; color: var(--primary);
+            font-size: 12px; font-weight: bold; cursor: pointer; background: none; border: none;
+        }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="app-header">Smart Management System</div>
+    <div class="app-header">✨ اسمارٹ منیجر پرو (مکمل اور حتمی ورژن) ✨</div>
 
     <div class="container">
 
-        <!-- ENTRY / MANAGEMENT MAIN TAB (سنگل پیج جہاں سب کچھ اور الگ الگ لسٹیں ہوں گی) -->
-        <div id="entryMgmtSection" class="view active">
-            
-            <!-- 1. Task Management Section -->
-            <div class="card">
-                <h3>⚙️ ٹاسک مینجمنٹ (Task Management)</h3>
-                <div class="form-group">
-                    <label>کام کی قسم</label>
-                    <select id="taskCategory">
-                        <option value="daily">روزانہ (Daily)</option>
-                        <option value="occasional">کبھی کبھی (Occasional)</option>
-                    </select>
-                </div>
-                <div class="row">
-                    <div class="col form-group">
-                        <label>کام کا نام</label>
-                        <input type="text" id="taskNameInput" placeholder="مثلاً: صفائی">
+        <!-- 1️⃣ کام کی انٹری اور لسٹ -->
+        <div class="card">
+            <h3>
+                <span>📋 1. کام اور پوائنٹس مینجمنٹ</span>
+                <button class="toggle-btn" onclick="toggleCard('taskCardBody', this)">➖ چھپائیں</button>
+            </h3>
+            <div id="taskCardBody">
+                <div class="section-box">
+                    <label>کام کی قسم اور تفصیل درج کریں</label>
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col">
+                            <select id="taskCategory">
+                                <option value="daily">روزانہ (Daily)</option>
+                                <option value="occasional">کبھی کبھی (Occasional)</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="number" id="taskPointsInput" placeholder="پوائنٹس (مثلاً 10)">
+                        </div>
                     </div>
-                    <div class="col form-group">
-                        <label>پوائنٹس</label>
-                        <input type="number" id="taskPointsInput" placeholder="10">
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveTask()" id="saveTaskBtn">💾 کام محفوظ کریں</button>
-                
-                <h4 style="margin-top:15px; color:var(--primary);">الگ ٹاسک لسٹ:</h4>
-                <div id="tasksListContainer"></div>
-            </div>
-
-            <!-- 2. Member Performance & History Section -->
-            <div class="card">
-                <h3>🔍 ممبر کارکردگی اور ہسٹری</h3>
-                <div class="form-group">
-                    <label>ممبر سلیکٹ کریں</label>
-                    <select id="memberSelect" onchange="renderHistory()"></select>
-                </div>
-                <div class="row">
-                    <div class="col form-group">
-                        <label>از تاریخ (Start Date)</label>
-                        <input type="date" id="fromDate" onchange="renderHistory()">
-                    </div>
-                    <div class="col form-group">
-                        <label>تا تاریخ (End Date)</label>
-                        <input type="date" id="toDate" onchange="renderHistory()">
-                    </div>
+                    <input type="text" id="taskNameInput" placeholder="کام کا نام (مثلاً کمرے کی صفائی)" style="margin-bottom:8px;">
+                    <button class="btn btn-primary" onclick="saveTask()">💾 نیا کام محفوظ کریں</button>
                 </div>
 
-                <h4 style="margin-top:15px; color:var(--primary);">الگ ممبر ہسٹری لسٹ:</h4>
-                <div id="historyListContainer"></div>
-
-                <div class="budget-box" style="background:#e8f5e9; border-color:#a5d6a7;">
-                    <div class="budget-row total" style="border:none; color:var(--primary);">
-                        <span>کل پوائنٹس (Total Points):</span>
-                        <span id="totalPointsDisplay">0</span>
+                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('taskMenu')">⚙️ ایکشن مینو</button>
+                        <div id="taskMenu" class="dropdown-content">
+                            <button onclick="selectAllTable('taskCheck', true)">سب سلیکٹ کریں</button>
+                            <button onclick="selectAllTable('taskCheck', false)">سلیکشن ختم کریں</button>
+                            <button onclick="deleteSelectedTasks()">منتخب حذف کریں</button>
+                            <button onclick="deleteAllTasks()">تمام کام ڈیلیٹ کریں</button>
+                            <button onclick="sortTasksAlphabetically()">ترتیب دیں (A-Z)</button>
+                        </div>
                     </div>
+                    <span id="taskCount" style="font-size:12px; color:#666; font-weight:bold;">کل ٹاسک: 0</span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="35"><input type="checkbox" onchange="toggleAll(this, 'taskCheck')"></th>
+                                <th>کام کا نام</th>
+                                <th>قسم</th>
+                                <th width="70">پوائنٹس</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskTableBody"></tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <!-- 3. Ration & Budget Order Section -->
-            <div class="card">
-                <h3>🛒 راشن اور بجٹ آرڈر مینجمنٹ</h3>
-                <div class="form-group">
-                    <label>راشن آئٹم کا نام</label>
-                    <input type="text" id="rationName" placeholder="مثلاً: چینی">
-                </div>
-                <div class="row">
-                    <div class="col form-group">
-                        <label>قیمت (Price)</label>
-                        <input type="number" id="rationPrice" placeholder="150">
+        <!-- 2️⃣ ممبر ہسٹری اور پوائنٹس -->
+        <div class="card">
+            <h3>
+                <span>🔍 2. ممبر ہسٹری اور کارکردگی</span>
+                <button class="toggle-btn" onclick="toggleCard('memberCardBody', this)">➖ چھپائیں</button>
+            </h3>
+            <div id="memberCardBody">
+                <div class="section-box">
+                    <label>ممبر کی نئی کارکردگی انٹری</label>
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col">
+                            <select id="logMemberSelect">
+                                <option value="علی">علی</option>
+                                <option value="عدنان">عدنان</option>
+                                <option value="سادیہ">سادیہ</option>
+                                <option value="عائشہ">عائشہ</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="date" id="logDate">
+                        </div>
                     </div>
-                    <div class="col form-group">
-                        <label>مقدار (Qty)</label>
-                        <input type="text" id="rationQty" placeholder="1 کلو">
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col">
+                            <input type="text" id="logTaskName" placeholder="مکمل کیے گئے کام کا نام">
+                        </div>
+                        <div class="col">
+                            <input type="number" id="logPoints" placeholder="حاصل کردہ پوائنٹس">
+                        </div>
                     </div>
-                </div>
-                <button class="btn btn-primary" onclick="saveRationItem()" id="saveRationBtn">➕ راشن سیو کریں</button>
-
-                <h4 style="margin-top:15px; color:var(--primary);">الگ راشن لسٹ (ٹِک کریں):</h4>
-                <div id="rationListContainer"></div>
-                <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateOrder()">📋 آرڈر لسٹ تیار کریں</button>
-
-                <h4 style="margin-top:15px; color:var(--primary);">الگ آرڈر لسٹ:</h4>
-                <div class="form-group">
-                    <label>کل فکسڈ بجٹ (Fixed Budget)</label>
-                    <input type="number" id="fixedBudget" placeholder="5000" oninput="calculateBudget()">
-                </div>
-                <div id="orderListContainer"></div>
-
-                <div class="budget-box">
-                    <div class="budget-row">
-                        <span>کل خرچ (Total Cost):</span>
-                        <span id="orderTotalDisplay">0</span>
-                    </div>
-                    <div class="budget-row total">
-                        <span>بقیہ بجٹ (Remaining):</span>
-                        <span id="remainingBudgetDisplay">0</span>
-                    </div>
+                    <button class="btn btn-primary" onclick="saveMemberLog()">➕ ہسٹری انٹری محفوظ کریں</button>
                 </div>
 
-                <h4 style="margin-top:15px; color:var(--primary);">الگ اسکپ / خریدی گئی ہسٹری:</h4>
-                <div id="purchasedListContainer"></div>
+                <div class="section-box" style="background:#f1f8f5;">
+                    <label>تاریخ اور نام کے حساب سے فلٹر کریں</label>
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col">
+                            <select id="filterMemberSelect" onchange="renderMemberTable()">
+                                <option value="علی">علی</option>
+                                <option value="عدنان">عدنان</option>
+                                <option value="سادیہ">سادیہ</option>
+                                <option value="عائشہ">عائشہ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label style="font-size:11px;">از تاریخ (Start)</label>
+                            <input type="date" id="fromDate" onchange="renderMemberTable()">
+                        </div>
+                        <div class="col">
+                            <label style="font-size:11px;">تا تاریخ (End)</label>
+                            <input type="date" id="toDate" onchange="renderMemberTable()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>کام کا نام</th>
+                                <th>کل بار ہوا</th>
+                                <th>کل پوائنٹس</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="summary-box">
+                    <span>مجموعی پوائنٹس (کل):</span>
+                    <span id="totalPointsDisplay" style="font-size:16px;">0</span>
+                </div>
             </div>
+        </div>
 
+        <!-- 3️⃣ راشن مینجমেন্ট -->
+        <div class="card">
+            <h3>
+                <span>🛒 3. راشن اور خریداری لسٹ</span>
+                <button class="toggle-btn" onclick="toggleCard('rationCardBody', this)">➖ چھپائیں</button>
+            </h3>
+            <div id="rationCardBody">
+                <div class="section-box">
+                    <label>نیا راشن آئٹم درج کریں</label>
+                    <input type="text" id="rationName" placeholder="آئٹم کا نام (مثلاً چینی، آٹا)" style="margin-bottom:8px;">
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col"><input type="number" id="rationPrice" placeholder="قیمت (Rs)"></div>
+                        <div class="col"><input type="text" id="rationQty" placeholder="مقدار (مثلاً 5 کلو)"></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveRationItem()">➕ راشن محفوظ کریں</button>
+                </div>
+
+                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('rationMenu')">⚙️ ایکشن مینو</button>
+                        <div id="rationMenu" class="dropdown-content">
+                            <button onclick="selectAllTable('rationCheck', true)">سب سلیکٹ کریں</button>
+                            <button onclick="selectAllTable('rationCheck', false)">سلیکشن ختم کریں</button>
+                            <button onclick="deleteSelectedRations()">منتخب حذف کریں</button>
+                            <button onclick="deleteAllRations()">تمام راشن ڈیلیٹ کریں</button>
+                            <button onclick="sortRationsAlphabetically()">ترتیب دیں (A-Z)</button>
+                        </div>
+                    </div>
+                    <span id="rationTotalCost" style="font-size:12px; color:#666; font-weight:bold;">کل لاگت: Rs. 0</span>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="35"><input type="checkbox" onchange="toggleAll(this, 'rationCheck')"></th>
+                                <th>آئٹم نام</th>
+                                <th>قیمت</th>
+                                <th>مقدار</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rationTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4️⃣ جانچ پڑتال (Check / Cross) -->
+        <div class="card">
+            <h3>
+                <span>✅ 4. کاموں کی جانچ پڑتال (Check/Cross)</span>
+                <button class="toggle-btn" onclick="toggleCard('statusCardBody', this)">➖ چھپائیں</button>
+            </h3>
+            <div id="statusCardBody">
+                <div class="section-box">
+                    <label>جانچ پڑتال انٹری</label>
+                    <div class="row" style="margin-bottom:8px;">
+                        <div class="col"><input type="text" id="statusTaskName" placeholder="ذمہ داری یا کام کا نام"></div>
+                        <div class="col">
+                            <select id="statusResult">
+                                <option value="درست / ٹھیک ہے">درست / ٹھیک ہے (✅)</option>
+                                <option value="بہتری درکار ہے">بہتری درکار ہے (❌)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveStatusEntry()">📥 جانچ انٹری محفوظ کریں</button>
+                </div>
+
+                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; color:#666; font-weight:bold;" id="statusCount">کل ریکارڈ: 0</span>
+                    <button class="btn btn-danger" style="width:auto; padding:5px 10px; font-size:12px;" onclick="clearStatusLogs()">تمام ریکارڈ صاف کریں</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>کام / ذمہ داری</th>
+                                <th>اسٹیٹس</th>
+                                <th>تاریخ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statusTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <!-- BOTTOM NAVIGATION (ENTRY / MANAGEMENT BUTTON) -->
+    <!-- BOTTOM NAV -->
     <div class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('entryMgmtSection', this)">
-            <span class="nav-icon">📝</span>
-            <span>انٹری / مینجمنٹ</span>
+        <button class="nav-item" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <span class="nav-icon">📊</span>
+            <span>اسمارٹ مینجمنٹ سسٹم پرو</span>
         </button>
     </div>
 
     <script>
         let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
-        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ', 'عائشہ'];
-        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [
-            { id: 1, member: 'علی', task: 'فریج کی صفائی', points: 20, date: '2026-08-30' }
-        ];
+        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [];
         let rationItems = JSON.parse(localStorage.getItem('rationItems')) || [];
-        let orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
-        let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
-
-        let editingTaskId = null;
-        let editingRationId = null;
+        let statusLogs = JSON.parse(localStorage.getItem('statusLogs')) || [];
 
         window.onload = function() {
-            renderTasks();
-            populateMembers();
-            renderHistory();
-            renderRation();
-            renderOrder();
-            renderPurchased();
+            document.getElementById('logDate').valueAsDate = new Date();
+            renderTaskTable();
+            renderMemberTable();
+            renderRationTable();
+            renderStatusTable();
         };
 
-        function switchTab(viewId, element) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            element.classList.add('active');
+        function toggleCard(id, btn) {
+            let el = document.getElementById(id);
+            if (el.style.display === "none") {
+                el.style.display = "block";
+                btn.innerText = "➖ چھپائیں";
+            } else {
+                el.style.display = "none";
+                btn.innerText = "➕ کھولیں";
+            }
         }
 
-        /* --- TASKS --- */
+        function toggleMenu(menuId) {
+            document.querySelectorAll('.dropdown-content').forEach(m => { if(m.id !== menuId) m.classList.remove('show'); });
+            document.getElementById(menuId).classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
+            }
+        }
+
+        /* --- MODULE 1: TASKS --- */
         function saveTask() {
             const category = document.getElementById('taskCategory').value;
             const name = document.getElementById('taskNameInput').value.trim();
             const points = parseInt(document.getElementById('taskPointsInput').value);
+            if (!name || isNaN(points)) return alert("براہ کرم کام کا نام اور پوائنٹس درست درج کریں!");
 
-            if (!name || isNaN(points)) return alert("نام اور پوائنٹس درج کریں!");
-
-            if (editingTaskId) {
-                customTasks = customTasks.map(t => t.id === editingTaskId ? { ...t, category, name, points } : t);
-                editingTaskId = null;
-                document.getElementById('saveTaskBtn').innerText = "💾 کام محفوظ کریں";
-            } else {
-                customTasks.push({ id: Date.now(), category, name, points });
-            }
-
+            customTasks.push({ id: Date.now(), category, name, points });
             localStorage.setItem('customTasks', JSON.stringify(customTasks));
             document.getElementById('taskNameInput').value = '';
             document.getElementById('taskPointsInput').value = '';
-            renderTasks();
+            renderTaskTable();
         }
 
-        function renderTasks() {
-            const box = document.getElementById('tasksListContainer');
-            box.innerHTML = customTasks.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی کام درج نہیں</p>' : '';
+        function renderTaskTable() {
+            const tbody = document.getElementById('taskTableBody');
+            tbody.innerHTML = customTasks.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی کام موجود نہیں</td></tr>' : '';
             
-            customTasks.forEach(task => {
-                const badgeClass = task.category === 'daily' ? 'badge-daily' : 'badge-occ';
-                const catText = task.category === 'daily' ? 'روزانہ' : 'کبھی کبھی';
-                box.innerHTML += `
-                    <div class="item-box">
-                        <div class="item-details">
-                            <span class="item-title">${task.name}</span>
-                            <span class="badge ${badgeClass}">${catText}</span>
-                            <div style="color:#666;">پوائنٹس: ${task.points}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-edit" onclick="editTask(${task.id})">✏️</button>
-                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
-                        </div>
-                    </div>
+            customTasks.forEach(t => {
+                let badge = t.category === 'daily' ? '<span class="badge badge-success">روزانہ</span>' : '<span class="badge badge-warning">کبھی کبھی</span>';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" class="taskCheck" value="${t.id}"></td>
+                        <td>${t.name}</td>
+                        <td>${badge}</td>
+                        <td><b>${t.points}</b></td>
+                    </tr>
                 `;
             });
+            document.getElementById('taskCount').innerText = "کل ٹاسک: " + customTasks.length;
         }
 
-        function editTask(id) {
-            const task = customTasks.find(t => t.id === id);
-            if (!task) return;
-            document.getElementById('taskCategory').value = task.category;
-            document.getElementById('taskNameInput').value = task.name;
-            document.getElementById('taskPointsInput').value = task.points;
-            editingTaskId = id;
-            document.getElementById('saveTaskBtn').innerText = "🔄 کام اپڈیٹ کریں";
+        function sortTasksAlphabetically() {
+            customTasks.sort((a, b) => a.name.localeCompare(b.name));
+            localStorage.setItem('customTasks', JSON.stringify(customTasks));
+            renderTaskTable();
         }
 
-        function deleteTask(id) {
-            if (confirm("کیا آپ اس کام کو ڈیلیٹ کرنا چاہتے ہیں؟")) {
-                customTasks = customTasks.filter(t => t.id !== id);
+        function deleteSelectedTasks() {
+            let selectedIds = Array.from(document.querySelectorAll('.taskCheck:checked')).map(c => parseInt(c.value));
+            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں کیا گیا!");
+            if (confirm("کیا آپ منتخب کردہ کام حذف کرنا چاہتے ہیں؟")) {
+                customTasks = customTasks.filter(t => !selectedIds.includes(t.id));
                 localStorage.setItem('customTasks', JSON.stringify(customTasks));
-                renderTasks();
+                renderTaskTable();
             }
         }
 
-        /* --- MEMBERS --- */
-        function populateMembers() {
-            const select = document.getElementById('memberSelect');
-            select.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
+        function deleteAllTasks() {
+            if (confirm("کیا آپ تمام کام حذف کرنا چاہتے ہیں؟")) {
+                customTasks = [];
+                localStorage.removeItem('customTasks');
+                renderTaskTable();
+            }
         }
 
-        function renderHistory() {
-            const member = document.getElementById('memberSelect').value;
+        /* --- MODULE 2: MEMBER HISTORY --- */
+        function saveMemberLog() {
+            const member = document.getElementById('logMemberSelect').value;
+            const task = document.getElementById('logTaskName').value.trim();
+            const points = parseInt(document.getElementById('logPoints').value);
+            const date = document.getElementById('logDate').value;
+
+            if (!task || isNaN(points) || !date) return alert("تمام معلومات درست درج کریں!");
+
+            historyLogs.push({ member, task, points, date });
+            localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+            document.getElementById('logTaskName').value = '';
+            document.getElementById('logPoints').value = '';
+            renderMemberTable();
+            alert("ہسٹری کامیابی سے محفوظ ہو گئی!");
+        }
+
+        function renderMemberTable() {
+            const member = document.getElementById('filterMemberSelect').value;
             const fromDate = document.getElementById('fromDate').value;
             const toDate = document.getElementById('toDate').value;
-            const container = document.getElementById('historyListContainer');
-            
+            const tbody = document.getElementById('memberTableBody');
+
             let filtered = historyLogs.filter(h => {
                 let matchMem = h.member === member;
                 let matchDate = true;
@@ -421,190 +528,131 @@
                 return matchMem && matchDate;
             });
 
-            container.innerHTML = filtered.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں ملی</p>' : '';
-            
-            let totalPts = 0;
-            filtered.forEach(log => {
-                totalPts += log.points;
-                container.innerHTML += `
-                    <div class="item-box">
-                        <div class="item-details">
-                            <span class="item-title">${log.task}</span>
-                            <div style="color:#666;">تاریخ: ${log.date} | پوائنٹس: ${log.points}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-edit" onclick="editHistory(${log.id})">✏️</button>
-                            <button class="btn btn-delete" onclick="deleteHistory(${log.id})">🗑️</button>
-                        </div>
-                    </div>
-                `;
+            let summary = {};
+            filtered.forEach(h => {
+                if (!summary[h.task]) summary[h.task] = { count: 0, totalPts: 0 };
+                summary[h.task].count += 1;
+                summary[h.task].totalPts += h.points;
             });
 
-            document.getElementById('totalPointsDisplay').innerText = totalPts;
-        }
-
-        function editHistory(id) {
-            let log = historyLogs.find(l => l.id === id);
-            if (!log) return;
-            let newPts = prompt("نئے پوائنٹس درج کریں:", log.points);
-            if (newPts && !isNaN(parseInt(newPts))) {
-                log.points = parseInt(newPts);
-                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-                renderHistory();
+            tbody.innerHTML = Object.keys(summary).length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ نہیں ملا</td></tr>' : '';
+            
+            let grandTotal = 0;
+            for (let taskName in summary) {
+                grandTotal += summary[taskName].totalPts;
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${taskName}</td>
+                        <td>${summary[taskName].count} بار</td>
+                        <td><b>${summary[taskName].totalPts} پوائنٹس</b></td>
+                    </tr>
+                `;
             }
+            document.getElementById('totalPointsDisplay').innerText = grandTotal + " پوائنٹس";
         }
 
-        function deleteHistory(id) {
-            if (confirm("ریکارڈ حذف کریں؟")) {
-                historyLogs = historyLogs.filter(l => l.id !== id);
-                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-                renderHistory();
-            }
-        }
-
-        /* --- RATION --- */
+        /* --- MODULE 3: RATION --- */
         function saveRationItem() {
             const name = document.getElementById('rationName').value.trim();
             const price = parseFloat(document.getElementById('rationPrice').value);
             const qty = document.getElementById('rationQty').value.trim();
+            if (!name || isNaN(price)) return alert("آئٹم کا نام اور قیمت درست درج کریں!");
 
-            if (!name || isNaN(price)) return alert("نام اور قیمت درج کریں!");
-
-            if (editingRationId) {
-                rationItems = rationItems.map(r => r.id === editingRationId ? { ...r, name, price, qty } : r);
-                editingRationId = null;
-                document.getElementById('saveRationBtn').innerText = "➕ راشن سیو کریں";
-            } else {
-                rationItems.push({ id: Date.now(), name, price, qty, selected: false });
-            }
-
+            rationItems.push({ id: Date.now(), name, price, qty });
             localStorage.setItem('rationItems', JSON.stringify(rationItems));
             document.getElementById('rationName').value = '';
             document.getElementById('rationPrice').value = '';
             document.getElementById('rationQty').value = '';
-            renderRation();
+            renderRationTable();
         }
 
-        function renderRation() {
-            const box = document.getElementById('rationListContainer');
-            box.innerHTML = rationItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی راشن آئٹم موجود نہیں</p>' : '';
+        function renderRationTable() {
+            const tbody = document.getElementById('rationTableBody');
+            tbody.innerHTML = rationItems.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی راشن آئٹم موجود نہیں</td></tr>' : '';
 
-            rationItems.forEach(item => {
-                box.innerHTML += `
-                    <div class="item-box">
-                        <div class="item-details">
-                            <input type="checkbox" id="check_${item.id}" ${item.selected ? 'checked' : ''} onchange="toggleSelectRation(${item.id})">
-                            <label for="check_${item.id}" class="item-title" style="display:inline;">${item.name} (${item.qty})</label>
-                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-edit" onclick="editRation(${item.id})">✏️</button>
-                            <button class="btn btn-delete" onclick="deleteRation(${item.id})">🗑️</button>
-                        </div>
-                    </div>
+            let totalCost = 0;
+            rationItems.forEach(r => {
+                totalCost += r.price;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><input type="checkbox" class="rationCheck" value="${r.id}"></td>
+                        <td>${r.name}</td>
+                        <td>Rs. ${r.price}</td>
+                        <td>${r.qty || '-'}</td>
+                    </tr>
                 `;
             });
+            document.getElementById('rationTotalCost').innerText = "کل لاگت: Rs. " + totalCost;
         }
 
-        function toggleSelectRation(id) {
-            let item = rationItems.find(r => r.id === id);
-            if (item) item.selected = !item.selected;
+        function sortRationsAlphabetically() {
+            rationItems.sort((a, b) => a.name.localeCompare(b.name));
             localStorage.setItem('rationItems', JSON.stringify(rationItems));
+            renderRationTable();
         }
 
-        function generateOrder() {
-            orderItems = rationItems.filter(r => r.selected);
-            localStorage.setItem('orderItems', JSON.stringify(orderItems));
-            renderOrder();
-        }
-
-        function renderOrder() {
-            const box = document.getElementById('orderListContainer');
-            box.innerHTML = orderItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی آئٹم منتخب نہیں کیا گیا</p>' : '';
-
-            let total = 0;
-            orderItems.forEach(item => {
-                total += item.price;
-                box.innerHTML += `
-                    <div class="item-box">
-                        <div class="item-details">
-                            <span class="item-title">${item.name} (${item.qty})</span>
-                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn btn-skip" onclick="skipOrder(${item.id})">⏭️ Skip</button>
-                            <button class="btn btn-delete" onclick="deleteOrderItem(${item.id})">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            document.getElementById('orderTotalDisplay').innerText = "Rs. " + total;
-            calculateBudget();
-        }
-
-        function calculateBudget() {
-            const fixedBudget = parseFloat(document.getElementById('fixedBudget').value) || 0;
-            let totalCost = orderItems.reduce((acc, curr) => acc + curr.price, 0);
-            let remaining = fixedBudget - totalCost;
-
-            const remDisplay = document.getElementById('remainingBudgetDisplay');
-            remDisplay.innerText = "Rs. " + remaining;
-            remDisplay.style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
-        }
-
-        function skipOrder(id) {
-            let item = orderItems.find(o => o.id === id);
-            if (!item) return;
-
-            purchasedItems.push({ ...item, skipDate: new Date().toLocaleDateString('ur-PK') });
-            localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
-
-            orderItems = orderItems.filter(o => o.id !== id);
-            localStorage.setItem('orderItems', JSON.stringify(orderItems));
-
-            renderOrder();
-            renderPurchased();
-        }
-
-        function deleteOrderItem(id) {
-            orderItems = orderItems.filter(o => o.id !== id);
-            localStorage.setItem('orderItems', JSON.stringify(orderItems));
-            renderOrder();
-        }
-
-        function renderPurchased() {
-            const box = document.getElementById('purchasedListContainer');
-            box.innerHTML = purchasedItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں</p>' : '';
-
-            purchasedItems.forEach(item => {
-                box.innerHTML += `
-                    <div class="item-box">
-                        <div class="item-details">
-                            <span class="item-title">${item.name} (${item.qty})</span>
-                            <div style="color:#666;">تاریخ: ${item.skipDate} | Rs. ${item.price}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function editRation(id) {
-            let item = rationItems.find(r => r.id === id);
-            if (!item) return;
-            document.getElementById('rationName').value = item.name;
-            document.getElementById('rationPrice').value = item.price;
-            document.getElementById('rationQty').value = item.qty;
-            editingRationId = id;
-            document.getElementById('saveRationBtn').innerText = "🔄 راشن اپڈیٹ کریں";
-        }
-
-        function deleteRation(id) {
-            if (confirm("آئٹم حذف کریں؟")) {
-                rationItems = rationItems.filter(r => r.id !== id);
+        function deleteSelectedRations() {
+            let selectedIds = Array.from(document.querySelectorAll('.rationCheck:checked')).map(c => parseInt(c.value));
+            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں کیا گیا!");
+            if (confirm("کیا آپ منتخب کردہ راشن آئٹمز حذف کرنا چاہتے ہیں؟")) {
+                rationItems = rationItems.filter(r => !selectedIds.includes(r.id));
                 localStorage.setItem('rationItems', JSON.stringify(rationItems));
-                renderRation();
+                renderRationTable();
             }
+        }
+
+        function deleteAllRations() {
+            if (confirm("کیا آپ تمام راشن حذف کرنا چاہتے ہیں؟")) {
+                rationItems = [];
+                localStorage.removeItem('rationItems');
+                renderRationTable();
+            }
+        }
+
+        /* --- MODULE 4: STATUS --- */
+        function saveStatusEntry() {
+            const taskName = document.getElementById('statusTaskName').value.trim();
+            const result = document.getElementById('statusResult').value;
+            if (!taskName) return alert("کام یا ذمہ داری کا نام درج کریں!");
+
+            statusLogs.unshift({ id: Date.now(), taskName, result, date: new Date().toLocaleDateString('ur-PK') });
+            localStorage.setItem('statusLogs', JSON.stringify(statusLogs));
+            document.getElementById('statusTaskName').value = '';
+            renderStatusTable();
+        }
+
+        function renderStatusTable() {
+            const tbody = document.getElementById('statusTableBody');
+            tbody.innerHTML = statusLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ موجود نہیں</td></tr>' : '';
+
+            statusLogs.forEach(s => {
+                let resBadge = s.result.includes('درست') ? '<span class="badge badge-success">درست / ٹھیک ہے ✅</span>' : '<span class="badge badge-warning" style="background:#f8d7da; color:#721c24;">بہتری درکار ہے ❌</span>';
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${s.taskName}</td>
+                        <td>${resBadge}</td>
+                        <td>${s.date}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('statusCount').innerText = "کل ریکارڈ: " + statusLogs.length;
+        }
+
+        function clearStatusLogs() {
+            if (confirm("کیا آپ جانچ پڑتال کے تمام ریکارڈ صاف کرنا چاہتے ہیں؟")) {
+                statusLogs = [];
+                localStorage.removeItem('statusLogs');
+                renderStatusTable();
+            }
+        }
+
+        /* --- UTILITIES --- */
+        function toggleAll(master, className) {
+            document.querySelectorAll('.' + className).forEach(chk => chk.checked = master.checked);
+        }
+
+        function selectAllTable(className, state) {
+            document.querySelectorAll('.' + className).forEach(chk => chk.checked = state);
         }
     </script>
 </body>
