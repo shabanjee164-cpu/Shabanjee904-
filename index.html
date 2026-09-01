@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Management System Pro - Complete Edition</title>
+    <title>Smart Management System Ultimate Pro</title>
     <style>
         :root {
             --primary: #1b5e20;
@@ -11,10 +11,10 @@
             --secondary: #0d47a1;
             --danger: #c62828;
             --warning: #ef6c00;
-            --bg: #f8f9fa;
+            --bg: #f4f6f8;
             --card-bg: #ffffff;
             --text: #212529;
-            --border: #dee2e6;
+            --border: #ced4da;
             --radius: 12px;
         }
 
@@ -38,17 +38,17 @@
 
         .card {
             background: var(--card-bg);
-            padding: 18px;
+            padding: 16px;
             border-radius: var(--radius);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 16px;
-            border: 1px solid rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
         .card h3 {
             margin-top: 0;
             color: var(--primary);
-            font-size: 16px;
+            font-size: 15px;
             border-bottom: 2px solid #e8f5e9;
             padding-bottom: 8px;
             display: flex;
@@ -65,54 +65,56 @@
         }
 
         .section-box label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             color: #374151;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: block;
         }
 
         input, select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 9px 12px;
             border-radius: 8px;
             border: 1px solid var(--border);
             outline: none;
-            font-size: 14px;
+            font-size: 13px;
             background: #fff;
             transition: all 0.2s;
         }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,94,32,0.1); }
 
-        .row { display: flex; gap: 10px; }
+        .row { display: flex; gap: 8px; margin-bottom: 8px; }
         .col { flex: 1; }
 
         .btn {
-            border: none; color: white; padding: 10px 16px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; transition: 0.2s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            border: none; color: white; padding: 9px 14px; border-radius: 8px;
+            cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; transition: 0.2s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
         }
         .btn-primary { background: var(--primary); }
         .btn-primary:hover { background: #2e7d32; }
         .btn-danger { background: var(--danger); }
         .btn-danger:hover { background: #b71c1c; }
+        .btn-secondary { background: var(--secondary); }
+        .btn-warning { background: var(--warning); color: #fff; }
 
         .table-container {
-            max-height: 260px;
+            max-height: 220px;
             overflow-y: auto;
             border: 1px solid var(--border);
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 8px;
             background: #fff;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12px;
             text-align: right;
         }
         th, td {
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-bottom: 1px solid var(--border);
         }
         th {
@@ -126,66 +128,62 @@
 
         .dropdown { position: relative; display: inline-block; }
         .dropbtn {
-            background: #e9ecef; color: #333; padding: 6px 12px; font-size: 13px;
+            background: #e9ecef; color: #333; padding: 5px 10px; font-size: 12px;
             border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
         }
         .dropbtn:hover { background: #dde2e6; }
         .dropdown-content {
             display: none; position: absolute; right: 0; background-color: #fff;
-            min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+            min-width: 150px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
             z-index: 50; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
         }
         .dropdown-content button {
-            color: #333; padding: 10px 14px; text-decoration: none; display: block;
-            background: none; border: none; width: 100%; text-align: right; cursor: pointer; font-size: 13px;
+            color: #333; padding: 9px 12px; text-decoration: none; display: block;
+            background: none; border: none; width: 100%; text-align: right; cursor: pointer; font-size: 12px;
         }
         .dropdown-content button:hover { background-color: #f1f5f9; }
         .show { display: block; }
 
         .toggle-btn {
             background: #e8f5e9; border: 1px solid #c8e6c9; color: var(--primary);
-            cursor: pointer; font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 6px;
+            cursor: pointer; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 6px;
         }
         
         .summary-box {
-            background: #e8f5e9; border: 1px solid #a5d6a7; padding: 12px 16px; border-radius: 8px; margin-top: 10px;
+            background: #e8f5e9; border: 1px solid #a5d6a7; padding: 10px 14px; border-radius: 8px; margin-top: 8px;
             display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);
+            font-size: 13px;
         }
 
         .badge {
-            display: inline-block; padding: 3px 8px; font-size: 11px; font-weight: bold; border-radius: 4px;
+            display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px;
         }
         .badge-success { background: #d4edda; color: #155724; }
         .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
 
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff;
-            display: flex; justify-content: space-around; padding: 12px 0;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid var(--border);
+        .sub-heading {
+            font-size: 13px; font-weight: bold; color: var(--secondary); margin: 10px 0 5px 0;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; color: var(--primary);
-            font-size: 12px; font-weight: bold; cursor: pointer; background: none; border: none;
-        }
-        .nav-icon { font-size: 20px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="app-header">✨ اسمارٹ منیجر پرو (مکمل اور حتمی ورژن) ✨</div>
+    <div class="app-header">✨ اسمارٹ مینیجر الٹیمیٹ پرو ✨</div>
 
     <div class="container">
 
-        <!-- 1️⃣ کام کی انٹری اور لسٹ -->
+        <!-- 1️⃣ کام اور پوائنٹس مینجমেন্ট -->
         <div class="card">
             <h3>
                 <span>📋 1. کام اور پوائنٹس مینجمنٹ</span>
-                <button class="toggle-btn" onclick="toggleCard('taskCardBody', this)">➖ چھپائیں</button>
+                <button class="toggle-btn" onclick="toggleCard('taskCardBody', this)">➖ بند کریں</button>
             </h3>
             <div id="taskCardBody">
                 <div class="section-box">
                     <label>کام کی قسم اور تفصیل درج کریں</label>
-                    <div class="row" style="margin-bottom:8px;">
+                    <div class="row">
                         <div class="col">
                             <select id="taskCategory">
                                 <option value="daily">روزانہ (Daily)</option>
@@ -196,13 +194,13 @@
                             <input type="number" id="taskPointsInput" placeholder="پوائنٹس (مثلاً 10)">
                         </div>
                     </div>
-                    <input type="text" id="taskNameInput" placeholder="کام کا نام (مثلاً کمرے کی صفائی)" style="margin-bottom:8px;">
+                    <input type="text" id="taskNameInput" placeholder="کام کا نام (مثلاً صفائی)" style="margin-bottom:8px;">
                     <button class="btn btn-primary" onclick="saveTask()">💾 نیا کام محفوظ کریں</button>
                 </div>
 
-                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
                     <div class="dropdown">
-                        <button class="dropbtn" onclick="toggleMenu('taskMenu')">⚙️ ایکشن مینو</button>
+                        <button class="dropbtn" onclick="toggleMenu('taskMenu')">⚙️ سیٹنگ مینو</button>
                         <div id="taskMenu" class="dropdown-content">
                             <button onclick="selectAllTable('taskCheck', true)">سب سلیکٹ کریں</button>
                             <button onclick="selectAllTable('taskCheck', false)">سلیکشن ختم کریں</button>
@@ -211,17 +209,17 @@
                             <button onclick="sortTasksAlphabetically()">ترتیب دیں (A-Z)</button>
                         </div>
                     </div>
-                    <span id="taskCount" style="font-size:12px; color:#666; font-weight:bold;">کل ٹاسک: 0</span>
+                    <span id="taskCount" style="font-size:11px; color:#666; font-weight:bold;">کل ٹاسک: 0</span>
                 </div>
 
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th width="35"><input type="checkbox" onchange="toggleAll(this, 'taskCheck')"></th>
+                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'taskCheck')"></th>
                                 <th>کام کا نام</th>
                                 <th>قسم</th>
-                                <th width="70">پوائنٹس</th>
+                                <th width="50">پوائنٹس</th>
                             </tr>
                         </thead>
                         <tbody id="taskTableBody"></tbody>
@@ -230,42 +228,16 @@
             </div>
         </div>
 
-        <!-- 2️⃣ ممبر ہسٹری اور پوائنٹس -->
+        <!-- 2️⃣ ممبر ہسٹری اور کارکردگی (آٹومیٹک ڈیش بورڈ لنکڈ) -->
         <div class="card">
             <h3>
                 <span>🔍 2. ممبر ہسٹری اور کارکردگی</span>
-                <button class="toggle-btn" onclick="toggleCard('memberCardBody', this)">➖ چھپائیں</button>
+                <button class="toggle-btn" onclick="toggleCard('memberCardBody', this)">➖ بند کریں</button>
             </h3>
             <div id="memberCardBody">
-                <div class="section-box">
-                    <label>ممبر کی نئی کارکردگی انٹری</label>
-                    <div class="row" style="margin-bottom:8px;">
-                        <div class="col">
-                            <select id="logMemberSelect">
-                                <option value="علی">علی</option>
-                                <option value="عدنان">عدنان</option>
-                                <option value="سادیہ">سادیہ</option>
-                                <option value="عائشہ">عائشہ</option>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <input type="date" id="logDate">
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom:8px;">
-                        <div class="col">
-                            <input type="text" id="logTaskName" placeholder="مکمل کیے گئے کام کا نام">
-                        </div>
-                        <div class="col">
-                            <input type="number" id="logPoints" placeholder="حاصل کردہ پوائنٹس">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveMemberLog()">➕ ہسٹری انٹری محفوظ کریں</button>
-                </div>
-
                 <div class="section-box" style="background:#f1f8f5;">
                     <label>تاریخ اور نام کے حساب سے فلٹر کریں</label>
-                    <div class="row" style="margin-bottom:8px;">
+                    <div class="row">
                         <div class="col">
                             <select id="filterMemberSelect" onchange="renderMemberTable()">
                                 <option value="علی">علی</option>
@@ -277,14 +249,24 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label style="font-size:11px;">از تاریخ (Start)</label>
+                            <label style="font-size:10px;">از تاریخ (Start)</label>
                             <input type="date" id="fromDate" onchange="renderMemberTable()">
                         </div>
                         <div class="col">
-                            <label style="font-size:11px;">تا تاریخ (End)</label>
+                            <label style="font-size:10px;">تا تاریخ (End)</label>
                             <input type="date" id="toDate" onchange="renderMemberTable()">
                         </div>
                     </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('memberMenu')">⚙️ سیٹنگ مینو</button>
+                        <div id="memberMenu" class="dropdown-content">
+                            <button onclick="clearMemberHistory()">ہسٹری صاف کریں</button>
+                        </div>
+                    </div>
+                    <span style="font-size:11px; color:#666;">(ڈیش بورڈ حاضری سے آٹومیٹک ریکارڈ)</span>
                 </div>
 
                 <div class="table-container">
@@ -302,128 +284,211 @@
 
                 <div class="summary-box">
                     <span>مجموعی پوائنٹس (کل):</span>
-                    <span id="totalPointsDisplay" style="font-size:16px;">0</span>
+                    <span id="totalPointsDisplay" style="font-size:15px;">0</span>
                 </div>
             </div>
         </div>
 
-        <!-- 3️⃣ راشن مینجমেন্ট -->
+        <!-- 3️⃣ راشن مینجমেন্ট (3 الگ لسٹیں، بجٹ اور اسکیپ سسٹم) -->
         <div class="card">
             <h3>
-                <span>🛒 3. راشن اور خریداری لسٹ</span>
-                <button class="toggle-btn" onclick="toggleCard('rationCardBody', this)">➖ چھپائیں</button>
+                <span>🛒 3. راشن مینجমেন্ট اور بل سسٹم</span>
+                <button class="toggle-btn" onclick="toggleCard('rationCardBody', this)">➖ بند کریں</button>
             </h3>
             <div id="rationCardBody">
                 <div class="section-box">
+                    <label>کل بجٹ درج کریں</label>
+                    <input type="number" id="totalBudgetInput" placeholder="کل بجٹ (Rs)" oninput="updateBudgetCalc()" style="margin-bottom:8px;">
                     <label>نیا راشن آئٹم درج کریں</label>
-                    <input type="text" id="rationName" placeholder="آئٹم کا نام (مثلاً چینی، آٹا)" style="margin-bottom:8px;">
-                    <div class="row" style="margin-bottom:8px;">
+                    <input type="text" id="rationName" placeholder="آئٹم کا نام (مثلاً چینی)" style="margin-bottom:8px;">
+                    <div class="row">
                         <div class="col"><input type="number" id="rationPrice" placeholder="قیمت (Rs)"></div>
                         <div class="col"><input type="text" id="rationQty" placeholder="مقدار (مثلاً 5 کلو)"></div>
                     </div>
-                    <button class="btn btn-primary" onclick="saveRationItem()">➕ راشن محفوظ کریں</button>
+                    <button class="btn btn-primary" onclick="saveRationItem()">➕ راشن مین لسٹ میں شامل کریں</button>
                 </div>
 
-                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <!-- لسٹ 1: مین راشن انوینٹری -->
+                <div class="sub-heading">
+                    <span>📋 لسٹ 1: مین راشن انوینٹری</span>
                     <div class="dropdown">
-                        <button class="dropbtn" onclick="toggleMenu('rationMenu')">⚙️ ایکشن مینو</button>
-                        <div id="rationMenu" class="dropdown-content">
-                            <button onclick="selectAllTable('rationCheck', true)">سب سلیکٹ کریں</button>
-                            <button onclick="selectAllTable('rationCheck', false)">سلیکشن ختم کریں</button>
-                            <button onclick="deleteSelectedRations()">منتخب حذف کریں</button>
-                            <button onclick="deleteAllRations()">تمام راشن ڈیلیٹ کریں</button>
-                            <button onclick="sortRationsAlphabetically()">ترتیب دیں (A-Z)</button>
+                        <button class="dropbtn" onclick="toggleMenu('rationMenu1')">⚙️ سیٹنگ</button>
+                        <div id="rationMenu1" class="dropdown-content">
+                            <button onclick="selectAllTable('rationCheck1', true)">سب سلیکٹ</button>
+                            <button onclick="selectAllTable('rationCheck1', false)">سلیکشن ختم</button>
+                            <button onclick="moveToSelectedCart()">منتخب اشیاء کارٹ میں ڈالیں</button>
+                            <button onclick="deleteSelectedRations(1)">منتخب حذف</button>
+                            <button onclick="sortRationsAlphabetically()">ترتیب (A-Z)</button>
                         </div>
                     </div>
-                    <span id="rationTotalCost" style="font-size:12px; color:#666; font-weight:bold;">کل لاگت: Rs. 0</span>
                 </div>
-
-                <div class="table-container">
+                <div class="table-container" style="max-height:160px;">
                     <table>
                         <thead>
                             <tr>
-                                <th width="35"><input type="checkbox" onchange="toggleAll(this, 'rationCheck')"></th>
-                                <th>آئٹم نام</th>
+                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'rationCheck1')"></th>
+                                <th>نام</th>
                                 <th>قیمت</th>
                                 <th>مقدار</th>
                             </tr>
                         </thead>
-                        <tbody id="rationTableBody"></tbody>
+                        <tbody id="rationTableBody1"></tbody>
                     </table>
+                </div>
+
+                <!-- لسٹ 2: خریداری کے لیے منتخب لسٹ (کارٹ) -->
+                <div class="sub-heading" style="color:var(--warning);">
+                    <span>🛒 لسٹ 2: خریداری کے لیے سلیکٹڈ لسٹ</span>
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('rationMenu2')">⚙️ سیٹنگ</button>
+                        <div id="rationMenu2" class="dropdown-content">
+                            <button onclick="skipSelectedToPurchased()">سلیکٹڈ چیزیں خرید لیں (Skip)</button>
+                            <button onclick="clearCart()">کارٹ خالی کریں</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" style="max-height:150px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'rationCheck2')"></th>
+                                <th>آئٹم</th>
+                                <th>قیمت</th>
+                                <th>مقدار</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rationTableBody2"></tbody>
+                    </table>
+                </div>
+                <div style="font-size:12px; font-weight:bold; margin-top:4px; text-align:left;" id="selectedCartTotal">منتخب بل: Rs. 0</div>
+
+                <!-- لسٹ 3: خریدی گئی / اسکیپ شدہ اشیاء کی ہسٹری -->
+                <div class="sub-heading" style="color:var(--primary);">
+                    <span>✅ لسٹ 3: خریدی گئی اشیاء (تاریخ کے ساتھ)</span>
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('rationMenu3')">⚙️ سیٹنگ</button>
+                        <div id="rationMenu3" class="dropdown-content">
+                            <button onclick="clearPurchasedHistory()">ہسٹری صاف کریں</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" style="max-height:150px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>نام</th>
+                                <th>قیمت</th>
+                                <th>مقدار</th>
+                                <th>تاریخ و وقت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rationTableBody3"></tbody>
+                    </table>
+                </div>
+
+                <div class="summary-box" style="margin-top:10px;">
+                    <span>بجٹ بقایا (Remaining Budget):</span>
+                    <span id="remainingBudgetDisplay" style="font-size:15px;">Rs. 0</span>
                 </div>
             </div>
         </div>
 
-        <!-- 4️⃣ جانچ پڑتال (Check / Cross) -->
+        <!-- 4️⃣ کاموں کی جانچ پڑتال (ٹک، کراس، سیکنڈ لسٹ اور پرسنٹیج) -->
         <div class="card">
             <h3>
                 <span>✅ 4. کاموں کی جانچ پڑتال (Check/Cross)</span>
-                <button class="toggle-btn" onclick="toggleCard('statusCardBody', this)">➖ چھپائیں</button>
+                <button class="toggle-btn" onclick="toggleCard('statusCardBody', this)">➖ بند کریں</button>
             </h3>
             <div id="statusCardBody">
                 <div class="section-box">
-                    <label>جانچ پڑتال انٹری</label>
-                    <div class="row" style="margin-bottom:8px;">
-                        <div class="col"><input type="text" id="statusTaskName" placeholder="ذمہ داری یا کام کا نام"></div>
-                        <div class="col">
-                            <select id="statusResult">
-                                <option value="درست / ٹھیک ہے">درست / ٹھیک ہے (✅)</option>
-                                <option value="بہتری درکار ہے">بہتری درکار ہے (❌)</option>
-                            </select>
+                    <label>مخصوص کام یا ذمہ داری کا نام درج کریں</label>
+                    <input type="text" id="auditTaskName" placeholder="کام کا نام (مثلاً کمرے کی حالت)" style="margin-bottom:8px;">
+                    <button class="btn btn-primary" onclick="addAuditTask()">📥 جانچ لسٹ میں شامل کریں</button>
+                </div>
+
+                <!-- لسٹ 1: تمام مخصوص کام اور ٹک/کراس اپشنز -->
+                <div class="sub-heading">
+                    <span>📋 لسٹ 1: جانچ پڑتال انٹریز (ٹک / کراس)</span>
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('auditMenu1')">⚙️ سیٹنگ</button>
+                        <div id="auditMenu1" class="dropdown-content">
+                            <button onclick="clearAuditList(1)">تمام صاف کریں</button>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="saveStatusEntry()">📥 جانچ انٹری محفوظ کریں</button>
                 </div>
-
-                <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; color:#666; font-weight:bold;" id="statusCount">کل ریکارڈ: 0</span>
-                    <button class="btn btn-danger" style="width:auto; padding:5px 10px; font-size:12px;" onclick="clearStatusLogs()">تمام ریکارڈ صاف کریں</button>
-                </div>
-
-                <div class="table-container">
+                <div class="table-container" style="max-height:160px;">
                     <table>
                         <thead>
                             <tr>
                                 <th>کام / ذمہ داری</th>
-                                <th>اسٹیٹس</th>
+                                <th width="120">فیصلہ کریں</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody1"></tbody>
+                    </table>
+                </div>
+
+                <!-- لسٹ 2: مکمل شدہ ریکارڈ (ٹک/کراس شدہ) -->
+                <div class="sub-heading" style="color:var(--secondary);">
+                    <span>📊 لسٹ 2: جانچ پڑتال کا ریکارڈ</span>
+                    <div class="dropdown">
+                        <button class="dropbtn" onclick="toggleMenu('auditMenu2')">⚙️ سیٹنگ</button>
+                        <div id="auditMenu2" class="dropdown-content">
+                            <button onclick="clearAuditList(2)">ریکارڈ صاف کریں</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" style="max-height:150px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>کام کا نام</th>
+                                <th>نتیجہ</th>
                                 <th>تاریخ</th>
                             </tr>
                         </thead>
-                        <tbody id="statusTableBody"></tbody>
+                        <tbody id="auditTableBody2"></tbody>
                     </table>
+                </div>
+
+                <!-- پرسنٹیج باکس -->
+                <div class="summary-box" style="background:#e3f2fd; border-color:#90caf9; color:var(--secondary); margin-top:10px;">
+                    <span>بہتری کی شرح (Performance Percentage):</span>
+                    <span id="performancePercentage" style="font-size:15px;">0%</span>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- BOTTOM NAV -->
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <span class="nav-icon">📊</span>
-            <span>اسمارٹ مینجمنٹ سسٹم پرو</span>
-        </button>
-    </div>
-
     <script>
+        // LocalStorage Data Initialization
         let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
-        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [];
-        let rationItems = JSON.parse(localStorage.getItem('rationItems')) || [];
-        let statusLogs = JSON.parse(localStorage.getItem('statusLogs')) || [];
+        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [
+            { member: 'علی', task: 'کمرے کی صفائی', points: 10, date: new Date().toISOString().split('T')[0] },
+            { member: 'عدنان', task: 'پانی بھرنا', points: 5, date: new Date().toISOString().split('T')[0] }
+        ];
+        let rationList1 = JSON.parse(localStorage.getItem('rationList1')) || [];
+        let rationList2 = JSON.parse(localStorage.getItem('rationList2')) || [];
+        let rationList3 = JSON.parse(localStorage.getItem('rationList3')) || [];
+        let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
+        
+        let auditList1 = JSON.parse(localStorage.getItem('auditList1')) || [];
+        let auditList2 = JSON.parse(localStorage.getItem('auditList2')) || [];
 
         window.onload = function() {
-            document.getElementById('logDate').valueAsDate = new Date();
+            document.getElementById('totalBudgetInput').value = totalBudget > 0 ? totalBudget : '';
             renderTaskTable();
             renderMemberTable();
-            renderRationTable();
-            renderStatusTable();
+            renderRationTables();
+            renderAuditTables();
         };
 
         function toggleCard(id, btn) {
             let el = document.getElementById(id);
             if (el.style.display === "none") {
                 el.style.display = "block";
-                btn.innerText = "➖ چھپائیں";
+                btn.innerText = "➖ بند کریں";
             } else {
                 el.style.display = "none";
                 btn.innerText = "➕ کھولیں";
@@ -446,7 +511,7 @@
             const category = document.getElementById('taskCategory').value;
             const name = document.getElementById('taskNameInput').value.trim();
             const points = parseInt(document.getElementById('taskPointsInput').value);
-            if (!name || isNaN(points)) return alert("براہ کرم کام کا نام اور پوائنٹس درست درج کریں!");
+            if (!name || isNaN(points)) return alert("نام اور پوائنٹس درست درج کریں!");
 
             customTasks.push({ id: Date.now(), category, name, points });
             localStorage.setItem('customTasks', JSON.stringify(customTasks));
@@ -481,8 +546,8 @@
 
         function deleteSelectedTasks() {
             let selectedIds = Array.from(document.querySelectorAll('.taskCheck:checked')).map(c => parseInt(c.value));
-            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں کیا گیا!");
-            if (confirm("کیا آپ منتخب کردہ کام حذف کرنا چاہتے ہیں؟")) {
+            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں!");
+            if (confirm("مطلوبہ کام حذف کریں؟")) {
                 customTasks = customTasks.filter(t => !selectedIds.includes(t.id));
                 localStorage.setItem('customTasks', JSON.stringify(customTasks));
                 renderTaskTable();
@@ -490,7 +555,7 @@
         }
 
         function deleteAllTasks() {
-            if (confirm("کیا آپ تمام کام حذف کرنا چاہتے ہیں؟")) {
+            if (confirm("تمام کام حذف کریں؟")) {
                 customTasks = [];
                 localStorage.removeItem('customTasks');
                 renderTaskTable();
@@ -498,22 +563,6 @@
         }
 
         /* --- MODULE 2: MEMBER HISTORY --- */
-        function saveMemberLog() {
-            const member = document.getElementById('logMemberSelect').value;
-            const task = document.getElementById('logTaskName').value.trim();
-            const points = parseInt(document.getElementById('logPoints').value);
-            const date = document.getElementById('logDate').value;
-
-            if (!task || isNaN(points) || !date) return alert("تمام معلومات درست درج کریں!");
-
-            historyLogs.push({ member, task, points, date });
-            localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-            document.getElementById('logTaskName').value = '';
-            document.getElementById('logPoints').value = '';
-            renderMemberTable();
-            alert("ہسٹری کامیابی سے محفوظ ہو گئی!");
-        }
-
         function renderMemberTable() {
             const member = document.getElementById('filterMemberSelect').value;
             const fromDate = document.getElementById('fromDate').value;
@@ -551,98 +600,231 @@
             document.getElementById('totalPointsDisplay').innerText = grandTotal + " پوائنٹس";
         }
 
-        /* --- MODULE 3: RATION --- */
+        function clearMemberHistory() {
+            if (confirm("ہسٹری صاف کریں؟")) {
+                historyLogs = [];
+                localStorage.removeItem('historyLogs');
+                renderMemberTable();
+            }
+        }
+
+        /* --- MODULE 3: RATION MANAGEMENT (3 LISTS) --- */
         function saveRationItem() {
             const name = document.getElementById('rationName').value.trim();
             const price = parseFloat(document.getElementById('rationPrice').value);
             const qty = document.getElementById('rationQty').value.trim();
-            if (!name || isNaN(price)) return alert("آئٹم کا نام اور قیمت درست درج کریں!");
+            if (!name || isNaN(price)) return alert("نام اور قیمت درست درج کریں!");
 
-            rationItems.push({ id: Date.now(), name, price, qty });
-            localStorage.setItem('rationItems', JSON.stringify(rationItems));
+            rationList1.push({ id: Date.now(), name, price, qty });
+            localStorage.setItem('rationList1', JSON.stringify(rationList1));
             document.getElementById('rationName').value = '';
             document.getElementById('rationPrice').value = '';
             document.getElementById('rationQty').value = '';
-            renderRationTable();
+            renderRationTables();
         }
 
-        function renderRationTable() {
-            const tbody = document.getElementById('rationTableBody');
-            tbody.innerHTML = rationItems.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی راشن آئٹم موجود نہیں</td></tr>' : '';
-
-            let totalCost = 0;
-            rationItems.forEach(r => {
-                totalCost += r.price;
-                tbody.innerHTML += `
+        function renderRationTables() {
+            // List 1
+            const tb1 = document.getElementById('rationTableBody1');
+            tb1.innerHTML = rationList1.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی راشن موجود نہیں</td></tr>' : '';
+            rationList1.forEach(r => {
+                tb1.innerHTML += `
                     <tr>
-                        <td><input type="checkbox" class="rationCheck" value="${r.id}"></td>
+                        <td><input type="checkbox" class="rationCheck1" value="${r.id}"></td>
                         <td>${r.name}</td>
                         <td>Rs. ${r.price}</td>
                         <td>${r.qty || '-'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('rationTotalCost').innerText = "کل لاگت: Rs. " + totalCost;
-        }
 
-        function sortRationsAlphabetically() {
-            rationItems.sort((a, b) => a.name.localeCompare(b.name));
-            localStorage.setItem('rationItems', JSON.stringify(rationItems));
-            renderRationTable();
-        }
-
-        function deleteSelectedRations() {
-            let selectedIds = Array.from(document.querySelectorAll('.rationCheck:checked')).map(c => parseInt(c.value));
-            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں کیا گیا!");
-            if (confirm("کیا آپ منتخب کردہ راشن آئٹمز حذف کرنا چاہتے ہیں؟")) {
-                rationItems = rationItems.filter(r => !selectedIds.includes(r.id));
-                localStorage.setItem('rationItems', JSON.stringify(rationItems));
-                renderRationTable();
-            }
-        }
-
-        function deleteAllRations() {
-            if (confirm("کیا آپ تمام راشن حذف کرنا چاہتے ہیں؟")) {
-                rationItems = [];
-                localStorage.removeItem('rationItems');
-                renderRationTable();
-            }
-        }
-
-        /* --- MODULE 4: STATUS --- */
-        function saveStatusEntry() {
-            const taskName = document.getElementById('statusTaskName').value.trim();
-            const result = document.getElementById('statusResult').value;
-            if (!taskName) return alert("کام یا ذمہ داری کا نام درج کریں!");
-
-            statusLogs.unshift({ id: Date.now(), taskName, result, date: new Date().toLocaleDateString('ur-PK') });
-            localStorage.setItem('statusLogs', JSON.stringify(statusLogs));
-            document.getElementById('statusTaskName').value = '';
-            renderStatusTable();
-        }
-
-        function renderStatusTable() {
-            const tbody = document.getElementById('statusTableBody');
-            tbody.innerHTML = statusLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ موجود نہیں</td></tr>' : '';
-
-            statusLogs.forEach(s => {
-                let resBadge = s.result.includes('درست') ? '<span class="badge badge-success">درست / ٹھیک ہے ✅</span>' : '<span class="badge badge-warning" style="background:#f8d7da; color:#721c24;">بہتری درکار ہے ❌</span>';
-                tbody.innerHTML += `
+            // List 2 (Cart)
+            const tb2 = document.getElementById('rationTableBody2');
+            tb2.innerHTML = rationList2.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کارٹ خالی ہے</td></tr>' : '';
+            let cartTotal = 0;
+            rationList2.forEach(r => {
+                cartTotal += r.price;
+                tb2.innerHTML += `
                     <tr>
-                        <td>${s.taskName}</td>
-                        <td>${resBadge}</td>
-                        <td>${s.date}</td>
+                        <td><input type="checkbox" class="rationCheck2" value="${r.id}"></td>
+                        <td>${r.name}</td>
+                        <td>Rs. ${r.price}</td>
+                        <td>${r.qty || '-'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('statusCount').innerText = "کل ریکارڈ: " + statusLogs.length;
+            document.getElementById('selectedCartTotal').innerText = "منتخب بل: Rs. " + cartTotal;
+
+            // List 3 (Purchased / Skipped History)
+            const tb3 = document.getElementById('rationTableBody3');
+            tb3.innerHTML = rationList3.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی خریداری ریکارڈ نہیں</td></tr>' : '';
+            rationList3.forEach(r => {
+                tb3.innerHTML += `
+                    <tr>
+                        <td>${r.name}</td>
+                        <td>Rs. ${r.price}</td>
+                        <td>${r.qty || '-'}</td>
+                        <td style="font-size:10px; color:#555;">${r.dateTime}</td>
+                    </tr>
+                `;
+            });
+
+            updateBudgetCalc();
         }
 
-        function clearStatusLogs() {
-            if (confirm("کیا آپ جانچ پڑتال کے تمام ریکارڈ صاف کرنا چاہتے ہیں؟")) {
-                statusLogs = [];
-                localStorage.removeItem('statusLogs');
-                renderStatusTable();
+        function updateBudgetCalc() {
+            totalBudget = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
+            localStorage.setItem('totalBudget', totalBudget);
+
+            let spentTotal = 0;
+            rationList3.forEach(r => spentTotal += r.price);
+
+            let remaining = totalBudget - spentTotal;
+            document.getElementById('remainingBudgetDisplay').innerText = "Rs. " + remaining;
+        }
+
+        function sortRationsAlphabetically() {
+            rationList1.sort((a, b) => a.name.localeCompare(b.name));
+            localStorage.setItem('rationList1', JSON.stringify(rationList1));
+            renderRationTables();
+        }
+
+        function deleteSelectedRations(listNum) {
+            let className = 'rationCheck' + listNum;
+            let selectedIds = Array.from(document.querySelectorAll('.' + className + ':checked')).map(c => parseInt(c.value));
+            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں!");
+            if (confirm("منتخب آئٹمز حذف کریں؟")) {
+                if(listNum === 1) {
+                    rationList1 = rationList1.filter(r => !selectedIds.includes(r.id));
+                    localStorage.setItem('rationList1', JSON.stringify(rationList1));
+                }
+                renderRationTables();
+            }
+        }
+
+        function moveToSelectedCart() {
+            let selectedIds = Array.from(document.querySelectorAll('.rationCheck1:checked')).map(c => parseInt(c.value));
+            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں کیا گیا!");
+            
+            selectedIds.forEach(id => {
+                let item = rationList1.find(r => r.id === id);
+                if(item && !rationList2.some(cartItem => cartItem.id === id)) {
+                    rationList2.push(item);
+                }
+            });
+            localStorage.setItem('rationList2', JSON.stringify(rationList2));
+            renderRationTables();
+            alert("منتخب اشیاء خریداری کارٹ (لسٹ 2) میں چلی گئی ہیں!");
+        }
+
+        function skipSelectedToPurchased() {
+            let selectedIds = Array.from(document.querySelectorAll('.rationCheck2:checked')).map(c => parseInt(c.value));
+            if (selectedIds.length === 0) return alert("کارٹ سے کوئی آئٹم سلیکٹ نہیں کیا گیا!");
+
+            let now = new Date().toLocaleString('ur-PK');
+            selectedIds.forEach(id => {
+                let item = rationList2.find(r => r.id === id);
+                if(item) {
+                    rationList3.unshift({ ...item, dateTime: now });
+                    rationList1 = rationList1.filter(r => r.id !== id);
+                }
+            });
+            rationList2 = rationList2.filter(r => !selectedIds.includes(r.id));
+
+            localStorage.setItem('rationList1', JSON.stringify(rationList1));
+            localStorage.setItem('rationList2', JSON.stringify(rationList2));
+            localStorage.setItem('rationList3', JSON.stringify(rationList3));
+            renderRationTables();
+            alert("چیزیں خرید کر لسٹ 3 (ہسٹری) میں محفوظ کر دی گئی ہیں!");
+        }
+
+        function clearCart() {
+            if(confirm("کارٹ خالی کریں؟")) {
+                rationList2 = [];
+                localStorage.removeItem('rationList2');
+                renderRationTables();
+            }
+        }
+
+        function clearPurchasedHistory() {
+            if(confirm("خریدی گئی ہسٹری صاف کریں؟")) {
+                rationList3 = [];
+                localStorage.removeItem('rationList3');
+                renderRationTables();
+            }
+        }
+
+        /* --- MODULE 4: AUDIT CHECK/CROSS & PERCENTAGE --- */
+        function addAuditTask() {
+            const taskName = document.getElementById('auditTaskName').value.trim();
+            if (!taskName) return alert("کام کا نام درج کریں!");
+
+            auditList1.push({ id: Date.now(), taskName });
+            localStorage.setItem('auditList1', JSON.stringify(auditList1));
+            document.getElementById('auditTaskName').value = '';
+            renderAuditTables();
+        }
+
+        function renderAuditTables() {
+            const tb1 = document.getElementById('auditTableBody1');
+            tb1.innerHTML = auditList1.length === 0 ? '<tr><td colspan="2" style="text-align:center; color:#888;">کوئی کام موجود نہیں</td></tr>' : '';
+            auditList1.forEach(a => {
+                tb1.innerHTML += `
+                    <tr>
+                        <td>${a.taskName}</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding:4px 8px; font-size:11px; width:auto; display:inline-block;" onclick="markAudit(${a.id}, 'درست / ٹھیک ہے ✅')">✅ ٹھیک</button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:11px; width:auto; display:inline-block;" onclick="markAudit(${a.id}, 'بہتری درکار ہے ❌')">❌ مسئلہ</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const tb2 = document.getElementById('auditTableBody2');
+            tb2.innerHTML = auditList2.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ موجود نہیں</td></tr>' : '';
+            auditList2.forEach(a => {
+                let badge = a.result.includes('✅') ? '<span class="badge badge-success">درست / ٹھیک ہے ✅</span>' : '<span class="badge badge-danger">بہتری درکار ہے ❌</span>';
+                tb2.innerHTML += `
+                    <tr>
+                        <td>${a.taskName}</td>
+                        <td>${badge}</td>
+                        <td style="font-size:10px;">${a.date}</td>
+                    </tr>
+                `;
+            });
+
+            calculatePercentage();
+        }
+
+        function markAudit(id, result) {
+            let item = auditList1.find(a => a.id === id);
+            if(item) {
+                auditList2.unshift({ taskName: item.taskName, result: result, date: new Date().toLocaleDateString('ur-PK') });
+                localStorage.setItem('auditList2', JSON.stringify(auditList2));
+                renderAuditTables();
+            }
+        }
+
+        function calculatePercentage() {
+            if(auditList2.length === 0) {
+                document.getElementById('performancePercentage').innerText = "0%";
+                return;
+            }
+            let positiveCount = auditList2.filter(a => a.result.includes('✅')).length;
+            let percentage = Math.round((positiveCount / auditList2.length) * 100);
+            document.getElementById('performancePercentage').innerText = percentage + "% (درست کام)";
+        }
+
+        function clearAuditList(listNum) {
+            if(confirm("ریکارڈ صاف کریں؟")) {
+                if(listNum === 1) {
+                    auditList1 = [];
+                    localStorage.removeItem('auditList1');
+                } else {
+                    auditList2 = [];
+                    localStorage.removeItem('auditList2');
+                }
+                renderAuditTables();
             }
         }
 
