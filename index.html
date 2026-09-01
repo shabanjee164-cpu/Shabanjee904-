@@ -3,38 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Work Tracker & Detailed Record</title>
+    <title>Smart Management System</title>
     <style>
         :root {
-            --primary: #4CAF50;
-            --danger: #f44336;
-            --warning: #ff9800;
-            --info: #2196F3;
-            --dark: #333;
-            --light: #f4f7f6;
+            --primary: #2e7d32;
+            --secondary: #1976d2;
+            --danger: #d32f2f;
+            --warning: #f57c00;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 15px;
-            padding-bottom: 100px;
-            color: var(--dark);
-            text-align: right;
+            padding: 0;
+            padding-bottom: 85px;
+            direction: rtl;
         }
 
-        .header-title {
-            text-align: center;
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        .app-header {
+            background: var(--primary);
             color: white;
+            text-align: center;
             padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .navbar {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 16px;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 8px;
+        }
+
+        .form-group { margin-bottom: 12px; }
+
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus { border-color: var(--primary); }
+
+        .row { display: flex; gap: 10px; }
+        .col { flex: 1; }
+
+        .btn {
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); }
+        .btn-secondary { background: var(--secondary); }
+        .btn-edit { background: var(--warning); width: auto; padding: 4px 8px; font-size: 12px; }
+        .btn-delete { background: var(--danger); width: auto; padding: 4px 8px; font-size: 12px; }
+        .btn-skip { background: #7b1fa2; width: auto; padding: 4px 8px; font-size: 12px; }
+
+        .item-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .item-details { font-size: 13px; }
+        .item-title { font-weight: bold; font-size: 14px; }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+        }
+        .badge-daily { background: #2e7d32; }
+        .badge-occ { background: #ed6c02; }
+
+        .actions { display: flex; gap: 4px; }
+
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -42,716 +141,471 @@
             background: #ffffff;
             display: flex;
             justify-content: space-around;
-            align-items: center;
             padding: 10px 0;
-            box-shadow: 0 -3px 12px rgba(0,0,0,0.15);
-            z-index: 999999 !important;
-            pointer-events: auto !important;
+            box-shadow: 0 -3px 12px rgba(0,0,0,0.12);
+            z-index: 1000;
+            border-top: 1px solid #e0e0e0;
         }
 
-        .nav-btn {
-            background: transparent;
-            border: none;
-            font-size: 13px;
-            font-weight: bold;
-            color: #666666;
-            cursor: pointer;
+        .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            width: 25%;
-            padding: 6px 0;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .nav-btn span:first-child { font-size: 20px; }
-        .nav-btn.active { color: var(--primary); }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-
-        h3, h4 {
-            margin-top: 0;
-            color: #2E7D32;
-            border-bottom: 2px solid #E8F5E9;
-            padding-bottom: 8px;
-        }
-
-        .alert-header-text {
-            color: #c62828 !important;
-            border-bottom-color: #ffebee !important;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 180px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input, select, textarea, button {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-
-        .task-card {
-            background: #e8f5e9;
-            border: 2px dashed #4CAF50;
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .task-title { font-size: 22px; font-weight: bold; color: #1b5e20; }
-        .task-points { font-size: 16px; color: #388e3c; margin-top: 5px; }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn {
-            border: none;
-            color: white;
-            font-weight: bold;
+            color: #666;
+            font-size: 12px;
             cursor: pointer;
-            transition: 0.2s;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-tick { background-color: var(--primary); }
-        .btn-cross { background-color: var(--danger); }
-        .btn-shared { background-color: var(--info); }
-        .btn-skip { background-color: #78909C; }
-        .btn-alarm { background-color: var(--warning); }
-        .btn-complain { background-color: var(--danger); }
-
-        /* Report Summary Box Styles */
-        .summary-box {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            border: 1px solid #90caf9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            border: none;
+            background: none;
+            width: 33%;
             text-align: center;
         }
 
-        .summary-card {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: bold;
         }
 
-        .summary-card div:first-child { font-size: 12px; color: #555; font-weight: bold; }
-        .summary-card div:last-child { font-size: 18px; color: #1565c0; font-weight: bold; margin-top: 4px; }
+        .nav-icon { font-size: 20px; margin-bottom: 3px; }
 
-        .report-box {
-            background: #fff8e1;
-            border-right: 5px solid var(--warning);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .report-list { margin: 5px 0 0 0; padding-right: 20px; font-size: 14px; }
-
-        .history-card {
-            background: #fafafa;
-            border: 1px solid #ddd;
-            border-right: 4px solid var(--info);
+        .budget-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
             padding: 12px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-top: 10px;
         }
-
-        .history-card.task-action { border-right-color: var(--primary); }
-        .history-card.alert-action { border-right-color: var(--danger); }
-        .history-card.leave-action { border-right-color: var(--warning); }
-
-        .history-time { font-size: 11px; color: #777; float: left; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e0e0e0; padding: 10px; text-align: center; }
-        th { background-color: #4CAF50; color: white; }
-
-        .badge { padding: 4px 10px; border-radius: 15px; color: white; font-weight: bold; font-size: 12px; }
-        .badge-excellent { background-color: var(--primary); }
-        .badge-good { background-color: var(--info); }
-        .badge-bad { background-color: var(--danger); }
-
-        .tab-section { display: none; }
-        .tab-section.active { display: block; }
+        .budget-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .budget-row.total {
+            font-weight: bold;
+            font-size: 14px;
+            border-top: 1px dashed #90caf9;
+            padding-top: 4px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header Title -->
-    <div class="header-title">
-        <h1>🏠 Home Work Tracker</h1>
-    </div>
+    <div class="app-header">Smart Management System</div>
 
-    <!-- ================= TAB 1: DASHBOARD ================= -->
-    <div id="tab-dashboard" class="tab-section active">
-        <div class="card">
-            <h3>📅 تاریخ اور دن (Date & Day Selection)</h3>
-            <div class="row">
-                <div class="col">
-                    <label>تاریخ منتخب کریں:</label>
-                    <input type="date" id="dutyDate" onchange="updateDayName()">
-                </div>
-                <div class="col">
-                    <label>آج کا دن:</label>
-                    <input type="text" id="dutyDay" readonly style="background-color: #e8f5e9; font-weight: bold; color: #1b5e20;">
-                </div>
-            </div>
-        </div>
+    <div class="container">
 
-        <div class="card">
-            <h3>👥 ڈیوٹی ممبرز (Duty Selection)</h3>
-            <div class="row">
-                <div class="col">
-                    <label>سینیئر (Senior):</label>
-                    <select id="seniorSelect">
-                        <option value="عدنان">عدنان (Senior 1)</option>
-                        <option value="علی">علی (Senior 2)</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>ہیلپر (Helper):</label>
-                    <select id="helperSelect">
-                        <option value="سادیہ">سادیہ (Helper 1)</option>
-                        <option value="ذیشان">ذیشان (Helper 2)</option>
-                        <option value="عائشہ">عائشہ (Helper 3)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>📋 جاری کام (Active Task)</h3>
-            <div class="task-card">
-                <div class="task-title" id="taskTitle">Step 1: برتن دھونا</div>
-                <div class="task-points" id="taskPoints">⭐ [ +15 Points ]</div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-tick" onclick="handleTaskAction('✓ ہو گیا (Tick)', 15)">✓ ہو گیا (Tick)</button>
-                <button class="btn btn-cross" onclick="handleTaskAction('✗ نہیں کیا (Cross)', -10)">✗ نہیں کیا (Cross)</button>
-                <button class="btn btn-shared" onclick="handleTaskAction('🤝 دونوں نے کیا', 10)">🤝 دونوں نے کیا</button>
-                <button class="btn btn-skip" onclick="handleTaskAction('⛔ نہیں کرنا تھا', 0)">⛔ نہیں کرنا تھا</button>
-            </div>
-        </div>
-
-        <!-- Leave Box -->
-        <div class="card">
-            <h3>🏖️ چھٹی کی درخواست (Leave Box)</h3>
-            <div class="row">
-                <div class="col">
-                    <label>ممبر کا نام:</label>
-                    <select id="leaveMember">
-                        <option>عدنان</option>
-                        <option>سادیہ</option>
-                        <option>ذیشان</option>
-                        <option>عائشہ</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>چھٹی کی تاریخ:</label>
-                    <input type="date" id="leaveDate">
-                </div>
-                <div class="col">
-                    <label>&nbsp;</label>
-                    <button class="btn btn-shared" onclick="submitLeave()">سبمٹ چھٹی</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>🏆 لائیو رزلٹ (Leaderboard)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ممبر</th>
-                        <th>پوائنٹس</th>
-                        <th>درجہ</th>
-                        <th>نتیجہ / سزا</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboardBody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- ================= TAB 2: ACTIVE ALERTS ================= -->
-    <div id="tab-alerts" class="tab-section">
-        <div class="card">
-            <h3 class="alert-header-text">⏰ الارم سیٹنگ اور ڈیوٹی ریمائنڈر</h3>
-            <div class="row">
-                <div class="col">
-                    <label>الارم کا وقت:</label>
-                    <input type="time" id="alarmTime">
-                </div>
-                <div class="col">
-                    <label>ممبر چنیں:</label>
-                    <select id="alarmMember">
-                        <option>عدنان</option>
-                        <option>سادیہ</option>
-                        <option>ذیشان</option>
-                        <option>عائشہ</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>&nbsp;</label>
-                    <button class="btn btn-alarm" onclick="setAlarm()">🔔 الارم سیٹ کریں</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= TAB 3: CUSTOM ALERTS ================= -->
-    <div id="tab-custom" class="tab-section">
-        <div class="card">
-            <h3 class="alert-header-text">📝 نیا کسٹم الرٹ / شکایت ایڈ کریں</h3>
-            <div class="row">
-                <div class="col">
-                    <label>ممبر کا نام:</label>
-                    <select id="complainTarget">
-                        <option>عدنان</option>
-                        <option>سادیہ</option>
-                        <option>ذیشان</option>
-                        <option>عائشہ</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>الرٹ کی قسم:</label>
-                    <select id="complainType">
-                        <option>حاضری نہ لگانا</option>
-                        <option>ڈیوٹی اگنور کرنا</option>
-                        <option>زیادہ چھٹیاں کرنا</option>
-                        <option>نماز نہ پڑھنا</option>
-                        <option>کچن کا راشن چیک نہ کرنا</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <label>تفصیل:</label>
-                    <textarea id="complainNote" rows="2" placeholder="تفصیل درج کریں..."></textarea>
-                </div>
-            </div>
-            <button class="btn btn-complain" onclick="addComplain()">🚨 نیا الرٹ ایڈ کریں</button>
-        </div>
-    </div>
-
-    <!-- ================= TAB 4: ADVANCED RECORD & HISTORY ================= -->
-    <div id="tab-history" class="tab-section">
-        <div class="card">
-            <h3>📊 ممبر ہسٹری فلٹر اور ریکارڈ رپورٹ</h3>
+        <!-- ENTRY / MANAGEMENT MAIN TAB (سنگل پیج جہاں سب کچھ اور الگ الگ لسٹیں ہوں گی) -->
+        <div id="entryMgmtSection" class="view active">
             
-            <!-- Filters Box -->
-            <div class="row">
-                <div class="col">
-                    <label>ممبر منتخب کریں:</label>
-                    <select id="filterMember" onchange="filterRecord()">
-                        <option value="ALL">تمام ممبرز (All)</option>
-                        <option value="عدنان">عدنان</option>
-                        <option value="سادیہ">سادیہ</option>
-                        <option value="ذیشان">ذیشان</option>
-                        <option value="عائشہ">عائشہ</option>
+            <!-- 1. Task Management Section -->
+            <div class="card">
+                <h3>⚙️ ٹاسک مینجمنٹ (Task Management)</h3>
+                <div class="form-group">
+                    <label>کام کی قسم</label>
+                    <select id="taskCategory">
+                        <option value="daily">روزانہ (Daily)</option>
+                        <option value="occasional">کبھی کبھی (Occasional)</option>
                     </select>
                 </div>
-                <div class="col">
-                    <label>از تاریخ (From Date):</label>
-                    <input type="date" id="filterFromDate" onchange="filterRecord()">
+                <div class="row">
+                    <div class="col form-group">
+                        <label>کام کا نام</label>
+                        <input type="text" id="taskNameInput" placeholder="مثلاً: صفائی">
+                    </div>
+                    <div class="col form-group">
+                        <label>پوائنٹس</label>
+                        <input type="number" id="taskPointsInput" placeholder="10">
+                    </div>
                 </div>
-                <div class="col">
-                    <label>تا تاریخ (To Date):</label>
-                    <input type="date" id="filterToDate" onchange="filterRecord()">
+                <button class="btn btn-primary" onclick="saveTask()" id="saveTaskBtn">💾 کام محفوظ کریں</button>
+                
+                <h4 style="margin-top:15px; color:var(--primary);">الگ ٹاسک لسٹ:</h4>
+                <div id="tasksListContainer"></div>
+            </div>
+
+            <!-- 2. Member Performance & History Section -->
+            <div class="card">
+                <h3>🔍 ممبر کارکردگی اور ہسٹری</h3>
+                <div class="form-group">
+                    <label>ممبر سلیکٹ کریں</label>
+                    <select id="memberSelect" onchange="renderHistory()"></select>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>از تاریخ (Start Date)</label>
+                        <input type="date" id="fromDate" onchange="renderHistory()">
+                    </div>
+                    <div class="col form-group">
+                        <label>تا تاریخ (End Date)</label>
+                        <input type="date" id="toDate" onchange="renderHistory()">
+                    </div>
+                </div>
+
+                <h4 style="margin-top:15px; color:var(--primary);">الگ ممبر ہسٹری لسٹ:</h4>
+                <div id="historyListContainer"></div>
+
+                <div class="budget-box" style="background:#e8f5e9; border-color:#a5d6a7;">
+                    <div class="budget-row total" style="border:none; color:var(--primary);">
+                        <span>کل پوائنٹس (Total Points):</span>
+                        <span id="totalPointsDisplay">0</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quick Filter Buttons -->
-            <div class="btn-group" style="margin-bottom: 15px;">
-                <button class="btn btn-shared" onclick="setQuickFilter('daily')">📅 آج (Daily)</button>
-                <button class="btn btn-shared" onclick="setQuickFilter('weekly')">🗓️ اس ہفتے (Weekly)</button>
-                <button class="btn btn-shared" onclick="setQuickFilter('monthly')">📆 اس مہینے (Monthly)</button>
-                <button class="btn btn-shared" onclick="setQuickFilter('yearly')">🏛️ اس سال (Yearly)</button>
+            <!-- 3. Ration & Budget Order Section -->
+            <div class="card">
+                <h3>🛒 راشن اور بجٹ آرڈر مینجمنٹ</h3>
+                <div class="form-group">
+                    <label>راشن آئٹم کا نام</label>
+                    <input type="text" id="rationName" placeholder="مثلاً: چینی">
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>قیمت (Price)</label>
+                        <input type="number" id="rationPrice" placeholder="150">
+                    </div>
+                    <div class="col form-group">
+                        <label>مقدار (Qty)</label>
+                        <input type="text" id="rationQty" placeholder="1 کلو">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveRationItem()" id="saveRationBtn">➕ راشن سیو کریں</button>
+
+                <h4 style="margin-top:15px; color:var(--primary);">الگ راشن لسٹ (ٹِک کریں):</h4>
+                <div id="rationListContainer"></div>
+                <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateOrder()">📋 آرڈر لسٹ تیار کریں</button>
+
+                <h4 style="margin-top:15px; color:var(--primary);">الگ آرڈر لسٹ:</h4>
+                <div class="form-group">
+                    <label>کل فکسڈ بجٹ (Fixed Budget)</label>
+                    <input type="number" id="fixedBudget" placeholder="5000" oninput="calculateBudget()">
+                </div>
+                <div id="orderListContainer"></div>
+
+                <div class="budget-box">
+                    <div class="budget-row">
+                        <span>کل خرچ (Total Cost):</span>
+                        <span id="orderTotalDisplay">0</span>
+                    </div>
+                    <div class="budget-row total">
+                        <span>بقیہ بجٹ (Remaining):</span>
+                        <span id="remainingBudgetDisplay">0</span>
+                    </div>
+                </div>
+
+                <h4 style="margin-top:15px; color:var(--primary);">الگ اسکپ / خریدی گئی ہسٹری:</h4>
+                <div id="purchasedListContainer"></div>
             </div>
 
-            <!-- Calculated Summary Cards -->
-            <div class="summary-box">
-                <h4>📈 منتخب عرصے کی سمری (Calculated Points & Total)</h4>
-                <div class="summary-grid">
-                    <div class="summary-card">
-                        <div>کل ایام (Total Days)</div>
-                        <div id="sumTotalDays">0</div>
-                    </div>
-                    <div class="summary-card">
-                        <div>کل کام (Tasks Done)</div>
-                        <div id="sumTotalTasks">0</div>
-                    </div>
-                    <div class="summary-card">
-                        <div>حاصل کردہ پوائنٹس</div>
-                        <div id="sumTotalPoints">0</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Member Analytics Card -->
-            <div class="report-box">
-                <h4>🔍 منتخب شدہ ممبر کا تفصیلی رپورٹ باکس</h4>
-                <div class="row" style="margin-bottom:0;">
-                    <div class="col">
-                        <strong>🚨 کل شکایتیں / الرٹس:</strong> <span id="repComplaintsCount" style="color:red; font-weight:bold;">0</span>
-                        <ul class="report-list" id="repComplaintsList"><li>کوئی نہیں</li></ul>
-                    </div>
-                    <div class="col">
-                        <strong>🏖️ کل چھٹیاں (Leaves):</strong> <span id="repLeavesCount" style="color:orange; font-weight:bold;">0</span>
-                    </div>
-                </div>
-                <hr style="border: 0.5px solid #ffe0b2; margin: 10px 0;">
-                <div class="row" style="margin-bottom:0;">
-                    <div class="col">
-                        <strong>✅ مکمل کی گئی ڈیوٹیز:</strong> <span id="repDutyDoneCount" style="color:green; font-weight:bold;">0</span>
-                    </div>
-                    <div class="col">
-                        <strong>❌ مس کی گئی ڈیوٹیز / کام:</strong> <span id="repDutyMissedCount" style="color:red; font-weight:bold;">0</span>
-                        <ul class="report-list" id="repMissedTasksList"><li>کوئی نہیں</li></ul>
-                    </div>
-                </div>
-                <hr style="border: 0.5px solid #ffe0b2; margin: 10px 0;">
-                <div>
-                    <strong>⛔ سکپ کیے گئے کام (Skipped):</strong> <span id="repSkippedCount" style="font-weight:bold;">0</span>
-                    <ul class="report-list" id="repSkippedTasksList"><li>کوئی نہیں</li></ul>
-                </div>
-            </div>
         </div>
 
-        <div class="card">
-            <h3>📜 ہسٹری لاگز (Recorded History)</h3>
-            <button class="btn btn-cross" style="width: auto; margin-bottom: 15px; padding: 6px 15px;" onclick="clearHistory()">🗑️ تمام ہسٹری صاف کریں</button>
-            <div id="historyListContainer"></div>
-        </div>
     </div>
 
-    <!-- ================= NAVIGATION BAR ================= -->
-    <div class="navbar">
-        <button type="button" class="nav-btn active" onclick="switchTab('tab-dashboard', this)">
-            <span>🏠</span>
-            <span>ڈیش بورڈ</span>
-        </button>
-        <button type="button" class="nav-btn" onclick="switchTab('tab-alerts', this)">
-            <span>🚨</span>
-            <span>الرٹس</span>
-        </button>
-        <button type="button" class="nav-btn" onclick="switchTab('tab-custom', this)">
-            <span>📝</span>
-            <span>ایڈ الرٹ</span>
-        </button>
-        <button type="button" class="nav-btn" onclick="switchTab('tab-history', this)">
-            <span>📜</span>
-            <span>ریکارڈ / ہسٹری</span>
+    <!-- BOTTOM NAVIGATION (ENTRY / MANAGEMENT BUTTON) -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('entryMgmtSection', this)">
+            <span class="nav-icon">📝</span>
+            <span>انٹری / مینجمنٹ</span>
         </button>
     </div>
 
     <script>
-        // Data Store
-        let userPoints = JSON.parse(localStorage.getItem('userPoints')) || {
-            'عدنان': 65, 'ذیشان': 50, 'سادیہ': 20, 'عائشہ': 0
-        };
-
-        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [];
-
-        // Tab Navigation
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-section').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-
-            if (tabId === 'tab-history') filterRecord();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Auto Day & Date Setup
-        window.onload = function() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            
-            document.getElementById('dutyDate').value = `${year}-${month}-${day}`;
-            updateDayName();
-            renderLeaderboard();
-        };
-
-        function updateDayName() {
-            const dateInput = document.getElementById('dutyDate').value;
-            if (dateInput) {
-                const dateParts = dateInput.split('-');
-                const selectedDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                const daysInUrdu = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
-                document.getElementById('dutyDay').value = daysInUrdu[selectedDate.getDay()];
-            }
-        }
-
-        // Tasks Rotation
-        const tasks = [
-            { title: "Step 1: برتن دھونا", points: "⭐ [ +15 Points ]" },
-            { title: "Step 2: صحن کی صفائی", points: "⭐ [ +20 Points ]" },
-            { title: "Step 3: کپڑے استری کرنا", points: "⭐ [ +10 Points ]" },
-            { title: "Step 4: چائے بنانا", points: "⭐ [ +10 Points ]" }
+        let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
+        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ', 'عائشہ'];
+        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [
+            { id: 1, member: 'علی', task: 'فریج کی صفائی', points: 20, date: '2026-08-30' }
         ];
-        let currentTaskIndex = 0;
+        let rationItems = JSON.parse(localStorage.getItem('rationItems')) || [];
+        let orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
+        let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
 
-        function handleTaskAction(actionLabel, pointValue) {
-            const senior = document.getElementById('seniorSelect').value;
-            const helper = document.getElementById('helperSelect').value;
-            const currentTask = tasks[currentTaskIndex].title;
-            const dateVal = document.getElementById('dutyDate').value;
+        let editingTaskId = null;
+        let editingRationId = null;
 
-            if (userPoints[senior] !== undefined) userPoints[senior] += pointValue;
-            if (userPoints[helper] !== undefined) userPoints[helper] += pointValue;
-            localStorage.setItem('userPoints', JSON.stringify(userPoints));
-            renderLeaderboard();
+        window.onload = function() {
+            renderTasks();
+            populateMembers();
+            renderHistory();
+            renderRation();
+            renderOrder();
+            renderPurchased();
+        };
 
-            addHistoryLog('task-action', {
-                memberSenior: senior,
-                memberHelper: helper,
-                taskTitle: currentTask,
-                action: actionLabel,
-                points: pointValue,
-                date: dateVal
-            }, `<strong>${currentTask}:</strong> ${actionLabel} - ڈیوٹی: ${senior} + ${helper} (${pointValue > 0 ? '+' : ''}${pointValue} پوائینٹس)`);
-
-            currentTaskIndex = (currentTaskIndex + 1) % tasks.length;
-            document.getElementById('taskTitle').innerText = tasks[currentTaskIndex].title;
-            document.getElementById('taskPoints').innerText = tasks[currentTaskIndex].points;
+        function switchTab(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
         }
 
-        function submitLeave() {
-            const member = document.getElementById('leaveMember').value;
-            const date = document.getElementById('leaveDate').value;
-            if(!date) return alert("براہ کرم تاریخ منتخب کریں!");
+        /* --- TASKS --- */
+        function saveTask() {
+            const category = document.getElementById('taskCategory').value;
+            const name = document.getElementById('taskNameInput').value.trim();
+            const points = parseInt(document.getElementById('taskPointsInput').value);
 
-            addHistoryLog('leave-action', {
-                member: member,
-                type: 'LEAVE',
-                date: date
-            }, `🏖️ <strong>چھٹی کی درخواست:</strong> ${member} نے ${date} کے لیے چھٹی کی درخواست دی`);
-            alert("چھٹی ریکارڈ میں محفوظ کر دی گئی!");
+            if (!name || isNaN(points)) return alert("نام اور پوائنٹس درج کریں!");
+
+            if (editingTaskId) {
+                customTasks = customTasks.map(t => t.id === editingTaskId ? { ...t, category, name, points } : t);
+                editingTaskId = null;
+                document.getElementById('saveTaskBtn').innerText = "💾 کام محفوظ کریں";
+            } else {
+                customTasks.push({ id: Date.now(), category, name, points });
+            }
+
+            localStorage.setItem('customTasks', JSON.stringify(customTasks));
+            document.getElementById('taskNameInput').value = '';
+            document.getElementById('taskPointsInput').value = '';
+            renderTasks();
         }
 
-        function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboardBody');
-            tbody.innerHTML = '';
-            for (const [name, pts] of Object.entries(userPoints)) {
-                let badgeClass = pts >= 60 ? 'badge-excellent' : (pts < 30 ? 'badge-bad' : 'badge-good');
-                let badgeText = pts >= 60 ? '🌟 Excellent' : (pts < 30 ? '❌ Bad' : '👍 Good');
-                let resultText = pts >= 60 ? 'شاندار! کوئی سزا نہیں' : (pts < 30 ? '🚨 سزا: اضافی کام' : 'کام جاری ہے');
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${name}</td>
-                        <td>${pts}</td>
-                        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-                        <td>${resultText}</td>
-                    </tr>
+        function renderTasks() {
+            const box = document.getElementById('tasksListContainer');
+            box.innerHTML = customTasks.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی کام درج نہیں</p>' : '';
+            
+            customTasks.forEach(task => {
+                const badgeClass = task.category === 'daily' ? 'badge-daily' : 'badge-occ';
+                const catText = task.category === 'daily' ? 'روزانہ' : 'کبھی کبھی';
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${task.name}</span>
+                            <span class="badge ${badgeClass}">${catText}</span>
+                            <div style="color:#666;">پوائنٹس: ${task.points}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editTask(${task.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
+                        </div>
+                    </div>
                 `;
-            }
-        }
-
-        // Voice Alert & Alarm System
-        function triggerVoiceAlert(messageText) {
-            if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 400]);
-            if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance();
-                speech.text = messageText;
-                speech.lang = 'ur-PK';
-                speech.rate = 0.9;
-                window.speechSynthesis.speak(speech);
-            }
-        }
-
-        function setAlarm() {
-            const time = document.getElementById('alarmTime').value;
-            const member = document.getElementById('alarmMember').value;
-            if (time) {
-                triggerVoiceAlert(`${member} کا ڈیوٹی الارم ${time} بجے سیٹ ہو گیا ہے`);
-                addHistoryLog('alert-action', { member: member, type: 'ALARM', time: time }, `⏰ الارم سیٹ: ${member} کے لیے ${time} بجے`);
-                alert("الارم سیٹ ہو گیا!");
-            }
-        }
-
-        function addComplain() {
-            const target = document.getElementById('complainTarget').value;
-            const type = document.getElementById('complainType').value;
-            const note = document.getElementById('complainNote').value;
-            const dateVal = new Date().toISOString().split('T')[0];
-
-            triggerVoiceAlert(`نیا الرٹ! ${target} کی شکایت: ${type}`);
-            addHistoryLog('alert-action', {
-                member: target,
-                type: 'COMPLAIN',
-                complainType: type,
-                note: note,
-                date: dateVal
-            }, `🚨 <strong>${target}:</strong> شکایت - ${type} ${note ? '— (' + note + ')' : ''}`);
-
-            document.getElementById('complainNote').value = '';
-            alert("الرٹ محفوظ ہو گیا!");
-        }
-
-        // Advanced Record & History Filtering System
-        function addHistoryLog(typeClass, rawData, contentHtml) {
-            const now = new Date();
-            const dateStr = rawData.date || now.toISOString().split('T')[0];
-            const timeString = `${dateStr} - ${now.toLocaleTimeString('ur-PK')}`;
-            
-            historyLogs.unshift({ type: typeClass, data: rawData, text: contentHtml, time: timeString, rawDate: dateStr });
-            localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-        }
-
-        function setQuickFilter(period) {
-            const today = new Date();
-            let fromDate = new Date();
-            let toDate = today.toISOString().split('T')[0];
-
-            if (period === 'daily') {
-                fromDate = today;
-            } else if (period === 'weekly') {
-                fromDate.setDate(today.getDate() - 7);
-            } else if (period === 'monthly') {
-                fromDate.setMonth(today.getMonth() - 1);
-            } else if (period === 'yearly') {
-                fromDate.setFullYear(today.getFullYear() - 1);
-            }
-
-            document.getElementById('filterFromDate').value = fromDate.toISOString().split('T')[0];
-            document.getElementById('filterToDate').value = toDate;
-            filterRecord();
-        }
-
-        function filterRecord() {
-            const selectedMember = document.getElementById('filterMember').value;
-            const fromDate = document.getElementById('filterFromDate').value;
-            const toDate = document.getElementById('filterToDate').value;
-
-            let filtered = historyLogs.filter(log => {
-                let memberMatch = (selectedMember === 'ALL');
-                if (!memberMatch && log.data) {
-                    memberMatch = (log.data.member === selectedMember || log.data.memberSenior === selectedMember || log.data.memberHelper === selectedMember);
-                }
-
-                let dateMatch = true;
-                if (fromDate && log.rawDate < fromDate) dateMatch = false;
-                if (toDate && log.rawDate > toDate) dateMatch = false;
-
-                return memberMatch && dateMatch;
             });
+        }
 
-            // Calculate Summary
-            let uniqueDates = new Set();
-            let totalTasks = 0;
-            let totalPoints = 0;
-            let complaints = [];
-            let leaves = 0;
-            let dutyDone = 0;
-            let dutyMissed = [];
-            let skippedTasks = [];
+        function editTask(id) {
+            const task = customTasks.find(t => t.id === id);
+            if (!task) return;
+            document.getElementById('taskCategory').value = task.category;
+            document.getElementById('taskNameInput').value = task.name;
+            document.getElementById('taskPointsInput').value = task.points;
+            editingTaskId = id;
+            document.getElementById('saveTaskBtn').innerText = "🔄 کام اپڈیٹ کریں";
+        }
 
-            filtered.forEach(log => {
-                if(log.rawDate) uniqueDates.add(log.rawDate);
-                const d = log.data;
-                if(!d) return;
+        function deleteTask(id) {
+            if (confirm("کیا آپ اس کام کو ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                customTasks = customTasks.filter(t => t.id !== id);
+                localStorage.setItem('customTasks', JSON.stringify(customTasks));
+                renderTasks();
+            }
+        }
 
-                if (log.type === 'task-action') {
-                    totalTasks++;
-                    totalPoints += d.points || 0;
-                    if(d.action.includes('✓')) dutyDone++;
-                    if(d.action.includes('✗')) dutyMissed.push(`${d.taskTitle} (${log.rawDate})`);
-                    if(d.action.includes('⛔')) skippedTasks.push(`${d.taskTitle} (${log.rawDate})`);
-                } else if (d.type === 'COMPLAIN') {
-                    complaints.push(`${d.complainType} ${d.note ? '(' + d.note + ')' : ''}`);
-                } else if (d.type === 'LEAVE') {
-                    leaves++;
-                }
-            });
+        /* --- MEMBERS --- */
+        function populateMembers() {
+            const select = document.getElementById('memberSelect');
+            select.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
+        }
 
-            // Update Summary UI
-            document.getElementById('sumTotalDays').innerText = uniqueDates.size;
-            document.getElementById('sumTotalTasks').innerText = totalTasks;
-            document.getElementById('sumTotalPoints').innerText = totalPoints;
-
-            // Update Member Analytics Card UI
-            document.getElementById('repComplaintsCount').innerText = complaints.length;
-            document.getElementById('repComplaintsList').innerHTML = complaints.length ? complaints.map(c => `<li>${c}</li>`).join('') : '<li>کوئی نہیں</li>';
-            
-            document.getElementById('repLeavesCount').innerText = leaves;
-            document.getElementById('repDutyDoneCount').innerText = dutyDone;
-            
-            document.getElementById('repDutyMissedCount').innerText = dutyMissed.length;
-            document.getElementById('repMissedTasksList').innerHTML = dutyMissed.length ? dutyMissed.map(m => `<li>${m}</li>`).join('') : '<li>کوئی نہیں</li>';
-
-            document.getElementById('repSkippedCount').innerText = skippedTasks.length;
-            document.getElementById('repSkippedTasksList').innerHTML = skippedTasks.length ? skippedTasks.map(s => `<li>${s}</li>`).join('') : '<li>کوئی نہیں</li>';
-
-            // Render History List
+        function renderHistory() {
+            const member = document.getElementById('memberSelect').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
             const container = document.getElementById('historyListContainer');
-            if (filtered.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#888;">اس فلٹر کے مطابق کوئی ریکارڈ نہیں مل سکا۔</p>';
-                return;
-            }
+            
+            let filtered = historyLogs.filter(h => {
+                let matchMem = h.member === member;
+                let matchDate = true;
+                if (fromDate && h.date < fromDate) matchDate = false;
+                if (toDate && h.date > toDate) matchDate = false;
+                return matchMem && matchDate;
+            });
 
-            container.innerHTML = filtered.map(item => `
-                <div class="history-card ${item.type}">
-                    <span class="history-time">${item.time}</span>
-                    <div>${item.text}</div>
-                </div>
-            `).join('');
+            container.innerHTML = filtered.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں ملی</p>' : '';
+            
+            let totalPts = 0;
+            filtered.forEach(log => {
+                totalPts += log.points;
+                container.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${log.task}</span>
+                            <div style="color:#666;">تاریخ: ${log.date} | پوائنٹس: ${log.points}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editHistory(${log.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteHistory(${log.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('totalPointsDisplay').innerText = totalPts;
         }
 
-        function clearHistory() {
-            if (confirm("کیا آپ واقعی تمام ہسٹری ریکارڈ حذف کرنا چاہتے ہیں؟")) {
-                historyLogs = [];
-                localStorage.removeItem('historyLogs');
-                filterRecord();
+        function editHistory(id) {
+            let log = historyLogs.find(l => l.id === id);
+            if (!log) return;
+            let newPts = prompt("نئے پوائنٹس درج کریں:", log.points);
+            if (newPts && !isNaN(parseInt(newPts))) {
+                log.points = parseInt(newPts);
+                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+                renderHistory();
+            }
+        }
+
+        function deleteHistory(id) {
+            if (confirm("ریکارڈ حذف کریں؟")) {
+                historyLogs = historyLogs.filter(l => l.id !== id);
+                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+                renderHistory();
+            }
+        }
+
+        /* --- RATION --- */
+        function saveRationItem() {
+            const name = document.getElementById('rationName').value.trim();
+            const price = parseFloat(document.getElementById('rationPrice').value);
+            const qty = document.getElementById('rationQty').value.trim();
+
+            if (!name || isNaN(price)) return alert("نام اور قیمت درج کریں!");
+
+            if (editingRationId) {
+                rationItems = rationItems.map(r => r.id === editingRationId ? { ...r, name, price, qty } : r);
+                editingRationId = null;
+                document.getElementById('saveRationBtn').innerText = "➕ راشن سیو کریں";
+            } else {
+                rationItems.push({ id: Date.now(), name, price, qty, selected: false });
+            }
+
+            localStorage.setItem('rationItems', JSON.stringify(rationItems));
+            document.getElementById('rationName').value = '';
+            document.getElementById('rationPrice').value = '';
+            document.getElementById('rationQty').value = '';
+            renderRation();
+        }
+
+        function renderRation() {
+            const box = document.getElementById('rationListContainer');
+            box.innerHTML = rationItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی راشن آئٹم موجود نہیں</p>' : '';
+
+            rationItems.forEach(item => {
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <input type="checkbox" id="check_${item.id}" ${item.selected ? 'checked' : ''} onchange="toggleSelectRation(${item.id})">
+                            <label for="check_${item.id}" class="item-title" style="display:inline;">${item.name} (${item.qty})</label>
+                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editRation(${item.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteRation(${item.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleSelectRation(id) {
+            let item = rationItems.find(r => r.id === id);
+            if (item) item.selected = !item.selected;
+            localStorage.setItem('rationItems', JSON.stringify(rationItems));
+        }
+
+        function generateOrder() {
+            orderItems = rationItems.filter(r => r.selected);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderOrder();
+        }
+
+        function renderOrder() {
+            const box = document.getElementById('orderListContainer');
+            box.innerHTML = orderItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی آئٹم منتخب نہیں کیا گیا</p>' : '';
+
+            let total = 0;
+            orderItems.forEach(item => {
+                total += item.price;
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${item.name} (${item.qty})</span>
+                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-skip" onclick="skipOrder(${item.id})">⏭️ Skip</button>
+                            <button class="btn btn-delete" onclick="deleteOrderItem(${item.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('orderTotalDisplay').innerText = "Rs. " + total;
+            calculateBudget();
+        }
+
+        function calculateBudget() {
+            const fixedBudget = parseFloat(document.getElementById('fixedBudget').value) || 0;
+            let totalCost = orderItems.reduce((acc, curr) => acc + curr.price, 0);
+            let remaining = fixedBudget - totalCost;
+
+            const remDisplay = document.getElementById('remainingBudgetDisplay');
+            remDisplay.innerText = "Rs. " + remaining;
+            remDisplay.style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
+        }
+
+        function skipOrder(id) {
+            let item = orderItems.find(o => o.id === id);
+            if (!item) return;
+
+            purchasedItems.push({ ...item, skipDate: new Date().toLocaleDateString('ur-PK') });
+            localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+
+            orderItems = orderItems.filter(o => o.id !== id);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+
+            renderOrder();
+            renderPurchased();
+        }
+
+        function deleteOrderItem(id) {
+            orderItems = orderItems.filter(o => o.id !== id);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderOrder();
+        }
+
+        function renderPurchased() {
+            const box = document.getElementById('purchasedListContainer');
+            box.innerHTML = purchasedItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں</p>' : '';
+
+            purchasedItems.forEach(item => {
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${item.name} (${item.qty})</span>
+                            <div style="color:#666;">تاریخ: ${item.skipDate} | Rs. ${item.price}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editRation(id) {
+            let item = rationItems.find(r => r.id === id);
+            if (!item) return;
+            document.getElementById('rationName').value = item.name;
+            document.getElementById('rationPrice').value = item.price;
+            document.getElementById('rationQty').value = item.qty;
+            editingRationId = id;
+            document.getElementById('saveRationBtn').innerText = "🔄 راشن اپڈیٹ کریں";
+        }
+
+        function deleteRation(id) {
+            if (confirm("آئٹم حذف کریں؟")) {
+                rationItems = rationItems.filter(r => r.id !== id);
+                localStorage.setItem('rationItems', JSON.stringify(rationItems));
+                renderRation();
             }
         }
     </script>
-</body    
+</body>
+</html>
