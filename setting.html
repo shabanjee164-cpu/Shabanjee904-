@@ -1,1 +1,666 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آسان مینجمنٹ سسٹم</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #1976d2;
+            --danger: #d32f2f;
+            --warning: #f57c00;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --radius: 12px;
+        }
 
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 85px; /* Bottom Nav Space */
+            direction: rtl;
+        }
+
+        /* App Header */
+        .app-header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Single Page Views Layout */
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 16px;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 8px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .col {
+            flex: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            border: none;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); }
+        .btn-secondary { background: var(--secondary); }
+        .btn-edit { background: var(--warning); width: auto; padding: 4px 8px; font-size: 12px; }
+        .btn-delete { background: var(--danger); width: auto; padding: 4px 8px; font-size: 12px; }
+        .btn-skip { background: #7b1fa2; width: auto; padding: 4px 8px; font-size: 12px; }
+
+        /* List Items */
+        .item-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .item-details { font-size: 13px; }
+        .item-title { font-weight: bold; font-size: 14px; }
+
+        .badge {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+        }
+        .badge-daily { background: #2e7d32; }
+        .badge-occ { background: #ed6c02; }
+
+        .actions { display: flex; gap: 4px; }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -3px 12px rgba(0,0,0,0.12);
+            z-index: 1000;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 33%;
+            text-align: center;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        /* Budget Summary Box */
+        .budget-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .budget-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .budget-row.total {
+            font-weight: bold;
+            font-size: 14px;
+            border-top: 1px dashed #90caf9;
+            padding-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">Smart Management System</div>
+
+    <div class="container">
+
+        <!-- 1st SECTION: ALL DATA ENTRIES -->
+        <div id="entrySection" class="view active">
+            <!-- Task Entry -->
+            <div class="card">
+                <h3>⚙️ نیا کام درج کریں (New Task Entry)</h3>
+                <div class="form-group">
+                    <label>کام کی قسم</label>
+                    <select id="taskCategory">
+                        <option value="daily">روزانہ (Daily)</option>
+                        <option value="occasional">کبھی کبھی (Occasional)</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>کام کا نام</label>
+                        <input type="text" id="taskNameInput" placeholder="مثلاً: صفائی">
+                    </div>
+                    <div class="col form-group">
+                        <label>پوائنٹس</label>
+                        <input type="number" id="taskPointsInput" placeholder="10">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveTask()" id="saveTaskBtn">💾 کام سیو کریں</button>
+            </div>
+
+            <!-- Ration Entry -->
+            <div class="card">
+                <h3>🛒 نیا راشن آئٹم درج کریں (New Ration Entry)</h3>
+                <div class="form-group">
+                    <label>آئٹم کا نام</label>
+                    <input type="text" id="rationName" placeholder="مثلاً: چینی">
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>قیمت (Price)</label>
+                        <input type="number" id="rationPrice" placeholder="150">
+                    </div>
+                    <div class="col form-group">
+                        <label>مقدار (Qty)</label>
+                        <input type="text" id="rationQty" placeholder="1 کلو">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="saveRationItem()" id="saveRationBtn">➕ راشن سیو کریں</button>
+            </div>
+        </div>
+
+        <!-- 2nd SECTION: DUTY & MEMBERS MANAGEMENT -->
+        <div id="dutySection" class="view">
+            <!-- All Tasks List -->
+            <div class="card">
+                <h3>📋 تمام طے شدہ کام (Task List)</h3>
+                <div id="tasksListContainer"></div>
+            </div>
+
+            <!-- Member Performance Filter -->
+            <div class="card">
+                <h3>🔍 ممبر ڈیوٹی ریکارڈ اور پوائنٹس (Member Performance)</h3>
+                <div class="form-group">
+                    <label>ممبر سلیکٹ کریں</label>
+                    <select id="memberSelect" onchange="renderHistory()"></select>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>از تاریخ (Start Date)</label>
+                        <input type="date" id="fromDate" onchange="renderHistory()">
+                    </div>
+                    <div class="col form-group">
+                        <label>تا تاریخ (End Date)</label>
+                        <input type="date" id="toDate" onchange="renderHistory()">
+                    </div>
+                </div>
+                
+                <div id="historyListContainer" style="margin-top:10px;"></div>
+                <div class="budget-box" style="background:#e8f5e9; border-color:#a5d6a7;">
+                    <div class="budget-row total" style="border:none; color:var(--primary);">
+                        <span>کل پوائنٹس (Total Points):</span>
+                        <span id="totalPointsDisplay">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3rd SECTION: RATION & BUDGET MANAGEMENT -->
+        <div id="rationSection" class="view">
+            <!-- Ration Items List -->
+            <div class="card">
+                <h3>📜 راشن لسٹ (خریداری کے لیے سلیکٹ کریں)</h3>
+                <div id="rationListContainer"></div>
+                <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateOrder()">📋 آرڈر لسٹ تیار کریں</button>
+            </div>
+
+            <!-- Order & Budget Calculation -->
+            <div class="card">
+                <h3>💰 موجودہ آرڈر اور بجٹ حساب</h3>
+                <div class="form-group">
+                    <label>کل بجٹ (Fixed Budget)</label>
+                    <input type="number" id="fixedBudget" placeholder="5000" oninput="calculateBudget()">
+                </div>
+                
+                <h4>ضروری سامان:</h4>
+                <div id="orderListContainer"></div>
+
+                <div class="budget-box">
+                    <div class="budget-row">
+                        <span>کل خرچ (Total Cost):</span>
+                        <span id="orderTotalDisplay">0</span>
+                    </div>
+                    <div class="budget-row total">
+                        <span>بقیہ بجٹ (Remaining):</span>
+                        <span id="remainingBudgetDisplay">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchased / History -->
+            <div class="card">
+                <h3>✅ خریدے گئے سامان کی ہسٹری</h3>
+                <div id="purchasedListContainer"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CLEAR & EASY BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('entrySection', this)">
+            <span class="nav-icon">📝</span>
+            <span>اینٹری فارمز</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('dutySection', this)">
+            <span class="nav-icon">📋</span>
+            <span>ڈیوٹی و ممبرز</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('rationSection', this)">
+            <span class="nav-icon">🛒</span>
+            <span>راشن و بجٹ</span>
+        </button>
+    </div>
+
+    <script>
+        // Data Stores (LocalStorage Compatible)
+        let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
+        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ', 'عائشہ'];
+        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [
+            { id: 1, member: 'علی', task: 'فریج کی صفائی', points: 20, date: '2026-08-30' },
+            { id: 2, member: 'عدنان', task: 'کپڑے استری', points: 15, date: '2026-08-31' }
+        ];
+        let rationItems = JSON.parse(localStorage.getItem('rationItems')) || [];
+        let orderItems = JSON.parse(localStorage.getItem('orderItems')) || [];
+        let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
+
+        let editingTaskId = null;
+        let editingRationId = null;
+
+        window.onload = function() {
+            renderTasks();
+            populateMembers();
+            renderHistory();
+            renderRation();
+            renderOrder();
+            renderPurchased();
+        };
+
+        // Navigation Controller
+        function switchTab(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        /* --- 1. TASK LOGIC --- */
+        function saveTask() {
+            const category = document.getElementById('taskCategory').value;
+            const name = document.getElementById('taskNameInput').value.trim();
+            const points = parseInt(document.getElementById('taskPointsInput').value);
+
+            if (!name || isNaN(points)) return alert("براہ کرم نام اور پوائنٹس درج کریں!");
+
+            if (editingTaskId) {
+                customTasks = customTasks.map(t => t.id === editingTaskId ? { ...t, category, name, points } : t);
+                editingTaskId = null;
+                document.getElementById('saveTaskBtn').innerText = "💾 کام سیو کریں";
+            } else {
+                customTasks.push({ id: Date.now(), category, name, points });
+            }
+
+            localStorage.setItem('customTasks', JSON.stringify(customTasks));
+            document.getElementById('taskNameInput').value = '';
+            document.getElementById('taskPointsInput').value = '';
+            renderTasks();
+            alert("کام کامیابی سے شامل ہو گیا!");
+        }
+
+        function renderTasks() {
+            const box = document.getElementById('tasksListContainer');
+            box.innerHTML = customTasks.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی کام درج نہیں</p>' : '';
+            
+            customTasks.forEach(task => {
+                const badgeClass = task.category === 'daily' ? 'badge-daily' : 'badge-occ';
+                const catText = task.category === 'daily' ? 'روزانہ' : 'کبھی کبھی';
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${task.name}</span>
+                            <span class="badge ${badgeClass}">${catText}</span>
+                            <div style="color:#666;">پوائنٹس: ${task.points}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editTask(${task.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editTask(id) {
+            const task = customTasks.find(t => t.id === id);
+            if (!task) return;
+            switchTab('entrySection', document.querySelectorAll('.nav-item')[0]);
+            document.getElementById('taskCategory').value = task.category;
+            document.getElementById('taskNameInput').value = task.name;
+            document.getElementById('taskPointsInput').value = task.points;
+            editingTaskId = id;
+            document.getElementById('saveTaskBtn').innerText = "🔄 کام اپڈیٹ کریں";
+        }
+
+        function deleteTask(id) {
+            if (confirm("کیا آپ اس کام کو ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                customTasks = customTasks.filter(t => t.id !== id);
+                localStorage.setItem('customTasks', JSON.stringify(customTasks));
+                renderTasks();
+            }
+        }
+
+        /* --- 2. MEMBER HISTORY LOGIC --- */
+        function populateMembers() {
+            const select = document.getElementById('memberSelect');
+            select.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
+        }
+
+        function renderHistory() {
+            const member = document.getElementById('memberSelect').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const container = document.getElementById('historyListContainer');
+            
+            let filtered = historyLogs.filter(h => {
+                let matchMem = h.member === member;
+                let matchDate = true;
+                if (fromDate && h.date < fromDate) matchDate = false;
+                if (toDate && h.date > toDate) matchDate = false;
+                return matchMem && matchDate;
+            });
+
+            container.innerHTML = filtered.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں ملی</p>' : '';
+            
+            let totalPts = 0;
+            filtered.forEach(log => {
+                totalPts += log.points;
+                container.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${log.task}</span>
+                            <div style="color:#666;">تاریخ: ${log.date} | پوائنٹس: ${log.points}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editHistory(${log.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteHistory(${log.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('totalPointsDisplay').innerText = totalPts;
+        }
+
+        function editHistory(id) {
+            let log = historyLogs.find(l => l.id === id);
+            if (!log) return;
+            let newPts = prompt("نئے پوائنٹس درج کریں:", log.points);
+            if (newPts && !isNaN(parseInt(newPts))) {
+                log.points = parseInt(newPts);
+                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+                renderHistory();
+            }
+        }
+
+        function deleteHistory(id) {
+            if (confirm("ریکارڈ حذف کریں؟")) {
+                historyLogs = historyLogs.filter(l => l.id !== id);
+                localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+                renderHistory();
+            }
+        }
+
+        /* --- 3. RATION & BUDGET LOGIC --- */
+        function saveRationItem() {
+            const name = document.getElementById('rationName').value.trim();
+            const price = parseFloat(document.getElementById('rationPrice').value);
+            const qty = document.getElementById('rationQty').value.trim();
+
+            if (!name || isNaN(price)) return alert("آئٹم کا نام اور قیمت ضرور درج کریں!");
+
+            if (editingRationId) {
+                rationItems = rationItems.map(r => r.id === editingRationId ? { ...r, name, price, qty } : r);
+                editingRationId = null;
+                document.getElementById('saveRationBtn').innerText = "➕ راشن سیو کریں";
+            } else {
+                rationItems.push({ id: Date.now(), name, price, qty, selected: false });
+            }
+
+            localStorage.setItem('rationItems', JSON.stringify(rationItems));
+            document.getElementById('rationName').value = '';
+            document.getElementById('rationPrice').value = '';
+            document.getElementById('rationQty').value = '';
+            renderRation();
+            alert("راشن آئٹم شامل ہو گیا!");
+        }
+
+        function renderRation() {
+            const box = document.getElementById('rationListContainer');
+            box.innerHTML = rationItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی راشن آئٹم موجود نہیں</p>' : '';
+
+            rationItems.forEach(item => {
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <input type="checkbox" id="check_${item.id}" ${item.selected ? 'checked' : ''} onchange="toggleSelectRation(${item.id})">
+                            <label for="check_${item.id}" class="item-title" style="display:inline;">${item.name} (${item.qty})</label>
+                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-edit" onclick="editRation(${item.id})">✏️</button>
+                            <button class="btn btn-delete" onclick="deleteRation(${item.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleSelectRation(id) {
+            let item = rationItems.find(r => r.id === id);
+            if (item) item.selected = !item.selected;
+            localStorage.setItem('rationItems', JSON.stringify(rationItems));
+        }
+
+        function generateOrder() {
+            orderItems = rationItems.filter(r => r.selected);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderOrder();
+        }
+
+        function renderOrder() {
+            const box = document.getElementById('orderListContainer');
+            box.innerHTML = orderItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی آئٹم منتخب نہیں کیا گیا</p>' : '';
+
+            let total = 0;
+            orderItems.forEach(item => {
+                total += item.price;
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${item.name} (${item.qty})</span>
+                            <div style="color:#666;">قیمت: Rs. ${item.price}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-skip" onclick="skipOrder(${item.id})">⏭️ خرید لیا / اسکپ</button>
+                            <button class="btn btn-delete" onclick="deleteOrderItem(${item.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('orderTotalDisplay').innerText = "Rs. " + total;
+            calculateBudget();
+        }
+
+        function calculateBudget() {
+            const fixedBudget = parseFloat(document.getElementById('fixedBudget').value) || 0;
+            let totalCost = orderItems.reduce((acc, curr) => acc + curr.price, 0);
+            let remaining = fixedBudget - totalCost;
+
+            const remDisplay = document.getElementById('remainingBudgetDisplay');
+            remDisplay.innerText = "Rs. " + remaining;
+            remDisplay.style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
+        }
+
+        function skipOrder(id) {
+            let item = orderItems.find(o => o.id === id);
+            if (!item) return;
+
+            purchasedItems.push({ ...item, skipDate: new Date().toLocaleDateString('ur-PK') });
+            localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+
+            orderItems = orderItems.filter(o => o.id !== id);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+
+            renderOrder();
+            renderPurchased();
+        }
+
+        function deleteOrderItem(id) {
+            orderItems = orderItems.filter(o => o.id !== id);
+            localStorage.setItem('orderItems', JSON.stringify(orderItems));
+            renderOrder();
+        }
+
+        function renderPurchased() {
+            const box = document.getElementById('purchasedListContainer');
+            box.innerHTML = purchasedItems.length === 0 ? '<p style="font-size:12px; color:#888;">کوئی ہسٹری نہیں</p>' : '';
+
+            purchasedItems.forEach(item => {
+                box.innerHTML += `
+                    <div class="item-box">
+                        <div class="item-details">
+                            <span class="item-title">${item.name} (${item.qty})</span>
+                            <div style="color:#666;">تاریخ: ${item.skipDate} | Rs. ${item.price}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editRation(id) {
+            let item = rationItems.find(r => r.id === id);
+            if (!item) return;
+            switchTab('entrySection', document.querySelectorAll('.nav-item')[0]);
+            document.getElementById('rationName').value = item.name;
+            document.getElementById('rationPrice').value = item.price;
+            document.getElementById('rationQty').value = item.qty;
+            editingRationId = id;
+            document.getElementById('saveRationBtn').innerText = "🔄 راشن اپڈیٹ کریں";
+        }
+
+        function deleteRation(id) {
+            if (confirm("آئٹم حذف کریں؟")) {
+                rationItems = rationItems.filter(r => r.id !== id);
+                localStorage.setItem('rationItems', JSON.stringify(rationItems));
+                renderRation();
+            }
+        }
+    </script>
+</body>
+</html>
