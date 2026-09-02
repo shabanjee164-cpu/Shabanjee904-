@@ -16,1013 +16,452 @@
             --text: #212529;
             --border: #ced4da;
             --radius: 12px;
-            --font-scale: 13px;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; padding-bottom: 90px; direction: rtl; font-size: var(--font-scale); }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; direction: rtl; display: flex; height: 100vh; overflow: hidden; }
 
-        .app-header {
-            background: linear-gradient(135deg, var(--primary), #2e7d32);
+        /* سائیڈ مینو (Sidebar) */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary), #0e3b12);
             color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .sidebar-header {
+            padding: 20px 15px;
             text-align: center;
-            padding: 18px;
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-header h2 { margin: 0; font-size: 18px; color: #fff; }
+        .sidebar-header p { margin: 5px 0 0 0; font-size: 11px; color: #a5d6a7; }
+
+        .sidebar-menu {
+            list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto;
+        }
+        .sidebar-menu li {
+            padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: bold;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background: rgba(255,255,255,0.15);
+            border-right: 4px solid #a5d6a7;
         }
 
-        .container { max-width: 680px; margin: 0 auto; padding: 15px; }
+        /* مین کنٹینٹ ایریا */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+        }
+        .top-navbar {
+            background: #ffffff; padding: 12px 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .content-body {
+            flex: 1; overflow-y: auto; padding: 20px; background: var(--bg);
+        }
+
+        .page-view { display: none; }
+        .page-view.active { display: block; }
 
         .card {
-            background: var(--card-bg);
-            padding: 16px;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 16px;
-            border: 1px solid rgba(0,0,0,0.04);
+            background: var(--card-bg); padding: 16px; border-radius: var(--radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.04);
         }
-
-        .card h3 {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 16px;
-            border-bottom: 2px solid #e8f5e9;
-            padding-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 8px; }
 
         .section-box {
-            background: #fafafa;
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 12px;
+            background: #fafafa; border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 12px;
         }
-
-        .section-box label {
-            font-size: 12px;
-            font-weight: bold;
-            color: #374151;
-            margin-bottom: 4px;
-            display: block;
-        }
+        .section-box label { font-size: 12px; font-weight: bold; color: #374151; margin-bottom: 4px; display: block; }
 
         input, select, textarea {
-            width: 100%;
-            padding: 9px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            outline: none;
-            font-size: inherit;
-            background: #fff;
-            transition: all 0.2s;
+            width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border);
+            outline: none; font-size: 13px; background: #fff; transition: all 0.2s;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,94,32,0.1); }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,94,32,0.1); }
 
         .row { display: flex; gap: 8px; margin-bottom: 8px; }
         .col { flex: 1; }
 
         .btn {
             border: none; color: white; padding: 9px 14px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-size: inherit; width: 100%; transition: 0.2s;
+            cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; transition: 0.2s;
             display: inline-flex; align-items: center; justify-content: center; gap: 5px;
         }
         .btn-primary { background: var(--primary); }
         .btn-primary:hover { background: #2e7d32; }
         .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #b71c1c; }
-        .btn-secondary { background: var(--secondary); }
         .btn-warning { background: var(--warning); color: #fff; }
 
         .table-container {
-            max-height: 220px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-top: 8px;
-            background: #fff;
+            max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; background: #fff;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: inherit;
-            text-align: right;
-        }
-        th, td {
-            padding: 8px 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            background: #f1f8f5;
-            color: var(--primary);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            font-weight: bold;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
+        th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+        th { background: #f1f8f5; color: var(--primary); position: sticky; top: 0; z-index: 10; font-weight: bold; }
 
-        .dropdown { position: relative; display: inline-block; }
-        .dropbtn {
-            background: #e9ecef; color: #333; padding: 5px 10px; font-size: 12px;
-            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
-        }
-        .dropbtn:hover { background: #dde2e6; }
-        .dropdown-content {
-            display: none; position: absolute; right: 0; background-color: #fff;
-            min-width: 190px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
-            z-index: 50; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
-        }
-        .dropdown-content button {
-            color: #333; padding: 9px 12px; text-decoration: none; display: block;
-            background: none; border: none; width: 100%; text-align: right; cursor: pointer; font-size: 12px;
-        }
-        .dropdown-content button:hover { background-color: #f1f5f9; }
-        .show { display: block; }
-
-        .toggle-btn {
-            background: #e8f5e9; border: 1px solid #c8e6c9; color: var(--primary);
-            cursor: pointer; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 6px;
-        }
-        
         .summary-box {
             background: #e8f5e9; border: 1px solid #a5d6a7; padding: 10px 14px; border-radius: 8px; margin-top: 8px;
-            display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);
-            font-size: 14px;
+            display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary); font-size: 14px;
         }
-
-        .badge {
-            display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px;
-        }
+        .badge { display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px; }
         .badge-success { background: #d4edda; color: #155724; }
         .badge-warning { background: #fff3cd; color: #856404; }
         .badge-danger { background: #f8d7da; color: #721c24; }
-
-        .sub-heading {
-            font-size: 13px; font-weight: bold; color: var(--secondary); margin: 10px 0 5px 0;
-            display: flex; justify-content: space-between; align-items: center;
-        }
     </style>
 </head>
 <body>
 
-    <div class="app-header">✨ اسمارٹ مینیجر الٹیمیٹ پرو ✨</div>
+    <!-- سائیڈ مینو (نام اوپر شو ہوگا) -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>✨ اسمارٹ مینیجر پرو ✨</h2>
+            <p>الٹیمیٹ اسسٹنٹ سسٹم</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li onclick="switchPage('dash', this)" class="active">📊 ڈیش بورڈ</li>
+            <li onclick="switchPage('tasks', this)">📋 کام اور پوائنٹس</li>
+            <li onclick="switchPage('history', this)">🔍 ممبر ہسٹری</li>
+            <li onclick="switchPage('ration', this)">🛒 راشن اور بل سسٹم</li>
+            <li onclick="switchPage('audit', this)">✅ جانچ پڑتال (Check/Cross)</li>
+            <li onclick="switchPage('members', this)">👥 ممبر مینجمنٹ</li>
+            <li onclick="switchPage('settings', this)">⚙️ ماسٹر سیٹنگز</li>
+        </ul>
+    </div>
 
-    <div class="container">
-
-        <!-- 1️⃣ کام اور پوائنٹس مینجমেন্ট -->
-        <div class="card" id="cardTask">
-            <h3>
-                <span>📋 1. کام اور پوائنٹس مینجমেন্ট</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('taskMenu')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('taskCardBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="taskMenu" class="dropdown-content">
-                <button onclick="selectAllTable('taskCheck', true)">سب سلیکٹ کریں</button>
-                <button onclick="selectAllTable('taskCheck', false)">سلیکشن ختم</button>
-                <button onclick="deleteSelectedTasks()">منتخب حذف کریں</button>
-                <button onclick="deleteAllTasks()">تمام حذف کریں</button>
-                <button onclick="sortTasksAlphabetically()">ترتیب दें (A-Z)</button>
-                <button onclick="renameTaskItem()">نام تبدیل کریں (Rename)</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="taskCardBody">
-                <div class="section-box">
-                    <label>کام کی قسم اور تفصیل درج کریں</label>
-                    <div class="row">
-                        <div class="col">
-                            <select id="taskCategory">
-                                <option value="daily">روزانہ (Daily)</option>
-                                <option value="occasional">کبھی کبھی (Occasional)</option>
-                            </select>
-                        </div>
-                        <div class="col">
-                            <input type="number" id="taskPointsInput" placeholder="پوائنٹس (مثلاً 10)">
-                        </div>
-                    </div>
-                    <input type="text" id="taskNameInput" placeholder="کام کا نام (مثلاً صفائی)" style="margin-bottom:8px;">
-                    <button class="btn btn-primary" onclick="saveTask()">💾 نیا کام محفوظ کریں</button>
-                </div>
-                <div style="text-align: left; font-size: 11px; color:#666; font-weight:bold;" id="taskCount">کل ٹاسک: 0</div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'taskCheck')"></th>
-                                <th>کام کا نام</th>
-                                <th>قسم</th>
-                                <th width="50">پوائنٹس</th>
-                            </tr>
-                        </thead>
-                        <tbody id="taskTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- مین کنٹینٹ -->
+    <div class="main-content">
+        <div class="top-navbar">
+            <span id="currentTitle" style="font-weight: bold; color: var(--primary);">ڈیش بورڈ اور کوئیک ویجٹس</span>
+            <button class="btn btn-warning" style="width: auto; padding: 5px 12px; font-size: 11px;" onclick="sendWhatsAppReport()">📤 واٹس ایپ رپورٹ</button>
         </div>
 
-        <!-- 2️⃣ ممبر ہسٹری اور کارکردگی -->
-        <div class="card" id="cardHistory">
-            <h3>
-                <span>🔍 2. ممبر ہسٹری اور کارکردگی</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('memberMenu')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('memberCardBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="memberMenu" class="dropdown-content">
-                <button onclick="clearMemberHistory()">ہسٹری صاف کریں</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="memberCardBody">
-                <div class="section-box" style="background:#f1f8f5;">
-                    <label>تاریخ اور نام کے حساب سے فلٹر کریں</label>
+        <div class="content-body">
+
+            <!-- 1️⃣ ڈیش بورڈ -->
+            <div id="dash" class="page-view active">
+                <div class="card">
+                    <h3>📊 ڈیش بورڈ اور کوئیک ویجٹس</h3>
                     <div class="row">
-                        <div class="col">
-                            <select id="filterMemberSelect" onchange="renderMemberTable()"></select>
+                        <div class="col section-box" style="text-align: center;">
+                            <label>کل ممبرز</label>
+                            <h2 id="widgetMembers" style="margin:5px 0; color:var(--primary);">0</h2>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label style="font-size:10px;">از تاریخ (Start)</label>
-                            <input type="date" id="fromDate" onchange="renderMemberTable()">
+                        <div class="col section-box" style="text-align: center;">
+                            <label>بقایا بجٹ</label>
+                            <h2 id="widgetBudget" style="margin:5px 0; color:var(--secondary);">Rs. 0</h2>
                         </div>
-                        <div class="col">
-                            <label style="font-size:10px;">تا تاریخ (End)</label>
-                            <input type="date" id="toDate" onchange="renderMemberTable()">
+                        <div class="col section-box" style="text-align: center;">
+                            <label>کل پوائنٹس</label>
+                            <h2 id="widgetPoints" style="margin:5px 0; color:var(--warning);">0</h2>
                         </div>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>کام کا نام</th>
-                                <th>کل بار ہوا</th>
-                                <th>کل پوائنٹس</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberTableBody"></tbody>
-                    </table>
-                </div>
-                <div class="summary-box">
-                    <span>مجموعی پوائنٹس (کل):</span>
-                    <span id="totalPointsDisplay">0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3️⃣ راشن مینجমেন্ট (درست ورکنگ: مین لسٹ، کارٹ ایڈیٹنگ، بقایا بجٹ) -->
-        <div class="card" id="cardRation">
-            <h3>
-                <span>🛒 3. راشن مینجমেন্ট اور بل سسٹم</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('rationMenuMain')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('rationCardBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="rationMenuMain" class="dropdown-content">
-                <button onclick="clearPurchasedHistory()">خریداری ہسٹری صاف کریں</button>
-                <button onclick="sortRationsAlphabetically()">ترتیب दें (A-Z)</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="rationCardBody">
-                <div class="section-box">
-                    <label>کل بجٹ درج کریں</label>
-                    <input type="number" id="totalBudgetInput" placeholder="کل بجٹ (Rs)" oninput="updateBudgetCalc()" style="margin-bottom:8px;">
-                    <label>نیا راشن آئٹم درج کریں (مین لسٹ کے لیے)</label>
-                    <input type="text" id="rationName" placeholder="آئٹم کا نام (مثلاً چینی)" style="margin-bottom:8px;">
-                    <div class="row">
-                        <div class="col"><input type="number" id="rationPrice" placeholder="قیمت (Rs)"></div>
-                        <div class="col"><input type="text" id="rationQty" placeholder="مقدار (مثلاً 5 کلو)"></div>
-                    </div>
-                    <button class="btn btn-primary" onclick="saveRationItem()">➕ مین راشن لسٹ میں شامل کریں</button>
-                </div>
-
-                <!-- لسٹ 1: مین راشن انوینٹری (یہاں سے ڈیلیٹ نہیں ہوگا، صرف سلیکٹ ہو کر کارٹ میں جائے گا) -->
-                <div class="sub-heading">
-                    <span>📋 لسٹ 1: مین راشن انوینٹری (دیکھنے اور سلیکٹ کرنے کے لیے)</span>
-                    <button class="dropbtn" onclick="moveToSelectedCart()">منتخب کردہ کارٹ میں ڈالیں</button>
-                </div>
-                <div class="table-container" style="max-height:150px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'rationCheck1')"></th>
-                                <th>نام</th>
-                                <th>قیمت</th>
-                                <th>مقدار</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rationTableBody1"></tbody>
-                    </table>
-                </div>
-
-                <!-- لسٹ 2: خریداری کے لیے منتخب لسٹ (یہاں قیمت اور مقدار ایڈٹ کی جا سکتی ہے) -->
-                <div class="sub-heading" style="color:var(--warning);">
-                    <span>🛒 لسٹ 2: کارٹ (قیمت/مقدار ایڈٹ اور اسکیپ کریں)</span>
-                    <button class="dropbtn" onclick="skipSelectedToPurchased()">خرید لیا گیا (Skip)</button>
-                </div>
-                <div class="table-container" style="max-height:160px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'rationCheck2')"></th>
-                                <th>آئٹم</th>
-                                <th>قیمت (ایڈٹ کریں)</th>
-                                <th>مقدار (ایڈٹ کریں)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rationTableBody2"></tbody>
-                    </table>
-                </div>
-                <div style="font-size:12px; font-weight:bold; margin-top:4px; text-align:left;" id="selectedCartTotal">منتخب بل: Rs. 0</div>
-
-                <!-- لسٹ 3: خریدی گئی اشیاء اور بقایا بجٹ -->
-                <div class="sub-heading" style="color:var(--primary);">
-                    <span>✅ لسٹ 3: خریدی گئی اشیاء اور فائنل ریکارڈ</span>
-                </div>
-                <div class="table-container" style="max-height:130px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>نام</th>
-                                <th>قیمت</th>
-                                <th>مقدار</th>
-                                <th>تاریخ و وقت</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rationTableBody3"></tbody>
-                    </table>
-                </div>
-
-                <div class="summary-box" style="margin-top:10px;">
-                    <span>بجٹ بقایا (Remaining Budget):</span>
-                    <span id="remainingBudgetDisplay">Rs. 0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4️⃣ کاموں کی جانچ پڑتال (ٹک، کراس) -->
-        <div class="card" id="cardAudit">
-            <h3>
-                <span>✅ 4. کاموں کی جانچ پڑتال (Check/Cross)</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('auditMenuMain')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('statusCardBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="auditMenuMain" class="dropdown-content">
-                <button onclick="clearAuditList(1)">لسٹ 1 صاف کریں</button>
-                <button onclick="clearAuditList(2)">ریکارڈ صاف کریں</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="statusCardBody">
-                <div class="section-box">
-                    <label>مخصوص کام یا ذمہ داری کا نام درج کریں</label>
-                    <input type="text" id="auditTaskName" placeholder="کام کا نام (مثلاً کمرے کی حالت)" style="margin-bottom:8px;">
-                    <button class="btn btn-primary" onclick="addAuditTask()">📥 جانچ لسٹ میں شامل کریں</button>
-                </div>
-
-                <div class="sub-heading">
-                    <span>📋 جانچ پڑتال انٹریز (ٹک / کراس)</span>
-                </div>
-                <div class="table-container" style="max-height:150px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>کام / ذمہ داری</th>
-                                <th width="120">فیصلہ کریں</th>
-                            </tr>
-                        </thead>
-                        <tbody id="auditTableBody1"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-heading" style="color:var(--secondary);">
-                    <span>📊 جانچ پڑتال کا ریکارڈ</span>
-                </div>
-                <div class="table-container" style="max-height:150px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>کام کا نام</th>
-                                <th>نتیجہ</th>
-                                <th>تاریخ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="auditTableBody2"></tbody>
-                    </table>
-                </div>
-
-                <div class="summary-box" style="background:#e3f2fd; border-color:#90caf9; color:var(--secondary); margin-top:10px;">
-                    <span>بہتری کی شرح (Performance Percentage):</span>
-                    <span id="performancePercentage">0%</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5️⃣ لڑائی جھگڑا اور انخراف نوٹ سسٹم -->
-        <div class="card" id="cardDispute">
-            <h3>
-                <span>⚠️ 5. لڑائی جھگڑا اور انخراف نوٹ سسٹم</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('disputeMenuMain')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('disputeCardBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="disputeMenuMain" class="dropdown-content">
-                <button onclick="clearDisputeHistory()">تمام ریکارڈ صاف کریں</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="disputeCardBody">
-                <div class="section-box" style="background:#fff5f5; border-color:#ffcdd2;">
-                    <label>ممبر سلیکٹ کریں</label>
-                    <div class="row" style="margin-bottom:8px;">
-                        <select id="disputeMemberSelect"></select>
-                    </div>
-                    <label>کس وجہ سے لڑائی جھگڑا ہوا / تفصیل درج کریں</label>
-                    <textarea id="disputeReasonInput" rows="2" placeholder="وجہ درج کریں..." style="margin-bottom:8px;"></textarea>
-                    <button class="btn btn-danger" onclick="saveDisputeRecord()">🚨 لڑائی جھگڑا ریکارڈ محفوظ کریں</button>
-                </div>
-
-                <div class="sub-heading" style="color:var(--danger);">
-                    <span>📋 لڑائی جھگڑے کی ہسٹری لسٹ</span>
-                </div>
-                <div class="table-container" style="max-height:180px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ممبر کا نام</th>
-                                <th>وجہ / تفصیل</th>
-                                <th>تاریخ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="disputeTableBody"></tbody>
-                    </table>
-                </div>
-
-                <div class="summary-box" style="background:#ffebee; border-color:#ef9a9a; color:var(--danger); margin-top:10px;">
-                    <span>مجموعی جھگڑے اور کارکردگی کا خلاصہ:</span>
-                    <span id="disputeSummaryDisplay" style="font-size:13px;">کل جھگڑے: 0 | اس ماہ: 0</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6️⃣ ممبر مینجمنٹ سسٹم (پوائنٹ نمبر 6 اب بالکل آخر میں موجود ہے) -->
-        <div class="card" id="cardMemberManager">
-            <h3>
-                <span>👥 6. ممبر مینجمنٹ سسٹم</span>
-                <div>
-                    <button class="dropbtn" onclick="toggleMenu('menuBox6')">⚙️ سیٹنگز</button>
-                    <button class="toggle-btn" onclick="toggleCard('memberManagerBody', this)">➖ بند</button>
-                </div>
-            </h3>
-            <div id="menuBox6" class="dropdown-content">
-                <button onclick="selectAllTable('memberCheck', true)">سب سلیکٹ کریں</button>
-                <button onclick="selectAllTable('memberCheck', false)">سلیکشن ختم</button>
-                <button onclick="deleteSelectedMembers()">منتخب حذف کریں</button>
-                <button onclick="renameMemberItem()">نام تبدیل کریں (Rename)</button>
-                <button onclick="changeFontSize(1)">🔍 سائز بڑا کریں</button>
-                <button onclick="changeFontSize(-1)">🔍 سائز چھوٹا کریں</button>
-            </div>
-            <div id="memberManagerBody">
-                <div class="section-box">
-                    <label>نیا ممبر درج کریں (جو پوری ایپ میں اپڈیٹ ہوگا)</label>
-                    <div class="row">
-                        <input type="text" id="newMemberNameInput" placeholder="ممبر کا نام (مثلاً بلال)">
-                        <button class="btn btn-primary" style="width: auto;" onclick="addNewMember()">➕ محفوظ کریں</button>
+                <div class="card">
+                    <h3>🤖 اسمارٹ آٹو ڈیوٹی اسائنمنٹ</h3>
+                    <div class="section-box">
+                        <label>کام اور پوائنٹس کی بنیاد پر خودکار ڈیوٹی تجویز:</label>
+                        <p id="autoDutySuggestion" style="font-size:13px; font-weight:bold; color:#333;">ڈیٹا کا تجزیہ جاری ہے...</p>
+                        <button class="btn btn-primary" onclick="generateAutoDuty()">⚡ آٹو ڈیوٹی جنریٹ کریں</button>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="30"><input type="checkbox" onchange="toggleAll(this, 'memberCheck')"></th>
-                                <th>ممبر کا نام</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberListTableBody"></tbody>
-                    </table>
+            </div>
+
+            <!-- 2️⃣ کام اور پوائنٹس -->
+            <div id="tasks" class="page-view">
+                <div class="card">
+                    <h3>📋 کام اور پوائنٹس مینجমেন্ট</h3>
+                    <div class="section-box">
+                        <div class="row">
+                            <div class="col">
+                                <select id="taskCategory">
+                                    <option value="daily">روزانہ (Daily)</option>
+                                    <option value="occasional">کبھی کبھی (Occasional)</option>
+                                </select>
+                            </div>
+                            <div class="col"><input type="number" id="taskPointsInput" placeholder="پوائنٹس"></div>
+                        </div>
+                        <input type="text" id="taskNameInput" placeholder="کام کا نام" style="margin-bottom:8px;">
+                        <button class="btn btn-primary" onclick="saveTask()">💾 نیا کام محفوظ کریں</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>کام کا نام</th><th>قسم</th><th>پوائنٹس</th></tr></thead>
+                            <tbody id="taskTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
+            <!-- 3️⃣ ممبر ہسٹری -->
+            <div id="history" class="page-view">
+                <div class="card">
+                    <h3>🔍 ممبر ہسٹری اور کارکردگی</h3>
+                    <div class="section-box">
+                        <label>ممبر سلیکٹ کریں</label>
+                        <select id="filterMemberSelect" onchange="renderMemberTable()"></select>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>کام کا نام</th><th>کل بار</th><th>کل پوائنٹس</th></tr></thead>
+                            <tbody id="memberTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4️⃣ راشن مینجমেন্ট -->
+            <div id="ration" class="page-view">
+                <div class="card">
+                    <h3>🛒 راشن مینجমেন্ট اور بل سسٹم</h3>
+                    <div class="section-box">
+                        <label>کل بجٹ (Rs)</label>
+                        <input type="number" id="totalBudgetInput" placeholder="کل بجٹ" oninput="updateBudgetCalc()" style="margin-bottom:8px;">
+                        <input type="text" id="rationName" placeholder="آئٹم کا نام" style="margin-bottom:8px;">
+                        <div class="row">
+                            <div class="col"><input type="number" id="rationPrice" placeholder="قیمت"></div>
+                            <div class="col"><input type="text" id="rationQty" placeholder="مقدار"></div>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveRationItem()">➕ انوینٹری میں شامل کریں</button>
+                    </div>
+                    <div class="table-container" style="max-height:140px;">
+                        <table>
+                            <thead><tr><th>نام</th><th>قیمت</th><th>مقدار</th><th>عمل</th></tr></thead>
+                            <tbody id="rationTableBody1"></tbody>
+                        </table>
+                    </div>
+                    <div class="summary-box" style="margin-top:10px;">
+                        <span>بجٹ بقایا:</span>
+                        <span id="remainingBudgetDisplay">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5️⃣ جانچ پڑتال -->
+            <div id="audit" class="page-view">
+                <div class="card">
+                    <h3>✅ کاموں کی جانچ پڑتال (Check/Cross)</h3>
+                    <div class="section-box">
+                        <input type="text" id="auditTaskName" placeholder="ذمہ داری کا نام" style="margin-bottom:8px;">
+                        <button class="btn btn-primary" onclick="addAuditTask()">📥 لسٹ میں شامل کریں</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>کام</th><th>فیصلہ</th></tr></thead>
+                            <tbody id="auditTableBody1"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6️⃣ ممبر مینجमेंट -->
+            <div id="members" class="page-view">
+                <div class="card">
+                    <h3>👥 ممبر مینجمنٹ سسٹم</h3>
+                    <div class="section-box">
+                        <div class="row">
+                            <input type="text" id="newMemberNameInput" placeholder="نیا ممبر نام">
+                            <button class="btn btn-primary" style="width:auto;" onclick="addNewMember()">➕ شامل کریں</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>ممبر کا نام</th></tr></thead>
+                            <tbody id="memberListTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7️⃣ ماسٹر سیٹنگز -->
+            <div id="settings" class="page-view">
+                <div class="card">
+                    <h3>⚙️ ماسٹر سیٹنگز اور کنٹرول</h3>
+                    <div class="section-box">
+                        <label>🔒 پاس ورڈ لاک پروٹیکشن</label>
+                        <div class="row">
+                            <input type="password" id="masterPassInput" placeholder="نیا پاس ورڈ درج کریں">
+                            <button class="btn btn-primary" style="width:auto;" onclick="togglePasswordLock()">پاس ورڈ آن/آف کریں</button>
+                        </div>
+                    </div>
+                    <div class="section-box">
+                        <label>📥 ڈیٹا ایکسپورٹ اور بیک اپ</label>
+                        <div class="row">
+                            <button class="btn btn-primary" onclick="exportPDF()">📄 پی ڈی ایف ڈاؤن لوڈ</button>
+                            <button class="btn btn-secondary" style="background:var(--secondary);" onclick="exportExcel()">📊 ایکسل (CSV) ڈاؤن لوڈ</button>
+                        </div>
+                        <div class="row" style="margin-top:8px;">
+                            <button class="btn btn-warning" onclick="backupDataJson()">💾 بیک اپ (JSON)</button>
+                            <button class="btn btn-danger" onclick="factoryReset()">⚠️ فیکٹری ری سیٹ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // LocalStorage Data Initialization
-        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ', 'عائشہ'];
+        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ'];
         let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
-        let historyLogs = JSON.parse(localStorage.getItem('historyLogs')) || [
-            { member: 'علی', task: 'کمرے کی صفائی', points: 10, date: new Date().toISOString().split('T')[0] },
-            { member: 'عدنان', task: 'پانی بھرنا', points: 5, date: new Date().toISOString().split('T')[0] }
-        ];
         let rationList1 = JSON.parse(localStorage.getItem('rationList1')) || [];
-        let rationList2 = JSON.parse(localStorage.getItem('rationList2')) || [];
-        let rationList3 = JSON.parse(localStorage.getItem('rationList3')) || [];
-        let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
-        
         let auditList1 = JSON.parse(localStorage.getItem('auditList1')) || [];
-        let auditList2 = JSON.parse(localStorage.getItem('auditList2')) || [];
-        let disputeList = JSON.parse(localStorage.getItem('disputeList')) || [];
+        let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
 
         window.onload = function() {
-            document.getElementById('totalBudgetInput').value = totalBudget > 0 ? totalBudget : '';
-            updateAllMemberDropdowns();
-            renderMemberManagerTable();
+            updateAllDropdowns();
+            renderWidgets();
             renderTaskTable();
-            renderMemberTable();
             renderRationTables();
             renderAuditTables();
-            renderDisputeTables();
+            renderMemberManagerTable();
         };
 
-        function toggleCard(id, btn) {
-            let el = document.getElementById(id);
-            if (el.style.display === "none") {
-                el.style.display = "block";
-                btn.innerText = "➖ بند";
-            } else {
-                el.style.display = "none";
-                btn.innerText = "➕ کھولیں";
-            }
+        function switchPage(pageId, el) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu li').forEach(l => l.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(el) el.classList.add('active');
+            document.getElementById('currentTitle').innerText = el ? el.innerText : 'ڈیش بورڈ';
         }
 
-        function toggleMenu(menuId) {
-            document.querySelectorAll('.dropdown-content').forEach(m => { if(m.id !== menuId) m.classList.remove('show'); });
-            document.getElementById(menuId).classList.toggle('show');
+        function renderWidgets() {
+            document.getElementById('widgetMembers').innerText = membersList.length;
+            let spent = rationList1.reduce((acc, item) => acc + (item.price || 0), 0);
+            document.getElementById('widgetBudget').innerText = "Rs. " + (totalBudget - spent);
+            let pts = customTasks.reduce((acc, item) => acc + (item.points || 0), 0);
+            document.getElementById('widgetPoints').innerText = pts;
         }
 
-        window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn') && !event.target.classList.contains('toggle-btn')) {
-                document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-            }
-        }
-
-        function toggleAll(source, className) {
-            let checkboxes = document.querySelectorAll('.' + className);
-            checkboxes.forEach(cb => cb.checked = source.checked);
-        }
-
-        function selectAllTable(className, status) {
-            let checkboxes = document.querySelectorAll('.' + className);
-            checkboxes.forEach(cb => cb.checked = status);
-        }
-
-        function changeFontSize(direction) {
-            let current = parseFloat(getComputedStyle(document.body).fontSize);
-            let newSize = current + (direction * 1.5);
-            if (newSize >= 11 && newSize <= 18) {
-                document.documentElement.style.setProperty('--font-scale', newSize + 'px');
-            }
-        }
-
-        /* --- MEMBER MANAGEMENT SYSTEM (BOX 6 - NOW LAST) --- */
         function addNewMember() {
             let name = document.getElementById('newMemberNameInput').value.trim();
-            if (!name) return alert("براہ کرم ممبر کا نام درج کریں!");
-            if (membersList.includes(name)) return alert("یہ ممبر پہلے سے موجود ہے!");
-
+            if (!name) return alert("نام درج کریں!");
             membersList.push(name);
             localStorage.setItem('membersList', JSON.stringify(membersList));
             document.getElementById('newMemberNameInput').value = '';
-            updateAllMemberDropdowns();
+            updateAllDropdowns();
             renderMemberManagerTable();
+            renderWidgets();
         }
 
         function renderMemberManagerTable() {
             let tb = document.getElementById('memberListTableBody');
-            tb.innerHTML = membersList.length === 0 ? '<tr><td colspan="2" style="text-align:center; color:#888;">کوئی ممبر موجود نہیں</td></tr>' : '';
-            membersList.forEach((m, index) => {
-                tb.innerHTML += `
-                    <tr>
-                        <td><input type="checkbox" class="memberCheck" value="${index}"></td>
-                        <td>${m}</td>
-                    </tr>
-                `;
-            });
+            tb.innerHTML = membersList.map(m => `<tr><td>${m}</td></tr>`).join('');
         }
 
-        function deleteSelectedMembers() {
-            let selectedIndexes = Array.from(document.querySelectorAll('.memberCheck:checked')).map(c => parseInt(c.value));
-            if (selectedIndexes.length === 0) return alert("کوئی ممبر سلیکٹ نہیں کیا گیا!");
-            if (confirm("منتخب ممبرز کو حذف کریں؟")) {
-                membersList = membersList.filter((_, idx) => !selectedIndexes.includes(idx));
-                localStorage.setItem('membersList', JSON.stringify(membersList));
-                updateAllMemberDropdowns();
-                renderMemberManagerTable();
-                renderMemberTable();
+        function updateAllDropdowns() {
+            let dd = document.getElementById('filterMemberSelect');
+            if(dd) {
+                dd.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
             }
         }
 
-        function renameMemberItem() {
-            let checkboxes = Array.from(document.querySelectorAll('.memberCheck:checked'));
-            if (checkboxes.length !== 1) return alert("براہ کرم رینیم کرنے کے لیے صرف ایک ممبر سلیکٹ کریں!");
-            let idx = parseInt(checkboxes[0].value);
-            let oldName = membersList[idx];
-            let newName = prompt("نیا نام درج کریں:", oldName);
-            if (newName && newName.trim() !== "") {
-                membersList[idx] = newName.trim();
-                localStorage.setItem('membersList', JSON.stringify(membersList));
-                updateAllMemberDropdowns();
-                renderMemberManagerTable();
-            }
-        }
-
-        function updateAllMemberDropdowns() {
-            let dropdowns = [document.getElementById('filterMemberSelect'), document.getElementById('disputeMemberSelect')];
-            dropdowns.forEach(dd => {
-                if(!dd) return;
-                let currentVal = dd.value;
-                dd.innerHTML = '';
-                membersList.forEach(m => {
-                    let opt = document.createElement('option');
-                    opt.value = m;
-                    opt.innerText = m;
-                    dd.appendChild(opt);
-                });
-                if(membersList.includes(currentVal)) dd.value = currentVal;
-            });
-        }
-
-        /* --- MODULE 1: TASKS --- */
         function saveTask() {
-            const category = document.getElementById('taskCategory').value;
-            const name = document.getElementById('taskNameInput').value.trim();
-            const points = parseInt(document.getElementById('taskPointsInput').value);
-            if (!name || isNaN(points)) return alert("نام اور پوائنٹس درست درج کریں!");
-
-            customTasks.push({ id: Date.now(), category, name, points });
+            let name = document.getElementById('taskNameInput').value.trim();
+            let points = parseInt(document.getElementById('taskPointsInput').value);
+            if (!name || isNaN(points)) return alert("درست معلومات دیں!");
+            customTasks.push({ name, points });
             localStorage.setItem('customTasks', JSON.stringify(customTasks));
-            document.getElementById('taskNameInput').value = '';
-            document.getElementById('taskPointsInput').value = '';
             renderTaskTable();
+            renderWidgets();
         }
 
         function renderTaskTable() {
-            const tbody = document.getElementById('taskTableBody');
-            tbody.innerHTML = customTasks.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی کام موجود نہیں</td></tr>' : '';
-            
-            customTasks.forEach(t => {
-                let badge = t.category === 'daily' ? '<span class="badge badge-success">روزانہ</span>' : '<span class="badge badge-warning">کبھی کبھی</span>';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><input type="checkbox" class="taskCheck" value="${t.id}"></td>
-                        <td>${t.name}</td>
-                        <td>${badge}</td>
-                        <td><b>${t.points}</b></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('taskCount').innerText = "کل ٹاسک: " + customTasks.length;
+            let tb = document.getElementById('taskTableBody');
+            tb.innerHTML = customTasks.map(t => `<tr><td>${t.name}</td><td>روزانہ</td><td><b>${t.points}</b></td></tr>`).join('');
         }
 
-        function sortTasksAlphabetically() {
-            customTasks.sort((a, b) => a.name.localeCompare(b.name));
-            localStorage.setItem('customTasks', JSON.stringify(customTasks));
-            renderTaskTable();
-        }
-
-        function renameTaskItem() {
-            let checkboxes = Array.from(document.querySelectorAll('.taskCheck:checked'));
-            if (checkboxes.length !== 1) return alert("براہ کرم رینیم کرنے کے لیے صرف ایک ٹاسک سلیکٹ کریں!");
-            let id = parseInt(checkboxes[0].value);
-            let task = customTasks.find(t => t.id === id);
-            let newName = prompt("نیا نام درج کریں:", task.name);
-            if (newName && newName.trim() !== "") {
-                task.name = newName.trim();
-                localStorage.setItem('customTasks', JSON.stringify(customTasks));
-                renderTaskTable();
-            }
-        }
-
-        function deleteSelectedTasks() {
-            let selectedIds = Array.from(document.querySelectorAll('.taskCheck:checked')).map(c => parseInt(c.value));
-            if (selectedIds.length === 0) return alert("کوئی آئٹم سلیکٹ نہیں!");
-            if (confirm("مطلوبہ کام حذف کریں؟")) {
-                customTasks = customTasks.filter(t => !selectedIds.includes(t.id));
-                localStorage.setItem('customTasks', JSON.stringify(customTasks));
-                renderTaskTable();
-            }
-        }
-
-        function deleteAllTasks() {
-            if (confirm("تمام کام حذف کریں؟")) {
-                customTasks = [];
-                localStorage.removeItem('customTasks');
-                renderTaskTable();
-            }
-        }
-
-        /* --- MODULE 2: MEMBER HISTORY --- */
-        function renderMemberTable() {
-            const member = document.getElementById('filterMemberSelect').value;
-            const fromDate = document.getElementById('fromDate').value;
-            const toDate = document.getElementById('toDate').value;
-            const tbody = document.getElementById('memberTableBody');
-
-            let filtered = historyLogs.filter(h => {
-                let matchMem = h.member === member;
-                let matchDate = true;
-                if (fromDate && h.date < fromDate) matchDate = false;
-                if (toDate && h.date > toDate) matchDate = false;
-                return matchMem && matchDate;
-            });
-
-            let summary = {};
-            filtered.forEach(h => {
-                if (!summary[h.task]) summary[h.task] = { count: 0, totalPts: 0 };
-                summary[h.task].count += 1;
-                summary[h.task].totalPts += h.points;
-            });
-
-            tbody.innerHTML = Object.keys(summary).length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ نہیں ملا</td></tr>' : '';
-            
-            let grandTotal = 0;
-            for (let taskName in summary) {
-                grandTotal += summary[taskName].totalPts;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${taskName}</td>
-                        <td>${summary[taskName].count} بار</td>
-                        <td><b>${summary[taskName].totalPts} پوائنٹس</b></td>
-                    </tr>
-                `;
-            }
-            document.getElementById('totalPointsDisplay').innerText = grandTotal + " پوائنٹس";
-        }
-
-        function clearMemberHistory() {
-            if (confirm("ہسٹری صاف کریں؟")) {
-                historyLogs = [];
-                localStorage.removeItem('historyLogs');
-                renderMemberTable();
-            }
-        }
-
-        /* --- MODULE 3: RATION MANAGEMENT (UPDATED LOGIC) --- */
         function saveRationItem() {
-            const name = document.getElementById('rationName').value.trim();
-            const price = parseFloat(document.getElementById('rationPrice').value);
-            const qty = document.getElementById('rationQty').value.trim();
-            if (!name || isNaN(price)) return alert("نام اور قیمت درست درج کریں!");
-
-            rationList1.push({ id: Date.now(), name, price, qty });
+            let name = document.getElementById('rationName').value.trim();
+            let price = parseFloat(document.getElementById('rationPrice').value);
+            if (!name || isNaN(price)) return alert("راشن کی معلومات دیں!");
+            rationList1.push({ name, price });
             localStorage.setItem('rationList1', JSON.stringify(rationList1));
-            document.getElementById('rationName').value = '';
-            document.getElementById('rationPrice').value = '';
-            document.getElementById('rationQty').value = '';
             renderRationTables();
+            renderWidgets();
         }
 
         function renderRationTables() {
-            const tb1 = document.getElementById('rationTableBody1');
-            tb1.innerHTML = rationList1.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی راشن انوینٹری موجود نہیں</td></tr>' : '';
-            rationList1.forEach(r => {
-                tb1.innerHTML += `
-                    <tr>
-                        <td><input type="checkbox" class="rationCheck1" value="${r.id}"></td>
-                        <td>${r.name}</td>
-                        <td>Rs. ${r.price}</td>
-                        <td>${r.qty || '-'}</td>
-                    </tr>
-                `;
-            });
-
-            const tb2 = document.getElementById('rationTableBody2');
-            tb2.innerHTML = rationList2.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کارٹ خالی ہے</td></tr>' : '';
-            let cartTotal = 0;
-            rationList2.forEach(r => {
-                cartTotal += (r.price || 0);
-                tb2.innerHTML += `
-                    <tr>
-                        <td><input type="checkbox" class="rationCheck2" value="${r.id}"></td>
-                        <td>${r.name}</td>
-                        <td><input type="number" value="${r.price}" onchange="updateCartItem(${r.id}, 'price', this.value)" style="padding:4px; width:90px;"></td>
-                        <td><input type="text" value="${r.qty || ''}" onchange="updateCartItem(${r.id}, 'qty', this.value)" style="padding:4px; width:90px;"></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('selectedCartTotal').innerText = "منتخب بل: Rs. " + cartTotal;
-
-            const tb3 = document.getElementById('rationTableBody3');
-            tb3.innerHTML = rationList3.length === 0 ? '<tr><td colspan="4" style="text-align:center; color:#888;">کوئی خریداری ریکارڈ نہیں</td></tr>' : '';
-            rationList3.forEach(r => {
-                tb3.innerHTML += `
-                    <tr>
-                        <td>${r.name}</td>
-                        <td>Rs. ${r.price}</td>
-                        <td>${r.qty || '-'}</td>
-                        <td style="font-size:10px; color:#555;">${r.dateTime}</td>
-                    </tr>
-                `;
-            });
-
-            updateBudgetCalc();
-        }
-
-        function updateCartItem(id, field, value) {
-            let item = rationList2.find(r => r.id === id);
-            if (item) {
-                if (field === 'price') item.price = parseFloat(value) || 0;
-                if (field === 'qty') item.qty = value;
-                localStorage.setItem('rationList2', JSON.stringify(rationList2));
-                renderRationTables();
-            }
+            let tb = document.getElementById('rationTableBody1');
+            tb.innerHTML = rationList1.map((r, i) => `<tr><td>${r.name}</td><td>Rs. ${r.price}</td><td>-</td><td><button class="badge badge-danger" onclick="rationList1.splice(${i},1);localStorage.setItem('rationList1',JSON.stringify(rationList1));renderRationTables();renderWidgets();">حذف</button></td></tr>`).join('');
+            let spent = rationList1.reduce((acc, item) => acc + item.price, 0);
+            totalBudget = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
+            document.getElementById('remainingBudgetDisplay').innerText = "Rs. " + (totalBudget - spent);
         }
 
         function updateBudgetCalc() {
-            totalBudget = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
-            localStorage.setItem('totalBudget', totalBudget);
-
-            let spentTotal = 0;
-            rationList3.forEach(r => spentTotal += r.price);
-
-            let remaining = totalBudget - spentTotal;
-            document.getElementById('remainingBudgetDisplay').innerText = "Rs. " + remaining;
-        }
-
-        function sortRationsAlphabetically() {
-            rationList1.sort((a, b) => a.name.localeCompare(b.name));
-            localStorage.setItem('rationList1', JSON.stringify(rationList1));
             renderRationTables();
         }
 
-        function moveToSelectedCart() {
-            let selectedIds = Array.from(document.querySelectorAll('.rationCheck1:checked')).map(c => parseInt(c.value));
-            if (selectedIds.length === 0) return alert("مین لسٹ سے کوئی آئٹم سلیکٹ نہیں کیا گیا!");
-            
-            selectedIds.forEach(id => {
-                let item = rationList1.find(r => r.id === id);
-                if (item && !rationList2.some(cartItem => cartItem.id === id)) {
-                    rationList2.push({ ...item });
-                }
-            });
-            
-            localStorage.setItem('rationList2', JSON.stringify(rationList2));
-            renderRationTables();
-        }
-
-        function skipSelectedToPurchased() {
-            let selectedIds = Array.from(document.querySelectorAll('.rationCheck2:checked')).map(c => parseInt(c.value));
-            if (selectedIds.length === 0) return alert("کارٹ سے کوئی آئٹم سلیکٹ نہیں کیا گیا!");
-
-            let currentDateTime = new Date().toLocaleString();
-            let purchasedItems = rationList2.filter(r => selectedIds.includes(r.id)).map(r => ({ ...r, dateTime: currentDateTime }));
-            
-            rationList3.push(...purchasedItems);
-            rationList2 = rationList2.filter(r => !selectedIds.includes(r.id));
-
-            localStorage.setItem('rationList2', JSON.stringify(rationList2));
-            localStorage.setItem('rationList3', JSON.stringify(rationList3));
-            renderRationTables();
-        }
-
-        function clearPurchasedHistory() {
-            if (confirm("خریداری کی ہسٹری صاف کریں؟")) {
-                rationList3 = [];
-                localStorage.removeItem('rationList3');
-                renderRationTables();
-            }
-        }
-
-        /* --- MODULE 4: AUDIT --- */
         function addAuditTask() {
-            const name = document.getElementById('auditTaskName').value.trim();
-            if (!name) return alert("کام کا نام درج کریں!");
-
-            auditList1.push({ id: Date.now(), name });
+            let name = document.getElementById('auditTaskName').value.trim();
+            if (!name) return alert("نام درج کریں!");
+            auditList1.push({ name });
             localStorage.setItem('auditList1', JSON.stringify(auditList1));
-            document.getElementById('auditTaskName').value = '';
             renderAuditTables();
         }
 
-        function markAudit(id, status) {
-            let itemIndex = auditList1.findIndex(a => a.id === id);
-            if (itemIndex > -1) {
-                let item = auditList1[itemIndex];
-                auditList1.splice(itemIndex, 1);
-
-                auditList2.push({
-                    name: item.name,
-                    status: status,
-                    date: new Date().toLocaleDateString()
-                });
-
-                localStorage.setItem('auditList1', JSON.stringify(auditList1));
-                localStorage.setItem('auditList2', JSON.stringify(auditList2));
-                renderAuditTables();
-            }
-        }
-
         function renderAuditTables() {
-            const tb1 = document.getElementById('auditTableBody1');
-            tb1.innerHTML = auditList1.length === 0 ? '<tr><td colspan="2" style="text-align:center; color:#888;">کوئی جانچ پڑتال باقی نہیں</td></tr>' : '';
-            auditList1.forEach(a => {
-                tb1.innerHTML += `
-                    <tr>
-                        <td>${a.name}</td>
-                        <td>
-                            <button class="badge badge-success" onclick="markAudit(${a.id}, 'pass')" style="cursor:pointer; border:none; padding:4px 8px;">✔️ ٹک</button>
-                            <button class="badge badge-danger" onclick="markAudit(${a.id}, 'fail')" style="cursor:pointer; border:none; padding:4px 8px; margin-right:4px;">❌ کراس</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            const tb2 = document.getElementById('auditTableBody2');
-            tb2.innerHTML = auditList2.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی ریکارڈ موجود نہیں</td></tr>' : '';
-            
-            let passCount = 0;
-            auditList2.forEach(a => {
-                if (a.status === 'pass') passCount++;
-                let statusBadge = a.status === 'pass' ? '<span class="badge badge-success">کامیاب (✔️)</span>' : '<span class="badge badge-danger">ناکام (❌)</span>';
-                tb2.innerHTML += `
-                    <tr>
-                        <td>${a.name}</td>
-                        <td>${statusBadge}</td>
-                        <td style="font-size:10px; color:#555;">${a.date}</td>
-                    </tr>
-                `;
-            });
-
-            let totalAudit = auditList2.length;
-            let percentage = totalAudit > 0 ? Math.round((passCount / totalAudit) * 100) : 0;
-            document.getElementById('performancePercentage').innerText = percentage + "%";
+            let tb = document.getElementById('auditTableBody1');
+            tb.innerHTML = auditList1.map(a => `<tr><td>${a.name}</td><td><span class="badge badge-success">✔️ ٹک</span></td></tr>`).join('');
         }
 
-        function clearAuditList(listNum) {
-            if (confirm("کیا آپ ریکارڈ صاف کرنا چاہتے ہیں؟")) {
-                if (listNum === 1) {
-                    auditList1 = [];
-                    localStorage.removeItem('auditList1');
-                } else {
-                    auditList2 = [];
-                    localStorage.removeItem('auditList2');
-                }
-                renderAuditTables();
+        function generateAutoDuty() {
+            if(membersList.length === 0 || customTasks.length === 0) {
+                document.getElementById('autoDutySuggestion').innerText = "پہلے ممبرز اور ٹاسک ایڈ کریں!";
+                return;
             }
+            let randomMem = membersList[Math.floor(Math.random() * membersList.length)];
+            let randomTask = customTasks[Math.floor(Math.random() * customTasks.length)];
+            document.getElementById('autoDutySuggestion').innerText = `تجویز: "${randomMem}" آج یہ کام سرانجام دیں گے -> ${randomTask.name} (${randomTask.points} پوائنٹس)`;
         }
 
-        /* --- MODULE 5: DISPUTE & INCIDENT TRACKING --- */
-        function saveDisputeRecord() {
-            const member = document.getElementById('disputeMemberSelect').value;
-            const reason = document.getElementById('disputeReasonInput').value.trim();
-            if (!reason) return alert("براہ کرم جھگڑے یا انخراف کی وجہ درج کریں!");
-
-            disputeList.push({
-                id: Date.now(),
-                member: member,
-                reason: reason,
-                date: new Date().toLocaleDateString(),
-                monthYear: new Date().toISOString().slice(0, 7)
-            });
-
-            localStorage.setItem('disputeList', JSON.stringify(disputeList));
-            document.getElementById('disputeReasonInput').value = '';
-            renderDisputeTables();
+        function sendWhatsAppReport() {
+            let text = `*اسمارٹ مینیجر رپورٹ*%0Aکل ممبرز: ${membersList.length}%0Aکل پوائنٹس: ${document.getElementById('widgetPoints').innerText}%0Aبقایا بجٹ: ${document.getElementById('widgetBudget').innerText}`;
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
 
-        function renderDisputeTables() {
-            const tb = document.getElementById('disputeTableBody');
-            tb.innerHTML = disputeList.length === 0 ? '<tr><td colspan="3" style="text-align:center; color:#888;">کوئی جھگڑا ریکارڈ نہیں کیا گیا</td></tr>' : '';
-
-            let currentMonth = new Date().toISOString().slice(0, 7);
-            let currentMonthCount = 0;
-
-            disputeList.slice().reverse().forEach(d => {
-                if (d.monthYear === currentMonth) currentMonthCount++;
-                tb.innerHTML += `
-                    <tr>
-                        <td><b>${d.member}</b></td>
-                        <td>${d.reason}</td>
-                        <td style="font-size:10px; color:#555;">${d.date}</td>
-                    </tr>
-                `;
-            });
-
-            let totalFights = disputeList.length;
-            let improvementRate = totalFights === 0 ? 100 : Math.max(0, 100 - (totalFights * 5));
-            document.getElementById('disputeSummaryDisplay').innerText = `کل جھگڑے: ${totalFights} | اس ماہ: ${currentMonthCount} | بہتری کی شرح: ${improvementRate}%`;
+        function togglePasswordLock() {
+            let pass = document.getElementById('masterPassInput').value;
+            if(!pass) return alert("پہلے پاسворڈ درج کریں!");
+            localStorage.setItem('appPassword', pass);
+            alert("پاس ورڈ کامیابی سے سیٹ کر دیا گیا ہے!");
         }
 
-        function clearDisputeHistory() {
-            if (confirm("کیا آپ تمام جھگڑے کی ہسٹری صاف کرنا چاہتے ہیں؟")) {
-                disputeList = [];
-                localStorage.removeItem('disputeList');
-                renderDisputeTables();
+        function exportPDF() {
+            window.print();
+        }
+
+        function exportExcel() {
+            let csv = "data:text/csv;charset=utf-8,Name,Points\n" + customTasks.map(t => `${t.name},${t.points}`).join("\n");
+            let encodedUri = encodeURI(csv);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "smart_manager_report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function backupDataJson() {
+            let data = JSON.stringify({ membersList, customTasks, rationList1, auditList1 });
+            let blob = new Blob([data], {type: "application/json"});
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement('a');
+            link.href = url;
+            link.download = 'backup_data.json';
+            link.click();
+        }
+
+        function factoryReset() {
+            if(confirm("کیا آپ واقعی تمام ڈیٹا ری سیٹ کرنا چاہتے ہیں؟")) {
+                localStorage.clear();
+                location.reload();
             }
         }
     </script>
