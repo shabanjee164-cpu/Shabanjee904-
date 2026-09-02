@@ -1,359 +1,703 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="ur" dir="rtl" id="htmlTag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسمارٹ مینیجر الٹیمیٹ پرو (ملٹی ڈیوائس رئیل ٹائم)</title>
+    <title>اسمارٹ ڈیوٹی مینیجر پرو</title>
     <style>
         :root {
             --primary: #1b5e20;
-            --primary-light: #4c8c4a;
+            --primary-dark: #0d3b0e;
             --secondary: #0d47a1;
             --danger: #c62828;
             --warning: #ef6c00;
             --bg: #f4f6f8;
-            --card-bg: #ffffff;
+            --card: #ffffff;
             --text: #212529;
             --border: #ced4da;
-            --radius: 12px;
+            --radius: 10px;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; direction: rtl; display: flex; height: 100vh; overflow: hidden; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* ایڈمن پن لاک اسکرین (مضبوط پرائیویسی) */
-        #adminLockScreen {
+        /* پاسورڈ لاک اسکرین */
+        #lockOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 71, 161, 0.98); z-index: 99999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+            background: rgba(13, 59, 14, 0.95); z-index: 99999;
+            display: flex; justify-content: center; align-items: center; color: white;
         }
-        #adminLockScreen.hidden { display: none; }
+        #lockOverlay.hidden { display: none; }
 
-        /* سائیڈ مینو */
+        /* ایمرجنسی براڈکاسٹ بینر */
+        #emergencyBanner {
+            background: var(--danger); color: white; text-align: center;
+            padding: 8px; font-weight: bold; font-size: 14px; display: none;
+            animation: pulse 1.5s infinite; z-index: 1000;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* ٹاپ نیویگیشن بار */
+        .top-navbar {
+            background: var(--primary); color: white; padding: 10px 15px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .nav-left { display: flex; align-items: center; gap: 12px; }
+        .menu-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 1; }
+
+        /* سائیڈ مینو (Slide-out Sidebar) */
         .sidebar {
-            width: 260px; background: linear-gradient(180deg, var(--primary), #0e3b12);
-            color: white; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.1); z-index: 1000;
+            position: fixed; top: 0; right: -280px; width: 270px; height: 100%;
+            background: var(--primary-dark); color: white; z-index: 9999;
+            transition: 0.3s ease; box-shadow: -4px 0 15px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column;
         }
-        .sidebar-header { padding: 20px 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-header h2 { margin: 0; font-size: 18px; color: #fff; }
-        .sidebar-header p { margin: 5px 0 0 0; font-size: 11px; color: #a5d6a7; }
+        html[dir="ltr"] .sidebar { right: auto; left: -280px; box-shadow: 4px 0 15px rgba(0,0,0,0.3); }
+        .sidebar.open { right: 0; }
+        html[dir="ltr"] .sidebar.open { left: 0; }
 
+        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
         .sidebar-menu { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
         .sidebar-menu li {
-            padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: bold;
-            border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; display: flex; align-items: center; gap: 10px;
+            padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s;
         }
-        .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.15); border-right: 4px solid #a5d6a7; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.15); border-right: 4px solid #81c784; }
+        html[dir="ltr"] .sidebar-menu li:hover { border-right: none; border-left: 4px solid #81c784; }
 
-        /* مین کنٹینٹ ایریا */
-        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .top-navbar {
-            background: #ffffff; padding: 12px 20px; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .content-body { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
-
+        /* مین باڈی کنٹینر */
+        .content-body { flex: 1; overflow-y: auto; padding: 15px; }
         .page-view { display: none; }
         .page-view.active { display: block; }
 
         .card {
-            background: var(--card-bg); padding: 16px; border-radius: var(--radius);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.04);
+            background: var(--card); padding: 15px; border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 15px; border: 1px solid var(--border);
         }
-        .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 8px; }
+        .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 6px; }
 
-        .section-box { background: #fafafa; border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 12px; }
-        .section-box label { font-size: 12px; font-weight: bold; color: #374151; margin-bottom: 4px; display: block; }
+        .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 140px; }
 
+        label { font-size: 12px; font-weight: bold; margin-bottom: 4px; display: block; color: #424242; }
         input, select, textarea {
-            width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border);
-            outline: none; font-size: 13px; background: #fff; transition: all 0.2s;
+            width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);
+            outline: none; font-size: 13px; background: #fff;
         }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,94,32,0.1); }
-
-        .row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .col { flex: 1; }
 
         .btn {
-            border: none; color: white; padding: 9px 14px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-size: 13px; width: 100%; transition: 0.2s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            border: none; color: white; padding: 8px 14px; border-radius: 6px;
+            cursor: pointer; font-weight: bold; font-size: 13px; display: inline-flex;
+            align-items: center; justify-content: center; gap: 5px; transition: 0.2s;
         }
         .btn-primary { background: var(--primary); }
         .btn-primary:hover { background: #2e7d32; }
+        .btn-secondary { background: var(--secondary); }
         .btn-danger { background: var(--danger); }
         .btn-warning { background: var(--warning); color: #fff; }
-        .btn-secondary { background: var(--secondary); }
 
-        .table-container { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; background: #fff; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
+        .table-container { overflow-x: auto; margin-top: 10px; border: 1px solid var(--border); border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: inherit; }
         th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
-        th { background: #f1f8f5; color: var(--primary); position: sticky; top: 0; z-index: 10; font-weight: bold; }
+        th { background: #e8f5e9; color: var(--primary-dark); font-weight: bold; }
 
-        .badge { display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px; }
-        .badge-success { background: #d4edda; color: #155724; }
-        .badge-warning { background: #fff3cd; color: #856404; }
-        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .badge-pending { background: #ffe0b2; color: #e65100; }
+        .badge-done { background: #c8e6c9; color: #2e7d32; }
+        .badge-carried { background: #ffcdd2; color: #b71c1c; }
+
+        .member-card { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+        .member-card h4 { margin: 0 0 8px 0; color: var(--secondary); border-bottom: 1px solid #eee; padding-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- 🔒 ایڈمن ماسٹر پن لاک (صرف آپ کا کنٹرول اور ڈیٹا لیک سے محفوظ) -->
-    <div id="adminLockScreen">
-        <div style="background: white; padding: 30px; border-radius: 14px; color: black; width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4);">
-            <h3 style="color: var(--secondary); margin-top:0;">🛡️ ایڈمن سیکیورٹی لاک</h3>
-            <p style="font-size: 12px; color: #555;">ڈیٹا کی حفاظت کے لیے اپنا ماسٹر پن (PIN) درج کریں</p>
-            <input type="password" id="adminPinInput" placeholder="4 ہندسوں کا پن کوڈ" maxlength="6" style="margin-bottom: 12px; text-align: center; font-size: 18px; letter-spacing: 5px;">
-            <button class="btn btn-secondary" onclick="verifyAdminPin()">ایپ انلاک کریں</button>
+    <!-- 🔒 پاسورڈ پروٹیکشن اسکرین -->
+    <div id="lockOverlay">
+        <div style="background: white; padding: 25px; border-radius: 12px; color: black; width: 300px; text-align: center;">
+            <h3 style="color: var(--primary); margin-top:0;" id="langLockTitle">🛡️ سیکیورٹی لاک</h3>
+            <p style="font-size: 12px; color: #666;" id="langLockSub">اپنا پاسورڈ / پن کوڈ درج کریں</p>
+            <input type="password" id="inputPin" placeholder="PIN" style="text-align: center; font-size: 18px; margin-bottom: 12px;">
+            <button class="btn btn-primary" style="width: 100%;" onclick="unlockApp()" id="langUnlockBtn">انلاک کریں</button>
         </div>
     </div>
 
-    <!-- سائیڈ مینو -->
-    <div class="sidebar">
+    <!-- 🚨 ایمرجنسی براڈکاسٹ الرٹ بینر -->
+    <div id="emergencyBanner">
+        🚨 <span id="bannerText">ایمرجنسی الرٹ!</span>
+    </div>
+
+    <!-- ☰ ٹاپ نیویگیشن بار -->
+    <div class="top-navbar">
+        <div class="nav-left">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <span style="font-weight: bold; font-size: 16px;" id="appTitleText">اسمارٹ ڈیوٹی مینیجر</span>
+        </div>
+        <div>
+            <button class="btn btn-warning" style="padding: 4px 8px; font-size: 11px;" onclick="toggleLanguage()">🌐 Urdu / Eng</button>
+        </div>
+    </div>
+
+    <!-- 📋 سائیڈ مینو (Sidebar) -->
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>✨ اسمارٹ مینیجر پرو ✨</h2>
-            <p>ملٹی ڈیوائس رئیل ٹائم سنک</p>
+            <h3 style="margin: 0; font-size: 16px;">✨ نیویگیشن مینو</h3>
+            <button class="menu-btn" onclick="toggleSidebar()">✕</button>
         </div>
         <ul class="sidebar-menu">
-            <li onclick="switchPage('dash', this)" class="active">📊 لائیو ڈیش بورڈ</li>
-            <li onclick="switchPage('smartduty', this)">⚡ اسمارٹ ڈیوٹی اور کنٹرول</li>
-            <li onclick="switchPage('ration', this)">🛒 راشن اور بجٹ الرٹ</li>
-            <li onclick="switchPage('syncstatus', this)">🌐 ملٹی ڈیوائس سنک نیٹ ورک</li>
-            <li onclick="switchPage('settings', this)">⚙️ ماسٹر سیٹنگز اور پن</li>
+            <li onclick="navTo('dash', this)" class="active">📊 <span class="t-dash">لائیو ڈیش بورڈ</span></li>
+            <li onclick="navTo('assign', this)">⚡ <span class="t-assign">آٹو و دستی ڈیوٹی</span></li>
+            <li onclick="navTo('history', this)">📜 <span class="t-history">ڈیوٹی ریکارڈ ہسٹری</span></li>
+            <li onclick="navTo('broadcast', this)">🚨 <span class="t-broadcast">ایمرجنسی براڈکاسٹ</span></li>
+            <li onclick="navTo('trash', this)">🗑️ <span class="t-trash">ری سائیکل بن (ٹریش)</span></li>
+            <li onclick="navTo('reports', this)">📥 <span class="t-reports">پی ڈی ایف، ایکسل و بیک اپ</span></li>
+            <li onclick="navTo('security', this)">🔒 <span class="t-security">پاسورڈ و سیٹنگز</span></li>
         </ul>
     </div>
 
-    <!-- مین کنٹینٹ -->
-    <div class="main-content">
-        <div class="top-navbar">
-            <span id="currentTitle" style="font-weight: bold; color: var(--primary);">لائیو ڈیش بورڈ (لیپ ٹاپ اور 5 موبائلز کنیکٹڈ)</span>
-            <button class="btn btn-warning" style="width: auto; padding: 5px 12px; font-size: 11px;" onclick="sendWhatsAppReport()">📤 واٹس ایپ رپورٹ</button>
+    <!-- 📱 مین باڈی کنٹینٹ -->
+    <div class="content-body">
+
+        <!-- 1️⃣ لائیو ڈیش بورڈ -->
+        <div id="dash" class="page-view active">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 class="t-dash">📊 لائیو ڈیش بورڈ (رئیل ٹائم 5 موبائل + 1 لیپ ٹاپ)</h3>
+                    <button class="btn btn-secondary" style="font-size: 11px; padding: 4px 8px;" onclick="sendWhatsAppReport()">💬 واٹس ایپ رپورٹ</button>
+                </div>
+                <div id="dashboardMembersContainer">
+                    <!-- ہر ممبر کے پچھلے ادھورے اور نئے کام یہاں آٹو شو ہوں گے -->
+                </div>
+            </div>
         </div>
 
-        <div class="content-body">
-
-            <!-- 1️⃣ لائیو ڈیش بورڈ -->
-            <div id="dash" class="page-view active">
-                <div class="card">
-                    <h3>📊 لائیو ڈیش بورڈ ویجٹس (رئیل ٹائم سنک)</h3>
-                    <div class="row">
-                        <div class="col section-box" style="text-align: center;">
-                            <label>آن لائن کنیکتد ڈیوائسز</label>
-                            <h2 style="margin:5px 0; color:var(--primary);">لیپ ٹاپ + 5 موبائل</h2>
-                        </div>
-                        <div class="col section-box" style="text-align: center;">
-                            <label>بقایا بجٹ</label>
-                            <h2 id="widgetBudget" style="margin:5px 0; color:var(--secondary);">Rs. 0</h2>
-                        </div>
-                        <div class="col section-box" style="text-align: center;">
-                            <label>کل ڈیوٹیز</label>
-                            <h2 id="widgetDuties" style="margin:5px 0; color:var(--warning);">0</h2>
-                        </div>
+        <!-- 2️⃣ آٹو و دستی ڈیوٹی اسائننگ -->
+        <div id="assign" class="page-view">
+            <div class="card">
+                <h3 class="t-assign">⚡ آٹو و دستی ڈیوٹی مینجمنٹ</h3>
+                <div class="row">
+                    <div class="col">
+                        <label class="t-selectMember">ممبر منتخب کریں:</label>
+                        <select id="dutyMemberSelect" onchange="checkMemberHistoryNotice()">
+                            <option value="">-- ممبر منتخب کریں --</option>
+                            <option value="علی">علی</option>
+                            <option value="احمد">احمد</option>
+                            <option value="عثمان">عثمان</option>
+                            <option value="بلال">بلال</option>
+                            <option value="حسن">حسن</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="t-selectTask">کام کی فہرست (Task Catalog):</label>
+                        <select id="dutyTaskSelect">
+                            <option value="">-- کام منتخب کریں --</option>
+                            <option value="صفائی اور دیکھ بھال">صفائی اور دیکھ بھال</option>
+                            <option value="راشن انوینٹری چیک">راشن انوینٹری چیک</option>
+                            <option value="سیکیورٹی اور لائٹس چیک">سیکیورٹی اور لائٹس چیک</option>
+                            <option value="روزانہ ڈیوٹی لاگ اینٹری">روزانہ ڈیوٹی لاگ اینٹری</option>
+                            <option value="سامان کی ترسیل">سامان کی ترسیل</option>
+                        </select>
                     </div>
                 </div>
+                <p id="historyNotice" style="font-size:12px; color:var(--danger); font-weight:bold;"></p>
+                <button class="btn btn-primary" onclick="assignDutyManual()"><span class="t-addDuty">➕ ڈیوٹی تفویض کریں (ادھورے کاموں سمیت)</span></button>
             </div>
-
-            <!-- 2️⃣ اسمارٹ ڈیوٹی اور ایڈیٹنگ -->
-            <div id="smartduty" class="page-view">
-                <div class="card">
-                    <h3>⚡ اسمارٹ ڈیوٹی کنٹرول اور ایڈیٹنگ</h3>
-                    <div class="section-box">
-                        <label>دستی ڈیوٹی اسائن کریں (تمام ڈیوائسز پر لائیو اپ ڈیٹ ہوگی):</label>
-                        <div class="row">
-                            <input type="text" id="manualMember" placeholder="ممبر کا نام">
-                            <input type="text" id="manualTask" placeholder="کام کی تفصیل">
-                        </div>
-                        <button class="btn btn-primary" style="margin-top:5px;" onclick="addManualDuty()">➕ ڈیوٹی لائیو شامل کریں</button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>ممبر نام</th><th>کام / ڈیوٹی</th><th>اسٹیٹس</th><th>عمل</th></tr></thead>
-                            <tbody id="dutyTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3️⃣ راشن اور بجٹ الرٹ -->
-            <div id="ration" class="page-view">
-                <div class="card">
-                    <h3>🛒 راشن اور بجٹ الرٹ سسٹم</h3>
-                    <div class="section-box">
-                        <label>کل بجٹ (Rs)</label>
-                        <input type="number" id="totalBudgetInput" placeholder="کل بجٹ" oninput="checkBudgetAlert()" style="margin-bottom:8px;">
-                        <div class="row">
-                            <input type="text" id="rationName" placeholder="آئٹم کا نام">
-                            <input type="number" id="rationPrice" placeholder="قیمت" oninput="checkBudgetAlert()">
-                        </div>
-                        <button class="btn btn-primary" style="margin-top:5px;" onclick="saveRation()">➕ راشن شامل کریں</button>
-                        <p id="budgetAlertMsg" style="font-size:12px; font-weight:bold; margin-top:5px; color:var(--danger);"></p>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>نام</th><th>قیمت</th><th>عمل</th></tr></thead>
-                            <tbody id="rationTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4️⃣ ملٹی ڈیوائس سنک نیٹ ورک ویو -->
-            <div id="syncstatus" class="page-view">
-                <div class="card">
-                    <h3>🌐 ملٹی ڈیوائس رئیل ٹائم کنکشن اسٹیٹس</h3>
-                    <div class="section-box">
-                        <p style="font-size: 13px; line-height: 1.6;">
-                            <b>لیپ ٹاپ اور 5 موبائلز کا کنکشن:</b> آپ اس ایپ کو اپنے لیپ ٹاپ اور پانچوں موبائلز کے براؤزر میں کھول سکتے ہیں۔ فائر بیس (Firebase) رئیل ٹائم ڈیٹا بیس کی مدد سے کسی بھی موبائل پر کیا گیا کام یا ایڈیٹنگ **ایک سیکنڈ کے اندر لیپ ٹاپ اور باقی تمام موبائلز پر لائیو نظر آئے گی**۔
-                        </p>
-                        <span class="badge badge-success" style="font-size: 12px; padding: 6px 12px;">🟢 تمام ڈیوائسز سنکڈ اور پروٹیکٹڈ ہیں</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5️⃣ ماسٹر سیٹنگز اور پن لاک -->
-            <div id="settings" class="page-view">
-                <div class="card">
-                    <h3>⚙️ ماسٹر سیٹنگز اور ایڈمن کنٹرول</h3>
-                    <div class="section-box">
-                        <label>🔒 ایڈمن ماسٹر پن (PIN Code) مینجمنٹ</label>
-                        <input type="password" id="newAdminPin" placeholder="نیا 4 ہندسوں کا پن کوڈ درج کریں" style="margin-bottom:8px;">
-                        <button class="btn btn-secondary" onclick="updateAdminPin()">پن کوڈ تبدیل اور محفوظ کریں</button>
-                    </div>
-                    <div class="section-box">
-                        <label>📥 ڈیٹا بیک اپ، پی ڈی ایف اور فیکٹری ری سیٹ</label>
-                        <div class="row">
-                            <button class="btn btn-primary" onclick="window.print()">📄 پی ڈی ایف ڈاؤن لوڈ</button>
-                            <button class="btn btn-warning" onclick="backupJson()">💾 بیک اپ (JSON)</button>
-                        </div>
-                        <div style="margin-top:8px;">
-                            <button class="btn btn-danger" onclick="factoryReset()">⚠️ فیکٹری ری سیٹ (ماسٹر کلیئر)</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!-- 3️⃣ ڈیوٹی ریکارڈ ہسٹری -->
+        <div id="history" class="page-view">
+            <div class="card">
+                <h3 class="t-history">📜 تمام ممبرز کی ڈیوٹی ریکارڈ ہسٹری</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>تاریخ</th>
+                                <th>ممبر</th>
+                                <th>کام / ڈیوٹی</th>
+                                <th>اسٹیٹس</th>
+                                <th>قسم</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4️⃣ ایمرجنسی براڈکاسٹ -->
+        <div id="broadcast" class="page-view">
+            <div class="card">
+                <h3 class="t-broadcast">🚨 ایڈمن ایمرجنسی براڈکاسٹ (لیپ ٹاپ / موبائل)</h3>
+                <label>تمام 5 موبائلز کی اسکرین پر الرٹ چلائیں:</label>
+                <input type="text" id="broadcastInput" placeholder="ایمرجنسی پیغام یہاں لکھیں..." style="margin-bottom:10px;">
+                <div class="row">
+                    <button class="btn btn-danger" onclick="sendBroadcast()">📢 الرٹ جاری کریں</button>
+                    <button class="btn btn-secondary" onclick="clearBroadcast()">❌ الرٹ بند کریں</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5️⃣ ری سائیکل بن / ٹریش -->
+        <div id="trash" class="page-view">
+            <div class="card">
+                <h3 class="t-trash">🗑️ ری سائیکل بن (ڈیلیٹ شدہ ریکارڈ)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ڈیٹا تفصیل</th>
+                                <th>ڈیلیٹ کی تاریخ</th>
+                                <th>عمل</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trashTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6️⃣ رپورٹس اور ڈاؤن لوڈ -->
+        <div id="reports" class="page-view">
+            <div class="card">
+                <h3 class="t-reports">📥 پی ڈی ایف، ایکسل و بیک اپ</h3>
+                <div class="row" style="margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="window.print()">📄 PDF / پرنٹ ڈاؤن لوڈ</button>
+                    <button class="btn btn-secondary" onclick="exportToCSV()">📊 ایکسل شیٹ (CSV) ڈاؤن لوڈ</button>
+                </div>
+                <div style="border-top:1px solid #ccc; padding-top:10px;">
+                    <label>JSON بیک اپ اور ریسٹور:</label>
+                    <div class="row" style="margin-top:5px;">
+                        <button class="btn btn-warning" onclick="downloadJSONBackup()">💾 بیک اپ ڈاؤن لوڈ (JSON)</button>
+                        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="restoreJSONBackup(event)">
+                        <button class="btn btn-secondary" onclick="document.getElementById('jsonFileInput').click()">📂 JSON فائل اپلوڈ کریں</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7️⃣ پاسورڈ و سیٹنگز -->
+        <div id="security" class="page-view">
+            <div class="card">
+                <h3 class="t-security">🔒 پاسورڈ پروٹیکشن و سیٹنگز</h3>
+                <div class="row" style="align-items: center; margin-bottom: 15px;">
+                    <label style="margin:0;">پاسورڈ سیکیورٹی آن/آف کریں:</label>
+                    <input type="checkbox" id="passToggle" style="width:auto;" onchange="togglePasswordSecurity()">
+                </div>
+                <div class="row">
+                    <input type="password" id="newPinInput" placeholder="نیا PIN کوڈ درج کریں">
+                    <button class="btn btn-primary" onclick="updatePin()">پن محفوظ کریں</button>
+                </div>
+                <div style="border-top: 1px solid #ccc; margin-top: 15px; padding-top: 15px;">
+                    <button class="btn btn-danger" onclick="factoryReset()">⚠️ فیکٹری ریسیٹ (پورا ڈیٹا صاف کریں)</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // ڈیٹا اسٹوریج (رئیل ٹائم سنک کے لیے لوکل اسٹریج کو فائر بیس یا سنک کی بورڈ کے ساتھ جوڑا گیا ہے)
-        let dutiesList = JSON.parse(localStorage.getItem('dutiesList')) || [
-            { member: 'علی', task: 'پچھلے 24 گھنٹوں میں ڈیوٹی چیک', status: 'باقی' }
-        ];
-        let rationList = JSON.parse(localStorage.getItem('rationList')) || [];
-        let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
-        
-        // ایڈمن پن سیکیورٹی (ڈیٹا لیک سے بچاؤ)
-        let adminPin = localStorage.getItem('adminPin') || '1234'; // ڈیفالٹ پن 1234 ہے
-
-        window.onload = function() {
-            renderDuties();
-            renderRation();
+        // ڈیٹا سٹرکچر
+        let state = {
+            activeDuties: JSON.parse(localStorage.getItem('app_duties')) || [],
+            dutyHistory: JSON.parse(localStorage.getItem('app_history')) || [],
+            trash: JSON.parse(localStorage.getItem('app_trash')) || [],
+            settings: JSON.parse(localStorage.getItem('app_settings')) || {
+                pin: '1234',
+                passwordEnabled: true,
+                lang: 'ur',
+                broadcastMsg: ''
+            }
         };
 
-        function verifyAdminPin() {
-            let val = document.getElementById('adminPinInput').value;
-            if(val === adminPin) {
-                document.getElementById('adminLockScreen').classList.add('hidden');
-                document.getElementById('adminPinInput').value = '';
+        const membersList = ['علی', 'احمد', 'عثمان', 'بلال', 'حسن'];
+
+        // ڈکشنری برائے اردو و انگلش
+        const dict = {
+            ur: {
+                title: "اسمارٹ ڈیوٹی مینیجر",
+                dash: "📊 لائیو ڈیش بورڈ",
+                assign: "⚡ آٹو و دستی ڈیوٹی",
+                history: "📜 ڈیوٹی ریکارڈ ہسٹری",
+                broadcast: "🚨 ایمرجنسی براڈکاسٹ",
+                trash: "🗑️ ری سائیکل بن (ٹریش)",
+                reports: "📥 پی ڈی ایف، ایکسل و بیک اپ",
+                security: "🔒 پاسورڈ و سیٹنگز",
+                selectMember: "ممبر منتخب کریں:",
+                selectTask: "کام کی فہرست (Task Catalog):",
+                addDuty: "➕ ڈیوٹی تفویض کریں (ادھورے کاموں سمیت)"
+            },
+            en: {
+                title: "Smart Duty Manager",
+                dash: "📊 Live Dashboard",
+                assign: "⚡ Duty Assignment",
+                history: "📜 Duty History",
+                broadcast: "🚨 Emergency Alert",
+                trash: "🗑️ Recycle Bin",
+                reports: "📥 Export & Backup",
+                security: "🔒 Password & Settings",
+                selectMember: "Select Member:",
+                selectTask: "Task Catalog:",
+                addDuty: "➕ Assign Duty (Include Incomplete)"
+            }
+        };
+
+        window.onload = function() {
+            checkLockState();
+            applyLanguage();
+            renderDashboard();
+            renderHistory();
+            renderTrash();
+            checkBroadcastState();
+        };
+
+        function saveData() {
+            localStorage.setItem('app_duties', JSON.stringify(state.activeDuties));
+            localStorage.setItem('app_history', JSON.stringify(state.dutyHistory));
+            localStorage.setItem('app_trash', JSON.stringify(state.trash));
+            localStorage.setItem('app_settings', JSON.stringify(state.settings));
+        }
+
+        // --- پاسورڈ اور لاک فنکشنز ---
+        function checkLockState() {
+            let lockScreen = document.getElementById('lockOverlay');
+            document.getElementById('passToggle').checked = state.settings.passwordEnabled;
+            if(state.settings.passwordEnabled) {
+                lockScreen.classList.remove('hidden');
             } else {
-                alert("غلط پن کوڈ! صرف مجاز ایڈمن رسائی حاصل کر سکتا ہے۔");
+                lockScreen.classList.add('hidden');
             }
         }
 
-        function switchPage(pageId, el) {
+        function unlockApp() {
+            let p = document.getElementById('inputPin').value;
+            if(p === state.settings.pin) {
+                document.getElementById('lockOverlay').classList.add('hidden');
+                document.getElementById('inputPin').value = '';
+            } else {
+                alert(state.settings.lang === 'ur' ? "غلط پن کوڈ!" : "Invalid PIN Code!");
+            }
+        }
+
+        function togglePasswordSecurity() {
+            state.settings.passwordEnabled = document.getElementById('passToggle').checked;
+            saveData();
+        }
+
+        function updatePin() {
+            let p = document.getElementById('newPinInput').value.trim();
+            if(p.length < 4) return alert("کم از کم 4 ہندسوں کا پن درج کریں");
+            state.settings.pin = p;
+            saveData();
+            document.getElementById('newPinInput').value = '';
+            alert("PIN کامیابی سے تبدیل ہو گیا!");
+        }
+
+        // --- سائیڈ مینو اور نیویگیشن ---
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function navTo(pageId, el) {
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.sidebar-menu li').forEach(l => l.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             if(el) el.classList.add('active');
-            document.getElementById('currentTitle').innerText = el ? el.innerText : 'لائیو ڈیش بورڈ';
+            toggleSidebar();
         }
 
-        function addManualDuty() {
-            let m = document.getElementById('manualMember').value.trim();
-            let t = document.getElementById('manualTask').value.trim();
-            if(!m || !t) return alert("نام اور کام درج کریں!");
-            dutiesList.push({ member: m, task: t, status: 'باقی' });
-            localStorage.setItem('dutiesList', JSON.stringify(dutiesList));
-            document.getElementById('manualMember').value = '';
-            document.getElementById('manualTask').value = '';
-            renderDuties();
-        }
+        // --- فیچر 4: آٹو ڈیوٹی اسائنر و ہسٹری ادھورے کام کی نقل ---
+        function checkMemberHistoryNotice() {
+            let member = document.getElementById('dutyMemberSelect').value;
+            let notice = document.getElementById('historyNotice');
+            if(!member) { notice.innerText = ''; return; }
 
-        function renderDuties() {
-            let tb = document.getElementById('dutyTableBody');
-            tb.innerHTML = dutiesList.map((d, i) => `
-                <tr>
-                    <td>${d.member}</td>
-                    <td>${d.task}</td>
-                    <td><span class="badge ${d.status === 'مکمل' ? 'badge-success' : 'badge-warning'}">${d.status}</span></td>
-                    <td><button class="badge badge-danger" onclick="dutiesList.splice(${i},1);localStorage.setItem('dutiesList',JSON.stringify(dutiesList));renderDuties();">حذف</button></td>
-                </tr>
-            `).join('');
-            document.getElementById('widgetDuties').innerText = dutiesList.length;
-        }
-
-        function saveRation() {
-            let name = document.getElementById('rationName').value.trim();
-            let price = parseFloat(document.getElementById('rationPrice').value);
-            totalBudget = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
-            if(!name || isNaN(price)) return alert("درست معلومات دیں!");
-            rationList.push({ name, price });
-            localStorage.setItem('rationList', JSON.stringify(rationList));
-            localStorage.setItem('totalBudget', totalBudget);
-            document.getElementById('rationName').value = '';
-            document.getElementById('rationPrice').value = '';
-            renderRation();
-            checkBudgetAlert();
-        }
-
-        function renderRation() {
-            let tb = document.getElementById('rationTableBody');
-            tb.innerHTML = rationList.map((r, i) => `<tr><td>${r.name}</td><td>Rs. ${r.price}</td><td><button class="badge badge-danger" onclick="rationList.splice(${i},1);localStorage.setItem('rationList',JSON.stringify(rationList));renderRation();">حذف</button></td></tr>`).join('');
-            let spent = rationList.reduce((acc, item) => acc + item.price, 0);
-            document.getElementById('widgetBudget').innerText = "Rs. " + (totalBudget - spent);
-        }
-
-        function checkBudgetAlert() {
-            let total = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
-            let spent = rationList.reduce((acc, item) => acc + item.price, 0);
-            let msg = document.getElementById('budgetAlertMsg');
-            if(spent >= total && total > 0) {
-                msg.innerText = "⚠️ وارننگ: بجٹ حد سے تجاوز کر چکا ہے!";
+            // ممبر کی ہسٹری میں پچھلے "نامکمل" کام تلاش کریں
+            let uncompleted = state.dutyHistory.filter(h => h.member === member && h.status === 'نامکمل');
+            if(uncompleted.length > 0) {
+                notice.innerText = `⚠️ تنبیہ: ${member} کے پچھلے ${uncompleted.length} ادھورے کام موجود ہیں جو نئ ڈیوٹی میں آٹو شامل ہوں گے!`;
             } else {
-                msg.innerText = "";
+                notice.innerText = `✅ ${member} کے پچھلے تمام کام مکمل تھے۔`;
             }
         }
 
-        function updateAdminPin() {
-            let p = document.getElementById('newAdminPin').value.trim();
-            if(p.length < 4) return alert("کم از کم 4 ہندسوں کا پن کوڈ درج کریں!");
-            localStorage.setItem('adminPin', p);
-            adminPin = p;
-            document.getElementById('newAdminPin').value = '';
-            alert("ایڈمن پن کوڈ کامیابی سے تبدیل ہو گیا ہے!");
+        function assignDutyManual() {
+            let member = document.getElementById('dutyMemberSelect').value;
+            let newTask = document.getElementById('dutyTaskSelect').value;
+
+            if(!member) return alert("براہ کرم ممبر منتخب کریں!");
+
+            let dateStr = new Date().toLocaleDateString('ur-PK');
+
+            // 1. پچھلے ادھورے کام خود بخود حاصل کریں
+            let uncompletedHistory = state.dutyHistory.filter(h => h.member === member && h.status === 'نامکمل');
+            
+            uncompletedHistory.forEach(item => {
+                state.activeDuties.push({
+                    id: Date.now() + Math.random(),
+                    member: member,
+                    task: item.task + " (پچھلا ادھورا کام)",
+                    status: 'نامکمل',
+                    date: dateStr,
+                    isCarriedOver: true
+                });
+            });
+
+            // 2. نیا منتخب کردہ کام شامل کریں (اگر سلیکٹ کیا ہو)
+            if(newTask) {
+                state.activeDuties.push({
+                    id: Date.now() + Math.random(),
+                    member: member,
+                    task: newTask,
+                    status: 'نامکمل',
+                    date: dateStr,
+                    isCarriedOver: false
+                });
+            }
+
+            saveData();
+            renderDashboard();
+            document.getElementById('dutyTaskSelect').value = '';
+            document.getElementById('historyNotice').innerText = '';
+            alert(`${member} کی ڈیوٹی ڈیش بورڈ پر اپ ڈیٹ کر دی گئی ہے!`);
         }
 
+        // ڈیش بورڈ رینڈرنگ (ہر ممبر کی الگ الگ لسٹ)
+        function renderDashboard() {
+            let container = document.getElementById('dashboardMembersContainer');
+            container.innerHTML = '';
+
+            membersList.forEach(member => {
+                let memberDuties = state.activeDuties.filter(d => d.member === member);
+                
+                let card = document.createElement('div');
+                card.className = 'member-card';
+                
+                let html = `<h4>👤 ممبر: ${member}</h4>`;
+                
+                if(memberDuties.length === 0) {
+                    html += `<p style="font-size:12px; color:#888;">کوئی فعال ڈیوٹی موجود نہیں۔</p>`;
+                } else {
+                    html += `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>کام / ڈیوٹی</th>
+                                        <th>تاریخ</th>
+                                        <th>اسٹیٹس</th>
+                                        <th>ایکشن</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+                    memberDuties.forEach(d => {
+                        html += `
+                            <tr>
+                                <td>${d.task}</td>
+                                <td>${d.date}</td>
+                                <td>
+                                    <span class="badge ${d.status === 'مکمل' ? 'badge-done' : (d.isCarriedOver ? 'badge-carried' : 'badge-pending')}">
+                                        ${d.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary" style="padding:2px 6px; font-size:10px;" onclick="toggleDutyStatus(${d.id})">تکمیل</button>
+                                    <button class="btn btn-danger" style="padding:2px 6px; font-size:10px;" onclick="deleteDuty(${d.id})">حذف</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    html += `</tbody></table></div>`;
+                }
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleDutyStatus(id) {
+            let item = state.activeDuties.find(d => d.id === id);
+            if(item) {
+                item.status = (item.status === 'مکمل') ? 'نامکمل' : 'مکمل';
+                
+                // ہسٹری میں بھی اینٹری سیو کریں
+                state.dutyHistory.unshift({
+                    id: Date.now(),
+                    member: item.member,
+                    task: item.task,
+                    status: item.status,
+                    date: new Date().toLocaleDateString('ur-PK')
+                });
+
+                saveData();
+                renderDashboard();
+                renderHistory();
+            }
+        }
+
+        function deleteDuty(id) {
+            let idx = state.activeDuties.findIndex(d => d.id === id);
+            if(idx !== -1) {
+                let deleted = state.activeDuties.splice(idx, 1)[0];
+                state.trash.push({
+                    id: Date.now(),
+                    item: deleted,
+                    deleteDate: new Date().toLocaleDateString('ur-PK')
+                });
+                saveData();
+                renderDashboard();
+                renderTrash();
+            }
+        }
+
+        function renderHistory() {
+            let tb = document.getElementById('historyTableBody');
+            tb.innerHTML = state.dutyHistory.map(h => `
+                <tr>
+                    <td>${h.date}</td>
+                    <td>${h.member}</td>
+                    <td>${h.task}</td>
+                    <td><span class="badge ${h.status === 'مکمل' ? 'badge-done' : 'badge-carried'}">${h.status}</span></td>
+                    <td>${h.task.includes('پچھلا ادھورا') ? 'آٹو ادھورا کام' : 'دستی'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // --- ٹریش اور ریسٹور ---
+        function renderTrash() {
+            let tb = document.getElementById('trashTableBody');
+            tb.innerHTML = state.trash.map((t, idx) => `
+                <tr>
+                    <td>${t.item.member} - ${t.item.task}</td>
+                    <td>${t.deleteDate}</td>
+                    <td>
+                        <button class="btn btn-primary" style="padding:3px 8px; font-size:11px;" onclick="restoreTrash(${idx})">🔄 ریسٹور کریں</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function restoreTrash(idx) {
+            let restored = state.trash.splice(idx, 1)[0];
+            state.activeDuties.push(restored.item);
+            saveData();
+            renderDashboard();
+                renderTrash();
+            alert("ڈیٹا بحال کر دیا گیا ہے!");
+        }
+
+        // --- ایمرجنسی براڈکاسٹ ---
+        function sendBroadcast() {
+            let msg = document.getElementById('broadcastInput').value.trim();
+            if(!msg) return alert("پیغام لکھیں!");
+            state.settings.broadcastMsg = msg;
+            saveData();
+            checkBroadcastState();
+            alert("تمام ڈیوائسز پر الرٹ جاری ہو گیا!");
+        }
+
+        function clearBroadcast() {
+            state.settings.broadcastMsg = '';
+            saveData();
+            checkBroadcastState();
+        }
+
+        function checkBroadcastState() {
+            let b = document.getElementById('emergencyBanner');
+            let txt = document.getElementById('bannerText');
+            if(state.settings.broadcastMsg) {
+                txt.innerText = state.settings.broadcastMsg;
+                b.style.display = 'block';
+            } else {
+                b.style.display = 'none';
+            }
+        }
+
+        // --- واٹس ایپ رپورٹ ---
         function sendWhatsAppReport() {
-            let text = `*اسمارٹ مینیجر لائیو رپورٹ*%0Aکل ڈیوٹیز: ${dutiesList.length}%0Aبقایا بجٹ: ${document.getElementById('widgetBudget').innerText}`;
-            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+            let text = `*📊 اسمارٹ ڈیوٹی مینیجر رپورٹ*\n\n`;
+            membersList.forEach(m => {
+                let duties = state.activeDuties.filter(d => d.member === m);
+                text += `*👤 ممبر: ${m}*\n`;
+                if(duties.length === 0) {
+                    text += ` - کوئی کام نہیں\n`;
+                } else {
+                    duties.forEach(d => {
+                        text += ` - ${d.task} [${d.status}]\n`;
+                    });
+                }
+            });
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        function backupJson() {
-            let data = JSON.stringify({ dutiesList, rationList });
-            let blob = new Blob([data], {type: "application/json"});
-            let url = URL.createObjectURL(blob);
+        // --- ایکسل اور JSON بیک اپ / ریسٹور ---
+        function exportToCSV() {
+            let csv = 'Member,Task,Status,Date\n';
+            state.activeDuties.forEach(d => {
+                csv += `"${d.member}","${d.task}","${d.status}","${d.date}"\n`;
+            });
+            let blob = new Blob([csv], { type: 'text/csv' });
             let link = document.createElement('a');
-            link.href = url;
+            link.href = URL.createObjectURL(blob);
+            link.download = 'duty_report.csv';
+            link.click();
+        }
+
+        function downloadJSONBackup() {
+            let blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
             link.download = 'smart_manager_backup.json';
             link.click();
         }
 
+        function restoreJSONBackup(e) {
+            let file = e.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    state = JSON.parse(evt.target.result);
+                    saveData();
+                    location.reload();
+                } catch(err) {
+                    alert("فائل پڑھنے میں غلطی ہوئی!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- فیکٹری ریسیٹ ---
         function factoryReset() {
-            if(confirm("کیا آپ تمام ڈیوائسز کا ڈیٹا فیکٹری ری سیٹ کرنا چاہتے ہیں؟")) {
+            if(confirm("⚠️ کیا آپ واقعی پورا ایپ ریسیٹ کرنا چاہتے ہیں؟ تمام ڈیٹا ختم ہو جائے گا۔")) {
                 localStorage.clear();
                 location.reload();
             }
+        }
+
+        // --- زبان کی تبدیلی (Urdu ↔ English) ---
+        function toggleLanguage() {
+            state.settings.lang = state.settings.lang === 'ur' ? 'en' : 'ur';
+            saveData();
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            let l = state.settings.lang;
+            document.getElementById('htmlTag').dir = l === 'ur' ? 'rtl' : 'ltr';
+            document.getElementById('appTitleText').innerText = dict[l].title;
+            
+            document.querySelectorAll('.t-dash').forEach(e => e.innerText = dict[l].dash);
+            document.querySelectorAll('.t-assign').forEach(e => e.innerText = dict[l].assign);
+            document.querySelectorAll('.t-history').forEach(e => e.innerText = dict[l].history);
+            document.querySelectorAll('.t-broadcast').forEach(e => e.innerText = dict[l].broadcast);
+            document.querySelectorAll('.t-trash').forEach(e => e.innerText = dict[l].trash);
+            document.querySelectorAll('.t-reports').forEach(e => e.innerText = dict[l].reports);
+            document.querySelectorAll('.t-security').forEach(e => e.innerText = dict[l].security);
+            
+            document.querySelectorAll('.t-selectMember').forEach(e => e.innerText = dict[l].selectMember);
+            document.querySelectorAll('.t-selectTask').forEach(e => e.innerText = dict[l].selectTask);
+            document.querySelectorAll('.t-addDuty').forEach(e => e.innerText = dict[l].addDuty);
         }
     </script>
 </body>
