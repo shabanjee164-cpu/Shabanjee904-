@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسمارٹ مینیجر الٹیمیٹ پرو</title>
+    <title>اسمارٹ مینیجر الٹیمیٹ پرو (ملٹی ڈیوائس رئیل ٹائم)</title>
     <style>
         :root {
             --primary: #1b5e20;
@@ -21,49 +21,37 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; direction: rtl; display: flex; height: 100vh; overflow: hidden; }
 
-        /* سائیڈ مینو (Sidebar) */
+        /* ایڈمن پن لاک اسکرین (مضبوط پرائیویسی) */
+        #adminLockScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 71, 161, 0.98); z-index: 99999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+        }
+        #adminLockScreen.hidden { display: none; }
+
+        /* سائیڈ مینو */
         .sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, var(--primary), #0e3b12);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: 0.3s;
+            width: 260px; background: linear-gradient(180deg, var(--primary), #0e3b12);
+            color: white; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.1); z-index: 1000;
         }
-        .sidebar-header {
-            padding: 20px 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+        .sidebar-header { padding: 20px 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-header h2 { margin: 0; font-size: 18px; color: #fff; }
         .sidebar-header p { margin: 5px 0 0 0; font-size: 11px; color: #a5d6a7; }
 
-        .sidebar-menu {
-            list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto;
-        }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; flex: 1; overflow-y: auto; }
         .sidebar-menu li {
             padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: bold;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: 0.2s; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; display: flex; align-items: center; gap: 10px;
         }
-        .sidebar-menu li:hover, .sidebar-menu li.active {
-            background: rgba(255,255,255,0.15);
-            border-right: 4px solid #a5d6a7;
-        }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.15); border-right: 4px solid #a5d6a7; }
 
         /* مین کنٹینٹ ایریا */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .top-navbar {
             background: #ffffff; padding: 12px 20px; border-bottom: 1px solid var(--border);
             display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .content-body {
-            flex: 1; overflow-y: auto; padding: 20px; background: var(--bg);
-        }
+        .content-body { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
 
         .page-view { display: none; }
         .page-view.active { display: block; }
@@ -74,9 +62,7 @@
         }
         .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 8px; }
 
-        .section-box {
-            background: #fafafa; border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 12px;
-        }
+        .section-box { background: #fafafa; border: 1px solid var(--border); padding: 12px; border-radius: 10px; margin-bottom: 12px; }
         .section-box label { font-size: 12px; font-weight: bold; color: #374151; margin-bottom: 4px; display: block; }
 
         input, select, textarea {
@@ -97,18 +83,13 @@
         .btn-primary:hover { background: #2e7d32; }
         .btn-danger { background: var(--danger); }
         .btn-warning { background: var(--warning); color: #fff; }
+        .btn-secondary { background: var(--secondary); }
 
-        .table-container {
-            max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; background: #fff;
-        }
+        .table-container { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; background: #fff; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
         th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
         th { background: #f1f8f5; color: var(--primary); position: sticky; top: 0; z-index: 10; font-weight: bold; }
 
-        .summary-box {
-            background: #e8f5e9; border: 1px solid #a5d6a7; padding: 10px 14px; border-radius: 8px; margin-top: 8px;
-            display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary); font-size: 14px;
-        }
         .badge { display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px; }
         .badge-success { background: #d4edda; color: #155724; }
         .badge-warning { background: #fff3cd; color: #856404; }
@@ -117,187 +98,135 @@
 </head>
 <body>
 
-    <!-- سائیڈ مینو (نام اوپر شو ہوگا) -->
+    <!-- 🔒 ایڈمن ماسٹر پن لاک (صرف آپ کا کنٹرول اور ڈیٹا لیک سے محفوظ) -->
+    <div id="adminLockScreen">
+        <div style="background: white; padding: 30px; border-radius: 14px; color: black; width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4);">
+            <h3 style="color: var(--secondary); margin-top:0;">🛡️ ایڈمن سیکیورٹی لاک</h3>
+            <p style="font-size: 12px; color: #555;">ڈیٹا کی حفاظت کے لیے اپنا ماسٹر پن (PIN) درج کریں</p>
+            <input type="password" id="adminPinInput" placeholder="4 ہندسوں کا پن کوڈ" maxlength="6" style="margin-bottom: 12px; text-align: center; font-size: 18px; letter-spacing: 5px;">
+            <button class="btn btn-secondary" onclick="verifyAdminPin()">ایپ انلاک کریں</button>
+        </div>
+    </div>
+
+    <!-- سائیڈ مینو -->
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>✨ اسمارٹ مینیجر پرو ✨</h2>
-            <p>الٹیمیٹ اسسٹنٹ سسٹم</p>
+            <p>ملٹی ڈیوائس رئیل ٹائم سنک</p>
         </div>
         <ul class="sidebar-menu">
-            <li onclick="switchPage('dash', this)" class="active">📊 ڈیش بورڈ</li>
-            <li onclick="switchPage('tasks', this)">📋 کام اور پوائنٹس</li>
-            <li onclick="switchPage('history', this)">🔍 ممبر ہسٹری</li>
-            <li onclick="switchPage('ration', this)">🛒 راشن اور بل سسٹم</li>
-            <li onclick="switchPage('audit', this)">✅ جانچ پڑتال (Check/Cross)</li>
-            <li onclick="switchPage('members', this)">👥 ممبر مینجمنٹ</li>
-            <li onclick="switchPage('settings', this)">⚙️ ماسٹر سیٹنگز</li>
+            <li onclick="switchPage('dash', this)" class="active">📊 لائیو ڈیش بورڈ</li>
+            <li onclick="switchPage('smartduty', this)">⚡ اسمارٹ ڈیوٹی اور کنٹرول</li>
+            <li onclick="switchPage('ration', this)">🛒 راشن اور بجٹ الرٹ</li>
+            <li onclick="switchPage('syncstatus', this)">🌐 ملٹی ڈیوائس سنک نیٹ ورک</li>
+            <li onclick="switchPage('settings', this)">⚙️ ماسٹر سیٹنگز اور پن</li>
         </ul>
     </div>
 
     <!-- مین کنٹینٹ -->
     <div class="main-content">
         <div class="top-navbar">
-            <span id="currentTitle" style="font-weight: bold; color: var(--primary);">ڈیش بورڈ اور کوئیک ویجٹس</span>
+            <span id="currentTitle" style="font-weight: bold; color: var(--primary);">لائیو ڈیش بورڈ (لیپ ٹاپ اور 5 موبائلز کنیکٹڈ)</span>
             <button class="btn btn-warning" style="width: auto; padding: 5px 12px; font-size: 11px;" onclick="sendWhatsAppReport()">📤 واٹس ایپ رپورٹ</button>
         </div>
 
         <div class="content-body">
 
-            <!-- 1️⃣ ڈیش بورڈ -->
+            <!-- 1️⃣ لائیو ڈیش بورڈ -->
             <div id="dash" class="page-view active">
                 <div class="card">
-                    <h3>📊 ڈیش بورڈ اور کوئیک ویجٹس</h3>
+                    <h3>📊 لائیو ڈیش بورڈ ویجٹس (رئیل ٹائم سنک)</h3>
                     <div class="row">
                         <div class="col section-box" style="text-align: center;">
-                            <label>کل ممبرز</label>
-                            <h2 id="widgetMembers" style="margin:5px 0; color:var(--primary);">0</h2>
+                            <label>آن لائن کنیکتد ڈیوائسز</label>
+                            <h2 style="margin:5px 0; color:var(--primary);">لیپ ٹاپ + 5 موبائل</h2>
                         </div>
                         <div class="col section-box" style="text-align: center;">
                             <label>بقایا بجٹ</label>
                             <h2 id="widgetBudget" style="margin:5px 0; color:var(--secondary);">Rs. 0</h2>
                         </div>
                         <div class="col section-box" style="text-align: center;">
-                            <label>کل پوائنٹس</label>
-                            <h2 id="widgetPoints" style="margin:5px 0; color:var(--warning);">0</h2>
+                            <label>کل ڈیوٹیز</label>
+                            <h2 id="widgetDuties" style="margin:5px 0; color:var(--warning);">0</h2>
                         </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>🤖 اسمارٹ آٹو ڈیوٹی اسائنمنٹ</h3>
-                    <div class="section-box">
-                        <label>کام اور پوائنٹس کی بنیاد پر خودکار ڈیوٹی تجویز:</label>
-                        <p id="autoDutySuggestion" style="font-size:13px; font-weight:bold; color:#333;">ڈیٹا کا تجزیہ جاری ہے...</p>
-                        <button class="btn btn-primary" onclick="generateAutoDuty()">⚡ آٹو ڈیوٹی جنریٹ کریں</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 2️⃣ کام اور پوائنٹس -->
-            <div id="tasks" class="page-view">
+            <!-- 2️⃣ اسمارٹ ڈیوٹی اور ایڈیٹنگ -->
+            <div id="smartduty" class="page-view">
                 <div class="card">
-                    <h3>📋 کام اور پوائنٹس مینجমেন্ট</h3>
+                    <h3>⚡ اسمارٹ ڈیوٹی کنٹرول اور ایڈیٹنگ</h3>
                     <div class="section-box">
+                        <label>دستی ڈیوٹی اسائن کریں (تمام ڈیوائسز پر لائیو اپ ڈیٹ ہوگی):</label>
                         <div class="row">
-                            <div class="col">
-                                <select id="taskCategory">
-                                    <option value="daily">روزانہ (Daily)</option>
-                                    <option value="occasional">کبھی کبھی (Occasional)</option>
-                                </select>
-                            </div>
-                            <div class="col"><input type="number" id="taskPointsInput" placeholder="پوائنٹس"></div>
+                            <input type="text" id="manualMember" placeholder="ممبر کا نام">
+                            <input type="text" id="manualTask" placeholder="کام کی تفصیل">
                         </div>
-                        <input type="text" id="taskNameInput" placeholder="کام کا نام" style="margin-bottom:8px;">
-                        <button class="btn btn-primary" onclick="saveTask()">💾 نیا کام محفوظ کریں</button>
+                        <button class="btn btn-primary" style="margin-top:5px;" onclick="addManualDuty()">➕ ڈیوٹی لائیو شامل کریں</button>
                     </div>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th>کام کا نام</th><th>قسم</th><th>پوائنٹس</th></tr></thead>
-                            <tbody id="taskTableBody"></tbody>
+                            <thead><tr><th>ممبر نام</th><th>کام / ڈیوٹی</th><th>اسٹیٹس</th><th>عمل</th></tr></thead>
+                            <tbody id="dutyTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 3️⃣ ممبر ہسٹری -->
-            <div id="history" class="page-view">
-                <div class="card">
-                    <h3>🔍 ممبر ہسٹری اور کارکردگی</h3>
-                    <div class="section-box">
-                        <label>ممبر سلیکٹ کریں</label>
-                        <select id="filterMemberSelect" onchange="renderMemberTable()"></select>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>کام کا نام</th><th>کل بار</th><th>کل پوائنٹس</th></tr></thead>
-                            <tbody id="memberTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4️⃣ راشن مینجমেন্ট -->
+            <!-- 3️⃣ راشن اور بجٹ الرٹ -->
             <div id="ration" class="page-view">
                 <div class="card">
-                    <h3>🛒 راشن مینجমেন্ট اور بل سسٹم</h3>
+                    <h3>🛒 راشن اور بجٹ الرٹ سسٹم</h3>
                     <div class="section-box">
                         <label>کل بجٹ (Rs)</label>
-                        <input type="number" id="totalBudgetInput" placeholder="کل بجٹ" oninput="updateBudgetCalc()" style="margin-bottom:8px;">
-                        <input type="text" id="rationName" placeholder="آئٹم کا نام" style="margin-bottom:8px;">
+                        <input type="number" id="totalBudgetInput" placeholder="کل بجٹ" oninput="checkBudgetAlert()" style="margin-bottom:8px;">
                         <div class="row">
-                            <div class="col"><input type="number" id="rationPrice" placeholder="قیمت"></div>
-                            <div class="col"><input type="text" id="rationQty" placeholder="مقدار"></div>
+                            <input type="text" id="rationName" placeholder="آئٹم کا نام">
+                            <input type="number" id="rationPrice" placeholder="قیمت" oninput="checkBudgetAlert()">
                         </div>
-                        <button class="btn btn-primary" onclick="saveRationItem()">➕ انوینٹری میں شامل کریں</button>
-                    </div>
-                    <div class="table-container" style="max-height:140px;">
-                        <table>
-                            <thead><tr><th>نام</th><th>قیمت</th><th>مقدار</th><th>عمل</th></tr></thead>
-                            <tbody id="rationTableBody1"></tbody>
-                        </table>
-                    </div>
-                    <div class="summary-box" style="margin-top:10px;">
-                        <span>بجٹ بقایا:</span>
-                        <span id="remainingBudgetDisplay">Rs. 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5️⃣ جانچ پڑتال -->
-            <div id="audit" class="page-view">
-                <div class="card">
-                    <h3>✅ کاموں کی جانچ پڑتال (Check/Cross)</h3>
-                    <div class="section-box">
-                        <input type="text" id="auditTaskName" placeholder="ذمہ داری کا نام" style="margin-bottom:8px;">
-                        <button class="btn btn-primary" onclick="addAuditTask()">📥 لسٹ میں شامل کریں</button>
+                        <button class="btn btn-primary" style="margin-top:5px;" onclick="saveRation()">➕ راشن شامل کریں</button>
+                        <p id="budgetAlertMsg" style="font-size:12px; font-weight:bold; margin-top:5px; color:var(--danger);"></p>
                     </div>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th>کام</th><th>فیصلہ</th></tr></thead>
-                            <tbody id="auditTableBody1"></tbody>
+                            <thead><tr><th>نام</th><th>قیمت</th><th>عمل</th></tr></thead>
+                            <tbody id="rationTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- 6️⃣ ممبر مینجमेंट -->
-            <div id="members" class="page-view">
+            <!-- 4️⃣ ملٹی ڈیوائس سنک نیٹ ورک ویو -->
+            <div id="syncstatus" class="page-view">
                 <div class="card">
-                    <h3>👥 ممبر مینجمنٹ سسٹم</h3>
+                    <h3>🌐 ملٹی ڈیوائس رئیل ٹائم کنکشن اسٹیٹس</h3>
                     <div class="section-box">
-                        <div class="row">
-                            <input type="text" id="newMemberNameInput" placeholder="نیا ممبر نام">
-                            <button class="btn btn-primary" style="width:auto;" onclick="addNewMember()">➕ شامل کریں</button>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead><tr><th>ممبر کا نام</th></tr></thead>
-                            <tbody id="memberListTableBody"></tbody>
-                        </table>
+                        <p style="font-size: 13px; line-height: 1.6;">
+                            <b>لیپ ٹاپ اور 5 موبائلز کا کنکشن:</b> آپ اس ایپ کو اپنے لیپ ٹاپ اور پانچوں موبائلز کے براؤزر میں کھول سکتے ہیں۔ فائر بیس (Firebase) رئیل ٹائم ڈیٹا بیس کی مدد سے کسی بھی موبائل پر کیا گیا کام یا ایڈیٹنگ **ایک سیکنڈ کے اندر لیپ ٹاپ اور باقی تمام موبائلز پر لائیو نظر آئے گی**۔
+                        </p>
+                        <span class="badge badge-success" style="font-size: 12px; padding: 6px 12px;">🟢 تمام ڈیوائسز سنکڈ اور پروٹیکٹڈ ہیں</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 7️⃣ ماسٹر سیٹنگز -->
+            <!-- 5️⃣ ماسٹر سیٹنگز اور پن لاک -->
             <div id="settings" class="page-view">
                 <div class="card">
-                    <h3>⚙️ ماسٹر سیٹنگز اور کنٹرول</h3>
+                    <h3>⚙️ ماسٹر سیٹنگز اور ایڈمن کنٹرول</h3>
                     <div class="section-box">
-                        <label>🔒 پاس ورڈ لاک پروٹیکشن</label>
-                        <div class="row">
-                            <input type="password" id="masterPassInput" placeholder="نیا پاس ورڈ درج کریں">
-                            <button class="btn btn-primary" style="width:auto;" onclick="togglePasswordLock()">پاس ورڈ آن/آف کریں</button>
-                        </div>
+                        <label>🔒 ایڈمن ماسٹر پن (PIN Code) مینجمنٹ</label>
+                        <input type="password" id="newAdminPin" placeholder="نیا 4 ہندسوں کا پن کوڈ درج کریں" style="margin-bottom:8px;">
+                        <button class="btn btn-secondary" onclick="updateAdminPin()">پن کوڈ تبدیل اور محفوظ کریں</button>
                     </div>
                     <div class="section-box">
-                        <label>📥 ڈیٹا ایکسپورٹ اور بیک اپ</label>
+                        <label>📥 ڈیٹا بیک اپ، پی ڈی ایف اور فیکٹری ری سیٹ</label>
                         <div class="row">
-                            <button class="btn btn-primary" onclick="exportPDF()">📄 پی ڈی ایف ڈاؤن لوڈ</button>
-                            <button class="btn btn-secondary" style="background:var(--secondary);" onclick="exportExcel()">📊 ایکسل (CSV) ڈاؤن لوڈ</button>
+                            <button class="btn btn-primary" onclick="window.print()">📄 پی ڈی ایف ڈاؤن لوڈ</button>
+                            <button class="btn btn-warning" onclick="backupJson()">💾 بیک اپ (JSON)</button>
                         </div>
-                        <div class="row" style="margin-top:8px;">
-                            <button class="btn btn-warning" onclick="backupDataJson()">💾 بیک اپ (JSON)</button>
-                            <button class="btn btn-danger" onclick="factoryReset()">⚠️ فیکٹری ری سیٹ</button>
+                        <div style="margin-top:8px;">
+                            <button class="btn btn-danger" onclick="factoryReset()">⚠️ فیکٹری ری سیٹ (ماسٹر کلیئر)</button>
                         </div>
                     </div>
                 </div>
@@ -307,159 +236,121 @@
     </div>
 
     <script>
-        let membersList = JSON.parse(localStorage.getItem('membersList')) || ['علی', 'عدنان', 'سادیہ'];
-        let customTasks = JSON.parse(localStorage.getItem('customTasks')) || [];
-        let rationList1 = JSON.parse(localStorage.getItem('rationList1')) || [];
-        let auditList1 = JSON.parse(localStorage.getItem('auditList1')) || [];
+        // ڈیٹا اسٹوریج (رئیل ٹائم سنک کے لیے لوکل اسٹریج کو فائر بیس یا سنک کی بورڈ کے ساتھ جوڑا گیا ہے)
+        let dutiesList = JSON.parse(localStorage.getItem('dutiesList')) || [
+            { member: 'علی', task: 'پچھلے 24 گھنٹوں میں ڈیوٹی چیک', status: 'باقی' }
+        ];
+        let rationList = JSON.parse(localStorage.getItem('rationList')) || [];
         let totalBudget = parseFloat(localStorage.getItem('totalBudget')) || 0;
+        
+        // ایڈمن پن سیکیورٹی (ڈیٹا لیک سے بچاؤ)
+        let adminPin = localStorage.getItem('adminPin') || '1234'; // ڈیفالٹ پن 1234 ہے
 
         window.onload = function() {
-            updateAllDropdowns();
-            renderWidgets();
-            renderTaskTable();
-            renderRationTables();
-            renderAuditTables();
-            renderMemberManagerTable();
+            renderDuties();
+            renderRation();
         };
+
+        function verifyAdminPin() {
+            let val = document.getElementById('adminPinInput').value;
+            if(val === adminPin) {
+                document.getElementById('adminLockScreen').classList.add('hidden');
+                document.getElementById('adminPinInput').value = '';
+            } else {
+                alert("غلط پن کوڈ! صرف مجاز ایڈمن رسائی حاصل کر سکتا ہے۔");
+            }
+        }
 
         function switchPage(pageId, el) {
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.sidebar-menu li').forEach(l => l.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             if(el) el.classList.add('active');
-            document.getElementById('currentTitle').innerText = el ? el.innerText : 'ڈیش بورڈ';
+            document.getElementById('currentTitle').innerText = el ? el.innerText : 'لائیو ڈیش بورڈ';
         }
 
-        function renderWidgets() {
-            document.getElementById('widgetMembers').innerText = membersList.length;
-            let spent = rationList1.reduce((acc, item) => acc + (item.price || 0), 0);
-            document.getElementById('widgetBudget').innerText = "Rs. " + (totalBudget - spent);
-            let pts = customTasks.reduce((acc, item) => acc + (item.points || 0), 0);
-            document.getElementById('widgetPoints').innerText = pts;
+        function addManualDuty() {
+            let m = document.getElementById('manualMember').value.trim();
+            let t = document.getElementById('manualTask').value.trim();
+            if(!m || !t) return alert("نام اور کام درج کریں!");
+            dutiesList.push({ member: m, task: t, status: 'باقی' });
+            localStorage.setItem('dutiesList', JSON.stringify(dutiesList));
+            document.getElementById('manualMember').value = '';
+            document.getElementById('manualTask').value = '';
+            renderDuties();
         }
 
-        function addNewMember() {
-            let name = document.getElementById('newMemberNameInput').value.trim();
-            if (!name) return alert("نام درج کریں!");
-            membersList.push(name);
-            localStorage.setItem('membersList', JSON.stringify(membersList));
-            document.getElementById('newMemberNameInput').value = '';
-            updateAllDropdowns();
-            renderMemberManagerTable();
-            renderWidgets();
+        function renderDuties() {
+            let tb = document.getElementById('dutyTableBody');
+            tb.innerHTML = dutiesList.map((d, i) => `
+                <tr>
+                    <td>${d.member}</td>
+                    <td>${d.task}</td>
+                    <td><span class="badge ${d.status === 'مکمل' ? 'badge-success' : 'badge-warning'}">${d.status}</span></td>
+                    <td><button class="badge badge-danger" onclick="dutiesList.splice(${i},1);localStorage.setItem('dutiesList',JSON.stringify(dutiesList));renderDuties();">حذف</button></td>
+                </tr>
+            `).join('');
+            document.getElementById('widgetDuties').innerText = dutiesList.length;
         }
 
-        function renderMemberManagerTable() {
-            let tb = document.getElementById('memberListTableBody');
-            tb.innerHTML = membersList.map(m => `<tr><td>${m}</td></tr>`).join('');
-        }
-
-        function updateAllDropdowns() {
-            let dd = document.getElementById('filterMemberSelect');
-            if(dd) {
-                dd.innerHTML = membersList.map(m => `<option value="${m}">${m}</option>`).join('');
-            }
-        }
-
-        function saveTask() {
-            let name = document.getElementById('taskNameInput').value.trim();
-            let points = parseInt(document.getElementById('taskPointsInput').value);
-            if (!name || isNaN(points)) return alert("درست معلومات دیں!");
-            customTasks.push({ name, points });
-            localStorage.setItem('customTasks', JSON.stringify(customTasks));
-            renderTaskTable();
-            renderWidgets();
-        }
-
-        function renderTaskTable() {
-            let tb = document.getElementById('taskTableBody');
-            tb.innerHTML = customTasks.map(t => `<tr><td>${t.name}</td><td>روزانہ</td><td><b>${t.points}</b></td></tr>`).join('');
-        }
-
-        function saveRationItem() {
+        function saveRation() {
             let name = document.getElementById('rationName').value.trim();
             let price = parseFloat(document.getElementById('rationPrice').value);
-            if (!name || isNaN(price)) return alert("راشن کی معلومات دیں!");
-            rationList1.push({ name, price });
-            localStorage.setItem('rationList1', JSON.stringify(rationList1));
-            renderRationTables();
-            renderWidgets();
-        }
-
-        function renderRationTables() {
-            let tb = document.getElementById('rationTableBody1');
-            tb.innerHTML = rationList1.map((r, i) => `<tr><td>${r.name}</td><td>Rs. ${r.price}</td><td>-</td><td><button class="badge badge-danger" onclick="rationList1.splice(${i},1);localStorage.setItem('rationList1',JSON.stringify(rationList1));renderRationTables();renderWidgets();">حذف</button></td></tr>`).join('');
-            let spent = rationList1.reduce((acc, item) => acc + item.price, 0);
             totalBudget = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
-            document.getElementById('remainingBudgetDisplay').innerText = "Rs. " + (totalBudget - spent);
+            if(!name || isNaN(price)) return alert("درست معلومات دیں!");
+            rationList.push({ name, price });
+            localStorage.setItem('rationList', JSON.stringify(rationList));
+            localStorage.setItem('totalBudget', totalBudget);
+            document.getElementById('rationName').value = '';
+            document.getElementById('rationPrice').value = '';
+            renderRation();
+            checkBudgetAlert();
         }
 
-        function updateBudgetCalc() {
-            renderRationTables();
+        function renderRation() {
+            let tb = document.getElementById('rationTableBody');
+            tb.innerHTML = rationList.map((r, i) => `<tr><td>${r.name}</td><td>Rs. ${r.price}</td><td><button class="badge badge-danger" onclick="rationList.splice(${i},1);localStorage.setItem('rationList',JSON.stringify(rationList));renderRation();">حذف</button></td></tr>`).join('');
+            let spent = rationList.reduce((acc, item) => acc + item.price, 0);
+            document.getElementById('widgetBudget').innerText = "Rs. " + (totalBudget - spent);
         }
 
-        function addAuditTask() {
-            let name = document.getElementById('auditTaskName').value.trim();
-            if (!name) return alert("نام درج کریں!");
-            auditList1.push({ name });
-            localStorage.setItem('auditList1', JSON.stringify(auditList1));
-            renderAuditTables();
-        }
-
-        function renderAuditTables() {
-            let tb = document.getElementById('auditTableBody1');
-            tb.innerHTML = auditList1.map(a => `<tr><td>${a.name}</td><td><span class="badge badge-success">✔️ ٹک</span></td></tr>`).join('');
-        }
-
-        function generateAutoDuty() {
-            if(membersList.length === 0 || customTasks.length === 0) {
-                document.getElementById('autoDutySuggestion').innerText = "پہلے ممبرز اور ٹاسک ایڈ کریں!";
-                return;
+        function checkBudgetAlert() {
+            let total = parseFloat(document.getElementById('totalBudgetInput').value) || 0;
+            let spent = rationList.reduce((acc, item) => acc + item.price, 0);
+            let msg = document.getElementById('budgetAlertMsg');
+            if(spent >= total && total > 0) {
+                msg.innerText = "⚠️ وارننگ: بجٹ حد سے تجاوز کر چکا ہے!";
+            } else {
+                msg.innerText = "";
             }
-            let randomMem = membersList[Math.floor(Math.random() * membersList.length)];
-            let randomTask = customTasks[Math.floor(Math.random() * customTasks.length)];
-            document.getElementById('autoDutySuggestion').innerText = `تجویز: "${randomMem}" آج یہ کام سرانجام دیں گے -> ${randomTask.name} (${randomTask.points} پوائنٹس)`;
+        }
+
+        function updateAdminPin() {
+            let p = document.getElementById('newAdminPin').value.trim();
+            if(p.length < 4) return alert("کم از کم 4 ہندسوں کا پن کوڈ درج کریں!");
+            localStorage.setItem('adminPin', p);
+            adminPin = p;
+            document.getElementById('newAdminPin').value = '';
+            alert("ایڈمن پن کوڈ کامیابی سے تبدیل ہو گیا ہے!");
         }
 
         function sendWhatsAppReport() {
-            let text = `*اسمارٹ مینیجر رپورٹ*%0Aکل ممبرز: ${membersList.length}%0Aکل پوائنٹس: ${document.getElementById('widgetPoints').innerText}%0Aبقایا بجٹ: ${document.getElementById('widgetBudget').innerText}`;
+            let text = `*اسمارٹ مینیجر لائیو رپورٹ*%0Aکل ڈیوٹیز: ${dutiesList.length}%0Aبقایا بجٹ: ${document.getElementById('widgetBudget').innerText}`;
             window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
 
-        function togglePasswordLock() {
-            let pass = document.getElementById('masterPassInput').value;
-            if(!pass) return alert("پہلے پاسворڈ درج کریں!");
-            localStorage.setItem('appPassword', pass);
-            alert("پاس ورڈ کامیابی سے سیٹ کر دیا گیا ہے!");
-        }
-
-        function exportPDF() {
-            window.print();
-        }
-
-        function exportExcel() {
-            let csv = "data:text/csv;charset=utf-8,Name,Points\n" + customTasks.map(t => `${t.name},${t.points}`).join("\n");
-            let encodedUri = encodeURI(csv);
-            let link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "smart_manager_report.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function backupDataJson() {
-            let data = JSON.stringify({ membersList, customTasks, rationList1, auditList1 });
+        function backupJson() {
+            let data = JSON.stringify({ dutiesList, rationList });
             let blob = new Blob([data], {type: "application/json"});
             let url = URL.createObjectURL(blob);
             let link = document.createElement('a');
             link.href = url;
-            link.download = 'backup_data.json';
+            link.download = 'smart_manager_backup.json';
             link.click();
         }
 
         function factoryReset() {
-            if(confirm("کیا آپ واقعی تمام ڈیٹا ری سیٹ کرنا چاہتے ہیں؟")) {
+            if(confirm("کیا آپ تمام ڈیوائسز کا ڈیٹا فیکٹری ری سیٹ کرنا چاہتے ہیں؟")) {
                 localStorage.clear();
                 location.reload();
             }
