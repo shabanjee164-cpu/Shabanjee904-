@@ -271,7 +271,6 @@
     </div>
 
     <script>
-        // مکمل ایپ اسٹیٹ اور لوکل اسٹریج سنک
         let appState = JSON.parse(localStorage.getItem('master_admin_state')) || {
             duties: [
                 { id: 1, member: 'علی', task: 'روزانہ ڈیوٹی لاگ', status: 'مکمل', date: '04/09/2026' },
@@ -282,7 +281,7 @@
                 passwordEnabled: true,
                 lang: 'ur',
                 broadcastMsg: '',
-                deviceRole: 'admin' // 'admin' یا 'viewer'
+                deviceRole: 'admin'
             }
         };
 
@@ -300,7 +299,6 @@
             renderAll();
             checkBroadcastState();
             
-            // ملٹی ڈیوائس رئیل ٹائم سنک لسنر
             window.addEventListener('storage', function(e) {
                 if(e.key === 'master_admin_state') {
                     appState = JSON.parse(e.newValue);
@@ -315,7 +313,6 @@
             renderAll();
         }
 
-        // --- پاسورڈ مینجمنٹ ---
         function checkLockState() {
             let lock = document.getElementById('lockScreen');
             document.getElementById('passToggle').checked = appState.settings.passwordEnabled;
@@ -359,7 +356,6 @@
             alert("پن کوڈ اپ ڈیٹ ہو گیا!");
         }
 
-        // --- ڈیوائس رول کنٹرول (ایڈمن بمقابلہ ویو-اونلی) ---
         function changeDeviceRole() {
             let role = document.getElementById('deviceRoleSelect').value;
             appState.settings.deviceRole = role;
@@ -387,7 +383,6 @@
             }
         }
 
-        // --- نیویگیشن ---
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
@@ -400,7 +395,6 @@
             toggleSidebar();
         }
 
-        // --- ڈیوٹی اور پرسنٹیج ڈیش بورڈ ---
         function addDuty() {
             if(appState.settings.deviceRole !== 'admin') return alert("صرف ایڈمن ڈیوائس سے ڈیوٹی ڈالی جا سکتی ہے!");
             let m = document.getElementById('taskMember').value;
@@ -472,7 +466,6 @@
             });
         }
 
-        // --- ایمرجنسی براڈکاسٹ اور وائس بینر ---
         function triggerBroadcast() {
             let msg = document.getElementById('broadcastInput').value.trim();
             if(!msg) return alert("پیغام درج کریں!");
@@ -492,7 +485,6 @@
                 txt.innerText = appState.settings.broadcastMsg;
                 b.style.display = 'block';
                 
-                // لائیو وائس نوٹیفیکیشن (آواز کے ساتھ بولنا)
                 if('speechSynthesis' in window) {
                     let speech = new SpeechSynthesisUtterance(appState.settings.broadcastMsg);
                     speech.lang = 'ur-PK';
@@ -503,7 +495,6 @@
             }
         }
 
-        // --- رپورٹس اور شیئرنگ ---
         function exportToExcel() {
             let csv = 'Member,Task,Status,Date\n';
             appState.duties.forEach(d => {
@@ -523,7 +514,7 @@
                 let done = md.filter(x => x.status === 'مکمل').length;
                 let tot = md.length;
                 let pct = tot > 0 ? Math.round((done/tot)*100) : 0;
-                text += `*${m}*: ${done}/${tot} (${pct}%)%0A`;
+                text += `*${m}* : ${done}/${tot} (${pct}%)%0A`;
             });
             window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
@@ -543,7 +534,6 @@
             }
         }
 
-        // --- زبان کی تبدیلی ---
         function toggleLanguage() {
             appState.settings.lang = appState.settings.lang === 'ur' ? 'en' : 'ur';
             saveAndSync();
