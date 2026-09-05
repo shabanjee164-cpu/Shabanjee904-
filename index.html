@@ -6,129 +6,160 @@
     <title>ہوم مینجمنٹ ٹریکر</title>
     <style>
         :root {
-            --primary: #1b5e20;
-            --primary-dark: #0d3b0e;
-            --danger: #c62828;
-            --warning: #ef6c00;
-            --bg: #f4f6f8;
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --accent: #2563eb;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --success: #16a34a;
+            --bg: #f8fafc;
             --card: #ffffff;
-            --text: #212529;
-            --border: #ced4da;
-            --radius: 12px;
+            --text: #334155;
+            --border: #e2e8f0;
+            --radius: 10px;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
 
         .container { max-width: 850px; margin: 0 auto; }
 
         /* 1. ایپ کا نام (ہیڈر) */
         .app-header {
             background: var(--primary); color: white; text-align: center;
-            padding: 15px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 12px;
+            padding: 16px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px;
         }
 
-        /* 2. لائیو نیوز / نصیحت پٹی باکس (رکنے کی سہولت کے ساتھ) */
+        /* 2. لائیو نیوز پٹی */
         .ticker-box {
-            background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px;
-            overflow: hidden; white-space: nowrap; padding: 10px; margin-bottom: 12px;
-            font-weight: bold; color: var(--primary-dark); cursor: pointer;
+            background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+            overflow: hidden; white-space: nowrap; padding: 12px; margin-bottom: 15px;
+            font-weight: 600; color: #1e40af; cursor: pointer;
         }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; }
-        .ticker-box:hover .ticker-text { animation-play-state: paused; } /* ماؤس رکھنے پر رک جائے گی */
+        .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 30s linear infinite; }
+        .ticker-box:hover .ticker-text { animation-play-state: paused; }
         @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* 3. الرٹ / کمپلینٹ ریڈ پٹی (اسکپ بٹن کے ساتھ) */
+        /* 3. الرٹ ریڈ پٹی (اسکپ بٹن کے ساتھ) */
         .alert-box {
-            background: var(--danger); color: white; padding: 10px 15px;
-            border-radius: 8px; font-weight: bold; font-size: 14px; margin-bottom: 15px;
+            background: var(--danger); color: white; padding: 12px 18px;
+            border-radius: 8px; font-weight: 600; font-size: 14px; margin-bottom: 15px;
             display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
         }
         .skip-btn {
-            background: rgba(255,255,255,0.3); border: none; color: white;
-            padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
+            background: rgba(255,255,255,0.2); border: none; color: white;
+            padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;
         }
-        .skip-btn:hover { background: rgba(255,255,255,0.5); }
+        .skip-btn:hover { background: rgba(255,255,255,0.4); }
 
         .card {
-            background: var(--card); padding: 20px; border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid var(--border);
+            background: var(--card); padding: 22px; border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 15px; border: 1px solid var(--border);
         }
-        .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid #e8f5e9; padding-bottom: 8px; }
+        .card h3 { margin-top: 0; color: var(--primary); font-size: 16px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+
+        /* پروفیشنل ممبر سلیکشن سیکشن (سینٹرڈ) */
+        .selection-center {
+            display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px;
+        }
+        .select-box {
+            padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border);
+            font-size: 14px; width: 280px; background: #fff; color: var(--text); outline: none;
+        }
 
         /* بٹن سٹائل */
-        .btn-group { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         .btn {
-            border: none; color: white; padding: 10px 16px; border-radius: 8px;
+            border: none; color: white; padding: 12px 16px; border-radius: 8px;
             cursor: pointer; font-weight: bold; font-size: 14px; flex: 1; text-align: center;
-            transition: 0.2s;
+            transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .btn-done { background: #2e7d32; }
-        .btn-notdone { background: #ef6c00; }
-        .btn-cancel { background: #c62828; }
+        .btn-done { background: var(--success); }
+        .btn-done:hover { background: #15803d; }
+        .btn-notdone { background: var(--warning); }
+        .btn-notdone:hover { background: #b45309; }
+        .btn-cancel { background: var(--danger); }
+        .btn-cancel:hover { background: #b91c1c; }
 
-        /* ہسٹری اور فریش ٹاسک باکسز */
-        .history-box {
-            background: #fafafa; border: 1px solid #ddd; border-radius: 8px;
-            padding: 10px; max-height: 150px; overflow-y: auto; font-size: 13px; margin-bottom: 12px;
-        }
-        .history-item { padding: 5px 0; border-bottom: 1px dashed #eee; color: #555; }
-        
+        /* پروفیشنل کلر فل فریش ٹاسک باکس */
         .fresh-task-display {
-            background: #fff3cd; border: 1px solid #ffeeba; color: #856404;
-            padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7); 
+            border: 1px solid #bbf7d0; color: #166534;
+            padding: 24px; border-radius: 10px; font-weight: bold; font-size: 18px;
+            display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;
+        }
+        .task-badge-large { 
+            background: #15803d; color: white; padding: 6px 18px; 
+            border-radius: 20px; font-size: 15px; font-weight: 600; 
+        }
+
+        /* ہسٹری اور ٹوٹل پوائنٹس */
+        .history-box {
+            background: #fafafa; border: 1px solid var(--border); border-radius: 8px;
+            padding: 12px; max-height: 160px; overflow-y: auto; font-size: 13px; margin-bottom: 12px;
+        }
+        .history-item { padding: 6px 0; border-bottom: 1px dashed var(--border); color: #475569; }
+        
+        .total-points-bar {
+            background: #f1f5f9; border: 1px solid var(--border); color: var(--primary);
+            padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .task-badge { background: #856404; color: white; padding: 3px 8px; border-radius: 6px; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="container">
 
+        <!-- 1. ایپ کا نام (ہیڈر) -->
         <div class="app-header">🏡 ہوم مینجمنٹ ٹریکر</div>
 
-        <div class="ticker-box" title="پڑھنے کے لیے ماؤس اس پر رکھیں (Pause)">
-            <div class="ticker-text">💡 ہدایت: گھر کا نظام بہتر چلانے کے لیے تمام ممبران آپس میں تعاون کریں۔ (نوٹ: اس پٹی پر ماؤس لانے سے یہ پڑھنے کے لیے رک جاتی ہے)</div>
+        <!-- 2. لائیو نیوز پٹی -->
+        <div class="ticker-box" title="ماوس لانے پر پٹی رک جاتی ہے">
+            <div class="ticker-text">💡 پروفیشنل سسٹم نوٹس: تمام ممبران اپنے ذمے داریاں وقت پر پوری کریں۔</div>
         </div>
 
+        <!-- 3. الرٹ ریڈ پٹی (اسکپ کے ساتھ) -->
         <div class="alert-box" id="alertBanner">
             <span>🚨 اہم الرٹ / کمپلینٹ: کچن کا پانی کا نلکا چیک کریں!</span>
             <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
         </div>
 
-        <div class="card">
-            <h3>👥 حاضری کے لیے ممبر سلیکٹ کریں</h3>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <select id="memberSelect" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px;">
-                    <option value="علی">علی</option>
-                    <option value="احمد">احمد</option>
+        <!-- 4. ممبر سلیکشن (حاضری کے بغیر ڈائریکٹ سلیکٹ) -->
+        <div class="card" style="text-align: center;">
+            <h3>👥 ممبر سلیکٹ کریں</h3>
+            <div class="selection-center">
+                <select id="memberSelect" class="select-box" onchange="updateSelectedMember()">
+                    <option value="علی">علی (سینئر)</option>
+                    <option value="احمد">احمد (ہیلپر)</option>
                     <option value="عثمان">عثمان</option>
                     <option value="بلال">بلال</option>
                     <option value="حسن">حسن</option>
                 </select>
-                <button class="btn" style="background: var(--primary); flex: 0.3;" onclick="markAttendance()">حاضری لگائیں</button>
             </div>
         </div>
 
-        <div class="card" style="background: #e8f5e9;">
-            <h3 style="color: var(--primary-dark);">⭐ جن ممبران کی آج ڈیوٹی ہے (آٹو روٹیشن)</h3>
-            <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 15px;">
+        <!-- جن ممبران کی آج ڈیوٹی ہے -->
+        <div class="card" style="background: #f8fafc; border-left: 4px solid var(--accent);">
+            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (آٹو سیٹ)</h3>
+            <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 15px; color: var(--primary);">
                 <span id="seniorDisplay">👨‍✈️ سینئر: علی</span>
                 <span id="helperDisplay">🧑‍سنبھالنے والا (ہیلپر): احمد</span>
             </div>
         </div>
 
+        <!-- موجودہ ٹاسک اور پوائنٹس باکس -->
         <div class="card">
-            <h3>⚡ نمبر بائی نمبر لائیو ٹاسک اور پوائنٹس</h3>
+            <h3>⚡ موجودہ ٹاسک اور پوائنٹس</h3>
             
-            <label style="font-size: 12px; color: #666; margin-bottom: 6px; display: block;">موجودہ فریش ٹاسک (صرف نیچے دیے گئے بٹن دبانے سے آگے بڑھے گا):</label>
             <div class="fresh-task-display" id="currentFreshTask">
-                <span>لائحہ عمل: کمرے کی مکمل صفائی</span>
-                <span class="task-badge">پوائنٹس: 15</span>
+                <span id="taskTitleText">🔥 ٹاسک: کمرے کی مکمل صفائی</span>
+                <span class="task-badge-large" id="taskPointsBadge">⭐ پوائنٹس: 15</span>
             </div>
 
+            <!-- مینوئل کنٹرول بٹنز -->
             <div class="btn-group">
                 <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
                 <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا</button>
@@ -136,21 +167,27 @@
             </div>
         </div>
 
+        <!-- ہسٹری اور فائنل پوائنٹس کاؤنٹر -->
         <div class="card">
             <h3>📜 مکمل شدہ کاموں کی لائیو ہسٹری (پچھلے 7-8 کام)</h3>
             <div class="history-box" id="historyContainer">
                 <div class="history-item">ابھی تک کوئی کام ریکارڈ نہیں ہوا۔</div>
+            </div>
+
+            <!-- فائنل پوائنٹس شو کرنے والی بار -->
+            <div class="total-points-bar">
+                <span>🏆 کل حاصل شدہ پوائنٹس (Total Points):</span>
+                <span id="totalPointsDisplay" style="color: var(--success); font-size: 20px;">0 پوائنٹس</span>
             </div>
         </div>
 
     </div>
 
     <script>
-        // ٹاسک کی لسٹ جن کے ساتھ پوائنٹس بھی موجود ہیں
         let tasksList = [
             { title: "کمرے کی مکمل صفائی", points: 15 },
             { title: "راشن انوینٹری کا ریکارڈ چیک کرنا", points: 10 },
-            { title: "شام کی چائے اور لوازمات", points: 10 },
+            { title: "شام کی چائے اور لوازمات تیار کرنا", points: 10 },
             { title: "ڈائننگ ٹیبل کی صفائی", points: 20 },
             { title: "کچن کا کچرا باہر پھینکنا", points: 15 },
             { title: "پینے کے پانی کا فلٹر چیک کرنا", points: 10 },
@@ -159,45 +196,50 @@
         ];
 
         let historyList = [];
-        let dutyMembers = ['علی', 'احمد']; // فرضی ابتدائی سینئر اور ہیلپر
+        let accumulatedPoints = 0;
 
         function skipAlert() {
             document.getElementById('alertBanner').style.display = 'none';
         }
 
-        function markAttendance() {
+        function updateSelectedMember() {
             let select = document.getElementById('memberSelect');
             let val = select.value;
-            alert(`ممبر '${val}' کی حاضری ریکارڈ کر لی گئی ہے!`);
+            // پروفیشنل طریقے سے ڈیوٹی باکس کو اپڈیٹ کرنا
+            document.getElementById('seniorDisplay').innerText = `👨‍✈️ سلেকٹڈ ممبر: ${val}`;
         }
 
         function renderUI() {
-            let freshBox = document.getElementById('currentFreshTask');
+            let titleText = document.getElementById('taskTitleText');
+            let pointsBadge = document.getElementById('taskPointsBadge');
             
             if(tasksList.length > 0) {
                 let current = tasksList[0];
-                freshBox.innerHTML = `<span>🔥 ٹاسک: ${current.title}</span> <span class="task-badge">پوائنٹس: ${current.points}</span>`;
+                titleText.innerText = `🔥 ٹاسک: ${current.title}`;
+                pointsBadge.innerText = `⭐ پوائنٹس: ${current.points}`;
             } else {
-                freshBox.innerHTML = `<span>🎉 تمام ٹاسک مکمل ہو چکے ہیں!</span> <span class="task-badge">پوائنٹس: 0</span>`;
+                titleText.innerText = `🎉 تمام ٹاسک مکمل ہو چکے ہیں!`;
+                pointsBadge.innerText = `⭐ پوائنٹس: 0`;
             }
 
-            // ہسٹری رینڈر کرنا (پچھلے 7-8 کام)
             let histContainer = document.getElementById('historyContainer');
             if(historyList.length === 0) {
                 histContainer.innerHTML = '<div class="history-item">ابھی تک کوئی کام مکمل نہیں ہوا۔</div>';
             } else {
                 histContainer.innerHTML = historyList.slice(-8).reverse().map(h => `<div class="history-item">${h}</div>`).join('');
             }
+
+            document.getElementById('totalPointsDisplay').innerText = `${accumulatedPoints} پوائنٹس`;
         }
 
-        // بٹن دبانے پر ہی کام چینج ہوگا (آٹو سسٹم نہیں)
         function handleTask(action) {
             if(tasksList.length === 0) return alert("فہرست میں مزید کوئی کام موجود نہیں!");
 
-            let current = tasksList.shift(); // پہلا کام نکالا
+            let current = tasksList.shift(); 
             let actionText = "";
 
             if(action === 'done') {
+                accumulatedPoints += current.points; 
                 actionText = `✔️ ہو گیا: ${current.title} (+${current.points} پوائنٹس)`;
             } else if(action === 'notdone') {
                 actionText = `⚠️ نہیں ہوا: ${current.title} (پینڈنگ)`;
