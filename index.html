@@ -115,16 +115,16 @@
             <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
         </div>
 
-        <!-- 4. آج کی ڈیوٹی کے ممبران (اوپر کر دیا گیا ہے - صرف دیکھنے کے لیے) -->
+        <!-- 4. آج کی ڈیوٹی کے ممبران (الرٹ پٹی کے بالکل نیچے - صرف دیکھنے کے لیے) -->
         <div class="card" style="background: #f8fafc; border-left: 4px solid var(--accent);">
-            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (آٹو سیٹ)</h3>
+            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (صرف دیکھنے کے لیے - آٹو سیٹ)</h3>
             <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 15px; color: var(--primary);">
                 <span>👨‍✈️ سینئر: علی</span>
                 <span>🧑‍ ہیلپر: احمد</span>
             </div>
         </div>
 
-        <!-- 5. ممبر سلیکشن / ڈراپ لائن (اب ڈیوٹی سے نیچے ہے) -->
+        <!-- 5. ممبر سلیکشن / ڈراپ لائن (اب اوپر کر دی گئی ہے) -->
         <div class="card" style="text-align: center;">
             <h3>👥 ممبر سلیکٹ کریں (حاضری اور کام کی تقسیم کے لیے)</h3>
             <div class="selection-center">
@@ -167,7 +167,7 @@
             </div>
 
             <div class="total-points-bar">
-                <span>🏆 کل حاصل شدہ پوائنٹس (فردًا فردًا / مشترکہ):</span>
+                <span>🏆 کل حاصل شدہ پوائنٹس:</span>
                 <span id="totalPointsDisplay" style="color: var(--success); font-size: 20px;">0 پوائنٹس</span>
             </div>
         </div>
@@ -188,7 +188,7 @@
 
         let historyList = [];
         let accumulatedPoints = 0;
-        let activeMembers = ['علی', 'احمد']; // جو حاضر یا کام میں شامل ہیں
+        let activeMembers = ['علی', 'احمد'];
 
         function skipAlert() {
             document.getElementById('alertBanner').style.display = 'none';
@@ -237,7 +237,7 @@
                 accumulatedPoints += current.points; 
                 let memberCount = activeMembers.length > 0 ? activeMembers.length : 1;
                 let perHead = (current.points / memberCount).toFixed(1);
-                actionText = `✔️ ہو گیا: ${current.title} (+${current.points} پوائنٹس ڈیوائیڈ ہوئے ${memberCount} ممبران میں، فی کس: ${perHead})`;
+                actionText = `✔️ ہو गया: ${current.title} (+${current.points} پوائنٹس ڈیوائیڈ ہوئے ${memberCount} ممبران میں، فی کس: ${perHead})`;
             } else if(action === 'notdone') {
                 actionText = `⚠️ نہیں ہوا: ${current.title} (پینڈنگ)`;
             } else if(action === 'cancel') {
