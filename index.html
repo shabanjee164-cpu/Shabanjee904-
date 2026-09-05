@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ہوم مینجمنٹ ٹریکر</title>
+    <title>ہوم مینجمنٹ اور صحت ٹریکر</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -63,30 +63,31 @@
             font-size: 14px; width: 280px; background: #fff; color: var(--text); outline: none;
         }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .btn-group { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
         .btn {
-            border: none; color: white; padding: 12px 16px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; font-size: 14px; flex: 1; text-align: center;
+            border: none; color: white; padding: 10px 14px; border-radius: 8px;
+            cursor: pointer; font-weight: bold; font-size: 13px; flex: 1; text-align: center;
             transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .btn-done { background: var(--success); }
         .btn-notdone { background: var(--warning); }
         .btn-cancel { background: var(--danger); }
+        .btn-halt { background: #7c3aed; } /* نیا ہلٹ بٹن */
 
         .fresh-task-display {
             background: linear-gradient(135deg, #f0fdf4, #dcfce7); 
             border: 1px solid #bbf7d0; color: #166534;
-            padding: 24px; border-radius: 10px; font-weight: bold; font-size: 18px;
-            display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center;
+            padding: 20px; border-radius: 10px; font-weight: bold; font-size: 17px;
+            display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;
         }
         .task-badge-large { 
-            background: #15803d; color: white; padding: 6px 18px; 
-            border-radius: 20px; font-size: 15px; font-weight: 600; 
+            background: #15803d; color: white; padding: 5px 15px; 
+            border-radius: 20px; font-size: 14px; font-weight: 600; 
         }
 
         .history-box {
             background: #fafafa; border: 1px solid var(--border); border-radius: 8px;
-            padding: 12px; max-height: 160px; overflow-y: auto; font-size: 13px; margin-bottom: 12px;
+            padding: 12px; max-height: 150px; overflow-y: auto; font-size: 13px; margin-bottom: 12px;
         }
         .history-item { padding: 6px 0; border-bottom: 1px dashed var(--border); color: #475569; }
         
@@ -102,11 +103,11 @@
     <div class="container">
 
         <!-- 1. ہیڈر -->
-        <div class="app-header">🏡 ہوم مینجمنٹ ٹریکر</div>
+        <div class="app-header">🏡 ہوم مینجمنٹ اور صحت ٹریکر</div>
 
         <!-- 2. لائیو نیوز پٹی -->
         <div class="ticker-box" title="ماوس لانے پر پٹی رک جاتی ہے">
-            <div class="ticker-text">💡 پروفیشنل سسٹم نوٹس: تمام ممبران اپنے ذمے داریاں وقت پر پوری کریں۔</div>
+            <div class="ticker-text">💡 پروفیشنل سسٹم نوٹس: تمام ممبران اپنے ذمے داریاں اور صحت کا ریکارڈ وقت پر اپ ڈیٹ کریں۔</div>
         </div>
 
         <!-- 3. الرٹ ریڈ پٹی -->
@@ -115,18 +116,18 @@
             <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
         </div>
 
-        <!-- 4. آج کی ڈیوٹی کے ممبران (الرٹ پٹی کے بالکل نیچے - صرف دیکھنے کے لیے) -->
+        <!-- 4. آج کی ڈیوٹی کے ممبران (صرف دیکھنے کے لیے - الرٹ کے نیچے) -->
         <div class="card" style="background: #f8fafc; border-left: 4px solid var(--accent);">
-            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (صرف دیکھنے کے لیے - آٹو سیٹ)</h3>
+            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (صرف دیکھنے کے لیے)</h3>
             <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 15px; color: var(--primary);">
                 <span>👨‍✈️ سینئر: علی</span>
                 <span>🧑‍ ہیلپر: احمد</span>
             </div>
         </div>
 
-        <!-- 5. ممبر سلیکشن / ڈراپ لائن (اب اوپر کر دی گئی ہے) -->
+        <!-- 5. ممبر سلیکشن / ڈراپ لائن (ڈیوٹی سے نیچے) -->
         <div class="card" style="text-align: center;">
-            <h3>👥 ممبر سلیکٹ کریں (حاضری اور کام کی تقسیم کے لیے)</h3>
+            <h3>👥 ممبر سلیکٹ کریں (ڈراپ لائن)</h3>
             <div class="selection-center">
                 <select id="memberSelect" class="select-box">
                     <option value="علی">علی</option>
@@ -135,10 +136,6 @@
                     <option value="بلال">بلال</option>
                     <option value="حسن">حسن</option>
                 </select>
-                <button class="btn" style="background: var(--accent); flex: none; padding: 10px 20px;" onclick="addActiveMember()">حاضر کریں / شامل کریں</button>
-            </div>
-            <div style="margin-top: 10px; font-size: 13px; color: var(--accent); font-weight: bold;" id="activeMembersList">
-                شامل ممبران: علی، احمد
             </div>
         </div>
 
@@ -151,12 +148,66 @@
                 <span class="task-badge-large" id="taskPointsBadge">⭐ پوائنٹس: 15</span>
             </div>
 
-            <!-- مینوئل کنٹرول بٹنز -->
             <div class="btn-group">
                 <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
                 <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا</button>
                 <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
             </div>
+        </div>
+
+        <!-- 🩺 نیا سیکشن: صحت مند رہنے کے لیے علامات (Symptoms Tracker) -->
+        <div class="card" style="border-left: 4px solid #7c3aed;">
+            <h3 style="color: #7c3aed;">🩺 صحت اور علامات کا ٹریکر</h3>
+            
+            <div style="margin-bottom: 12px; text-align: center;">
+                <label style="font-weight: bold; font-size: 13px;">ممبر سلیکٹ کریں:</label>
+                <select id="healthMemberSelect" class="select-box" style="margin-top: 5px;">
+                    <option value="علی">علی</option>
+                    <option value="احمد">احمد</option>
+                    <option value="عثمان">عثمان</option>
+                    <option value="بلال">بلال</option>
+                </select>
+            </div>
+
+            <div class="fresh-task-display" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-color: #ddd6fe; color: #5b21b6;">
+                <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
+            </div>
+
+            <!-- حالت کے بٹن بمعہ نیا ہلٹ بٹن -->
+            <div class="btn-group">
+                <button class="btn btn-done" onclick="handleSymptom('thik')">✅ ٹھیک ہے</button>
+                <button class="btn btn-notdone" onclick="handleSymptom('thora')">⚠️ تھوڑا مسئلہ ہے</button>
+                <button class="btn btn-halt" onclick="handleSymptom('halt')">🔄 کبھی کبھی / مسلسل (Halt)</button>
+                <button class="btn btn-cancel" onclick="handleSymptom('zyada')">❌ زیادہ مسئلہ ہے</button>
+            </div>
+
+            <!-- تفصیل لکھنے کا چھوٹا باکس -->
+            <div style="margin-top: 12px;">
+                <input type="text" id="symptomNote" placeholder="مسئلے کی مزید تفصیل یہاں لکھیں..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
+            </div>
+        </div>
+
+        <!-- 🍽️ نیا سیکشن: کھانے پینے کی روٹین (Diet Routine) -->
+        <div class="card" style="border-left: 4px solid var(--warning);">
+            <h3 style="color: var(--warning);">🍽️ کھانے پینے کی روٹین (Diet Routine)</h3>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">وقت کا انتخاب:</label>
+                    <select id="mealTimeSelect" class="select-box" style="width: 100%;">
+                        <option value="پہلا ٹائم (ناشتہ)">پہلا ٹائم (ناشتہ)</option>
+                        <option value="دوسرا ٹائم (دوپہر کا کھانا)">دوسرا ٹائم (دوپہر کا کھانا)</option>
+                        <option value="تیسرا ٹائم (شام کا ناشتہ/چائے)">تیسرا ٹائم (شام کا ناشتہ/چائے)</option>
+                        <option value="چوتھا ٹائم (رات کا کھانا)">چوتھا ٹائم (رات کا کھانا)</option>
+                        <option value="پانچواں ٹائم (مڈ نائٹ / دیگر)">پانچواں ٹائم (مڈ نائٹ / دیگر)</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">کھانے کی چیز / روٹین:</label>
+                    <input type="text" id="mealInput" placeholder="کیا کھایا؟ تفصیل لکھیں..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; background: #fff;">
+                </div>
+            </div>
+            <button class="btn" style="background: var(--warning); width: 100%; padding: 10px;" onclick="saveMealRecord()">💾 خوراک کا ریکارڈ محفوظ کریں</button>
         </div>
 
         <!-- ہسٹری اور پوائنٹس کاؤنٹر -->
@@ -180,27 +231,26 @@
             { title: "راشن انوینٹری کا ریکارڈ چیک کرنا", points: 10 },
             { title: "شام کی چائے اور لوازمات تیار کرنا", points: 10 },
             { title: "ڈائننگ ٹیبل کی صفائی", points: 20 },
-            { title: "کچن کا کچرا باہر پھینکنا", points: 15 },
-            { title: "پینے کے پانی کا فلٹر چیک کرنا", points: 10 },
-            { title: "دروازے اور کھڑکیوں کے تالے لگانا", points: 25 },
-            { title: "کل کی ڈیوٹی لسٹ ترتیب دینا", points: 10 }
+            { title: "کچن کا کچرا باہر پھینکना", points: 15 }
+        ];
+
+        let symptomsList = [
+            "گیس / پیٹ میں ابھار",
+            "قبض کی شکایت",
+            "سر درد",
+            "چکر آنا",
+            "گھبراہٹ",
+            "پیٹ میں درد",
+            "جلد کی ڈرائینس",
+            "جسم میں کمزوری اور ویکنس"
         ];
 
         let historyList = [];
         let accumulatedPoints = 0;
-        let activeMembers = ['علی', 'احمد'];
+        let currentSymptomIndex = 0;
 
         function skipAlert() {
             document.getElementById('alertBanner').style.display = 'none';
-        }
-
-        function addActiveMember() {
-            let select = document.getElementById('memberSelect');
-            let val = select.value;
-            if(!activeMembers.includes(val)) {
-                activeMembers.push(val);
-                document.getElementById('activeMembersList').innerText = `شامل ممبران: ${activeMembers.join(', ')}`;
-            }
         }
 
         function renderUI() {
@@ -209,17 +259,19 @@
             
             if(tasksList.length > 0) {
                 let current = tasksList[0];
-                let dividedPoints = (current.points / (activeMembers.length > 0 ? activeMembers.length : 1)).toFixed(1);
                 titleText.innerText = `🔥 ٹاسک: ${current.title}`;
-                pointsBadge.innerText = `⭐ کل پوائنٹس: ${current.points} (ہر ممبر کا حصہ: ${dividedPoints})`;
+                pointsBadge.innerText = `⭐ کل پوائنٹس: ${current.points}`;
             } else {
                 titleText.innerText = `🎉 تمام ٹاسک مکمل ہو چکے ہیں!`;
                 pointsBadge.innerText = `⭐ پوائنٹس: 0`;
             }
 
+            // علامات کا لائیو ٹیکسٹ اپ ڈیٹ کرنا
+            document.getElementById('symptomTitleText').innerText = `🔍 علامت: ${symptomsList[currentSymptomIndex]}`;
+
             let histContainer = document.getElementById('historyContainer');
             if(historyList.length === 0) {
-                histContainer.innerHTML = '<div class="history-item">ابھی تک کوئی کام مکمل نہیں ہوا۔</div>';
+                histContainer.innerHTML = '<div class="history-item">ابھی تک کوئی کام ریکارڈ نہیں ہوا۔</div>';
             } else {
                 histContainer.innerHTML = historyList.slice(-8).reverse().map(h => `<div class="history-item">${h}</div>`).join('');
             }
@@ -235,9 +287,7 @@
 
             if(action === 'done') {
                 accumulatedPoints += current.points; 
-                let memberCount = activeMembers.length > 0 ? activeMembers.length : 1;
-                let perHead = (current.points / memberCount).toFixed(1);
-                actionText = `✔️ ہو गया: ${current.title} (+${current.points} پوائنٹس ڈیوائیڈ ہوئے ${memberCount} ممبران میں، فی کس: ${perHead})`;
+                actionText = `✔️ ہو گیا: ${current.title} (+${current.points} پوائنٹس)`;
             } else if(action === 'notdone') {
                 actionText = `⚠️ نہیں ہوا: ${current.title} (پینڈنگ)`;
             } else if(action === 'cancel') {
@@ -246,6 +296,39 @@
 
             historyList.push(actionText);
             renderUI();
+        }
+
+        function handleSymptom(status) {
+            let member = document.getElementById('healthMemberSelect').value;
+            let symptom = symptomsList[currentSymptomIndex];
+            let note = document.getElementById('symptomNote').value;
+            let statusText = "";
+
+            if(status === 'thik') statusText = "ٹھیک ہے";
+            else if(status === 'thora') statusText = "تھوڑا مسئلہ ہے";
+            else if(status === 'halt') statusText = "کبھی کبھی / مسلسل مسئلہ (Halt)";
+            else if(status === 'zyada') statusText = "زیادہ مسئلہ ہے";
+
+            let record = `🩺 صحت (${member}): ${symptom} ⬅️ حالت: ${statusText} ${note ? '[' + note + ']' : ''}`;
+            historyList.push(record);
+            
+            // اگلی علامت پر جانا
+            currentSymptomIndex = (currentSymptomIndex + 1) % symptomsList.length;
+            document.getElementById('symptomNote').value = '';
+            renderUI();
+        }
+
+        function saveMealRecord() {
+            let timeSlot = document.getElementById('mealTimeSelect').value;
+            let meal = document.getElementById('mealInput').value.trim();
+
+            if(!meal) return alert("براہ کرم کھانے کی تفصیل درج کریں!");
+
+            let record = `🍽️ خوراک روٹین: [${timeSlot}] ⬅️ کھایا: ${meal}`;
+            historyList.push(record);
+            document.getElementById('mealInput').value = '';
+            renderUI();
+            alert("خوراک کا ریکارڈ کامیابی سے محفوظ ہو گیا ہے!");
         }
 
         window.onload = function() {
