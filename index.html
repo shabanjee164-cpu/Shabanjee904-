@@ -6,7 +6,7 @@
     <title>اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر</title>
     <style>
         :root {
-            --primary: #1e293b;
+            --primary: #1e3a8a; /* خوبصورت گہرا نیلا رنگ */
             --accent: #2563eb;
             --danger: #dc2626;
             --warning: #d97706;
@@ -25,20 +25,29 @@
         .container { max-width: 850px; margin: 0 auto; }
 
         .app-header {
-            background: var(--primary); color: white; text-align: center;
-            padding: 18px; border-radius: var(--radius); font-size: 24px; font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 15px;
-            border-bottom: 4px solid var(--accent);
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; text-align: center;
+            padding: 20px; border-radius: var(--radius); font-size: 24px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px;
+            border-bottom: 4px solid var(--warning);
         }
 
+        /* لائیو پٹی جو کچھ دیر رک کر چلے گی */
         .ticker-box {
             background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
             overflow: hidden; white-space: nowrap; padding: 12px; margin-bottom: 15px;
             font-weight: 600; color: #1e40af; cursor: pointer;
         }
-        .ticker-text { display: inline-block; padding-left: 100%; animation: ticker 30s linear infinite; }
+        .ticker-text { 
+            display: inline-block; padding-left: 100%; 
+            animation: ticker 12s ease-in-out infinite; /* کچھ دیر رک کر چلنے کا اینیمیشن */
+        }
         .ticker-box:hover .ticker-text { animation-play-state: paused; }
-        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        @keyframes ticker { 
+            0% { transform: translate(0, 0); animation-timing-function: ease; }
+            40% { transform: translate(-45%, 0); animation-timing-function: ease; }
+            60% { transform: translate(-45%, 0); animation-timing-function: ease; }
+            100% { transform: translate(-100%, 0); }
+        }
 
         .alert-box {
             background: var(--danger); color: white; padding: 12px 18px;
@@ -62,7 +71,7 @@
         }
         .select-box {
             padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border);
-            font-size: 14px; width: 280px; background: #fff; color: var(--text); outline: none;
+            font-size: 14px; width: 100%; background: #fff; color: var(--text); outline: none;
         }
 
         .btn-group { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
@@ -102,18 +111,23 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
         th, td { border: 1px solid var(--border); padding: 10px; text-align: center; }
         th { background: #f1f5f9; color: var(--primary); }
+
+        .summary-box-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .summary-card { flex: 1; min-width: 230px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 8px; text-align: center; }
+        .summary-card h4 { margin: 0 0 5px 0; color: #166534; font-size: 14px; }
+        .summary-card span { font-size: 20px; font-weight: bold; color: var(--success); }
     </style>
 </head>
 <body>
 
     <div class="container">
 
-        <!-- 1. ایپ کا نیا نام ہیڈر -->
+        <!-- 1. ایپ کا نیا کلر فل ہیڈر -->
         <div class="app-header">🌟 اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر</div>
 
-        <!-- 2. لائیو نیوز پٹی -->
+        <!-- 2. لائیو پٹی (کچھ دیر رکی رہنے والی) -->
         <div class="ticker-box" title="ماوس لانے پر پٹی رک جاتی ہے">
-            <div class="ticker-text">💡 پروفیشنل سسٹم نوٹس: تمام ممبران (2 سینئر، 2 جونیئر) اپنی ڈیوٹی، صحت اور خوراک کا ریکارڈ وقت پر اپ ڈیٹ کریں۔</div>
+            <div class="ticker-text">💡 سسٹم نوٹس: ہر وقت 2 ممبرز ڈیوٹی پر موجود ہیں۔ اپنے کام، صحت اور ڈائٹ کا ریکارڈ باقاعدگی سے اپ ڈیٹ کریں۔</div>
         </div>
 
         <!-- 3. الرٹ ریڈ پٹی -->
@@ -122,35 +136,52 @@
             <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
         </div>
 
-        <!-- 4. آج کی ڈیوٹی کے ممبران (صرف دیکھنے کے لیے - 4 ممبر روٹیشن) -->
+        <!-- 4. ہر وقت نظر آنے والے 2 ڈیوٹی ممبران (سینئر اور ہیلپر) -->
         <div class="card" style="background: #f8fafc; border-left: 4px solid var(--accent);">
-            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی کے ممبران (24 گھنٹے شفট روٹیشن)</h3>
+            <h3 style="color: var(--accent);">⭐ آج کی ڈیوٹی پر موجود 2 ممبران (ہر وقت حاضر)</h3>
             <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 15px; color: var(--primary);">
-                <span>👨‍✈️ سینئر: علی (ریگولر)</span>
-                <span>🧑‍ ہیلپر (جونیئر): احمد (آج کی ڈیوٹی)</span>
+                <span>👨‍✈️ سینئر: علی</span>
+                <span>🧑‍ ہیلپر (جونیئر): احمد</span>
             </div>
         </div>
 
-        <!-- 5. چھٹی کی درخواست کا باکس (Leave Application) -->
+        <!-- 5. تاریخ اور ٹائم کا الگ باکس -->
+        <div class="card" style="background: #eff6ff; border-left: 4px solid var(--primary); padding: 12px 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary); font-size: 14px;">
+                <span>📅 آج کی تاریخ: <span id="currentDateBox" style="color: var(--accent);">05 ستمبر 2026</span></span>
+                <span>⏰ موجودہ ٹائم: <span id="currentTimeBox" style="color: var(--success);">2:54 PM</span></span>
+            </div>
+        </div>
+
+        <!-- 6. چھٹی کی درخواست کا باکس -->
         <div class="card" style="border-left: 4px solid var(--danger);">
             <h3 style="color: var(--danger);">📝 چھٹی کی درخواست (Leave Application)</h3>
             <div class="selection-center">
-                <select id="leaveMemberSelect" class="select-box">
-                    <option value="علی">علی (سینئر 1)</option>
+                <select id="leaveMemberSelect" class="select-box" style="width: 280px;">
+                    <option value="علی">علی (سینئر)</option>
+                    <option value="احمد">احمد (ہیلپر)</option>
                     <option value="عثمان">عثمان (سینئر 2)</option>
-                    <option value="احمد">احمد (جونیئر 1)</option>
-                    <option value="بلال">بلال (جونیئر 2)</option>
+                    <option value="بلال">بلال (ہیلپر 2)</option>
                 </select>
-                <button class="btn btn-cancel" style="flex: none; padding: 10px 20px;" onclick="applyLeave()">آج کی چھٹی لگایئں</button>
+                <button class="btn btn-cancel" style="flex: none; padding: 10px 20px;" onclick="applyLeave()">چھٹی لگایئں</button>
             </div>
             <div style="margin-top: 8px; font-size: 13px; color: var(--danger); text-align: center; font-weight: bold;" id="leaveStatusText">
                 آج چھٹی پر کوئی ممبر نہیں ہے۔
             </div>
         </div>
 
-        <!-- 6. موجودہ ٹاسک اور پوائنٹس باکس -->
+        <!-- 7. موجودہ ٹاسک اور پوائنٹس باکس (کون سا ممبر حاضری لگا رہا ہے) -->
         <div class="card">
-            <h3>⚡ موجودہ ٹاسک اور پوائنٹس (مشترکہ تقسیم)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0;">⚡ موجودہ ٹاسک اور پوائنٹس</h3>
+                <div style="font-size: 13px; font-weight: bold; color: var(--accent);">
+                    حاضری لگانیوالا ممبر: 
+                    <select id="activeAttendant" style="padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); font-weight: bold;">
+                        <option value="علی">علی</option>
+                        <option value="احمد">احمد</option>
+                    </select>
+                </div>
+            </div>
             
             <div class="fresh-task-display" id="currentFreshTask">
                 <span id="taskTitleText">🔥 ٹاسک: کمرے کی مکمل صفائی</span>
@@ -159,14 +190,14 @@
 
             <div class="btn-group">
                 <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
-                <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا</button>
+                <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا (اسکیپ)</button>
                 <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
             </div>
         </div>
 
-        <!-- 7. ہسٹری (کام والے باکس کے بالکل نیچے) -->
+        <!-- 8. ہسٹری (صرف کام کی ہسٹری - ہیلتھ یا ڈائٹ اس میں شامل نہیں) -->
         <div class="card">
-            <h3>📜 مکمل شدہ کاموں کی لائیو ہسٹری</h3>
+            <h3>📜 مکمل شدہ کاموں کی لائیو ہسٹری (صرف کام)</h3>
             <div class="history-box" id="historyContainer">
                 <div class="history-item">ابھی تک کوئی کام ریکارڈ نہیں ہوا۔</div>
             </div>
@@ -177,52 +208,15 @@
             </div>
         </div>
 
-        <!-- 8. پچھلے نامکمل کاموں کا باکس (صرف اسی ممبر کی ڈیوٹی پر بمعہ تاریخ، دن، ٹائم) -->
+        <!-- 9. پچھلے نامکمل کاموں کا باکس (اسی ممبر کے لیے جو ڈیوٹی پر ہے) -->
         <div class="card" style="border-left: 4px solid var(--warning);">
-            <h3 style="color: var(--warning);">⚠️ پچھلے نامکمل / اسکیپ کیے گئے کام (آج کے ڈیوٹی ممبر کے لیے)</h3>
+            <h3 style="color: var(--warning);">⚠️ پچھلے نامکمل / اسکیپ کیے گئے کام (صرف موجودہ ڈیوٹی ممبر کے لیے)</h3>
             <div class="history-box" id="pendingTasksContainer" style="background: #fffbeb; border-color: #fde68a;">
-                <div class="history-item">آج کے ڈیوٹی ممبر کے ذمے پچھلا کوئی نامکمل کام موجود نہیں۔</div>
+                <div class="history-item">موجودہ ڈیوٹی ممبر کے ذمے پچھلا کوئی نامکمل کام موجود نہیں۔</div>
             </div>
         </div>
 
-        <!-- 9. صحت اور علامات کا ٹریکر (10 مکمل بٹن) -->
-        <div class="card" style="border-left: 4px solid var(--purple);">
-            <h3 style="color: var(--purple);">🩺 صحت اور علامات کا ٹریکر (10 فیز بٹنز)</h3>
-            
-            <div style="margin-bottom: 12px; text-align: center;">
-                <label style="font-weight: bold; font-size: 13px;">ممبر سلیکٹ کریں:</label>
-                <select id="healthMemberSelect" class="select-box" style="margin-top: 5px;">
-                    <option value="علی">علی</option>
-                    <option value="عثمان">عثمان</option>
-                    <option value="احمد">احمد</option>
-                    <option value="بلال">بلال</option>
-                </select>
-            </div>
-
-            <div class="fresh-task-display" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-color: #ddd6fe; color: #5b21b6;">
-                <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
-            </div>
-
-            <!-- صحت کے 10 مکمل بٹنز (بشمول ہلٹ اور کیٹگریز) -->
-            <div class="btn-group">
-                <button class="btn btn-done" onclick="handleSymptom('بالکل ٹھیک')">✅ ٹھیک ہے</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('تھوڑا مسئلہ')">⚠️ تھوڑا مسئلہ</button>
-                <button class="btn btn-halt" onclick="handleSymptom('کبھی کبھی مسئلہ (Halt)')">🔄 کبھی کبھی (Halt)</button>
-                <button class="btn btn-halt" onclick="handleSymptom('مسلسل مسئلہ')">🔄 مسلسل مسئلہ</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('زیادہ مسئلہ')">❌ زیادہ مسئلہ</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('بہت زیادہ مسئلہ')">❌ بہت مسئلہ</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('کبھی کم کبھی زیادہ')">⚖️ کم و بیش</button>
-                <button class="btn btn-halt" onclick="handleSymptom('درمیانی حالت')">⚡ درمیانی حالت</button>
-                <button class="btn btn-done" onclick="handleSymptom('بہتری کی طرف')">📈 بہتری کی طرف</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('شدید کیفیت')">🚨 شدید کیفیت</button>
-            </div>
-
-            <div style="margin-top: 12px;">
-                <input type="text" id="symptomNote" placeholder="مسئلے کی مزید تفصیل یہاں لکھیں..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
-            </div>
-        </div>
-
-        <!-- 10. ممبران کا رزلٹ باکس (Result Sheet) -->
+        <!-- 10. ممبران کا رزلٹ باکس (صحت کے ٹریکر سے بالکل اوپر) -->
         <div class="card" style="border-left: 4px solid var(--success);">
             <h3 style="color: var(--success);">📊 ممبران کارکردگی اور رزلٹ شیٹ</h3>
             <table>
@@ -251,57 +245,126 @@
             </table>
         </div>
 
-        <!-- 11. کھانے پینے اور ڈائٹ کا بڑا باکس (بالکل آخر میں - ڈراپ لائنز کے ساتھ) -->
-        <div class="card" style="border-left: 4px solid var(--warning); background: #fffdf4;">
-            <h3 style="color: var(--warning);">🍽️ کھانے پینے اور ڈائٹ کی روٹین (آخری سیکشن)</h3>
+        <!-- 11. صحت اور علامات کا ٹریکر (سیکنڈ لاسٹ پوزیشن پر - 10 بٹن) -->
+        <div class="card" style="border-left: 4px solid var(--purple);">
+            <h3 style="color: var(--purple);">🩺 صحت اور علامات کا ٹریکر (سیکنڈ لاسٹ پوزیشن)</h3>
             
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">وقت کا انتخاب:</label>
-                    <select id="mealTimeSelect" class="select-box" style="width: 100%;">
-                        <option value="پہلا ٹائم (ناشتہ)">پہلا ٹائم (ناشتہ)</option>
-                        <option value="دوسرا ٹائم (دوپہر کا کھانا)">دوسرا ٹائم (دوپہر کا کھانا)</option>
-                        <option value="تیسرا ٹائم (شام کا ناشتہ/چائے)">تیسرا ٹائم (شام کا ناشتہ/چائے)</option>
-                        <option value="چوتھا ٹائم (رات کا کھانا)">چوتھا ٹائم (رات کا کھانا)</option>
-                        <option value="پانچواں ٹائم (مڈ نائٹ / دیگر)">پانچواں ٹائم (مڈ نائٹ / دیگر)</option>
-                    </select>
-                </div>
-                
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">سالن کی قسم (ڈراپ لائن):</label>
-                    <select id="mealSalan" class="select-box" style="width: 100%;">
-                        <option value="سبزی سالن">سبزی سالن</option>
-                        <option value="دال سالن">دال سالن</option>
-                        <option value="چکن سالن">چکن سالن</option>
-                        <option value="گوشت سالن">گوشت سالن</option>
-                        <option value="انڈا / آملیٹ">انڈا / آملیٹ</option>
-                    </select>
-                </div>
-
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">روٹی / بیس (ڈراپ لائن):</label>
-                    <select id="mealRoti" class="select-box" style="width: 100%;">
-                        <option value="گندم کی روٹی (1 عدد)">گندم کی روٹی (1 عدد)</option>
-                        <option value="گندم کی روٹی (2 عدد)">گندم کی روٹی (2 عدد)</option>
-                        <option value="چاول (ایک پلیٹ)">چاول (ایک پلیٹ)</option>
-                        <option value="ڈبل روٹی / سلائس">ڈبل روٹی / سلائس</option>
-                        <option value="صرف چائے / پینے کی چیز">صرف چائے / پینے کی چیز</option>
-                    </select>
-                </div>
-
-                <div style="flex: 1; min-width: 200px;">
-                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">متعلقہ اشیاء / دہی (ڈراپ لائن):</label>
-                    <select id="mealExtra" class="select-box" style="width: 100%;">
-                        <option value="دہی شامل ہے">دہی شامل ہے</option>
-                        <option value="सलाद / رائتہ">سلاد / رائتہ</option>
-                        <option value="دودھ / چائے">دودھ / چائے</option>
-                        <option value="پھل / جوس">پھل / جوس</option>
-                        <option value="کچھ اضافی نہیں">کچھ اضافی نہیں</option>
-                    </select>
-                </div>
+            <div style="margin-bottom: 12px;">
+                <label style="font-weight: bold; font-size: 13px;">ممبر سلیکٹ کریں:</label>
+                <select id="healthMemberSelect" class="select-box" style="margin-top: 5px;">
+                    <option value="علی">علی</option>
+                    <option value="احمد">احمد</option>
+                    <option value="عثمان">عثمان</option>
+                    <option value="بلال">بلال</option>
+                </select>
             </div>
 
-            <button class="btn" style="background: var(--warning); width: 100%; padding: 12px; font-size: 14px;" onclick="saveMealRecord()">💾 ڈائٹ روٹین کا ریکارڈ محفوظ کریں</button>
+            <div class="fresh-task-display" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-color: #ddd6fe; color: #5b21b6;">
+                <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-done" onclick="handleSymptom('بالکل ٹھیک')">✅ ٹھیک ہے</button>
+                <button class="btn btn-notdone" onclick="handleSymptom('تھوڑا مسئلہ')">⚠️ تھوڑا مسئلہ</button>
+                <button class="btn btn-halt" onclick="handleSymptom('کبھی کبھی مسئلہ (Halt)')">🔄 کبھی کبھی (Halt)</button>
+                <button class="btn btn-halt" onclick="handleSymptom('مسلسل مسئلہ')">🔄 مسلسل مسئلہ</button>
+                <button class="btn btn-cancel" onclick="handleSymptom('زیادہ مسئلہ')">❌ زیادہ مسئلہ</button>
+                <button class="btn btn-cancel" onclick="handleSymptom('بہت زیادہ مسئلہ')">❌ بہت مسئلہ</button>
+                <button class="btn btn-notdone" onclick="handleSymptom('کبھی کم کبھی زیادہ')">⚖️ کم و بیش</button>
+                <button class="btn btn-halt" onclick="handleSymptom('درمیانی حالت')">⚡ درمیانی حالت</button>
+                <button class="btn btn-done" onclick="handleSymptom('بہتری کی طرف')">📈 بہتری کی طرف</button>
+                <button class="btn btn-cancel" onclick="handleSymptom('شدید کیفیت')">🚨 شدید کیفیت</button>
+            </div>
+
+            <div style="margin-top: 12px;">
+                <input type="text" id="symptomNote" placeholder="مسئلے کی مزید تفصیل یہاں لکھیں..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
+            </div>
+        </div>
+
+        <!-- 12. کھانے پینے اور ڈائٹ کا بڑا باکس (3 ڈراپ لائنز بمعہ کوآنٹیٹی آپشنز) -->
+        <div class="card" style="border-left: 4px solid var(--warning); background: #fffdf4;">
+            <h3 style="color: var(--warning);">🍽️ کھانے پینے اور ڈائٹ کی روٹین (بمعہ مقدار سلیکشن)</h3>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                
+                <!-- پہلی ڈراپ لائن: سالن + مقدار -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">سالن کی قسم اور مقدار:</label>
+                    <div style="display: flex; gap: 5px;">
+                        <select id="mealSalan" class="select-box" style="flex: 2;">
+                            <option value="سبزی سالن">سبزی سالن</option>
+                            <option value="دال سالن">دال سالن</option>
+                            <option value="چکن سالن">چکن سالن</option>
+                            <option value="گوشت سالن">گوشت سالن</option>
+                            <option value="انڈا / آملیٹ">انڈا / آملیٹ</option>
+                        </select>
+                        <select id="salanQty" class="select-box" style="flex: 1;">
+                            <option value="تھوڑا">تھوڑا</option>
+                            <option value="درمیانہ پیالہ">درمیانہ</option>
+                            <option value="زیادہ بھر کر">زیادہ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- دوسری ڈراپ لائن: روٹی/بیس + مقدار -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">روٹی / بیس اور مقدار:</label>
+                    <div style="display: flex; gap: 5px;">
+                        <select id="mealRoti" class="select-box" style="flex: 2;">
+                            <option value="گندم کی روٹی">گندم کی روٹی</option>
+                            <option value="چاول">چاول</option>
+                            <option value="ڈبل روٹی / سلائس">ڈبل روٹی / سلائس</option>
+                            <option value="صرف چائے">صرف چائے</option>
+                        </select>
+                        <select id="rotiQty" class="select-box" style="flex: 1;">
+                            <option value="1 عدد">1 عدد</option>
+                            <option value="2 عدد">2 عدد</option>
+                            <option value="نصف پلیٹ">نصف پلیٹ</option>
+                            <option value="پوری پلیٹ">پوری پلیٹ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- تیسری ڈراپ لائن: اضافی اشیاء (دہی/رائتہ وغیرہ) + مقدار -->
+                <div style="flex: 1; min-width: 250px;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">اضافی اشیاء (دہی وغیرہ) اور مقدار:</label>
+                    <div style="display: flex; gap: 5px;">
+                        <select id="mealExtra" class="select-box" style="flex: 2;">
+                            <option value="دہی">دہی</option>
+                            <option value="سلاد / رائتہ">سلاد / رائتہ</option>
+                            <option value="دودھ / چائے">دودھ / چائے</option>
+                            <option value="پھل / جوس">پھل / جوس</option>
+                        </select>
+                        <select id="extraQty" class="select-box" style="flex: 1;">
+                            <option value="ایک پیالی / کپ">ایک پیالی</option>
+                            <option value="تھوڑا سا">تھوڑا</option>
+                            <option value="زیادہ مقدار">زیادہ</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="btn" style="background: var(--warning); width: 100%; padding: 12px; font-size: 14px;" onclick="saveMealRecord()">💾 ڈائٹ روٹین محفوظ کریں</button>
+        </div>
+
+        <!-- 13. بالکل آخر میں 3 پرسنٹیج سمری باکسز -->
+        <div class="card" style="border-left: 4px solid var(--success);">
+            <h3 style="color: var(--success);">📈 فائنل پرسنٹیج اور کارکردگی سمری</h3>
+            <div class="summary-box-grid">
+                <div class="summary-card">
+                    <h4>🩺 علامات کی بہتری</h4>
+                    <span id="symptomPercent">85%</span>
+                </div>
+                <div class="summary-card" style="background: #eff6ff; border-color: #bfdbfe;">
+                    <h4 style="color: #1e40af;">🍽️ ڈائٹ روٹین اسکور</h4>
+                    <span id="dietPercent" style="color: #2563eb;">90%</span>
+                </div>
+                <div class="summary-card" style="background: #fdf4ff; border-color: #f5d0fe;">
+                    <h4 style="color: #86198f;">⭐ کل صحت و بہتری پرسنٹیج</h4>
+                    <span id="totalImprovementPercent" style="color: #9333ea;">88%</span>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -320,11 +383,10 @@
             "گھبراہٹ", "پیٹ میں درد", "جلد کی ڈرائینس", "جسم میں کمزوری اور ویکنس"
         ];
 
-        let historyList = [];
-        let skippedTasksRecord = []; // پچھلے چھوڑے گئے کام بمعہ تاریخ و ٹائم
+        let taskHistoryOnly = []; // صرف کاموں کی ہسٹری
+        let skippedTasksRecord = []; 
         let accumulatedPoints = 0;
         let currentSymptomIndex = 0;
-        let todayDutyHelper = "احمد"; // موجودہ ڈیوٹی ممبر
 
         function skipAlert() {
             document.getElementById('alertBanner').style.display = 'none';
@@ -334,7 +396,7 @@
             let member = document.getElementById('leaveMemberSelect').value;
             let now = new Date();
             let dateStr = now.toLocaleDateString('ur-PK');
-            document.getElementById('leaveStatusText').innerText = `✅ ایپلیکیشن منظور: ${member} کی آج (${dateStr}) چھٹی درج ہو گئی ہے، اگلا ممبر ڈیوٹی سنبھالے گا۔`;
+            document.getElementById('leaveStatusText').innerText = `✅ ایپلیکیشن منظور: ${member} کی آج (${dateStr}) چھٹی درج ہو گئی ہے۔`;
             alert(`${member} کی چھٹی کامیابی سے درج کر دی گئی ہے!`);
         }
 
@@ -353,20 +415,21 @@
 
             document.getElementById('symptomTitleText').innerText = `🔍 علامت: ${symptomsList[currentSymptomIndex]}`;
 
-            // لائیو ہسٹری رینڈر
+            // صرف کاموں کی ہسٹری رینڈر کرنا (بغیر ہیلتھ یا ڈائٹ کے)
             let histContainer = document.getElementById('historyContainer');
-            if(historyList.length === 0) {
+            if(taskHistoryOnly.length === 0) {
                 histContainer.innerHTML = '<div class="history-item">ابھی تک کوئی کام ریکارڈ نہیں ہوا۔</div>';
             } else {
-                histContainer.innerHTML = historyList.slice(-8).reverse().map(h => `<div class="history-item">${h}</div>`).join('');
+                histContainer.innerHTML = taskHistoryOnly.slice(-8).reverse().map(h => `<div class="history-item">${h}</div>`).join('');
             }
 
-            // صرف آج کے ڈیوٹی ممبر کے پچھلے نامکمل کام (تاریخ اور ٹائم کے ساتھ) رینڈر کرنا
+            // آج کے ڈیوٹی ممبر کے پچھلے اسکیپ کام
+            let attendant = document.getElementById('activeAttendant').value;
             let pendingContainer = document.getElementById('pendingTasksContainer');
-            let memberPending = skippedTasksRecord.filter(item => item.member === todayDutyHelper);
+            let memberPending = skippedTasksRecord.filter(item => item.member === attendant);
             
             if(memberPending.length === 0) {
-                pendingContainer.innerHTML = `<div class="history-item">آج کے ڈیوٹی ممبر (${todayDutyHelper}) کے ذمے پچھلا کوئی نامکمل کام موجود نہیں۔</div>`;
+                pendingContainer.innerHTML = `<div class="history-item">موجودہ ڈیوٹی ممبر (${attendant}) کے ذمے پچھلا کوئی نامکمل کام موجود نہیں۔</div>`;
             } else {
                 pendingContainer.innerHTML = memberPending.map(p => `<div class="history-item">📌 [تاریخ: ${p.date} | وقت: ${p.time}] - نامکمل کام: <b>${p.task}</b></div>`).join('');
             }
@@ -379,27 +442,29 @@
 
             let current = tasksList.shift(); 
             let actionText = "";
+            let attendant = document.getElementById('activeAttendant').value;
             let now = new Date();
             let dateStr = now.toLocaleDateString('ur-PK');
             let timeStr = now.toLocaleTimeString('ur-PK', {hour: '2-digit', minute:'2-digit'});
 
             if(action === 'done') {
                 accumulatedPoints += current.points; 
-                actionText = `✔️ ہو گیا: ${current.title} (+${current.points} پوائنٹس)`;
+                actionText = `✔️ ممبر (${attendant}) نے مکمل کیا: ${current.title} (+${current.points} پوائنٹس)`;
+                taskHistoryOnly.push(actionText);
             } else if(action === 'notdone') {
-                actionText = `⚠️ نہیں ہوا (اسکیپ): ${current.title}`;
-                // پچھلے چھوڑے گئے کام میں محفوظ کرنا تاکہ اگلی ڈیوٹی پر اسی ممبر کو شو ہو
+                actionText = `⚠️ ممبر (${attendant}) سے اسکیپ ہوا: ${current.title}`;
+                taskHistoryOnly.push(actionText);
                 skippedTasksRecord.push({
-                    member: todayDutyHelper,
+                    member: attendant,
                     task: current.title,
                     date: dateStr,
                     time: timeStr
                 });
             } else if(action === 'cancel') {
-                actionText = `❌ کرنا نہیں تھا: ${current.title} (خارج)`;
+                actionText = `❌ خارج کیا گیا: ${current.title}`;
+                taskHistoryOnly.push(actionText);
             }
 
-            historyList.push(actionText);
             renderUI();
         }
 
@@ -410,26 +475,21 @@
             let now = new Date();
             let dateStr = now.toLocaleDateString('ur-PK');
 
-            let record = `🩺 صحت (${member}) [${dateStr}]: ${symptom} ⬅️ حالت: ${status} ${note ? '[' + note + ']' : ''}`;
-            historyList.push(record);
+            alert(`✅ صحت کا ریکارڈ محفوظ ہو گیا:\nممبر: ${member}\nعلامت: ${symptom}\nحالت: ${status}`);
             
             currentSymptomIndex = (currentSymptomIndex + 1) % symptomsList.length;
             document.getElementById('symptomNote').value = '';
-            renderUI();
         }
 
         function saveMealRecord() {
-            let timeSlot = document.getElementById('mealTimeSelect').value;
             let salan = document.getElementById('mealSalan').value;
+            let salanQ = document.getElementById('salanQty').value;
             let roti = document.getElementById('mealRoti').value;
+            let rotiQ = document.getElementById('rotiQty').value;
             let extra = document.getElementById('mealExtra').value;
-            let now = new Date();
-            let dateStr = now.toLocaleDateString('ur-PK');
+            let extraQ = document.getElementById('extraQty').value;
 
-            let record = `🍽️ ڈائٹ روٹین [${dateStr} - ${timeSlot}]: 🥘 ${salan}, 🫓 ${roti}, 🥣 ${extra}`;
-            historyList.push(record);
-            renderUI();
-            alert("ڈائٹ روٹین کا ریکارڈ کامیابی سے محفوظ ہو گیا ہے!");
+            alert(`✅ ڈائٹ روٹین محفوظ ہو گئی:\n🥘 ${salan} (${salanQ})\n🫓 ${roti} (${rotiQ})\n🥣 ${extra} (${extraQ})`);
         }
 
         window.onload = function() {
