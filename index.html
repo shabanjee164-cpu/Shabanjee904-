@@ -28,10 +28,30 @@
         .app-header {
             background: linear-gradient(135deg, #1e293b, #0f172a); 
             color: white; text-align: center;
-            padding: 28px; border-radius: var(--radius); font-size: 28px; font-weight: bold;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15); margin-bottom: 24px;
+            padding: 24px; border-radius: var(--radius); font-size: 26px; font-weight: bold;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15); margin-bottom: 16px;
             border-bottom: 5px solid var(--accent);
         }
+
+        /* نیویگیشن بار اسٹائل */
+        .nav-bar {
+            display: flex; gap: 10px; justify-content: center; margin-bottom: 24px;
+            background: #ffffff; padding: 10px; border-radius: 12px; border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .nav-btn {
+            background: #f1f5f9; color: var(--primary); border: none; padding: 10px 24px;
+            border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover { background: #e2e8f0; }
+        .nav-btn.active {
+            background: var(--accent); color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .view-section { display: none; }
+        .view-section.active-view { display: block; }
 
         .ticker-box {
             background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
@@ -138,261 +158,292 @@
         <!-- 1. ایپ کا نام -->
         <div class="app-header">⚡ اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر</div>
 
-        <!-- 2. ٹِکر پٹی -->
-        <div class="ticker-box">
-            <div class="ticker-text">📢 اہم نوٹ: یہ سسٹم فیملی کی روزمرہ کارکردگی اور ہیلتھ ریکارڈ کو مانیٹر کرنے کے لیے فعال ہے۔</div>
+        <!-- نیویگیشن بٹنز (ڈیش بورڈ اور رکارڈ) -->
+        <div class="nav-bar">
+            <button class="nav-btn active" id="navDashboardBtn" onclick="switchView('dashboard')">🏠 ڈیش بورڈ (Dashboard)</button>
+            <button class="nav-btn" id="navRecordBtn" onclick="switchView('record')">📋 مکمل رکارڈ (Records)</button>
         </div>
 
-        <!-- 3. الرٹ پٹی -->
-        <div class="alert-box" id="alertBanner">
-            <span>🚨 اہم الرٹ: کچن کا پانی کا نلکا چیک کریں اور فیملی نوٹس پڑھیں!</span>
-            <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
-        </div>
+        <!-- ========================================== -->
+        <!-- 1. ڈیش بورڈ ویو (Dashboard View) -->
+        <!-- ========================================== -->
+        <div id="dashboardView" class="view-section active-view">
 
-        <!-- 4. ڈیوٹی ممبران -->
-        <div class="card" style="border-right: 5px solid var(--golden);">
-            <h3 style="color: var(--golden);">⭐ آج کی ڈیوٹی پر موجود ممبران</h3>
-            <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 16px; color: var(--primary); margin-top: 8px;">
-                <span>👨‍✈️ سینئر: علی</span>
-                <span>🧑‍ ہیلپر: احمد</span>
-            </div>
-        </div>
-
-        <!-- 5. چھٹی کی درخواست -->
-        <div class="card" style="border-right: 5px solid var(--danger);">
-            <h3 style="color: var(--danger);">📝 چھٹی کی درخواست</h3>
-            <div class="selection-center">
-                <select id="leaveMemberSelect" class="select-box" style="width: 280px;">
-                    <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (ہیلپر)</option>
-                </select>
-                <button class="btn btn-cancel" style="flex: none; padding: 12px 24px;" onclick="applyLeave()">چھٹی لگایئں</button>
-            </div>
-            <div id="leaveSubmitStatus" style="margin-top: 10px; font-weight: bold; font-size: 13px; text-align: center; color: var(--success);"></div>
-        </div>
-
-        <!-- 6. کام کی لسٹ، ممبر سلیکشن اور ٹاسک ایکشن ہسٹری -->
-        <div class="card" style="border-right: 5px solid var(--accent);">
-            <div style="text-align: center; margin-bottom: 14px;">
-                <label style="font-weight: bold; font-size: 14px; color: var(--primary); display: block; margin-bottom: 8px;">
-                    حاضری اور کام کرنے والا ممبر سلیکٹ کریں:
-                </label>
-                <select id="activeAttendant" class="select-box" style="max-width: 350px; margin: 0 auto; display: block; font-weight: bold; text-align: center;">
-                    <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (ہیلپر)</option>
-                </select>
-            </div>
-            
-            <div class="fresh-task-display" id="currentFreshTask">
-                <span id="taskTitleText">🔥 ٹاسک: کمرے کی مکمل صفائی</span>
-                <span class="task-badge-large" id="taskPointsBadge">⭐ پوائنٹس: 15</span>
+            <!-- 2. ٹِکر پٹی -->
+            <div class="ticker-box">
+                <div class="ticker-text">📢 اہم نوٹ: یہ سسٹم فیملی کی روزمرہ کارکردگی اور ہیلتھ ریکارڈ کو مانیٹر کرنے کے لیے فعال ہے۔</div>
             </div>
 
-            <div class="btn-group">
-                <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
-                <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا (اسکیپ)</button>
-                <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
+            <!-- 3. الرٹ پٹی -->
+            <div class="alert-box" id="alertBanner">
+                <span>🚨 اہم الرٹ: کچن کا پانی کا نلکا چیک کریں اور فیملی نوٹس پڑھیں!</span>
+                <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
             </div>
 
-            <!-- ٹاسک ایکشن ہسٹری -->
-            <div style="margin-top: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-weight: bold; font-size: 13px; color: var(--primary);">📋 ٹاسک ایکشن ہسٹری (مع پوائنٹس):</span>
-                    <button class="setting-btn-pro" onclick="openTaskHistorySettings()">⚙️ ٹاسک ہسٹری سیٹنگ</button>
-                </div>
-                <div id="taskActionHistory" style="font-size: 12px; color: #64748b; max-height: 120px; overflow-y: auto;">
-                    کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔
-                </div>
-                <div id="taskHistoryTotalPoints" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-weight: bold; font-size: 13px; color: var(--success); text-align: left;">
-                    کل پوائنٹس (Total Points): 0
+            <!-- 4. ڈیوٹی ممبران -->
+            <div class="card" style="border-right: 5px solid var(--golden);">
+                <h3 style="color: var(--golden);">⭐ آج کی ڈیوٹی پر موجود ممبران</h3>
+                <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 16px; color: var(--primary); margin-top: 8px;">
+                    <span>👨‍✈️ سینئر: علی</span>
+                    <span>🧑‍ ہیلپر: احمد</span>
                 </div>
             </div>
-        </div>
 
-        <!-- 8. نامکمل کام: دو ممبروں کی الگ الگ بڑی پارٹیشنز -->
-        <div class="card" style="border-right: 5px solid var(--purple);">
-            <h3 style="color: var(--purple);">📊 نامکمل و پچھلے اسکیپ شدہ کاموں کی پروفیشنل ہسٹری</h3>
-            
-            <div class="partition-grid">
-                <div class="member-partition-box">
-                    <div class="member-big-title">👨‍✈️ علی</div>
-                    <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
-                    <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
-                    <div class="skipped-tasks-list">
-                        • کمرے کی مکمل صفائی<br>• راشن انوینٹری چیک
+            <!-- 5. چھٹی کی درخواست -->
+            <div class="card" style="border-right: 5px solid var(--danger);">
+                <h3 style="color: var(--danger);">📝 چھٹی کی درخواست</h3>
+                <div class="selection-center">
+                    <select id="leaveMemberSelect" class="select-box" style="width: 280px;">
+                        <option value="علی">علی (سینئر)</option>
+                        <option value="احمد">احمد (ہیلپر)</option>
+                    </select>
+                    <button class="btn btn-cancel" style="flex: none; padding: 12px 24px;" onclick="applyLeave()">چھٹی لگایئں</button>
+                </div>
+                <div id="leaveSubmitStatus" style="margin-top: 10px; font-weight: bold; font-size: 13px; text-align: center; color: var(--success);"></div>
+            </div>
+
+            <!-- 6. کام کی لسٹ، ممبر سلیکشن اور ٹاسک ایکشن ہسٹری -->
+            <div class="card" style="border-right: 5px solid var(--accent);">
+                <div style="text-align: center; margin-bottom: 14px;">
+                    <label style="font-weight: bold; font-size: 14px; color: var(--primary); display: block; margin-bottom: 8px;">
+                        حاضری اور کام کرنے والا ممبر سلیکٹ کریں:
+                    </label>
+                    <select id="activeAttendant" class="select-box" style="max-width: 350px; margin: 0 auto; display: block; font-weight: bold; text-align: center;">
+                        <option value="علی">علی (سینئر)</option>
+                        <option value="احمد">احمد (ہیلپر)</option>
+                    </select>
+                </div>
+                
+                <div class="fresh-task-display" id="currentFreshTask">
+                    <span id="taskTitleText">🔥 ٹاسک: کمرے کی مکمل صفائی</span>
+                    <span class="task-badge-large" id="taskPointsBadge">⭐ پوائنٹس: 15</span>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
+                    <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا (اسکیپ)</button>
+                    <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
+                </div>
+
+                <!-- ٹاسک ایکشن ہسٹری -->
+                <div style="margin-top: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: bold; font-size: 13px; color: var(--primary);">📋 ٹاسک ایکشن ہسٹری (مع پوائنٹس):</span>
+                        <button class="setting-btn-pro" onclick="openTaskHistorySettings()">⚙️ ٹاسک ہسٹری سیٹنگ</button>
                     </div>
-                </div>
-
-                <div class="member-partition-box">
-                    <div class="member-big-title">🧑‍ ہیلپر: احمد</div>
-                    <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
-                    <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
-                    <div class="skipped-tasks-list">
-                        • چائے بنانا<br>• کچن کاؤنٹر صاف کرنا
+                    <div id="taskActionHistory" style="font-size: 12px; color: #64748b; max-height: 120px; overflow-y: auto;">
+                        کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔
+                    </div>
+                    <div id="taskHistoryTotalPoints" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-weight: bold; font-size: 13px; color: var(--success); text-align: left;">
+                        کل پوائنٹس (Total Points): 0
                     </div>
                 </div>
             </div>
 
-            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-top: 16px;">
-                <div style="font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 10px;">📌 نئی کمپلین / ریزن اور اسکیپ باکس:</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="skipMemberSelect" class="select-box" style="flex: 1; min-width: 110px; background: #fff;">
+            <!-- 8. نامکمل کام: دو ممبروں کی الگ الگ بڑی پارٹیشنز -->
+            <div class="card" style="border-right: 5px solid var(--purple);">
+                <h3 style="color: var(--purple);">📊 نامکمل و پچھلے اسکیپ شدہ کاموں کی پروفیشنل ہسٹری</h3>
+                
+                <div class="partition-grid">
+                    <div class="member-partition-box">
+                        <div class="member-big-title">👨‍✈️ علی</div>
+                        <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
+                        <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
+                        <div class="skipped-tasks-list">
+                            • کمرے کی مکمل صفائی<br>• راشن انوینٹری چیک
+                        </div>
+                    </div>
+
+                    <div class="member-partition-box">
+                        <div class="member-big-title">🧑‍ ہیلپر: احمد</div>
+                        <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
+                        <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
+                        <div class="skipped-tasks-list">
+                            • چائے بنانا<br>• کچن کاؤنٹر صاف کرنا
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-top: 16px;">
+                    <div style="font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 10px;">📌 نئی کمپلین / ریزن اور اسکیپ باکس:</div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <select id="skipMemberSelect" class="select-box" style="flex: 1; min-width: 110px; background: #fff;">
+                            <option value="علی">علی</option>
+                            <option value="احمد">احمد</option>
+                        </select>
+                        <select id="skipTaskSelect" class="select-box" style="flex: 1.5; min-width: 140px; background: #fff;">
+                            <option value="کمرے کی صفائی">کمرے کی صفائی</option>
+                            <option value="راشن انوینٹری">راشن انوینٹری</option>
+                            <option value="چائے بنانا">چائے بنانا</option>
+                        </select>
+                        <input type="text" id="skipReasonInput" placeholder="ریزن درج کریں..." style="flex: 2; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: #fff;">
+                        <button class="btn btn-cancel" style="flex: none; padding: 10px 16px;" onclick="autoSkipTask()">اسکیپ کریں</button>
+                    </div>
+                    <div id="autoSkippedLogsList" style="font-size: 12px; color: #64748b; margin-top: 8px;">کوئی نیا اسکیپ ریکارڈ موجود نہیں۔</div>
+                </div>
+            </div>
+
+            <!-- 9. فائنل رزلٹ شیٹ -->
+            <div class="card" style="border-right: 5px solid var(--success);">
+                <h3 style="color: var(--success);">📈 ممبران فائنل رزلٹ شیٹ</h3>
+                <table class="clean-result-table">
+                    <thead>
+                        <tr>
+                            <th>ممبر کا نام</th>
+                            <th>پوائنٹس</th>
+                            <th>کارکردگی گریڈ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>علی</b></td>
+                            <td><span style="font-weight: bold; color: var(--success);">45 پوائنٹس</span></td>
+                            <td><span style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Excellent</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>احمد</b></td>
+                            <td><span style="font-weight: bold; color: var(--accent);">35 پوائنٹس</span></td>
+                            <td><span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Good</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 10. علامت ٹریکر -->
+            <div class="card" style="border-right: 5px solid var(--purple);">
+                <h3 style="color: var(--purple);">🩺 صحت اور علامات کا ٹریکر</h3>
+                <div style="margin-bottom: 14px;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px;">ممبر سلیکٹ کریں:</label>
+                    <select id="healthMemberSelect" class="select-box">
                         <option value="علی">علی</option>
                         <option value="احمد">احمد</option>
                     </select>
-                    <select id="skipTaskSelect" class="select-box" style="flex: 1.5; min-width: 140px; background: #fff;">
-                        <option value="کمرے کی صفائی">کمرے کی صفائی</option>
-                        <option value="راشن انوینٹری">راشن انوینٹری</option>
-                        <option value="چائے بنانا">چائے بنانا</option>
+                </div>
+                <div class="fresh-task-display" style="background: #f5f3ff; border-color: #ddd6fe; color: var(--purple);">
+                    <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
+                </div>
+                <div class="btn-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-top: 14px;">
+                    <button class="btn btn-done" onclick="handleSymptom('1. ٹھیک ہے')">1. ٹھیک ہے</button>
+                    <button class="btn btn-cancel" onclick="handleSymptom('2. نہیں ٹھیک')">2. نہیں ٹھیک</button>
+                    <button class="btn btn-notdone" onclick="handleSymptom('3. تھوڑا مسئلہ ہے')">3. تھوڑا مسئلہ ہے</button>
+                    <button class="btn btn-halt" onclick="handleSymptom('4. کبھی کبھی مسئلہ ہوتا ہے')">4. کبھی کبھی</button>
+                    <button class="btn btn-primary" onclick="handleSymptom('5. مسئلہ سیم پہلے کی طرح ہے')">5. سیم پہلے جیسا</button>
+                    <button class="btn btn-done" onclick="handleSymptom('6. مسئلہ بہتر ہے پہلے سے')">6. بہتر ہے پہلے سے</button>
+                    <button class="btn btn-notdone" onclick="handleSymptom('7. کبھی زیادہ ہے مسئلہ')">7. کبھی زیادہ ہے</button>
+                    <button class="btn btn-cancel" onclick="handleSymptom('8. مسئلہ بہت زیادہ ہے')">8. بہت زیادہ ہے</button>
+                    <button class="btn btn-danger" style="background:#b91c1c;" onclick="handleSymptom('9. مسئلہ زیادہ ہے')">9. مسئلہ زیادہ ہے</button>
+                    <button class="btn btn-purple" style="background:#6d28d9;" onclick="handleSymptom('10. بار بار وہی مسئلہ ریپیٹ ہو رہا ہے')">10. بار بار ریپیٹ</button>
+                    <button class="btn btn-primary" style="background:#0f766e;" onclick="handleSymptom('11. دیگر صورتحال')">11. دیگر صورتحال</button>
+                </div>
+            </div>
+
+            <!-- 11. ڈائٹ روٹین سسٹم -->
+            <div class="card" style="border-right: 5px solid var(--warning); background: #fffdf4;">
+                <h3 style="color: var(--warning);">🍽️ ڈائٹ روٹین (تین سیکشنز ایک ہی لائن میں)</h3>
+                <div style="border-bottom: 1px solid var(--border); margin-bottom: 16px;"></div>
+                
+                <div style="margin-bottom: 14px; text-align: center;">
+                    <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: var(--primary);">⏰ کھانے یا پینے کا وقت (Time Slot):</label>
+                    <select id="mealTimeSlot" class="select-box" style="max-width: 260px; margin: 0 auto; display: block; font-weight: bold; background: #fffbeb; border-color: var(--warning); text-align: center;">
+                        <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
+                        <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
+                        <option value="شام کی چائے">3. شام کی چائے</option>
+                        <option value="رات کا کھانا">4. رات کا کھانا</option>
                     </select>
-                    <input type="text" id="skipReasonInput" placeholder="ریزن درج کریں..." style="flex: 2; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: #fff;">
-                    <button class="btn btn-cancel" style="flex: none; padding: 10px 16px;" onclick="autoSkipTask()">اسکیپ کریں</button>
                 </div>
-                <div id="autoSkippedLogsList" style="font-size: 12px; color: #64748b; margin-top: 8px;">کوئی نیا اسکیپ ریکارڈ موجود نہیں۔</div>
-            </div>
-        </div>
 
-        <!-- 9. فائنل رزلٹ شیٹ -->
-        <div class="card" style="border-right: 5px solid var(--success);">
-            <h3 style="color: var(--success);">📈 ممبران فائنل رزلٹ شیٹ</h3>
-            <table class="clean-result-table">
-                <thead>
-                    <tr>
-                        <th>ممبر کا نام</th>
-                        <th>پوائنٹس</th>
-                        <th>کارکردگی گریڈ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>علی</b></td>
-                        <td><span style="font-weight: bold; color: var(--success);">45 پوائنٹس</span></td>
-                        <td><span style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Excellent</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>احمد</b></td>
-                        <td><span style="font-weight: bold; color: var(--accent);">35 پوائنٹس</span></td>
-                        <td><span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Good</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                <div class="diet-horizontal-container">
+                    <div class="diet-column-box">
+                        <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">1️⃣ گندم / روٹی آئٹم:</div>
+                        <div class="diet-item-row">
+                            <input type="checkbox" id="dietCheck1" style="width: 15px; height: 15px;" checked>
+                            <span style="flex: 2;">گندم روٹی / نان</span>
+                            <select id="dietVal1" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>1</option><option>2</option><option>0</option></select>
+                        </div>
+                    </div>
 
-        <!-- 10. علامت ٹریکر -->
-        <div class="card" style="border-right: 5px solid var(--purple);">
-            <h3 style="color: var(--purple);">🩺 صحت اور علامات کا ٹریکر</h3>
-            <div style="margin-bottom: 14px;">
-                <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px;">ممبر سلیکٹ کریں:</label>
-                <select id="healthMemberSelect" class="select-box">
-                    <option value="علی">علی</option>
-                    <option value="احمد">احمد</option>
-                </select>
-            </div>
-            <div class="fresh-task-display" style="background: #f5f3ff; border-color: #ddd6fe; color: var(--purple);">
-                <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
-            </div>
-            <div class="btn-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-top: 14px;">
-                <button class="btn btn-done" onclick="handleSymptom('1. ٹھیک ہے')">1. ٹھیک ہے</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('2. نہیں ٹھیک')">2. نہیں ٹھیک</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('3. تھوڑا مسئلہ ہے')">3. تھوڑا مسئلہ ہے</button>
-                <button class="btn btn-halt" onclick="handleSymptom('4. کبھی کبھی مسئلہ ہوتا ہے')">4. کبھی کبھی</button>
-                <button class="btn btn-primary" onclick="handleSymptom('5. مسئلہ سیم پہلے کی طرح ہے')">5. سیم پہلے جیسا</button>
-                <button class="btn btn-done" onclick="handleSymptom('6. مسئلہ بہتر ہے پہلے سے')">6. بہتر ہے پہلے سے</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('7. کبھی زیادہ ہے مسئلہ')">7. کبھی زیادہ ہے</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('8. مسئلہ بہت زیادہ ہے')">8. بہت زیادہ ہے</button>
-                <button class="btn btn-danger" style="background:#b91c1c;" onclick="handleSymptom('9. مسئلہ زیادہ ہے')">9. مسئلہ زیادہ ہے</button>
-                <button class="btn btn-purple" style="background:#6d28d9;" onclick="handleSymptom('10. بار بار وہی مسئلہ ریپیٹ ہو رہا ہے')">10. بار بار ریپیٹ</button>
-                <button class="btn btn-primary" style="background:#0f766e;" onclick="handleSymptom('11. دیگر صورتحال')">11. دیگر صورتحال</button>
-            </div>
-        </div>
+                    <div class="diet-column-box">
+                        <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">2️⃣ دودھ / لسی آئٹم:</div>
+                        <div class="diet-item-row">
+                            <input type="checkbox" id="dietCheck2" style="width: 15px; height: 15px;" checked>
+                            <span style="flex: 2;">خالص دودھ / لسی</span>
+                            <select id="dietVal2" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>گلاس</option><option>کپ</option><option>0</option></select>
+                        </div>
+                    </div>
 
-        <!-- 11. ڈائٹ روٹین سسٹم -->
-        <div class="card" style="border-right: 5px solid var(--warning); background: #fffdf4;">
-            <h3 style="color: var(--warning);">🍽️ ڈائٹ روٹین (تین سیکشنز ایک ہی لائن میں)</h3>
-            <div style="border-bottom: 1px solid var(--border); margin-bottom: 16px;"></div>
-            
-            <div style="margin-bottom: 14px; text-align: center;">
-                <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: var(--primary);">⏰ کھانے یا پینے کا وقت (Time Slot):</label>
-                <select id="mealTimeSlot" class="select-box" style="max-width: 260px; margin: 0 auto; display: block; font-weight: bold; background: #fffbeb; border-color: var(--warning); text-align: center;">
-                    <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
-                    <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
-                    <option value="شام کی چائے">3. شام کی چائے</option>
-                    <option value="رات کا کھانا">4. رات کا کھانا</option>
-                </select>
-            </div>
-
-            <div class="diet-horizontal-container">
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">1️⃣ گندم / روٹی آئٹم:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck1" style="width: 15px; height: 15px;" checked>
-                        <span style="flex: 2;">گندم روٹی / نان</span>
-                        <select id="dietVal1" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>1</option><option>2</option><option>0</option></select>
+                    <div class="diet-column-box">
+                        <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">3️⃣ مکس جنک فوڈ:</div>
+                        <div class="diet-item-row">
+                            <input type="checkbox" id="dietCheck3" style="width: 15px; height: 15px;">
+                            <span style="flex: 2;">جنک فوڈ / سنیکس</span>
+                            <select id="dietVal3" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>0</option><option>تھوڑا</option><option>زیادہ</option></select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">2️⃣ دودھ / لسی آئٹم:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck2" style="width: 15px; height: 15px;" checked>
-                        <span style="flex: 2;">خالص دودھ / لسی</span>
-                        <select id="dietVal2" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>گلاس</option><option>کپ</option><option>0</option></select>
-                    </div>
-                </div>
+                <button class="btn" style="background: var(--warning); width: 100%; padding: 12px; font-size: 14px;" onclick="saveMealRecordToStore()">💾 ڈائٹ روٹین سیو کریں</button>
+            </div>
 
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">3️⃣ مکس جنک فوڈ:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck3" style="width: 15px; height: 15px;">
-                        <span style="flex: 2;">جنک فوڈ / سنیکس</span>
-                        <select id="dietVal3" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>0</option><option>تھوڑا</option><option>زیادہ</option></select>
+            <!-- ورکنگ پرسنٹیج اور کمپیریزن -->
+            <div class="card" style="border-right: 5px solid var(--success);">
+                <h3 style="color: var(--success);">📈 صحت بہتری اور ڈائٹ پرسنٹیج کمپیریزن سمری</h3>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
+                    <div style="flex: 1; min-width: 200px; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 14px; border-radius: 12px; text-align: center;">
+                        <h4 style="margin: 0 0 4px 0; color: #065f46; font-size: 12px;">🩺 علامات کی بہتری پرسنٹیج</h4>
+                        <span id="symptomPercentage" style="font-size: 20px; font-weight: bold; color: var(--success);">100%</span>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 14px; border-radius: 12px; text-align: center;">
+                        <h4 style="margin: 0 0 4px 0; color: #1e40af; font-size: 12px;">🍽️ اچھی ڈائٹ (روٹی/دودھ) پرسنٹیج</h4>
+                        <span id="dietPercentage" style="font-size: 20px; font-weight: bold; color: #2563eb;">100%</span>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; background: #fdf4ff; border: 1px solid #f5d0fe; padding: 14px; border-radius: 12px; text-align: center;">
+                        <h4 style="margin: 0 0 4px 0; color: #86198f; font-size: 12px;">⚖️ مجموعی صحت کمپیریزن پرسنٹیج</h4>
+                        <span id="totalPercentage" style="font-size: 20px; font-weight: bold; color: #7c3aed;">100%</span>
                     </div>
                 </div>
             </div>
 
-            <button class="btn" style="background: var(--warning); width: 100%; padding: 12px; font-size: 14px;" onclick="saveMealRecordToStore()">💾 ڈائٹ روٹین سیو کریں</button>
-        </div>
+        </div> <!-- ڈیش بورڈ ویو ختم -->
 
-        <!-- ہسٹری باکسز مع سیٹنگ/ایڈیٹ/ڈیلیٹ بٹن -->
-        <div class="card" style="border-right: 5px solid var(--accent);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="color: var(--accent); margin: 0; border: none; padding: 0;">📋 ڈائٹ اور علامات ہسٹری ریکارڈ (مع سیٹنگز)</h3>
-                <button class="setting-btn-pro" onclick="openHistorySettings()">⚙️ ہسٹری سیٹنگ (ایڈیٹ/ڈیلیٹ)</button>
+
+        <!-- ========================================== -->
+        <!-- 2. ریکارڈ ویو (Record View - الگ پیج) -->
+        <!-- ========================================== -->
+        <div id="recordView" class="view-section">
+
+            <div class="card" style="border-right: 5px solid var(--accent);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 style="color: var(--accent); margin: 0; border: none; padding: 0;">📋 ماسٹر رکارڈ اور ہسٹری سینٹر</h3>
+                    <button class="setting-btn-pro" onclick="openHistorySettings()">⚙️ تمام رکارڈ مینیج/ڈیلیٹ کریں</button>
+                </div>
+                <p style="font-size: 13px; color: #64748b; margin-top: 0;">یہاں آپ فیملی کا تمام ڈائٹ، علامات اور ٹاسک پرفارمنس کا مکمل تاریخ وار ریکارڈ دیکھ سکتے ہیں۔</p>
             </div>
-            
-            <div style="margin-bottom: 14px;">
-                <div style="font-weight: bold; font-size: 13px; color: var(--warning); margin-bottom: 4px;">🍽️ ڈائٹ ہسٹری:</div>
-                <div id="dietHistoryLog" style="background: #fffdf4; border: 1px solid var(--warning); border-radius: 10px; padding: 10px; font-size: 13px; max-height: 100px; overflow-y: auto;">
+
+            <!-- ڈائٹ ہسٹری کارڈ -->
+            <div class="card" style="border-right: 5px solid var(--warning); background: #fffdf4;">
+                <h3 style="color: var(--warning);">🍽️ ڈائٹ روٹین کا تفصیلی ریکارڈ</h3>
+                <div id="fullDietHistoryLog" style="font-size: 13px; max-height: 250px; overflow-y: auto;">
                     <div style="color: #64748b;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>
                 </div>
             </div>
 
-            <div>
-                <div style="font-weight: bold; font-size: 13px; color: var(--purple); margin-bottom: 4px;">🩺 علامات ٹریکر ہسٹری:</div>
-                <div id="symptomHistoryLog" style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 10px; font-size: 13px; max-height: 100px; overflow-y: auto;">
+            <!-- علامات ٹریکر ہسٹری کارڈ -->
+            <div class="card" style="border-right: 5px solid var(--purple);">
+                <h3 style="color: var(--purple);">🩺 صحت اور علامات کا تفصیلی ریکارڈ</h3>
+                <div id="fullSymptomHistoryLog" style="font-size: 13px; max-height: 250px; overflow-y: auto;">
                     <div style="color: #64748b;">کوئی علامت ہسٹری موجود نہیں۔</div>
                 </div>
             </div>
-        </div>
 
-        <!-- ورکنگ پرسنٹیج اور کمپیریزن -->
-        <div class="card" style="border-right: 5px solid var(--success);">
-            <h3 style="color: var(--success);">📈 صحت بہتری اور ڈائٹ پرسنٹیج کمپیریزن سمری</h3>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
-                <div style="flex: 1; min-width: 200px; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #065f46; font-size: 12px;">🩺 علامات کی بہتری پرسنٹیج</h4>
-                    <span id="symptomPercentage" style="font-size: 20px; font-weight: bold; color: var(--success);">100%</span>
-                </div>
-                <div style="flex: 1; min-width: 200px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #1e40af; font-size: 12px;">🍽️ اچھی ڈائٹ (روٹی/دودھ) پرسنٹیج</h4>
-                    <span id="dietPercentage" style="font-size: 20px; font-weight: bold; color: #2563eb;">100%</span>
-                </div>
-                <div style="flex: 1; min-width: 200px; background: #fdf4ff; border: 1px solid #f5d0fe; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #86198f; font-size: 12px;">⚖️ مجموعی صحت کمپیریزن پرسنٹیج</h4>
-                    <span id="totalPercentage" style="font-size: 20px; font-weight: bold; color: #7c3aed;">100%</span>
+            <!-- ٹاسک پوائنٹس ہسٹری کارڈ -->
+            <div class="card" style="border-right: 5px solid var(--success);">
+                <h3 style="color: var(--success);">⭐ ممبران ٹاسک اور پوائنٹس کا ریکارڈ</h3>
+                <div id="fullTaskHistoryLog" style="font-size: 13px; max-height: 250px; overflow-y: auto;">
+                    <div style="color: #64748b;">کوئی ٹاسک ریکارڈ موجود نہیں۔</div>
                 </div>
             </div>
-        </div>
+
+        </div> <!-- ریکارڈ ویو ختم -->
 
     </div>
 
@@ -413,6 +464,27 @@
             { member: "علی", symptom: "گیس / پیٹ میں ابھار", status: "1. ٹھیک ہے", isPositive: true }
         ];
         let currentSymptomIndex = 0;
+
+        // ویو سوئچ کرنے کا فنکشن (ڈیش بورڈ <-> رکارڈ)
+        function switchView(viewName) {
+            let dashBtn = document.getElementById('navDashboardBtn');
+            let recBtn = document.getElementById('navRecordBtn');
+            let dashView = document.getElementById('dashboardView');
+            let recView = document.getElementById('recordView');
+
+            if(viewName === 'dashboard') {
+                dashBtn.classList.add('active');
+                recBtn.classList.remove('active');
+                dashView.classList.add('active-view');
+                recView.classList.remove('active-view');
+            } else {
+                recBtn.classList.add('active');
+                dashBtn.classList.remove('active');
+                recView.classList.add('active-view');
+                dashView.classList.remove('active-view');
+                renderFullRecords(); // جب ریکارڈ اوپن ہو تو تمام لسٹ اپڈیٹ ہو جائے
+            }
+        }
 
         function skipAlert() { document.getElementById('alertBanner').style.display = 'none'; }
         
@@ -460,7 +532,7 @@
 
             document.getElementById('symptomTitleText').innerText = `🔍 علامت: ${symptomsList[currentSymptomIndex]}`;
 
-            // ٹاسک ایکشن ہسٹری رینڈر
+            // ڈیش بورڈ ٹاسک ایکشن ہسٹری سمال باکس
             let taskActCont = document.getElementById('taskActionHistory');
             let totalTaskPoints = 0;
             
@@ -480,33 +552,7 @@
                 document.getElementById('taskHistoryTotalPoints').innerText = `کل پوائنٹس (Total Points): ${totalTaskPoints} ⭐`;
             }
 
-            // ڈائٹ ہسٹری رینڈر
-            let dietCont = document.getElementById('dietHistoryLog');
-            if(dietHistoryLogs.length === 0) {
-                dietCont.innerHTML = '<div style="color: #64748b;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>';
-            } else {
-                dietCont.innerHTML = dietHistoryLogs.map((item, i) => `
-                    <div style="padding: 4px 0; border-bottom: 1px dashed #fde68a; display: flex; justify-content: space-between;">
-                        <span>⏰ <b>${item.slot}</b> (روٹی: ${item.v1}, دودھ: ${item.v2}, جنک: ${item.v3})</span>
-                        <span style="color:${item.isGood ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">${item.isGood ? '✅ اچھی خوراک (روٹی/دودھ)' : '⚠️ جنک فوڈ'}</span>
-                    </div>
-                `).join('');
-            }
-
-            // علامات ہسٹری رینڈر
-            let sympCont = document.getElementById('symptomHistoryLog');
-            if(symptomHistoryLogs.length === 0) {
-                sympCont.innerHTML = '<div style="color: #64748b;">کوئی علامت ہسٹری موجود نہیں۔</div>';
-            } else {
-                sympCont.innerHTML = symptomHistoryLogs.map((item, i) => `
-                    <div style="padding: 4px 0; border-bottom: 1px dashed #ddd6fe; display: flex; justify-content: space-between;">
-                        <span>👤 <b>${item.member}</b>: ${item.symptom} ➔ <b style="color:var(--purple);">${item.status}</b></span>
-                        <span style="color:${item.isPositive ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">${item.isPositive ? '👍 بہتر' : '⚠️ مسئلہ'}</span>
-                    </div>
-                `).join('');
-            }
-
-            // پرسنٹیج کیلکولیشن (پچھلے ورکنگ ورژن کی طرح درست کی گئی ہے)
+            // پرسنٹیج کیلکولیشن
             let positiveSymps = symptomHistoryLogs.filter(x => x.isPositive).length;
             let sympScore = symptomHistoryLogs.length > 0 ? Math.round((positiveSymps / symptomHistoryLogs.length) * 100) : 0;
 
@@ -518,6 +564,48 @@
             document.getElementById('symptomPercentage').innerText = sympScore + '%';
             document.getElementById('dietPercentage').innerText = dietScore + '%';
             document.getElementById('totalPercentage').innerText = totalScore + '%';
+        }
+
+        // ریکارڈ ویو کے لیے مکمل رکارڈ رینڈر کرنے کا فنکشن
+        function renderFullRecords() {
+            // ڈائٹ فل ریکارڈ
+            let dietCont = document.getElementById('fullDietHistoryLog');
+            if(dietHistoryLogs.length === 0) {
+                dietCont.innerHTML = '<div style="color: #64748b;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>';
+            } else {
+                dietCont.innerHTML = dietHistoryLogs.map((item, i) => `
+                    <div style="padding: 8px 0; border-bottom: 1px dashed #fde68a; display: flex; justify-content: space-between; align-items: center;">
+                        <span>⏰ <b>${item.slot}</b> | (روٹی: ${item.v1}, دودھ: ${item.v2}, جنک: ${item.v3})</span>
+                        <span style="background: ${item.isGood ? '#dcfce7' : '#fee2e2'}; color: ${item.isGood ? '#166534' : '#991b1b'}; padding: 3px 10px; border-radius: 8px; font-weight:bold; font-size:12px;">${item.isGood ? '✅ اچھی خوراک (روٹی/دودھ)' : '⚠️ جنک فوڈ'}</span>
+                    </div>
+                `).join('');
+            }
+
+            // علامات فل ریکارڈ
+            let sympCont = document.getElementById('fullSymptomHistoryLog');
+            if(symptomHistoryLogs.length === 0) {
+                sympCont.innerHTML = '<div style="color: #64748b;">کوئی علامت ہسٹری موجود نہیں۔</div>';
+            } else {
+                sympCont.innerHTML = symptomHistoryLogs.map((item, i) => `
+                    <div style="padding: 8px 0; border-bottom: 1px dashed #ddd6fe; display: flex; justify-content: space-between; align-items: center;">
+                        <span>👤 ممبر: <b>${item.member}</b> | علامت: ${item.symptom} ➔ <b style="color:var(--purple);">${item.status}</b></span>
+                        <span style="background: ${item.isPositive ? '#ecfdf5' : '#fef2f2'}; color: ${item.isPositive ? '#065f46' : '#991b1b'}; padding: 3px 10px; border-radius: 8px; font-weight:bold; font-size:12px;">${item.isPositive ? '👍 بہتر' : '⚠️ مسئلہ'}</span>
+                    </div>
+                `).join('');
+            }
+
+            // ٹاسک پوائنٹس فل ریکارڈ
+            let taskCont = document.getElementById('fullTaskHistoryLog');
+            if(taskActionLogs.length === 0) {
+                taskCont.innerHTML = '<div style="color: #64748b;">کوئی ٹاسک ریکارڈ موجود نہیں۔</div>';
+            } else {
+                taskCont.innerHTML = taskActionLogs.map((item, i) => `
+                    <div style="padding: 8px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                        <span>👤 ممبر: <b>${item.member}</b> | کام: <b>${item.task}</b> | سٹیٹس: <b style="color: ${item.color};">${item.status}</b></span>
+                        <span style="background: #f1f5f9; padding: 3px 10px; border-radius: 6px; font-weight: bold; color: var(--primary);">⭐ ${item.points} پوائنٹس</span>
+                    </div>
+                `).join('');
+            }
         }
 
         function handleTask(actionType) {
@@ -594,16 +682,13 @@
         }
 
         function openHistorySettings() {
-            let action = prompt("⚙️ [ڈائٹ اور علامات ہسٹری سیٹنگ]\n1. ہسٹری سے آخری انٹری ڈیلیٹ کریں (Delete Entry)\n2. تمام ہسٹری صاف کریں (Clear All)\n\nنمبر درج کریں (1 یا 2):");
-            if(action === "1") {
-                if(dietHistoryLogs.length > 0) dietHistoryLogs.shift();
-                else if(symptomHistoryLogs.length > 0) symptomHistoryLogs.shift();
-                renderUI();
-            } else if(action === "2") {
-                dietHistoryLogs = [];
-                symptomHistoryLogs = [];
-                renderUI();
-            }
+            let action = prompt("⚙️ [ماسٹر رکارڈ سیٹنگ]\n1. ڈائٹ ہسٹری صاف کریں\n2. علامات ہسٹری صاف کریں\n3. ٹاسک ہسٹری صاف کریں\n4. تمام رکارڈ صاف کریں (Clear All)\n\nنمبر درج کریں (1 تا 4):");
+            if(action === "1") { dietHistoryLogs = []; }
+            else if(action === "2") { symptomHistoryLogs = []; }
+            else if(action === "3") { taskActionLogs = []; }
+            else if(action === "4") { dietHistoryLogs = []; symptomHistoryLogs = []; taskActionLogs = []; }
+            renderUI();
+            renderFullRecords();
         }
 
         window.onload = function() { renderUI(); }
