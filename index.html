@@ -177,7 +177,7 @@
             <div id="leaveSubmitStatus" style="margin-top: 10px; font-weight: bold; font-size: 13px; text-align: center; color: var(--success);"></div>
         </div>
 
-        <!-- 6. کام کی لسٹ، ممبر سلیکشن اور نیچے ٹاسک ایکشن ہسٹری -->
+        <!-- 6. کام کی لسٹ، ممبر سلیکشن اور ٹاسک ایکشن ہسٹری (مع پوائنٹس اور سیٹنگ بٹن) -->
         <div class="card" style="border-right: 5px solid var(--accent);">
             <div style="text-align: center; margin-bottom: 14px;">
                 <label style="font-weight: bold; font-size: 14px; color: var(--primary); display: block; margin-bottom: 8px;">
@@ -200,11 +200,17 @@
                 <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
             </div>
 
-            <!-- ری اسٹور شدہ: ٹاسک ایکشن ہسٹری کا باکس -->
-            <div style="margin-top: 16px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px;">
-                <div style="font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 6px;">📋 ٹاسک ایکشن ہسٹری (Task History):</div>
-                <div id="taskActionHistory" style="font-size: 12px; color: #64748b; max-height: 110px; overflow-y: auto;">
+            <!-- ٹاسک ایکشن ہسٹری (مع سیٹنگ بٹن، ہر کام کے پوائنٹس اور ٹوٹل پوائنٹس) -->
+            <div style="margin-top: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: bold; font-size: 13px; color: var(--primary);">📋 ٹاسک ایکشن ہسٹری (مع پوائنٹس):</span>
+                    <button class="setting-btn-pro" onclick="openTaskHistorySettings()">⚙️ ٹاسک ہسٹری سیٹنگ</button>
+                </div>
+                <div id="taskActionHistory" style="font-size: 12px; color: #64748b; max-height: 120px; overflow-y: auto;">
                     کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔
+                </div>
+                <div id="taskHistoryTotalPoints" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-weight: bold; font-size: 13px; color: var(--success); text-align: left;">
+                    کل پوائنٹس (Total Points): 0
                 </div>
             </div>
         </div>
@@ -456,16 +462,24 @@
 
             document.getElementById('symptomTitleText').innerText = `🔍 علامت: ${symptomsList[currentSymptomIndex]}`;
 
-            // ٹاسک ایکشن ہسٹری رینڈر
+            // ٹاسک ایکشن ہسٹری (مع پوائنٹس اور ٹوٹل پوائنٹس) رینڈر
             let taskActCont = document.getElementById('taskActionHistory');
+            let totalTaskPoints = 0;
+            
             if(taskActionLogs.length === 0) {
                 taskActCont.innerHTML = '<div style="color: #64748b;">کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔</div>';
+                document.getElementById('taskHistoryTotalPoints').innerText = "کل پوائنٹس (Total Points): 0";
             } else {
-                taskActCont.innerHTML = taskActionLogs.map((item, i) => `
-                    <div style="padding: 3px 0; border-bottom: 1px dashed #cbd5e1;">
-                        <span>👤 <b>${item.member}</b> ➔ کام: <b>${item.task}</b> | سٹیٹس: <b style="color: ${item.color};">${item.status}</b></span>
-                    </div>
-                `).join('');
+                taskActCont.innerHTML = taskActionLogs.map((item, i) => {
+                    totalTaskPoints += item.points;
+                    return `
+                        <div style="padding: 4px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                            <span>👤 <b>${item.member}</b> ➔ کام: <b>${item.task}</b> | سٹیٹس: <b style="color: ${item.color};">${item.status}</b></span>
+                            <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-weight: bold; color: var(--primary);">⭐ ${item.points} پوائنٹس</span>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('taskHistoryTotalPoints').innerText = `کل پوائنٹس (Total Points): ${totalTaskPoints} ⭐`;
             }
 
             // ڈائٹ ہسٹری رینڈر
@@ -494,7 +508,7 @@
                 `).join('');
             }
 
-            // پرسنٹیج کیلکولیشن (روٹی/دودھ بنام جنک فوڈ کی بنیاد پر)
+            // پرسنٹیج کیلکولیشن
             let positiveSymps = symptomHistoryLogs.filter(x => x.isPositive).length;
             let sympScore = symptomHistoryLogs.length > 0 ? Math.round((positiveSymps / symptomHistoryLogs.length) * 100) : 0;
 
@@ -511,15 +525,34 @@
         function handleTask(actionType) {
             if(tasksList.length === 0) return alert("فہرست میں مزید کوئی کام نہیں!");
             let member = document.getElementById('activeAttendant').value;
-            let currentTask = tasksList[0].title;
+            let currentTaskObj = tasksList[0];
             
             let statusText = "";
             let colorCode = "";
-            if(actionType === 'done') { statusText = "✅ ہو گیا"; colorCode = "var(--success)"; }
-            else if(actionType === 'notdone') { statusText = "⚠️ نہیں ہوا (اسکیپ)"; colorCode = "var(--warning)"; }
-            else if(actionType === 'cancel') { statusText = "❌ کرنا نہیں تھا"; colorCode = "var(--danger)"; }
+            let awardedPoints = 0;
 
-            taskActionLogs.unshift({ member: member, task: currentTask, status: statusText, color: colorCode });
+            if(actionType === 'done') { 
+                statusText = "✅ ہو گیا"; 
+                colorCode = "var(--success)"; 
+                awardedPoints = currentTaskObj.points; 
+            } else if(actionType === 'notdone') { 
+                statusText = "⚠️ نہیں ہوا (اسکیپ)"; 
+                colorCode = "var(--warning)"; 
+                awardedPoints = 0; 
+            } else if(actionType === 'cancel') { 
+                statusText = "❌ کرنا نہیں تھا"; 
+                colorCode = "var(--danger)"; 
+                awardedPoints = 0; 
+            }
+
+            taskActionLogs.unshift({ 
+                member: member, 
+                task: currentTaskObj.title, 
+                status: statusText, 
+                color: colorCode, 
+                points: awardedPoints 
+            });
+            
             tasksList.shift(); 
             renderUI();
         }
@@ -543,7 +576,6 @@
             let check2 = document.getElementById('dietCheck2').checked;
             let check3 = document.getElementById('dietCheck3').checked;
 
-            // اچھی خوراک تب مانی جائے گی جب روٹی یا دودھ استعمال کیا ہو اور جنک فوڈ (v3 یا check3) شامل نہ ہو
             let hasGoodFood = (check1 || v1 !== "0") || (check2 || v2 !== "0");
             let hasJunk = check3 || (v3 !== "0");
             let isGood = hasGoodFood && !hasJunk;
@@ -553,20 +585,29 @@
             alert(`✅ ڈائٹ روٹین کامیابی سے سیو ہو گئی ہے اور پرسنٹیج اپڈیٹ ہو گئی ہے!`);
         }
 
-        function openHistorySettings() {
-            let action = prompt("⚙️ [ہسٹری مینیجمنٹ اور سیٹنگ]\n1. ہسٹری ایڈٹ کریں (Edit History)\n2. ہسٹری سے انٹری ڈیلیٹ کریں (Delete Entry)\n3. تمام ہسٹری صاف کریں (Clear All)\n\nنمبر درج کریں (1، 2 یا 3):");
+        function openTaskHistorySettings() {
+            let action = prompt("⚙️ [ٹاسک ہسٹری سیٹنگ]\n1. آخری انٹری ڈیلیٹ کریں (Delete Last Entry)\n2. تمام ٹاسک ہسٹری صاف کریں (Clear All Task History)\n\nنمبر درج کریں (1 یا 2):");
             if(action === "1") {
-                alert("✏️ مطلوبہ انٹری کو اپڈیٹ کر دیا گیا ہے!");
+                if(taskActionLogs.length > 0) taskActionLogs.shift();
+                renderUI();
+                alert("🗑️ ٹاسک ہسٹری کی آخری انٹری ڈیلیٹ کر دی گئی ہے!");
             } else if(action === "2") {
+                taskActionLogs = [];
+                renderUI();
+                alert("🧹 تمام ٹاسک ہسٹری صاف کر دی گئی ہے!");
+            }
+        }
+
+        function openHistorySettings() {
+            let action = prompt("⚙️ [ڈائٹ اور علامات ہسٹری سیٹنگ]\n1. ہسٹری سے آخری انٹری ڈیلیٹ کریں (Delete Entry)\n2. تمام ہسٹری صاف کریں (Clear All)\n\nنمبر درج کریں (1 یا 2):");
+            if(action === "1") {
                 if(dietHistoryLogs.length > 0) dietHistoryLogs.shift();
                 else if(symptomHistoryLogs.length > 0) symptomHistoryLogs.shift();
-                else if(taskActionLogs.length > 0) taskActionLogs.shift();
                 renderUI();
                 alert("🗑️ آخری انٹری کامیابی سے ڈیلیٹ کر دی گئی ہے!");
-            } else if(action === "3") {
+            } else if(action === "2") {
                 dietHistoryLogs = [];
                 symptomHistoryLogs = [];
-                taskActionLogs = [];
                 renderUI();
                 alert("🧹 تمام ہسٹری صاف کر دی گئی ہے!");
             }
