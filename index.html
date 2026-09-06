@@ -25,7 +25,7 @@
 
         .container { max-width: 900px; margin: 0 auto; }
 
-        /* 1. اورجنل خوبصورت گولڈن / اورنج ہیڈر */
+        /* 1. گولڈن / اورنج ہیڈر */
         .app-header {
             background: linear-gradient(135deg, #f59e0b, #d97706, #b45309); color: white; text-align: center;
             padding: 24px; border-radius: var(--radius); font-size: 26px; font-weight: bold;
@@ -33,34 +33,35 @@
             border-bottom: 4px solid #92400e; letter-spacing: 0.5px;
         }
 
-        /* 2. لائیو پٹی جو پہلے 15 سیکنڈ فرنٹ پر رکے گی */
+        /* 2. لائیو پٹی جو پہلے 20 سیکنڈ بالکل ساکت رہے گی */
         .ticker-box {
-            background: #f8fafc; border: 2px solid var(--golden); border-radius: 8px;
+            background: #fffbeb; border: 2px solid var(--golden); border-radius: 8px;
             overflow: hidden; white-space: nowrap; padding: 12px; margin-bottom: 20px;
             font-weight: bold; color: var(--golden); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .ticker-text { 
             display: inline-block; padding-left: 100%; 
-            animation: tickerHold 18s linear infinite; 
+            animation: tickerHold 25s ease-out infinite; 
         }
         @keyframes tickerHold { 
             0% { transform: translate(0, 0); }
-            75% { transform: translate(-100%, 0); } /* 15 سے 18 سیکنڈ ہولڈ اور موومنت */
+            80% { transform: translate(0, 0); } /* 20 سیکنڈ تک بالکل نہیں ہلے گی */
             100% { transform: translate(-100%, 0); }
         }
 
-        /* 3. الرٹ پٹی جو 15 سیکنڈ رکنے کے بعد بیپ/بلنک کرے گی */
+        /* 3. الرٹ پٹی جو 15 سیکنڈ بعد تیزی سے بلنک کرے گی */
         .alert-box {
             background: var(--danger); color: white; padding: 14px 20px;
             border-radius: 8px; font-weight: 600; font-size: 15px; margin-bottom: 20px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-            animation: alertBlink 3s infinite;
+            animation: alertFastBlink 1.2s infinite;
+            animation-delay: 15s; /* 15 سیکنڈ بعد بلنکنگ تیز ہوگی */
         }
-        @keyframes alertBlink {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.99); }
-            100% { opacity: 1; transform: scale(1); }
+        @keyframes alertFastBlink {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; background: #991b1b; }
+            100% { opacity: 1; }
         }
         .skip-btn {
             background: rgba(255,255,255,0.25); border: none; color: white;
@@ -106,19 +107,20 @@
             border-radius: 20px; font-size: 14px; font-weight: 600; 
         }
 
-        /* نامکمل کاموں کے ڈائنامک پارٹیشنز */
+        /* پچھلے نامکمل کاموں کے ڈائنامک پارٹیشنز */
         .pending-wrapper { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
         .pending-box {
             flex: 1; min-width: 250px; background: #fff1f2; border: 1px solid #fecdd3;
             border-radius: 10px; padding: 15px; border-top: 4px solid var(--danger);
         }
-        .pending-title { font-weight: bold; color: var(--danger); font-size: 14px; margin-bottom: 8px; border-bottom: 1px solid #fecdd3; padding-bottom: 5px; }
+        .pending-title { font-weight: bold; color: var(--danger); font-size: 15px; margin-bottom: 8px; border-bottom: 1px solid #fecdd3; padding-bottom: 5px; }
 
-        /* ڈائٹ 3 پارٹیشنز باکسز */
+        /* ڈائٹ 3 الگ پارٹیشنز (ملٹی سلیکٹ لسٹ سٹائل) */
         .diet-section-box {
             background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px;
         }
-        .diet-section-title { font-weight: bold; color: var(--golden); font-size: 14px; margin-bottom: 8px; }
+        .diet-section-title { font-weight: bold; color: var(--golden); font-size: 14px; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; }
+        .diet-item-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
         th, td { border: 1px solid var(--border); padding: 10px; text-align: center; }
@@ -139,12 +141,12 @@
         <!-- 1. گولڈن ہیڈر -->
         <div class="app-header">⚡ اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر</div>
 
-        <!-- 2. لائیو پٹی (15 سیکنڈ فرنٹ پر رکے گی) -->
+        <!-- 2. لائیو پٹی (20 سیکنڈ فرنٹ پر رکے گی) -->
         <div class="ticker-box">
-            <div class="ticker-text">📢 اہم نوٹ: یہ پٹی پہلے 15 سیکنڈ کے لیے بالکل فرنٹ پر رکے گی تاکہ آپ آسانی سے پڑھ سکیں۔ اس کے بعد اسکرول ہوگی۔</div>
+            <div class="ticker-text">📢 اہم نوٹ: یہ پٹی پہلے 20 سیکنڈ کے لیے بالکل فرنٹ پر ساکت رہے گی تاکہ آسانی سے پڑھی جا سکے۔</div>
         </div>
 
-        <!-- 3. الرٹ پٹی (15 سیکنڈ بعد بیپ/بلنک کے ساتھ) -->
+        <!-- 3. الرٹ پٹی (15 سیکنڈ بعد تیز بلنکنگ کے ساتھ) -->
         <div class="alert-box" id="alertBanner">
             <span>🚨 اہم الرٹ: کچن کا پانی کا نلکا چیک کریں اور فیملی نوٹس پڑھیں!</span>
             <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
@@ -165,7 +167,7 @@
             <div class="selection-center">
                 <select id="leaveMemberSelect" class="select-box" style="width: 280px;">
                     <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (هیلپر)</option>
+                    <option value="احمد">احمد (ہیلپر)</option>
                     <option value="عثمان">عثمان (سینئر 2)</option>
                     <option value="بلال">بلال (ہیلپر 2)</option>
                 </select>
@@ -184,7 +186,7 @@
                 </label>
                 <select id="activeAttendant" class="select-box" style="max-width: 350px; margin: 0 auto; display: block; font-weight: bold; font-size: 15px; text-align: center; background: #f8fafc;">
                     <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (هیلپر)</option>
+                    <option value="احمد">احمد (ہیلپر)</option>
                     <option value="عثمان">عثمان (سینئر 2)</option>
                     <option value="بلال">بلال (ہیلپر 2)</option>
                 </select>
@@ -202,36 +204,33 @@
             </div>
         </div>
 
-        <!-- 7. ہسٹری باکس اور ڈائنامک پچھਲੇ نامکمل کاموں کے الگ الگ پارٹیشنز -->
+        <!-- 5 & 7. ہسٹری، کل پوائنٹس اور پچھلے نامکمل کاموں کے ڈائنامک پارٹیشنز -->
         <div class="card" style="border-left: 5px solid var(--accent);">
-            <h3 style="color: var(--accent);">📊 کاموں کی ہسٹری اور ممبرز کے پچھلے نامکمل کام</h3>
+            <h3 style="color: var(--accent);">📊 کاموں کی لائیو ہسٹری اور پچھلے نامکمل کام</h3>
             
             <div style="margin-bottom: 15px;">
-                <label style="font-weight: bold; font-size: 13px; color: var(--primary); display: block; margin-bottom: 5px;">📜 لائیو مکمل ہونے والے کاموں کی ہسٹری:</label>
-                <div id="liveHistoryLog" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 13px; max-height: 120px; overflow-y: auto;">
+                <label style="font-weight: bold; font-size: 13px; color: var(--primary); display: block; margin-bottom: 5px;">📜 لائیو مکمل ہونے والے کاموں کی ہسٹری (موٹے نام کے ساتھ):</label>
+                <div id="liveHistoryLog" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-size: 14px; max-height: 120px; overflow-y: auto;">
                     <div style="color: #64748b;">ابھی تک کوئی کام مکمل نہیں ہوا۔</div>
                 </div>
             </div>
 
-            <label style="font-weight: bold; font-size: 13px; color: var(--danger); display: block; margin-bottom: 5px;">⚠️ ڈیوٹی ممبران کے پچھلے نامکمل کام (الگ الگ پارٹیشنز):</label>
-            <div class="pending-wrapper" id="dynamicPendingContainer">
-                <!-- جتننے ممبرز کے کام رہ گئے ہوں گے، یہاں ڈائنامک باکسز آئیں گے -->
-                <div class="pending-box">
-                    <div class="pending-title">👤 علی (نامکمل کام)</div>
-                    <div style="font-size: 12px; color: #334155;">• کچن کا صفائی ٹاسک (کل رہ گیا تھا)</div>
-                </div>
-                <div class="pending-box">
-                    <div class="pending-title">👤 احمد (نامکمل کام)</div>
-                    <div style="font-size: 12px; color: #334155;">• پانی کا کین بھرنا (کل رہ گیا تھا)</div>
-                </div>
+            <!-- کل پوائنٹس کا بار ہسٹری کے بالکل نیچے -->
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold;">
+                <span style="color: #1e40af;">🏆 ہسٹری کے مطابق کل حاصل شدہ پوائنٹس:</span>
+                <span id="totalPointsDisplay" style="color: var(--accent); font-size: 18px;">35 پوائنٹس</span>
             </div>
-        </div>
 
-        <!-- کل پوائنٹس -->
-        <div class="card" style="background: #f8fafc; border-left: 5px solid var(--success);">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 16px; color: var(--primary);">
-                <span>🏆 تمام ممبران کے کل حاصل شدہ پوائنٹس:</span>
-                <span id="totalPointsDisplay" style="color: var(--success); font-size: 20px;">35 پوائنٹس</span>
+            <label style="font-weight: bold; font-size: 13px; color: var(--danger); display: block; margin-bottom: 5px;">⚠️ پچھلی ڈیوٹی کے نامکمل کاموں کی لسٹ (آج کے ڈیوٹی ممبران کے لیے):</label>
+            <div class="pending-wrapper" id="dynamicPendingContainer">
+                <div class="pending-box">
+                    <div class="pending-title">👤 علی</div>
+                    <div style="font-size: 13px; color: #334155; font-weight: 500;">• کچن کا صفائی ٹاسک (پچھلی ڈیوٹی میں رہ گیا تھا)</div>
+                </div>
+                <div class="pending-box">
+                    <div class="pending-title">👤 احمد</div>
+                    <div style="font-size: 13px; color: #334155; font-weight: 500;">• پانی کا کین بھرنا (پچھلی ڈیوٹی میں رہ گیا تھا)</div>
+                </div>
             </div>
         </div>
 
@@ -303,14 +302,14 @@
             </div>
         </div>
 
-        <!-- 9. ڈائٹ اور کھانے پینے کا نیا سسٹم (3 الگ پارٹیشنز بمعہ کوانٹٹی) -->
+        <!-- 9. ڈائٹ اور کھانے پینے کا نیا سسٹم (سینٹرڈ چھوٹا ٹائم + 3 الگ لسٹ پارٹیشنز بمعہ کوانٹٹی) -->
         <div class="card" style="border-left: 5px solid var(--warning); background: #fffdf4;">
-            <h3 style="color: var(--warning);">🍽️ ڈائٹ اور کھانے پینے کی روٹین (ٹائم اور 3 الگ پارٹیشنز بمعہ کوانٹٹی)</h3>
+            <h3 style="color: var(--warning);">🍽️ ڈائٹ اور کھانے پینے کی روٹین (متوازن ٹائم سلاٹ اور 3 الگ لسٹ پارٹیشنز)</h3>
             
-            <!-- ٹائم سلیکشن ڈراپ لائن -->
-            <div style="margin-bottom: 15px;">
-                <label style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 6px; color: var(--primary);">⏰ کھانے یا پینے کا وقت (Slot):</label>
-                <select id="mealTimeSlot" class="select-box" style="font-weight: bold; background: #fffbeb; border-color: var(--warning);">
+            <!-- سینٹرڈ چھوٹا ٹائم سلیکشن ڈراپ لائن -->
+            <div style="margin-bottom: 20px; text-align: center;">
+                <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: var(--primary);">⏰ کھانے یا پینے کا وقت (Time Slot):</label>
+                <select id="mealTimeSlot" class="select-box" style="max-width: 320px; margin: 0 auto; display: block; font-weight: bold; background: #fffbeb; border-color: var(--warning); text-align: center;">
                     <option value="1. پہلا ٹائم (صبح کا ناشتہ)">1. پہلا ٹائم (صبح کا ناشتہ)</option>
                     <option value="2. دوسرا ٹائم (دوپہر کا کھانا)">2. دوسرا ٹائم (دوپہر کا کھانا)</option>
                     <option value="3. تیسرا ٹائم (شام کی چائے)">3. تیسرا ٹائم (شام کی چائے)</option>
@@ -321,39 +320,51 @@
                 </select>
             </div>
 
-            <!-- پارٹیشن 1: ڈیلی استعمال ہونے والی چیزیں -->
+            <!-- پارٹیشن 1: ڈیلی استعمال ہونے والی چیزیں (ملٹی آئٹম سلیکشن بمعہ کوانٹٹی) -->
             <div class="diet-section-box">
-                <div class="diet-section-title">1️⃣ ڈیلی استعمال ہونے والی چیزیں (روٹی، پراٹھا وغیرہ)</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="dailyFood" class="select-box" style="flex: 2;">
+                <div class="diet-section-title">1️⃣ ڈیلی استعمال ہونے والی چیزیں (روٹی، پراٹھا، نان وغیرہ)</div>
+                <div class="diet-item-row">
+                    <select id="dailyFood1" class="select-box" style="flex: 2;">
                         <option value="گندم کی روٹی">گندم کی روٹی</option>
                         <option value="پراٹھا">پراٹھا</option>
+                        <option value="نان / روغنی نان">نان / روغنی نان</option>
                         <option value="ڈبل روٹی (بران بریڈ)">ڈبل روٹی (بران بریڈ)</option>
-                        <option value="چاول اور سالن">چاول اور سالن</option>
                     </select>
-                    <select id="dailyFoodQty" class="select-box" style="flex: 1;">
+                    <select id="dailyQty1" class="select-box" style="flex: 1;">
                         <option value="1 عدد">1 عدد</option>
                         <option value="2 عدد">2 عدد</option>
-                        <option value="آدھا / تھوڑا">آدھا</option>
-                        <option value="پوری پلیٹ">بھر کر</option>
+                        <option value="آدھا">آدھا</option>
+                    </select>
+                </div>
+                <div class="diet-item-row">
+                    <select id="dailyFood2" class="select-box" style="flex: 2;">
+                        <option value="چاول اور سالن">چاول اور سالن</option>
+                        <option value="دال اور چاول">دال اور چاول</option>
+                        <option value="سبزی اور سالن">سبزی اور سالن</option>
+                        <option value="کوئی اور آئٹم نہیں">-- کچھ نہیں --</option>
+                    </select>
+                    <select id="dailyQty2" class="select-box" style="flex: 1;">
+                        <option value="پوری پلیٹ">پوری پلیٹ</option>
+                        <option value="آدھی پلیٹ">آدھی پلیٹ</option>
+                        <option value="تھوڑا سا">تھوڑا سا</option>
                     </select>
                 </div>
             </div>
 
-            <!-- پارٹیشن 2: ملکی آئٹمز (دودھ والی چیزیں) -->
+            <!-- پارٹیشن 2: ملکی آئٹمز (دودھ، لسی وغیرہ) -->
             <div class="diet-section-box">
                 <div class="diet-section-title">2️⃣ ملکی آئٹمز (دودھ، لسی، ملک شیک وغیرہ)</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="milkyFood" class="select-box" style="flex: 2;">
+                <div class="diet-item-row">
+                    <select id="milkyFood1" class="select-box" style="flex: 2;">
                         <option value="خالص دودھ">خالص دودھ</option>
                         <option value="لسی">لسی</option>
                         <option value="ملک شیک">ملک شیک</option>
                         <option value="دہی / چھاچھ">دہی / چھاچھ</option>
                     </select>
-                    <select id="milkyQty" class="select-box" style="flex: 1;">
-                        <option value="1 کپ / پیالی">1 کپ</option>
+                    <select id="milkyQty1" class="select-box" style="flex: 1;">
                         <option value="بڑا گلاس">بڑا گلاس</option>
-                        <option value="تھوڑا سا">تھوڑا</option>
+                        <option value="1 کپ / پیالی">1 کپ</option>
+                        <option value="تھوڑا سا">تھوڑا سا</option>
                     </select>
                 </div>
             </div>
@@ -361,16 +372,16 @@
             <!-- پارٹیشن 3: مکس چیزیں / جنک فوڈ -->
             <div class="diet-section-box">
                 <div class="diet-section-title">3️⃣ مکس چیزیں / جنک فوڈ</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="junkFood" class="select-box" style="flex: 2;">
+                <div class="diet-item-row">
+                    <select id="junkFood1" class="select-box" style="flex: 2;">
                         <option value="گول گپے / پکوڑے">گول گپے / پکوڑے</option>
                         <option value="ساس اور چٹ پٹی چیز">ساس اور چٹ پٹی چیز</option>
                         <option value="مکس جنک فوڈ فرائز">مکس جنک فوڈ فرائز</option>
                         <option value="بیکری بسکٹ آئٹم">بیکری بسکٹ آئٹم</option>
                     </select>
-                    <select id="junkQty" class="select-box" style="flex: 1;">
-                        <option value="تھوڑا سا">تھوڑا</option>
-                        <option value="درمیانہ پیکٹ">درمیانہ</option>
+                    <select id="junkQty1" class="select-box" style="flex: 1;">
+                        <option value="درمیانہ پیکٹ">درمیانہ پیکٹ</option>
+                        <option value="تھوڑا سا">تھوڑا سا</option>
                         <option value="زیادہ مقدار">زیادہ</option>
                     </select>
                 </div>
@@ -382,7 +393,7 @@
             </div>
         </div>
 
-        <!-- 10. پرسنٹیج اور کارکردگی سمری (علامات، ڈائٹ اور کل) -->
+        <!-- 10. فائنل پرسنٹیج سمری (علامات، ڈائٹ اور ٹوٹل) -->
         <div class="card" style="border-left: 5px solid var(--success);">
             <h3 style="color: var(--success);">📈 فائنل پرسنٹیج اور کارکردگی سمری</h3>
             <div class="summary-box-grid">
@@ -395,7 +406,7 @@
                     <span id="dietPercent" style="color: #2563eb;">92%</span>
                 </div>
                 <div class="summary-card" style="background: #fdf4ff; border-color: #f5d0fe;">
-                    <h4 style="color: #86198f;">⭐ کل کارکردگی اور بہتری</h4>
+                    <h4 style="color: #86198f;">⭐ کل مجموعی کارکردگی</h4>
                     <span id="totalImprovementPercent" style="color: #9333ea;">90%</span>
                 </div>
             </div>
@@ -462,8 +473,8 @@
                 logContainer.innerHTML = '<div style="color: #64748b;">ابھی تک کوئی کام مکمل نہیں ہوا۔</div>';
             } else {
                 logContainer.innerHTML = completedHistoryLogs.map(item => `
-                    <div style="padding: 6px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between;">
-                        <span>👤 <b>${item.member}</b> نے کام مکمل کیا: ${item.task}</span>
+                    <div style="padding: 8px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
+                        <span>👤 <b style="font-size: 15px; color: var(--primary);">${item.member}</b> نے کام مکمل کیا: ${item.task}</span>
                         <span style="color: var(--success); font-weight: bold;">+${item.points} پوائنٹس</span>
                     </div>
                 `).join('');
@@ -508,12 +519,13 @@
         function saveMealRecordToStore() {
             playBeepSound();
             let slot = document.getElementById('mealTimeSlot').value;
-            let f1 = document.getElementById('dailyFood').value + " (" + document.getElementById('dailyFoodQty').value + ")";
-            let f2 = document.getElementById('milkyFood').value + " (" + document.getElementById('milkyQty').value + ")";
-            let f3 = document.getElementById('junkFood').value + " (" + document.getElementById('junkQty').value + ")";
+            let item1 = document.getElementById('dailyFood1').value + " (" + document.getElementById('dailyQty1').value + ")";
+            let item2 = document.getElementById('dailyFood2').value + " (" + document.getElementById('dailyQty2').value + ")";
+            let item3 = document.getElementById('milkyFood1').value + " (" + document.getElementById('milkyQty1').value + ")";
+            let item4 = document.getElementById('junkFood1').value + " (" + document.getElementById('junkQty1').value + ")";
 
-            savedMealRecords.push({ slot, f1, f2, f3 });
-            alert(`✅ [ڈائٹ روٹین کامیابی سے سیو ہو گئی!]\nٹائم: ${slot}\n1. ${f1}\n2. ${f2}\n3. ${f3}`);
+            savedMealRecords.push({ slot, items: [item1, item2, item3, item4] });
+            alert(`✅ [ڈائٹ روٹین کامیابی سے سیو ہو گئی!]\nٹائم: ${slot}\n• ${item1}\n• ${item2}\n• ${item3}\n• ${item4}`);
         }
 
         function openRecordsHistoryModal() {
