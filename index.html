@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پروفیشنل فیملی ہسٹری اینڈ پوائنٹس ڈیش بورڈ</title>
+    <title>اسمارٹ فیملی ہسٹری اینڈ پوائنٹس ڈیش بورڈ</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --primary-accent: #3b82f6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-accent: #2563eb;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --success-color: #059669;
+            --danger-color: #dc2626;
             --radius: 16px;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; autocomplete: off; }
-        body { background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; }
+        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; }
 
         .container { max-width: 850px; margin: 0 auto; }
 
@@ -27,59 +27,58 @@
             background: linear-gradient(135deg, #1e293b, #0f172a); 
             color: #ffffff; text-align: center;
             padding: 22px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); margin-bottom: 24px;
-            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1); margin-bottom: 24px;
             border-bottom: 4px solid var(--primary-accent);
         }
 
         /* مین ہسٹری کارڈ */
         .card {
             background: var(--card-bg); padding: 26px; border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); margin-bottom: 24px; 
-            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 24px; 
+            border: 2px solid #e2e8f0;
             position: relative; overflow: hidden;
         }
 
         .card-header-flex {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--border-color); padding-bottom: 12px; margin-bottom: 18px;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 18px;
         }
-        .card h3 { margin: 0; color: #e2e8f0; font-size: 19px; font-weight: 700; }
+        .card h3 { margin: 0; color: #1e293b; font-size: 19px; font-weight: 700; }
 
         /* سیٹنگز مینو بٹن اور باکس */
         .settings-dropdown-wrapper { position: relative; display: inline-block; }
         .setting-btn-pro {
-            background: #2563eb; border: none; color: #ffffff;
+            background: #eff6ff; border: 2px solid #3b82f6; color: #1d4ed8;
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
-            transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(59, 130, 246, 0.1);
         }
-        .setting-btn-pro:hover { background: #1d4ed8; }
+        .setting-btn-pro:hover { background: #dbeafe; }
 
         .settings-menu-box {
-            display: none; position: absolute; left: 0; top: 45px; background: #0f172a;
-            min-width: 230px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border-radius: 12px;
-            border: 1px solid var(--border-color); z-index: 100; overflow: hidden;
+            display: none; position: absolute; left: 0; top: 45px; background: #ffffff;
+            min-width: 240px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            border: 2px solid var(--border-color); z-index: 100; overflow: hidden;
         }
         .settings-menu-box button {
             width: 100%; padding: 11px 14px; text-align: right; background: none; border: none;
-            border-bottom: 1px solid var(--border-color); font-size: 13px; font-weight: bold; color: var(--text-main);
+            border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
             cursor: pointer; transition: background 0.2s;
         }
-        .settings-menu-box button:hover { background: #1e293b; color: var(--primary-accent); }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
         .settings-menu-box button:last-child { border-bottom: none; }
 
         /* کنٹرولز سیکشن */
         .controls-wrapper {
             display: flex; flex-direction: column; align-items: center; gap: 12px;
-            background: #0f172a; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: #f8fafc; padding: 16px; border-radius: 12px; border: 2px solid #e2e8f0;
             margin-bottom: 20px;
         }
 
         .dropdown-center {
             width: 240px; padding: 10px 14px; border-radius: 10px; 
-            border: 1px solid var(--border-color);
+            border: 2px solid #93c5fd;
             font-size: 14px; font-weight: bold; text-align: center; 
-            background: #1e293b; color: var(--text-main); outline: none; cursor: pointer;
+            background: #ffffff; color: var(--text-main); outline: none; cursor: pointer;
         }
         .dropdown-center:focus { border-color: var(--primary-accent); }
 
@@ -88,35 +87,23 @@
             font-size: 13px; font-weight: 600; color: var(--text-muted);
         }
         .date-input {
-            padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 13px; background: #1e293b; color: var(--text-main); font-weight: 600;
+            padding: 8px 10px; border-radius: 8px; border: 2px solid var(--border-color); font-size: 13px; background: #fff; color: var(--text-main); font-weight: 600;
         }
 
-        /* شاندار ڈارک ٹیبل اسٹائل */
+        /* شاندار لائٹ ٹیبل اسٹائل */
         .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
-        .clean-result-table th { background: #0f172a; color: #38bdf8; padding: 12px; text-align: center; font-weight: 700; border-bottom: 2px solid var(--border-color); }
-        .clean-result-table td { padding: 14px 12px; text-align: center; background: #1e293b; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); color: var(--text-main); }
+        .clean-result-table th { background: #e0f2fe; color: #0369a1; padding: 12px; text-align: center; font-weight: 700; border-bottom: 2px solid #bae6fd; }
+        .clean-result-table td { padding: 14px 12px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; color: var(--text-main); }
         .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
         .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
 
         /* گرینڈ ٹوٹل باکس */
         .grand-total-box {
-            margin-top: 20px; background: linear-gradient(135deg, #064e3b, #022c22); 
-            border: 1px solid #059669; padding: 16px 20px;
+            margin-top: 20px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); 
+            border: 2px solid #6ee7b7; padding: 16px 20px;
             border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
-            font-weight: bold; font-size: 16px; color: #34d399;
-            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2);
-        }
-
-        /* ان لائن رینیم باکس (بغیر پاپ اپ کے ڈائریکٹ ایڈیٹنگ کے لیے) */
-        .inline-rename-box {
-            background: #0f172a; border: 1px solid var(--primary-accent); padding: 10px; border-radius: 10px; margin-bottom: 15px;
-            display: none; gap: 10px; align-items: center; justify-content: center;
-        }
-        .inline-rename-box input {
-            padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color); background: #1e293b; color: #fff; font-size: 13px;
-        }
-        .inline-rename-box button {
-            background: var(--success-color); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;
+            font-weight: bold; font-size: 16px; color: #065f46;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
         }
     </style>
 </head>
@@ -138,23 +125,14 @@
                     <button class="setting-btn-pro" onclick="toggleSettingsMenu()">⚙️ سیٹنگز مینو</button>
                     
                     <div id="settingsMenuBox" class="settings-menu-box">
-                        <button onclick="toggleSelectMode()">☑️ سلیکٹ موڈ (باکس کھولیں/بند کریں)</button>
+                        <button onclick="toggleSelectMode()">☑️ سلیکٹ موڈ (باکس آن/آف)</button>
                         <button onclick="selectAllRows()">✅ سب سلیکٹ کریں (All Select)</button>
                         <button onclick="deleteSelectedRows()">🗑️ سلیکٹ شدہ ڈیلیٹ کریں</button>
-                        <button onclick="showInlineRename()">✏️ کام کا نام تبدیل کریں (Rename)</button>
                         <button onclick="deleteAllHistory()">🧹 تمام ہسٹری ڈیلیٹ کریں (All Delete)</button>
-                        <button onclick="sortRecordsDirect()">🔄 ترتیب دیں (Sort / Tarteeb)</button>
-                        <button onclick="toggleSectionView()">📂 سیکشن بند/کھولیں</button>
+                        <button onclick="sortRecordsAZ()">🔤 ترتیب دیں (A to Z Tarteeb)</button>
+                        <button onclick="toggleSectionView()">📂 سیکشن آن/آف (Section View)</button>
                     </div>
                 </div>
-            </div>
-
-            <!-- ڈائریکٹ رینیم کرنے کا چھوٹا سا باکس (بغیر براؤزر پاپ اپ کے) -->
-            <div id="inlineRenameContainer" class="inline-rename-box">
-                <span style="font-size: 13px; font-weight: bold;">نیا نام:</span>
-                <input type="text" id="targetOldName" placeholder="پرانا نام" autocomplete="off">
-                <input type="text" id="targetNewName" placeholder="نیا نام" autocomplete="off">
-                <button onclick="executeRename()">محفوظ کریں</button>
             </div>
 
             <!-- ڈراپ لائن اور ڈیٹ فلٹرز -->
@@ -208,7 +186,6 @@
         ];
 
         let isSelectModeActive = false;
-        let sortToggleState = false;
 
         // سیٹنگز مینو کھلنے اور بند ہونے کا فنکشن
         function toggleSettingsMenu() {
@@ -266,9 +243,9 @@
                 return `
                     <tr>
                         ${checkboxTd}
-                        <td><b style="color: #f1f5f9;">${item.taskName}</b></td>
-                        <td><span style="background: #0f172a; padding: 4px 10px; border-radius: 6px; color: #38bdf8; font-weight: bold;">${item.pointsPerUnit}</span></td>
-                        <td><span style="background: #0f172a; color: #e2e8f0; padding: 4px 10px; border-radius: 6px; font-weight: bold;">${item.frequency} بار</span></td>
+                        <td><b style="color: #1e293b;">${item.taskName}</b></td>
+                        <td><span style="background: #e0f2fe; padding: 4px 10px; border-radius: 6px; color: #0369a1; font-weight: bold;">${item.pointsPerUnit}</span></td>
+                        <td><span style="background: #f1f5f9; color: #1e293b; padding: 4px 10px; border-radius: 6px; font-weight: bold;">${item.frequency} بار</span></td>
                         <td><span style="color: var(--success-color); font-weight: bold; font-size: 15px;">${totalTaskPoints} ⭐</span></td>
                     </tr>
                 `;
@@ -288,7 +265,7 @@
             toggleSettingsMenu();
         }
 
-        // 3. سلیکٹ شدہ ریکارڈ ڈیلیٹ کرنا
+        // 3. سلیکٹ شدہ ریکارڈ ڈیلیٹ کرنا (Delete Selected)
         function deleteSelectedRows() {
             if (!isSelectModeActive) {
                 alert("⚠️ پہلے 'سلیکٹ موڈ' آن کر کے ریکارڈ ٹک کریں!");
@@ -307,55 +284,21 @@
             toggleSettingsMenu();
         }
 
-        // 4. نام تبدیل کرنے کا ڈائریکٹ باکس کھولنا
-        function showInlineRename() {
-            let box = document.getElementById('inlineRenameContainer');
-            box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
-            toggleSettingsMenu();
-        }
-
-        // نام تبدیل کرنے کی کمانڈ ڈائریکٹ ایگزیکیوٹ کرنا
-        function executeRename() {
-            let oldName = document.getElementById('targetOldName').value.trim();
-            let newName = document.getElementById('targetNewName').value.trim();
-
-            if(!oldName || !newName) {
-                alert("⚠️ دونوں خانوں میں نام درج کریں!");
-                return;
-            }
-
-            let record = masterTaskRecords.find(x => x.taskName === oldName);
-            if(record) {
-                record.taskName = newName;
-                renderMemberRecord();
-                document.getElementById('targetOldName').value = '';
-                document.getElementById('targetNewName').value = '';
-                document.getElementById('inlineRenameContainer').style.display = 'none';
-            } else {
-                alert("❌ اس نام کا کوئی کام نہیں ملا!");
-            }
-        }
-
-        // 5. تمام ہسٹری ڈیلیٹ کرنا (All Delete)
+        // 4. تمام ہسٹری ڈیلیٹ کرنا (All Delete)
         function deleteAllHistory() {
             masterTaskRecords = [];
             renderMemberRecord();
             toggleSettingsMenu();
         }
 
-        // 6. ترتیب دینا (Sort / Tarteeb - ڈائریکٹ کلک سے)
-        function sortRecordsDirect() {
-            sortToggleState = !sortToggleState;
-            if(sortToggleState) {
-                masterTaskRecords.sort((a, b) => (b.pointsPerUnit * b.frequency) - (a.pointsPerUnit * a.frequency));
-            } else {
-                masterTaskRecords.sort((a, b) => a.taskName.localeCompare(b.taskName));
-            }
+        // 5. الف سے ی ترتیب دینا (A to Z Tarteeb)
+        function sortRecordsAZ() {
+            masterTaskRecords.sort((a, b) => a.taskName.localeCompare(b.taskName));
             renderMemberRecord();
             toggleSettingsMenu();
         }
 
-        // 7. سیکشن بند کرنا یا کھولنا
+        // 6. سیکشن بند کرنا یا کھولना (Section On/Off)
         function toggleSectionView() {
             let controls = document.getElementById('mainControlsWrapper');
             let table = document.getElementById('mainResultTable');
