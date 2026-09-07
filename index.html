@@ -968,7 +968,6 @@
             --text-main: #334155;
             --text-muted: #64748b;
             --border-color: #cbd5e1;
-            --success-color: #059669;
             --danger-color: #dc2626;
             --radius: 16px;
         }
@@ -978,18 +977,11 @@
 
         .container { max-width: 850px; margin: 0 auto; }
 
-        .app-header {
-            background: linear-gradient(135deg, #1e293b, #0f172a); 
-            color: #ffffff; text-align: center;
-            padding: 22px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1); margin-bottom: 24px;
-            border-bottom: 4px solid var(--primary-accent);
-            position: relative;
-        }
+        /* واپس جانے کا بٹن */
+        .back-nav-bar { margin-bottom: 15px; }
         .back-btn {
-            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-            background: #334155; color: white; padding: 8px 14px; border-radius: 8px;
-            text-decoration: none; font-size: 13px; font-weight: bold;
+            background: #334155; color: white; padding: 8px 16px; border-radius: 8px;
+            text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block;
         }
         .back-btn:hover { background: #475569; }
 
@@ -999,22 +991,36 @@
             border: 2px solid #e2e8f0; position: relative;
         }
 
-        /* ہیڈر ٹاپ بار: سیٹنگز اور بائیں طرف چھوٹا فلٹر */
+        /* ہیڈر بار: دائیں طرف سیٹنگز اور اس کے ساتھ ہی فلٹر */
         .header-action-bar {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 18px;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;
+            flex-wrap: wrap; gap: 10px;
         }
 
-        /* سیٹنگز مینو پاپ اپ */
-        .settings-dropdown-wrapper { position: relative; display: inline-block; }
+        .header-right-group {
+            display: flex; align-items: center; gap: 10px; position: relative;
+        }
+
+        /* سیٹنگز اور فلٹر بٹن اسٹائل */
         .setting-btn-pro {
             background: #eff6ff; border: 2px solid #3b82f6; color: #1d4ed8;
-            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
         }
+        .setting-btn-pro:hover { background: #dbeafe; }
+
+        .filter-dropdown-btn {
+            background: #ffffff; border: 2px solid var(--border-color); color: var(--text-main);
+            padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
+        }
+
+        /* سیٹنگز مینو پاپ اپ باکس */
         .settings-menu-box {
             display: none; position: absolute; right: 0; top: 45px; background: #ffffff;
             min-width: 220px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
-            border: 2px solid var(--border-color); z-index: 1000; overflow: hidden; text-align: right;
+            border: 2px solid var(--border-color); z-index: 9999; overflow: hidden; text-align: right;
         }
         .settings-menu-box button {
             width: 100%; padding: 12px 16px; background: none; border: none;
@@ -1023,9 +1029,9 @@
         }
         .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
 
-        /* سینٹر بڑی ممبر ڈراپ لائن اور بائیں جانب چھوٹا فلٹر */
+        /* سینٹر میں بڑی ممبر ڈراپ لائن */
         .top-controls-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
             background: #f8fafc; padding: 18px; border-radius: 12px; border: 2px solid #e2e8f0;
             margin-bottom: 20px;
         }
@@ -1052,34 +1058,34 @@
 
     <div class="container">
 
-        <div class="app-header">
-            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ</a>
-            📅 ڈیلی لگنے والی ڈیوٹی کا ریکارڈ
+        <!-- ڈیش بورڈ واپسی کا بٹن -->
+        <div class="back-nav-bar">
+            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ پر جائیں</a>
         </div>
 
         <div class="card">
             
-            <!-- ہیڈر بار: بائیں جانب چھوٹا فلٹر اور دائیں جانب سیٹنگز بٹن -->
+            <!-- ہیڈر بار: ٹائ틀 غائب، دائیں طرف سیٹنگز اور اس کے ساتھ فلٹر -->
             <div class="header-action-bar">
-                <!-- بائیں طرف چھوٹا فلٹر -->
-                <div>
-                    <select id="filterRange" class="setting-btn-pro" style="background: #ffffff; border-color: var(--border-color); color: var(--text-main);" onchange="renderDutyRecords()">
-                        <option value="all">⏳ تمام ریکارڈ (All)</option>
+                <h3 style="margin: 0; color: #1e293b; font-size: 19px;">📅 ڈیلی لگنے والی ڈیوٹی کا ریکارڈ</h3>
+
+                <div class="header-right-group">
+                    <!-- فلٹر بٹن (سیٹنگز کے بالکل ساتھ دائیں سائیڈ پر) -->
+                    <select id="filterRange" class="filter-dropdown-btn" onchange="renderDutyRecords()">
+                        <option value="all">⏳ تمام ریکارڈ</option>
                         <option value="day">📅 ڈیلی (آج)</option>
-                        <option value="week">📆 ویکلی (ہفتہ)</option>
-                        <option value="month">🗓️ منتھلی (مہینہ)</option>
-                        <option value="year">📊 سالانہ (سال)</option>
+                        <option value="week">📆 ویکلی</option>
+                        <option value="month">🗓️ منتھلی</option>
+                        <option value="year">📊 سالانہ</option>
                     </select>
-                </div>
 
-                <h3 style="margin: 0; color: #1e293b; font-size: 18px;">🛡️ ڈیوٹی ہسٹری</h3>
-
-                <!-- سیٹنگز بٹن اور پاپ اپ مینو -->
-                <div class="settings-dropdown-wrapper">
-                    <button class="setting-btn-pro" onclick="toggleSettingsMenu(event)">⚙️ سیٹنگز</button>
-                    <div id="settingsMenuBox" class="settings-menu-box">
-                        <button onclick="clearAllDutyHistory()">🧹 تمام ہسٹری کلیئر کریں</button>
-                        <button onclick="toggleSettingsMenu(event)" style="color: var(--danger-color);">❌ مینو بند کریں</button>
+                    <!-- سیٹنگز بٹن اور پاپ اپ مینو -->
+                    <div class="settings-dropdown-wrapper">
+                        <button type="button" class="setting-btn-pro" onclick="toggleSettingsMenu(event)">⚙️ سیٹنگز</button>
+                        <div id="settingsMenuBox" class="settings-menu-box">
+                            <button type="button" onclick="clearAllDutyHistory()">🧹 تمام ہسٹری کلیئر کریں</button>
+                            <button type="button" onclick="closeSettingsMenu()" style="color: var(--danger-color);">❌ مینو بند کریں</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1112,18 +1118,19 @@
     </div>
 
     <script>
-        // فرضی / سیمپل ڈیٹا (احمد اور علی کی مثال کے مطابق)
-        let defaultSampleData = [
+        // آپ کی مثال کے مطابق کافی سارا ٹیسٹنگ ڈیٹا (احمد اور علی کی مختلف تاریخوں کی ڈیوٹیاں)
+        let sampleTestData = [
             { id: 1, member: "احمد (ہیلپر)", title: "مین گیٹ ڈیوٹی اور سیکیورٹی چیک", date: "2026-09-01", dayName: "منگل" },
-            { id: 2, member: "علی (سینئر)", title: "آفس مینجمنٹ اور مانیٹرنگ", date: "2026-09-02", dayName: "بدھ" },
+            { id: 2, member: "علی (سینئر)", title: "آفس مینجمنٹ اور مانیٹرنگ میٹنگ", date: "2026-09-02", dayName: "بدھ" },
             { id: 3, member: "احمد (ہیلپر)", title: "گودام کی صفائی اور اسٹاک چیک", date: "2026-09-03", dayName: "جمعرات" },
-            { id: 4, member: "علی (سینئر)", title: "سپرویژن اور فنانس رپورٹ", date: "2026-09-05", dayName: "ہفتہ" },
-            { id: 5, member: "احمد (ہیلپر)", title: "بجلی کا کام اور مرمت", date: "2026-09-07", dayName: "پیر" }
+            { id: 4, member: "علی (سینئر)", title: "اسٹاف سپرویژن اور فنانس رپورٹ چیک", date: "2026-09-05", dayName: "ہفتہ" },
+            { id: 5, member: "احمد (ہیلپر)", title: "بجلی کا کام اور مرمت", date: "2026-09-07", dayName: "پیر" },
+            { id: 6, member: "احمد (ہیلپر)", title: "مین گیٹ نائٹ ڈیوٹی", date: "2026-09-08", dayName: "منگل" }
         ];
 
         let dutyRecords = JSON.parse(localStorage.getItem('familyDutyRecords'));
         if (!dutyRecords || dutyRecords.length === 0) {
-            dutyRecords = defaultSampleData;
+            dutyRecords = sampleTestData;
             localStorage.setItem('familyDutyRecords', JSON.stringify(dutyRecords));
         }
 
@@ -1131,9 +1138,9 @@
             localStorage.setItem('familyDutyRecords', JSON.stringify(dutyRecords));
         }
 
-        // سیٹنگز مینو کھولنے اور بند کرنے کا پرفیکٹ فنکشن
+        // 100% ورکنگ سیٹنگز مینو ٹوگل فنکشن
         function toggleSettingsMenu(event) {
-            if(event) event.stopPropagation();
+            if (event) event.stopPropagation();
             let menu = document.getElementById('settingsMenuBox');
             if (menu.style.display === 'block') {
                 menu.style.display = 'none';
@@ -1142,10 +1149,14 @@
             }
         }
 
-        // اسکرین پر کہیں بھی کلک کرنے سے مینو بند ہو جائے گا
+        function closeSettingsMenu() {
+            document.getElementById('settingsMenuBox').style.display = 'none';
+        }
+
+        // اسکرین پر کہیں بھی کلک کرنے سے مینو خود بخود بند ہو جائے گا
         window.onclick = function(event) {
             let menu = document.getElementById('settingsMenuBox');
-            if (menu && !event.target.matches('.setting-btn-pro')) {
+            if (menu && !event.target.closest('.settings-dropdown-wrapper')) {
                 menu.style.display = 'none';
             }
         }
@@ -1188,7 +1199,7 @@
                     <td><b>${item.date}</b></td>
                     <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
                     <td style="text-align: right; padding-right: 20px;"><b>${item.title}</b></td>
-                    <td><button class="btn-delete-row" onclick="deleteSingleDuty(${item.id})">🗑️ ڈیلیٹ</button></td>
+                    <td><button type="button" class="btn-delete-row" onclick="deleteSingleDuty(${item.id})">🗑️ ڈیلیٹ</button></td>
                 </tr>
             `).join('');
         }
@@ -1206,7 +1217,7 @@
                 dutyRecords = [];
                 saveDutyStorage();
                 renderDutyRecords();
-                toggleSettingsMenu();
+                closeSettingsMenu();
             }
         }
 
