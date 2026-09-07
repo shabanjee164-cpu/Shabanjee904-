@@ -954,3 +954,321 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڈیوٹی کا ریکارڈ</title>
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-accent: #2563eb;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --success-color: #059669;
+            --danger-color: #dc2626;
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; padding-bottom: 90px; }
+
+        .container { max-width: 850px; margin: 0 auto; }
+
+        .app-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a); 
+            color: #ffffff; text-align: center;
+            padding: 22px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1); margin-bottom: 24px;
+            border-bottom: 4px solid var(--primary-accent);
+            position: relative;
+        }
+        .back-btn {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            background: #334155; color: white; padding: 8px 14px; border-radius: 8px;
+            text-decoration: none; font-size: 13px; font-weight: bold;
+        }
+        .back-btn:hover { background: #475569; }
+
+        .card {
+            background: var(--card-bg); padding: 26px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 24px; 
+            border: 2px solid #e2e8f0; position: relative;
+        }
+
+        .card-header-flex {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 18px;
+        }
+        .card h3 { margin: 0; color: #1e293b; font-size: 19px; }
+
+        /* سیٹنگز مینو پاپ اپ */
+        .settings-dropdown-wrapper { position: relative; display: inline-block; }
+        .setting-btn-pro {
+            background: #eff6ff; border: 2px solid #3b82f6; color: #1d4ed8;
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+        }
+        .settings-menu-box {
+            display: none; position: absolute; left: 0; top: 45px; background: #ffffff;
+            min-width: 220px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            border: 2px solid var(--border-color); z-index: 100; overflow: hidden; text-align: right;
+        }
+        .settings-menu-box button {
+            width: 100%; padding: 11px 14px; background: none; border: none;
+            border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
+            cursor: pointer;
+        }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--danger-color); }
+
+        /* کنٹرولز اور فلٹرز */
+        .controls-wrapper {
+            display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between;
+            background: #f8fafc; padding: 16px; border-radius: 12px; border: 2px solid #e2e8f0;
+            margin-bottom: 20px; align-items: center;
+        }
+        .form-control-custom {
+            padding: 8px 12px; border-radius: 8px; border: 2px solid var(--border-color);
+            font-size: 13px; font-weight: bold; background: white; color: var(--text-main); outline: none;
+        }
+
+        /* ڈیوٹی ان پٹ فارم */
+        .add-duty-box {
+            background: #f1f5f9; padding: 15px; border-radius: 12px; margin-bottom: 20px;
+            display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+        }
+        .add-duty-box input, .add-duty-box select { flex: 1; min-width: 140px; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color); }
+        .btn-add { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* ٹیبل اسٹائل */
+        .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
+        .clean-result-table th { background: #e0f2fe; color: #0369a1; padding: 12px; text-align: center; font-weight: 700; }
+        .clean-result-table td { padding: 12px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+        .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+
+        .btn-delete-row { background: #fee2e2; color: var(--danger-color); border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-delete-row:hover { background: #fecaca; }
+
+        /* فٹر نیویگیشن (5 بٹن) */
+        .bottom-nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #ffffff; border-top: 2px solid #e2e8f0;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .bottom-nav-bar a {
+            text-decoration: none; color: var(--text-muted); font-size: 12px; font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+        }
+        .bottom-nav-bar a.active, .bottom-nav-bar a:hover { color: var(--primary-accent); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="app-header">
+            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ</a>
+            🛡️ ممبر ڈیوٹی ریکارڈ
+        </div>
+
+        <!-- نئی ڈیوٹی ایڈ کرنے کا چھوٹا سیکشن -->
+        <div class="card" style="padding: 15px 25px; margin-bottom: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #1e293b;">➕ نئی ڈیوٹی درج کریں</h4>
+            <div class="add-duty-box">
+                <select id="dutyMember" class="form-control-custom">
+                    <option value="علی (سینئر)">👨‍✈️ علی (سینئر)</option>
+                    <option value="احمد (ہیلپر)">🧑‍ ہیلپر: احمد</option>
+                </select>
+                <input type="text" id="dutyTitle" placeholder="ڈیوٹی کا نام (مثلاً گیٹ ڈیوٹی)" autocomplete="off">
+                <input type="date" id="dutyDate" class="form-control-custom">
+                <button class="btn-add" onclick="addNewDuty()">محفوظ کریں</button>
+            </div>
+        </div>
+
+        <!-- مین ڈیوٹی ریکارڈ کارڈ -->
+        <div class="card">
+            <div class="card-header-flex">
+                <h3>📋 ڈیوٹی کی فہرست</h3>
+                
+                <!-- سیٹنگز پاپ اپ مینو -->
+                <div class="settings-dropdown-wrapper">
+                    <button class="setting-btn-pro" onclick="toggleSettingsMenu()">⚙️ سیٹنگز</button>
+                    <div id="settingsMenuBox" class="settings-menu-box">
+                        <button onclick="deleteAllDutyHistory()">🧹 تمام ڈیوٹی ہسٹری ڈیلیٹ کریں</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- فلٹرز (دن، ہفتہ، مہینہ، سال) -->
+            <div class="controls-wrapper">
+                <div>
+                    <label style="font-size: 12px; font-weight: bold;">🔍 ممبر فلٹر:</label>
+                    <select id="filterMember" class="form-control-custom" onchange="renderDutyRecords()">
+                        <option value="all">تمام ممبران</option>
+                        <option value="علی (سینئر)">علی (سینئر)</option>
+                        <option value="احمد (ہیلپر)">احمد (ہیلپر)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="font-size: 12px; font-weight: bold;">📅 دورانیہ فلٹر:</label>
+                    <select id="filterRange" class="form-control-custom" onchange="renderDutyRecords()">
+                        <option value="all">تمام ریکارڈ</option>
+                        <option value="day">آج کا دن (Single Day)</option>
+                        <option value="week">اس ہفتے (This Week)</option>
+                        <option value="month">اس مہینے (This Month)</option>
+                        <option value="year">اس سال (This Year)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ڈیوٹی ٹیبل -->
+            <table class="clean-result-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ (Date)</th>
+                        <th>دن (Day)</th>
+                        <th>ممبر کا نام</th>
+                        <th>ڈیوٹی کی تفصیل</th>
+                        <th>ایکشن (Delete)</th>
+                    </tr>
+                </thead>
+                <tbody id="dutyTableBody">
+                    <!-- ڈیٹا یہاں شو ہوگا -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- نیچے 5 مستقل بٹنوں والا فٹر -->
+    <div class="bottom-nav-bar">
+        <a href="index.html">📊 ڈیش بورڈ</a>
+        <a href="record.html">📂 ریکارڈ</a>
+        <a href="duty.html" class="active">🛡️ ڈیوٹی</a>
+        <a href="alerts.html">🔔 الرٹس</a>
+        <a href="settings.html">⚙️ سیٹنگز</a>
+    </div>
+
+    <script>
+        document.getElementById('dutyDate').valueAsDate = new Date();
+
+        let dutyRecords = JSON.parse(localStorage.getItem('familyDutyRecords')) || [];
+
+        function saveDutyStorage() {
+            localStorage.setItem('familyDutyRecords', JSON.stringify(dutyRecords));
+        }
+
+        function toggleSettingsMenu() {
+            let menu = document.getElementById('settingsMenuBox');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // تاریخ سے دن کا نام نکالنے کا فنکشن (اردو میں)
+        function getDayNameInUrdu(dateString) {
+            let days = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
+            let d = new Date(dateString);
+            return days[d.getDay()];
+        }
+
+        function addNewDuty() {
+            let member = document.getElementById('dutyMember').value;
+            let title = document.getElementById('dutyTitle').value.trim();
+            let date = document.getElementById('dutyDate').value;
+
+            if(!title) {
+                alert("⚠️ براہ کرم ڈیوٹی کا نام درج کریں!");
+                return;
+            }
+
+            let newDuty = {
+                id: Date.now(),
+                member: member,
+                title: title,
+                date: date,
+                dayName: getDayNameInUrdu(date)
+            };
+
+            dutyRecords.push(newDuty);
+            saveDutyStorage();
+            document.getElementById('dutyTitle').value = '';
+            renderDutyRecords();
+            alert("✅ ڈیوٹی کامیابی سے محفوظ ہو گئی!");
+        }
+
+        function renderDutyRecords() {
+            let tbody = document.getElementById('dutyTableBody');
+            let memberFilter = document.getElementById('filterMember').value;
+            let rangeFilter = document.getElementById('filterRange').value;
+
+            let todayStr = new Date().toISOString().split('T')[0];
+            let currentYear = new Date().getFullYear().toString();
+            let currentMonth = todayStr.substring(0, 7); // YYYY-MM
+
+            let filtered = dutyRecords.filter(item => {
+                // ممبر فلٹر
+                if(memberFilter !== 'all' && item.member !== memberFilter) return false;
+
+                // دورانیہ فلٹر
+                if(rangeFilter === 'day') {
+                    if(item.date !== todayStr) return false;
+                } else if(rangeFilter === 'month') {
+                    if(!item.date.startsWith(currentMonth)) return false;
+                } else if(rangeFilter === 'year') {
+                    if(!item.date.startsWith(currentYear)) return false;
+                }
+                // ہفتہ کے لیے آسان فلٹر (پچھلے 7 دن)
+                else if(rangeFilter === 'week') {
+                    let itemDate = new Date(item.date);
+                    let todayDate = new Date();
+                    let diffTime = Math.abs(todayDate - itemDate);
+                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if(diffDays > 7) return false;
+                }
+
+                return true;
+            });
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color: var(--text-muted); padding: 25px;">کوئی ڈیوٹی ریکارڈ موجود نہیں۔</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => `
+                <tr>
+                    <td><b>${item.date}</b></td>
+                    <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
+                    <td><b>${item.member}</b></td>
+                    <td>${item.title}</td>
+                    <td><button class="btn-delete-row" onclick="deleteSingleDuty(${item.id})">🗑️ ڈیلیٹ</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteSingleDuty(id) {
+            if(confirm("⚠️ کیا آپ اس ڈیوٹی کو ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                dutyRecords = dutyRecords.filter(x => x.id !== id);
+                saveDutyStorage();
+                renderDutyRecords();
+            }
+        }
+
+        function deleteAllDutyHistory() {
+            if(confirm("⚠️ کیا آپ تمام ڈیوٹی ریکارڈ صاف کرنا چاہتے ہیں؟")) {
+                dutyRecords = [];
+                saveDutyStorage();
+                renderDutyRecords();
+                toggleSettingsMenu();
+            }
+        }
+
+        window.onload = function() {
+            renderDutyRecords();
+        }
+    </script>
+</body>
+</html>
