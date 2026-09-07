@@ -1227,3 +1227,301 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چھٹیوں کا ریکارڈ</title>
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-accent: #2563eb;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --danger-color: #dc2626;
+            --success-color: #059669;
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; }
+
+        .container { max-width: 850px; margin: 0 auto; }
+
+        /* واپس جانے کا بٹن */
+        .back-nav-bar { margin-bottom: 15px; }
+        .back-btn {
+            background: #334155; color: white; padding: 8px 16px; border-radius: 8px;
+            text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block;
+        }
+        .back-btn:hover { background: #475569; }
+
+        .card {
+            background: var(--card-bg); padding: 26px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 24px; 
+            border: 2px solid #e2e8f0; position: relative;
+        }
+
+        /* ہیڈر بار: دائیں طرف سیٹنگز اور فلٹر */
+        .header-action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;
+            flex-wrap: wrap; gap: 10px;
+        }
+
+        .header-right-group {
+            display: flex; align-items: center; gap: 10px; position: relative;
+        }
+
+        .setting-btn-pro {
+            background: #eff6ff; border: 2px solid #3b82f6; color: #1d4ed8;
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
+        }
+        .setting-btn-pro:hover { background: #dbeafe; }
+
+        .filter-dropdown-btn {
+            background: #ffffff; border: 2px solid var(--border-color); color: var(--text-main);
+            padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
+        }
+
+        /* سیٹنگز مینو پاپ اپ باکس */
+        .settings-menu-box {
+            display: none; position: absolute; right: 0; top: 45px; background: #ffffff;
+            min-width: 220px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            border: 2px solid var(--border-color); z-index: 9999; overflow: hidden; text-align: right;
+        }
+        .settings-menu-box button {
+            width: 100%; padding: 12px 16px; background: none; border: none;
+            border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
+            cursor: pointer; text-align: right; display: block;
+        }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
+
+        /* سینٹر میں بڑی ممبر ڈراپ لائن */
+        .top-controls-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            background: #f8fafc; padding: 18px; border-radius: 12px; border: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .center-member-dropdown {
+            width: 100%; max-width: 320px; padding: 12px 16px; border-radius: 12px;
+            border: 2px solid #93c5fd; font-size: 16px; font-weight: bold; text-align: center;
+            background: white; color: var(--text-main); outline: none; cursor: pointer;
+        }
+        .center-member-dropdown:focus { border-color: var(--primary-accent); }
+
+        /* ٹیبل اسٹائل */
+        .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
+        .clean-result-table th { background: #fee2e2; color: #991b1b; padding: 12px; text-align: center; font-weight: 700; }
+        .clean-result-table td { padding: 14px 12px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+        .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+
+        .btn-delete-row { background: #fee2e2; color: var(--danger-color); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-delete-row:hover { background: #fecaca; }
+
+        /* ٹوٹل چھٹیوں کا باکس (فٹر سیکشن) */
+        .total-summary-box {
+            background: #f1f5f9; padding: 16px; border-radius: 12px; text-align: center;
+            font-size: 16px; font-weight: bold; color: #1e293b; border: 2px solid #cbd5e1; margin-top: 20px;
+        }
+        .total-number { color: var(--danger-color); font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ڈیش بورڈ واپسی کا بٹن -->
+        <div class="back-nav-bar">
+            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ پر جائیں</a>
+        </div>
+
+        <div class="card" id="mainCardSection">
+            
+            <!-- ہیڈر بار: چھٹیوں کا ریکارڈ ٹائ틀، دائیں طرف فلٹر اور سیٹنگز -->
+            <div class="header-action-bar">
+                <h3 style="margin: 0; color: #1e293b; font-size: 19px;">🏖️ چھٹیوں کا ریکارڈ</h3>
+
+                <div class="header-right-group">
+                    <!-- فلٹر بٹن -->
+                    <select id="filterRange" class="filter-dropdown-btn" onchange="renderLeaveRecords()">
+                        <option value="all">⏳ تمام ریکارڈ</option>
+                        <option value="day">📅 ڈیلی (آج)</option>
+                        <option value="week">📆 ویکلی</option>
+                        <option value="month">🗓️ منتھلی</option>
+                        <option value="year">📊 سالانہ</option>
+                    </select>
+
+                    <!-- سیٹنگز بٹن اور مینو -->
+                    <div class="settings-dropdown-wrapper">
+                        <button type="button" class="setting-btn-pro" onclick="toggleSettingsMenu(event)">⚙️ سیٹنگز</button>
+                        <div id="settingsMenuBox" class="settings-menu-box">
+                            <button type="button" onclick="toggleSectionView()">📂 سیکشن آن/آف (کلوز)</button>
+                            <button type="button" onclick="clearAllLeaveHistory()">🧹 تمام چھٹیاں کلیئر کریں</button>
+                            <button type="button" onclick="closeSettingsMenu()" style="color: var(--danger-color);">❌ مینو بند کریں</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- سینٹر میں بڑی ممبر ڈراپ لائن -->
+            <div class="top-controls-wrapper">
+                <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">🔍 ممبر منتخب کریں:</label>
+                <select id="selectedMember" class="center-member-dropdown" onchange="renderLeaveRecords()">
+                    <option value="احمد (ہیلپر)">🧑‍ ہیلپر: احمد</option>
+                    <option value="علی (سینئر)">👨‍✈️ علی (سینئر)</option>
+                </select>
+            </div>
+
+            <!-- چھٹیوں کا ٹیبل -->
+            <table class="clean-result-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ (Date)</th>
+                        <th>دن (Day)</th>
+                        <th>چھٹی کی وجہ / تفصیل</th>
+                        <th>ایکشن</th>
+                    </tr>
+                </thead>
+                <tbody id="leaveTableBody">
+                    <!-- ڈیٹا یہاں شو ہوگا -->
+                </tbody>
+            </table>
+
+            <!-- کل چھٹیوں کا ٹوٹل باکس -->
+            <div class="total-summary-box">
+                📉 اس دورانیے کی کل چھٹیاں: <span class="total-number" id="totalLeaveCount">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // چھٹیوں کا فرضی ٹیسٹنگ ڈیٹا
+        let sampleLeaveData = [
+            { id: 1, member: "احمد (ہیلپر)", reason: "طبی عذر (بخار)", date: "2026-09-02", dayName: "بدھ" },
+            { id: 2, member: "علی (سینئر)", reason: "ذاتی کام / ایمرجنسی", date: "2026-09-04", dayName: "جمعہ" },
+            { id: 3, member: "احمد (ہیلپر)", reason: "گریلو تقریب", date: "2026-09-06", dayName: "اتوار" },
+            { id: 4, member: "علی (سینئر)", reason: "شہر سے باہر سفر", date: "2026-09-07", dayName: "پیر" }
+        ];
+
+        let leaveRecords = JSON.parse(localStorage.getItem('familyLeaveRecords'));
+        if (!leaveRecords || leaveRecords.length === 0) {
+            leaveRecords = sampleLeaveData;
+            localStorage.setItem('familyLeaveRecords', JSON.stringify(leaveRecords));
+        }
+
+        function saveLeaveStorage() {
+            localStorage.setItem('familyLeaveRecords', JSON.stringify(leaveRecords));
+        }
+
+        // سیٹنگز مینو ٹوگل
+        function toggleSettingsMenu(event) {
+            if (event) event.stopPropagation();
+            let menu = document.getElementById('settingsMenuBox');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function closeSettingsMenu() {
+            document.getElementById('settingsMenuBox').style.display = 'none';
+        }
+
+        // باہر کلک کرنے پر مینو بند ہو جائے
+        window.onclick = function(event) {
+            let menu = document.getElementById('settingsMenuBox');
+            if (menu && !event.target.closest('.settings-dropdown-wrapper')) {
+                menu.style.display = 'none';
+            }
+        }
+
+        // سیکشن آن/آف کرنے کا فنکشن
+        function toggleSectionView() {
+            let card = document.getElementById('mainCardSection');
+            let contentElements = card.querySelectorAll('.top-controls-wrapper, table, .total-summary-box');
+            let isHidden = contentElements[0].style.display === 'none';
+            
+            contentElements.forEach(el => {
+                el.style.display = isHidden ? '' : 'none';
+            });
+            closeSettingsMenu();
+        }
+
+        // ریکارڈ رینڈر اور فلٹر کرنے کا فنکشن
+        function renderLeaveRecords() {
+            let currentMember = document.getElementById('selectedMember').value;
+            let rangeFilter = document.getElementById('filterRange').value;
+            let tbody = document.getElementById('leaveTableBody');
+            let totalCountSpan = document.getElementById('totalLeaveCount');
+
+            let todayStr = new Date().toISOString().split('T')[0];
+            let currentYear = new Date().getFullYear().toString();
+            let currentMonth = todayStr.substring(0, 7);
+
+            let filtered = leaveRecords.filter(item => {
+                if(item.member !== currentMember) return false;
+
+                if(rangeFilter === 'day') {
+                    if(item.date !== todayStr) return false;
+                } else if(rangeFilter === 'month') {
+                    if(!item.date.startsWith(currentMonth)) return false;
+                } else if(rangeFilter === 'year') {
+                    if(!item.date.startsWith(currentYear)) return false;
+                } else if(rangeFilter === 'week') {
+                    let itemDate = new Date(item.date);
+                    let todayDate = new Date();
+                    let diffDays = Math.ceil(Math.abs(todayDate - itemDate) / (1000 * 60 * 60 * 24));
+                    if(diffDays > 7) return false;
+                }
+                return true;
+            });
+
+            // ٹوٹل چھٹیوں کی تعداد اپڈیٹ کریں
+            totalCountSpan.textContent = filtered.length;
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="color: var(--text-muted); padding: 25px;">اس ممبر اور دورانیے کی کوئی چھٹی کا ریکارڈ موجود نہیں۔</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => `
+                <tr>
+                    <td><b>${item.date}</b></td>
+                    <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
+                    <td style="text-align: right; padding-right: 20px;"><b>${item.reason}</b></td>
+                    <td><button type="button" class="btn-delete-row" onclick="deleteSingleLeave(${item.id})">🗑️ ڈیلیٹ</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // انفرادی چھٹی ڈیلیٹ کرنا
+        function deleteSingleLeave(id) {
+            leaveRecords = leaveRecords.filter(x => x.id !== id);
+            saveLeaveStorage();
+            renderLeaveRecords();
+        }
+
+        // تمام چھٹیاں کلیئر کرنا
+        function clearAllLeaveHistory() {
+            if(confirm("⚠️ کیا آپ واقعی اس ممبر کی تمام چھٹیاں کلیئر کرنا چاہتے ہیں؟")) {
+                let currentMember = document.getElementById('selectedMember').value;
+                leaveRecords = leaveRecords.filter(x => x.member !== currentMember);
+                saveLeaveStorage();
+                renderLeaveRecords();
+                closeSettingsMenu();
+            }
+        }
+
+        window.onload = function() {
+            renderLeaveRecords();
+        }
+    </script>
+</body>
+</html>
