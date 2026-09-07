@@ -2980,3 +2980,371 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راشن کا ریکارڈ (Ration Record)</title>
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-accent: #d97706;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* واپس جانے کا بٹن */
+        .back-nav-bar { margin-bottom: 15px; }
+        .back-btn {
+            background: #334155; color: white; padding: 8px 16px; border-radius: 8px;
+            text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block;
+        }
+        .back-btn:hover { background: #475569; }
+
+        .card {
+            background: var(--card-bg); padding: 26px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 24px; 
+            border: 2px solid #e2e8f0; position: relative;
+        }
+
+        /* ہیڈر بار: دائیں طرف فلٹر اور 100% ورکنگ سیٹنگز بٹن */
+        .header-action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;
+            flex-wrap: wrap; gap: 10px;
+        }
+
+        .header-right-group {
+            display: flex; align-items: center; gap: 10px; position: relative;
+        }
+
+        .setting-btn-pro {
+            background: #fef3c7; border: 2px solid #f59e0b; color: #b45309;
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
+        }
+        .setting-btn-pro:hover { background: #fde68a; }
+
+        .filter-dropdown-btn {
+            background: #ffffff; border: 2px solid var(--border-color); color: var(--text-main);
+            padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            outline: none;
+        }
+
+        /* 100% ورکنگ سیٹنگز مینو پاپ اپ باکس */
+        .settings-menu-box {
+            display: none; position: absolute; right: 0; top: 45px; background: #ffffff;
+            min-width: 230px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            border: 2px solid var(--border-color); z-index: 9999; overflow: hidden; text-align: right;
+        }
+        .settings-menu-box button {
+            width: 100%; padding: 12px 16px; background: none; border: none;
+            border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
+            cursor: pointer; text-align: right; display: block;
+        }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
+
+        /* سینٹر میں بڑی ممبر ڈراپ لائن */
+        .top-controls-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            background: #f8fafc; padding: 18px; border-radius: 12px; border: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .center-member-dropdown {
+            width: 100%; max-width: 320px; padding: 12px 16px; border-radius: 12px;
+            border: 2px solid #fcd34d; font-size: 16px; font-weight: bold; text-align: center;
+            background: white; color: var(--text-main); outline: none; cursor: pointer;
+        }
+
+        /* نیا راشن انٹری پینل (سیٹنگز سے کھلے گا) */
+        .add-entry-panel {
+            display: none; background: #fffbeb; border: 2px solid #fde68a; padding: 16px;
+            border-radius: 12px; margin-bottom: 20px; text-align: right;
+        }
+        .add-entry-panel input {
+            width: 100%; padding: 8px 12px; margin-top: 5px; margin-bottom: 12px;
+            border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px;
+        }
+        .btn-save-new { background: var(--warning-color); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* ٹیبل اسٹائل */
+        .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 13px; }
+        .clean-result-table th { background: #fef3c7; color: #b45309; padding: 12px; text-align: center; font-weight: 700; }
+        .clean-result-table td { padding: 14px 10px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+        .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+
+        .btn-delete-row { background: #fee2e2; color: var(--danger-color); border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; }
+        
+        .price-badge { background: #ecfdf5; color: #047857; padding: 5px 10px; border-radius: 8px; font-weight: bold; }
+
+        /* کل راشن کا ٹوٹل باکس */
+        .total-summary-box {
+            background: #fffbeb; padding: 16px; border-radius: 12px; text-align: center;
+            font-size: 16px; font-weight: bold; color: #1e293b; border: 2px solid #fde68a; margin-top: 20px;
+        }
+        .total-number { color: var(--warning-color); font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ڈیش بورڈ واپسی کا بٹن -->
+        <div class="back-nav-bar">
+            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ پر جائیں</a>
+        </div>
+
+        <div class="card" id="mainCardSection">
+            
+            <!-- ہیڈر بار: ٹائ틀، فلٹر اور 100% ورکنگ سیٹنگز -->
+            <div class="header-action-bar">
+                <h3 style="margin: 0; color: #1e293b; font-size: 19px;">🛒 راشن کا ریکارڈ (Ration Record)</h3>
+
+                <div class="header-right-group">
+                    <!-- فلٹر بٹن -->
+                    <select id="filterRange" class="filter-dropdown-btn" onchange="renderRationRecords()">
+                        <option value="all">⏳ تمام ریکارڈ</option>
+                        <option value="day">📅 ڈیلی (آج)</option>
+                        <option value="week">📆 ویکلی</option>
+                        <option value="month">🗓️ منتھلی</option>
+                        <option value="year">📊 سالانہ</option>
+                    </select>
+
+                    <!-- 100% ورکنگ سیٹنگز بٹن -->
+                    <div class="settings-dropdown-wrapper">
+                        <button type="button" class="setting-btn-pro" onclick="toggleSettingsMenu(event)">⚙️ سیٹنگز</button>
+                        <div id="settingsMenuBox" class="settings-menu-box">
+                            <button type="button" onclick="toggleAddPanel()">➕ نیا راشن آئٹم درج کریں</button>
+                            <button type="button" onclick="toggleSectionView()">📂 سیکشن آن/آف (کلوز)</button>
+                            <button type="button" onclick="clearAllRationHistory()">🧹 تمام راشن ہسٹری کلیئر کریں</button>
+                            <button type="button" onclick="closeSettingsMenu()" style="color: var(--danger-color);">❌ مینو بند کریں</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- نیا راشن انٹری پینل (سیٹنگز سے کنٹرولڈ) -->
+            <div id="addEntryPanel" class="add-entry-panel">
+                <h4 style="margin: 0 0 10px 0; color: #b45309;">➕ نیا راشن آئٹم شامل کریں</h4>
+                <label>خریدی گئی چیز کا نام:</label>
+                <input type="text" id="inputItemName" placeholder="مثلاً: آٹا 10 کلو یا چینی 5 کلو">
+                <label>قیمت (روپے میں):</label>
+                <input type="number" id="inputItemPrice" placeholder="مثلاً: 1500" value="500">
+                <button type="button" class="btn-save-new" onclick="addNewRationRecord()">محفوظ کریں</button>
+            </div>
+
+            <!-- سینٹر میں بڑی ممبر ڈراپ لائن -->
+            <div class="top-controls-wrapper">
+                <label style="font-size: 13px; font-weight: bold; color: var(--text-muted);">🔍 ممبر منتخب کریں:</label>
+                <select id="selectedMember" class="center-member-dropdown" onchange="renderRationRecords()">
+                    <option value="احمد (ہیلپر)">🧑‍ ہیلپر: احمد</option>
+                    <option value="علی (سینئر)">👨‍✈️ علی (سینئر)</option>
+                </select>
+            </div>
+
+            <!-- راشن ریکارڈ ٹیبل -->
+            <table class="clean-result-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ اور وقت</th>
+                        <th>دن</th>
+                        <th>خریدی گئی چیز</th>
+                        <th>قیمت (روپے)</th>
+                        <th>ایکشن</th>
+                    </tr>
+                </thead>
+                <tbody id="rationTableBody">
+                    <!-- ڈیٹا یہاں رینڈر ہوگا -->
+                </tbody>
+            </table>
+
+            <!-- کل راشن کا ٹوٹل باکس -->
+            <div class="total-summary-box">
+                💰 اس دورانیے کے کل راشن کے اخراجات: <span class="total-number" id="totalRationCost">0</span> روپے
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // فرضی ٹیسٹنگ ڈیٹا
+        let sampleRationData = [
+            { id: 1, member: "احمد (ہیلپر)", itemName: "آٹا 10 کلو", price: 1400, dateTime: "2026-09-06 10:15", dayName: "اتوار" },
+            { id: 2, member: "احمد (ہیلپر)", itemName: "چینی 2 کلو", price: 300, dateTime: "2026-09-06 10:20", dayName: "اتوار" },
+            { id: 3, member: "علی (سینئر)", itemName: "خوردنی تیل 1 لیٹر", price: 650, dateTime: "2026-09-07 14:00", dayName: "پیر" },
+            { id: 4, member: "علی (سینئر)", itemName: "دال چنا 1 کلو", price: 320, dateTime: "2026-09-07 14:05", dayName: "پیر" }
+        ];
+
+        let rationRecords = JSON.parse(localStorage.getItem('familyRationRecords'));
+        if (!rationRecords || rationRecords.length === 0) {
+            rationRecords = sampleRationData;
+            localStorage.setItem('familyRationRecords', JSON.stringify(rationRecords));
+        }
+
+        function saveRationStorage() {
+            localStorage.setItem('familyRationRecords', JSON.stringify(rationRecords));
+        }
+
+        // 100% ورکنگ سیٹنگز مینو فنکشنز
+        function toggleSettingsMenu(event) {
+            if (event) event.stopPropagation();
+            let menu = document.getElementById('settingsMenuBox');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function closeSettingsMenu() {
+            document.getElementById('settingsMenuBox').style.display = 'none';
+        }
+
+        // باہر کلک کرنے پر مینو خودکار بند ہو جائے
+        window.onclick = function(event) {
+            let menu = document.getElementById('settingsMenuBox');
+            if (menu && !event.target.closest('.settings-dropdown-wrapper')) {
+                menu.style.display = 'none';
+            }
+        }
+
+        // سیکشن آن/آف (کلوز) کرنے کا ورکنگ فنکشن
+        function toggleSectionView() {
+            let card = document.getElementById('mainCardSection');
+            let contentElements = card.querySelectorAll('.top-controls-wrapper, table, .total-summary-box');
+            let isHidden = contentElements[0].style.display === 'none';
+            
+            contentElements.forEach(el => {
+                el.style.display = isHidden ? '' : 'none';
+            });
+            closeSettingsMenu();
+        }
+
+        // نیا راشن پینل کھولنا/بند کرنا
+        function toggleAddPanel() {
+            let panel = document.getElementById('addEntryPanel');
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+            closeSettingsMenu();
+        }
+
+        // نئی انٹری محفوظ کرنا
+        function addNewRationRecord() {
+            let currentMember = document.getElementById('selectedMember').value;
+            let itemName = document.getElementById('inputItemName').value.trim();
+            let price = Number(document.getElementById('inputItemPrice').value);
+
+            if(!itemName || isNaN(price)) {
+                alert("براہ کرم چیز کا نام اور درست قیمت درج کریں۔");
+                return;
+            }
+
+            let now = new Date();
+            let dateStr = now.toISOString().split('T')[0];
+            let timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const daysNames = ["اتوار", "پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ"];
+            let dayName = daysNames[now.getDay()];
+
+            let newObj = {
+                id: Date.now(),
+                member: currentMember,
+                itemName: itemName,
+                price: price,
+                dateTime: `${dateStr} ${timeStr}`,
+                dayName: dayName
+            };
+
+            rationRecords.push(newObj);
+            saveRationStorage();
+            renderRationRecords();
+
+            // فیلڈز صاف کریں اور پینل بند کریں
+            document.getElementById('inputItemName').value = '';
+            document.getElementById('addEntryPanel').style.display = 'none';
+        }
+
+        // ریکارڈ رینڈر اور فلٹر کرنے کا مین فنکشن
+        function renderRationRecords() {
+            let currentMember = document.getElementById('selectedMember').value;
+            let rangeFilter = document.getElementById('filterRange').value;
+            let tbody = document.getElementById('rationTableBody');
+            let totalCostSpan = document.getElementById('totalRationCost');
+
+            let todayStr = new Date().toISOString().split('T')[0];
+            let currentYear = new Date().getFullYear().toString();
+            let currentMonth = todayStr.substring(0, 7);
+
+            let filtered = rationRecords.filter(item => {
+                if(item.member !== currentMember) return false;
+                let itemDateOnly = item.dateTime.split(' ')[0];
+
+                if(rangeFilter === 'day') {
+                    if(itemDateOnly !== todayStr) return false;
+                } else if(rangeFilter === 'month') {
+                    if(!itemDateOnly.startsWith(currentMonth)) return false;
+                } else if(rangeFilter === 'year') {
+                    if(!itemDateOnly.startsWith(currentYear)) return false;
+                } else if(rangeFilter === 'week') {
+                    let itemDate = new Date(itemDateOnly);
+                    let todayDate = new Date();
+                    let diffDays = Math.ceil(Math.abs(todayDate - itemDate) / (1000 * 60 * 60 * 24));
+                    if(diffDays > 7) return false;
+                }
+                return true;
+            });
+
+            // کل لاگت کا حساب لگانا
+            let totalSum = filtered.reduce((sum, item) => sum + Number(item.price), 0);
+            totalCostSpan.textContent = totalSum.toLocaleString();
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="color: var(--text-muted); padding: 25px;">اس ممبر اور دورانیے کا کوئی راشن ریکارڈ موجود نہیں۔</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => `
+                <tr>
+                    <td><b>${item.dateTime}</b></td>
+                    <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
+                    <td style="text-align: right; padding-right: 15px;"><b>${item.itemName}</b></td>
+                    <td><span class="price-badge">Rs. ${item.price.toLocaleString()}</span></td>
+                    <td><button type="button" class="btn-delete-row" onclick="deleteSingleRation(${item.id})">🗑️ ڈیلیٹ</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // انفرادی ریکارڈ ڈیلیٹ کرنا
+        function deleteSingleRation(id) {
+            rationRecords = rationRecords.filter(x => x.id !== id);
+            saveRationStorage();
+            renderRationRecords();
+        }
+
+        // تمام ہسٹری کلیئر کرنا
+        function clearAllRationHistory() {
+            if(confirm("⚠️ کیا آپ واقعی اس ممبر کی تمام راشن ہسٹری کلیئر کرنا چاہتے ہیں؟")) {
+                let currentMember = document.getElementById('selectedMember').value;
+                rationRecords = rationRecords.filter(x => x.member !== currentMember);
+                saveRationStorage();
+                renderRationRecords();
+                closeSettingsMenu();
+            }
+        }
+
+        window.onload = function() {
+            renderRationRecords();
+        }
+    </script>
+</body>
+</html>
