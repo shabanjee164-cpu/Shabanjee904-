@@ -959,7 +959,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ڈیوٹی کا ریکارڈ</title>
+    <title>ڈیوٹی ریکارڈ</title>
     <style>
         :root {
             --bg-light: #f8fafc;
@@ -974,7 +974,7 @@
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; padding-bottom: 90px; }
+        body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; }
 
         .container { max-width: 850px; margin: 0 auto; }
 
@@ -1013,33 +1013,36 @@
         }
         .settings-menu-box {
             display: none; position: absolute; left: 0; top: 45px; background: #ffffff;
-            min-width: 220px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            min-width: 230px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
             border: 2px solid var(--border-color); z-index: 100; overflow: hidden; text-align: right;
         }
         .settings-menu-box button {
             width: 100%; padding: 11px 14px; background: none; border: none;
             border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
-            cursor: pointer;
+            cursor: pointer; text-align: right;
         }
-        .settings-menu-box button:hover { background: #f8fafc; color: var(--danger-color); }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
 
-        /* کنٹرولز اور فلٹرز */
+        /* کنٹرولز، ڈراپ ڈاؤن اور فلٹرز */
         .controls-wrapper {
-            display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between;
+            display: flex; flex-direction: column; gap: 15px;
             background: #f8fafc; padding: 16px; border-radius: 12px; border: 2px solid #e2e8f0;
             margin-bottom: 20px; align-items: center;
         }
+        .filter-row { display: flex; gap: 15px; width: 100%; justify-content: center; flex-wrap: wrap; }
         .form-control-custom {
-            padding: 8px 12px; border-radius: 8px; border: 2px solid var(--border-color);
-            font-size: 13px; font-weight: bold; background: white; color: var(--text-main); outline: none;
+            padding: 9px 14px; border-radius: 10px; border: 2px solid var(--border-color);
+            font-size: 14px; font-weight: bold; background: white; color: var(--text-main); outline: none;
+            min-width: 220px; text-align: center;
         }
 
         /* ڈیوٹی ان پٹ فارم */
         .add-duty-box {
-            background: #f1f5f9; padding: 15px; border-radius: 12px; margin-bottom: 20px;
+            background: #f8fafc; padding: 16px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 20px;
             display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
         }
-        .add-duty-box input, .add-duty-box select { flex: 1; min-width: 140px; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color); }
+        .add-duty-box input { flex: 2; min-width: 180px; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color); font-size: 14px; }
+        .add-duty-box input[type="date"] { flex: 1; min-width: 140px; }
         .btn-add { background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
         /* ٹیبل اسٹائل */
@@ -1049,21 +1052,8 @@
         .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
         .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
 
-        .btn-delete-row { background: #fee2e2; color: var(--danger-color); border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-delete-row { background: #fee2e2; color: var(--danger-color); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
         .btn-delete-row:hover { background: #fecaca; }
-
-        /* فٹر نیویگیشن (5 بٹن) */
-        .bottom-nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #ffffff; border-top: 2px solid #e2e8f0;
-            display: flex; justify-content: space-around; padding: 10px 0;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1000;
-        }
-        .bottom-nav-bar a {
-            text-decoration: none; color: var(--text-muted); font-size: 12px; font-weight: bold;
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
-        }
-        .bottom-nav-bar a.active, .bottom-nav-bar a:hover { color: var(--primary-accent); }
     </style>
 </head>
 <body>
@@ -1075,89 +1065,83 @@
             🛡️ ممبر ڈیوٹی ریکارڈ
         </div>
 
-        <!-- نئی ڈیوٹی ایڈ کرنے کا چھوٹا سیکشن -->
-        <div class="card" style="padding: 15px 25px; margin-bottom: 15px;">
-            <h4 style="margin: 0 0 10px 0; color: #1e293b;">➕ نئی ڈیوٹی درج کریں</h4>
+        <!-- ڈیوٹی درج کرنے کا فارم -->
+        <div class="card">
+            <h3 style="margin-bottom: 15px; color: #1e293b;">➕ نئی ڈیوٹی درج کریں</h3>
             <div class="add-duty-box">
-                <select id="dutyMember" class="form-control-custom">
-                    <option value="علی (سینئر)">👨‍✈️ علی (سینئر)</option>
-                    <option value="احمد (ہیلپر)">🧑‍ ہیلپر: احمد</option>
-                </select>
-                <input type="text" id="dutyTitle" placeholder="ڈیوٹی کا نام (مثلاً گیٹ ڈیوٹی)" autocomplete="off">
-                <input type="date" id="dutyDate" class="form-control-custom">
+                <input type="text" id="dutyTitle" placeholder="ڈیوٹی یا کام کا نام (مثلاً گیٹ ڈیوٹی / صفائی)" autocomplete="off">
+                <input type="date" id="dutyDate">
                 <button class="btn-add" onclick="addNewDuty()">محفوظ کریں</button>
             </div>
         </div>
 
         <!-- مین ڈیوٹی ریکارڈ کارڈ -->
-        <div class="card">
+        <div class="card" id="mainDutyCard">
             <div class="card-header-flex">
                 <h3>📋 ڈیوٹی کی فہرست</h3>
                 
                 <!-- سیٹنگز پاپ اپ مینو -->
                 <div class="settings-dropdown-wrapper">
-                    <button class="setting-btn-pro" onclick="toggleSettingsMenu()">⚙️ سیٹنگز</button>
+                    <button class="setting-btn-pro" onclick="toggleSettingsMenu()">⚙️ سیٹنگز مینو</button>
                     <div id="settingsMenuBox" class="settings-menu-box">
-                        <button onclick="deleteAllDutyHistory()">🧹 تمام ڈیوٹی ہسٹری ڈیلیٹ کریں</button>
+                        <button onclick="toggleSelectMode()">☑️ سلیکٹ موڈ (باکس آن/آف)</button>
+                        <button onclick="selectAllRows()">✅ سب سلیکٹ کریں (All Select)</button>
+                        <button onclick="deleteSelectedRows()">🗑️ سلیکٹ شدہ ڈیلیٹ کریں</button>
+                        <button onclick="deleteAllDutyHistory()">🧹 تمام ہسٹری کلیئر کریں (All Delete)</button>
+                        <button onclick="toggleSectionView()">📂 سیکشن آن/آف (Section View)</button>
+                        <button onclick="toggleSettingsMenu()" style="color: var(--danger-color); border-top: 1px solid #cbd5e1;">❌ کلوز مینو (Close)</button>
                     </div>
                 </div>
             </div>
 
-            <!-- فلٹرز (دن، ہفتہ، مہینہ، سال) -->
-            <div class="controls-wrapper">
-                <div>
-                    <label style="font-size: 12px; font-weight: bold;">🔍 ممبر فلٹر:</label>
-                    <select id="filterMember" class="form-control-custom" onchange="renderDutyRecords()">
-                        <option value="all">تمام ممبران</option>
-                        <option value="علی (سینئر)">علی (سینئر)</option>
-                        <option value="احمد (ہیلپر)">احمد (ہیلپر)</option>
+            <!-- سب سے اوپر ممبر سلیکٹ کرنے کی ڈراپ لائن اور فلٹرز -->
+            <div class="controls-wrapper" id="controlsWrapperSection">
+                <div style="width: 100%; text-align: center;">
+                    <label style="font-size: 13px; font-weight: bold; display: block; margin-bottom: 6px; color: var(--text-muted);">🔍 ممبر منتخب کریں (ڈراپ ڈاؤن):</label>
+                    <select id="selectedMember" class="form-control-custom" onchange="renderDutyRecords()">
+                        <option value="علی (سینئر)">👨‍✈️ علی (سینئر)</option>
+                        <option value="احمد (ہیلپر)">🧑‍ ہیلپر: احمد</option>
                     </select>
                 </div>
 
-                <div>
-                    <label style="font-size: 12px; font-weight: bold;">📅 دورانیہ فلٹر:</label>
-                    <select id="filterRange" class="form-control-custom" onchange="renderDutyRecords()">
-                        <option value="all">تمام ریکارڈ</option>
-                        <option value="day">آج کا دن (Single Day)</option>
-                        <option value="week">اس ہفتے (This Week)</option>
-                        <option value="month">اس مہینے (This Month)</option>
-                        <option value="year">اس سال (This Year)</option>
-                    </select>
+                <div class="filter-row">
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">📅 دورانیہ فلٹر:</label>
+                        <select id="filterRange" class="form-control-custom" style="min-width: 180px;" onchange="renderDutyRecords()">
+                            <option value="all">تمام ریکارڈ</option>
+                            <option value="day">آج کا دن (Daily)</option>
+                            <option value="week">اس ہفتے (Weekly)</option>
+                            <option value="month">اس مہینے (Monthly)</option>
+                            <option value="year">اس سال (Yearly)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <!-- ڈیوٹی ٹیبل -->
-            <table class="clean-result-table">
+            <table class="clean-result-table" id="dutyTable">
                 <thead>
                     <tr>
+                        <th id="selectThHeader" style="display: none; width: 40px;">انتخاب</th>
                         <th>تاریخ (Date)</th>
                         <th>دن (Day)</th>
-                        <th>ممبر کا نام</th>
-                        <th>ڈیوٹی کی تفصیل</th>
-                        <th>ایکشن (Delete)</th>
+                        <th>ڈیوٹی / کام کا نام</th>
+                        <th>ایکشن</th>
                     </tr>
                 </thead>
                 <tbody id="dutyTableBody">
-                    <!-- ڈیٹا یہاں شو ہوگا -->
+                    <!-- ڈیٹا یہاں ڈائنامیکلی شو ہوگا -->
                 </tbody>
             </table>
         </div>
 
     </div>
 
-    <!-- نیچے 5 مستقل بٹنوں والا فٹر -->
-    <div class="bottom-nav-bar">
-        <a href="index.html">📊 ڈیش بورڈ</a>
-        <a href="record.html">📂 ریکارڈ</a>
-        <a href="duty.html" class="active">🛡️ ڈیوٹی</a>
-        <a href="alerts.html">🔔 الرٹس</a>
-        <a href="settings.html">⚙️ سیٹنگز</a>
-    </div>
-
     <script>
         document.getElementById('dutyDate').valueAsDate = new Date();
 
         let dutyRecords = JSON.parse(localStorage.getItem('familyDutyRecords')) || [];
+        let isSelectModeActive = false;
 
         function saveDutyStorage() {
             localStorage.setItem('familyDutyRecords', JSON.stringify(dutyRecords));
@@ -1168,7 +1152,17 @@
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
-        // تاریخ سے دن کا نام نکالنے کا فنکشن (اردو میں)
+        // باہر کلک کرنے سے مینو بند ہو جائے
+        window.onclick = function(event) {
+            if (!event.target.matches('.setting-btn-pro')) {
+                let menu = document.getElementById('settingsMenuBox');
+                if (menu && menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        // اردو میں دن کا نام نکالنے کا فنکشن
         function getDayNameInUrdu(dateString) {
             let days = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
             let d = new Date(dateString);
@@ -1176,12 +1170,12 @@
         }
 
         function addNewDuty() {
-            let member = document.getElementById('dutyMember').value;
+            let member = document.getElementById('selectedMember').value;
             let title = document.getElementById('dutyTitle').value.trim();
             let date = document.getElementById('dutyDate').value;
 
             if(!title) {
-                alert("⚠️ براہ کرم ڈیوٹی کا نام درج کریں!");
+                alert("⚠️ براہ کرم ڈیوٹی یا کام کا نام درج کریں!");
                 return;
             }
 
@@ -1201,52 +1195,108 @@
         }
 
         function renderDutyRecords() {
-            let tbody = document.getElementById('dutyTableBody');
-            let memberFilter = document.getElementById('filterMember').value;
+            let currentMember = document.getElementById('selectedMember').value;
             let rangeFilter = document.getElementById('filterRange').value;
+            let tbody = document.getElementById('dutyTableBody');
+            let selectTh = document.getElementById('selectThHeader');
+
+            selectTh.style.display = isSelectModeActive ? "" : "none";
 
             let todayStr = new Date().toISOString().split('T')[0];
             let currentYear = new Date().getFullYear().toString();
-            let currentMonth = todayStr.substring(0, 7); // YYYY-MM
+            let currentMonth = todayStr.substring(0, 7);
 
             let filtered = dutyRecords.filter(item => {
-                // ممبر فلٹر
-                if(memberFilter !== 'all' && item.member !== memberFilter) return false;
+                if(item.member !== currentMember) return false;
 
-                // دورانیہ فلٹر
                 if(rangeFilter === 'day') {
                     if(item.date !== todayStr) return false;
                 } else if(rangeFilter === 'month') {
                     if(!item.date.startsWith(currentMonth)) return false;
                 } else if(rangeFilter === 'year') {
                     if(!item.date.startsWith(currentYear)) return false;
-                }
-                // ہفتہ کے لیے آسان فلٹر (پچھلے 7 دن)
-                else if(rangeFilter === 'week') {
+                } else if(rangeFilter === 'week') {
                     let itemDate = new Date(item.date);
                     let todayDate = new Date();
-                    let diffTime = Math.abs(todayDate - itemDate);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    let diffDays = Math.ceil(Math.abs(todayDate - itemDate) / (1000 * 60 * 60 * 24));
                     if(diffDays > 7) return false;
                 }
-
                 return true;
             });
 
+            let colSpanSize = isSelectModeActive ? 5 : 4;
+
             if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color: var(--text-muted); padding: 25px;">کوئی ڈیوٹی ریکارڈ موجود نہیں۔</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${colSpanSize}" style="color: var(--text-muted); padding: 25px;">اس ممبر اور دورانیے کا کوئی ڈیوٹی ریکارڈ موجود نہیں۔</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = filtered.map(item => `
-                <tr>
-                    <td><b>${item.date}</b></td>
-                    <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
-                    <td><b>${item.member}</b></td>
-                    <td>${item.title}</td>
-                    <td><button class="btn-delete-row" onclick="deleteSingleDuty(${item.id})">🗑️ ڈیلیٹ</button></td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = filtered.map(item => {
+                let checkboxTd = isSelectModeActive ? `<td><input type="checkbox" class="duty-row-checkbox" data-id="${item.id}" style="width: 18px; height: 18px; cursor: pointer;"></td>` : '';
+                return `
+                    <tr>
+                        ${checkboxTd}
+                        <td><b>${item.date}</b></td>
+                        <td><span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${item.dayName}</span></td>
+                        <td style="text-align: right; padding-right: 20px;"><b>${item.title}</b></td>
+                        <td><button class="btn-delete-row" onclick="deleteSingleDuty(${item.id})">🗑️ ڈیلیٹ</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function toggleSelectMode() {
+            isSelectModeActive = !isSelectModeActive;
+            renderDutyRecords();
+            toggleSettingsMenu();
+        }
+
+        function selectAllRows() {
+            if(!isSelectModeActive) {
+                alert("⚠️ پہلے 'سلیکٹ موڈ' آن کریں!");
+                return;
+            }
+            let boxes = document.querySelectorAll('.duty-row-checkbox');
+            boxes.forEach(b => b.checked = true);
+            toggleSettingsMenu();
+        }
+
+        function deleteSelectedRows() {
+            if(!isSelectModeActive) {
+                alert("⚠️ پہلے 'سلیکٹ موڈ' آن کر کے ریکارڈ ٹک کریں!");
+                return;
+            }
+            let checkedBoxes = document.querySelectorAll('.duty-row-checkbox:checked');
+            if(checkedBoxes.length === 0) {
+                alert("⚠️ کوئی ریکارڈ سلیکٹ نہیں کیا گیا!");
+                return;
+            }
+            checkedBoxes.forEach(b => {
+                let id = Number(b.getAttribute('data-id'));
+                dutyRecords = dutyRecords.filter(x => x.id !== id);
+            });
+            saveDutyStorage();
+            renderDutyRecords();
+            toggleSettingsMenu();
+        }
+
+        function deleteAllDutyHistory() {
+            if(confirm("⚠️ کیا آپ اس ممبر کی تمام ڈیوٹی ہسٹری کلیئر کرنا چاہتے ہیں؟")) {
+                let currentMember = document.getElementById('selectedMember').value;
+                dutyRecords = dutyRecords.filter(x => x.member !== currentMember);
+                saveDutyStorage();
+                renderDutyRecords();
+                toggleSettingsMenu();
+            }
+        }
+
+        function toggleSectionView() {
+            let controls = document.getElementById('controlsWrapperSection');
+            let table = document.getElementById('dutyTable');
+            let isHidden = controls.style.display === "none";
+            controls.style.display = isHidden ? "flex" : "none";
+            table.style.display = isHidden ? "table" : "none";
+            toggleSettingsMenu();
         }
 
         function deleteSingleDuty(id) {
@@ -1254,15 +1304,6 @@
                 dutyRecords = dutyRecords.filter(x => x.id !== id);
                 saveDutyStorage();
                 renderDutyRecords();
-            }
-        }
-
-        function deleteAllDutyHistory() {
-            if(confirm("⚠️ کیا آپ تمام ڈیوٹی ریکارڈ صاف کرنا چاہتے ہیں؟")) {
-                dutyRecords = [];
-                saveDutyStorage();
-                renderDutyRecords();
-                toggleSettingsMenu();
             }
         }
 
