@@ -610,12 +610,28 @@
     </script>
 </body>
 </html>
+// ڈیش بورڈ پر جب بھی کوئی ٹاسک سیو ہو، اسے اس طرح لکھیں:
+function saveTaskToLocalStorage(member, taskName, points, count, date) {
+    let allRecords = JSON.parse(localStorage.getItem('familyTaskRecords')) || [];
+    
+    let newEntry = {
+        id: Date.now(),
+        member: member,
+        taskName: taskName,
+        pointsPerUnit: Number(points),
+        frequency: Number(count),
+        date: date
+    };
+
+    allRecords.push(newEntry);
+    localStorage.setItem('familyTaskRecords', JSON.stringify(allRecords));
+}
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فیملی مین ڈیش بورڈ</title>
+    <title>سیٹنگز - فیملی ایپ</title>
     <style>
         :root {
             --bg-light: #f8fafc;
@@ -624,11 +640,11 @@
             --text-main: #334155;
             --text-muted: #64748b;
             --border-color: #cbd5e1;
-            --success-color: #059669;
+            --danger-color: #dc2626;
             --radius: 16px;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; autocomplete: off; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; padding-bottom: 90px; }
 
         .container { max-width: 600px; margin: 0 auto; }
@@ -644,23 +660,17 @@
         .card {
             background: var(--card-bg); padding: 25px; border-radius: var(--radius);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 2px solid #e2e8f0;
-            margin-bottom: 20px;
+            margin-bottom: 20px; text-align: right;
         }
 
-        .form-group { margin-bottom: 15px; text-align: right; }
-        .form-group label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 6px; color: var(--text-muted); }
-        .form-control {
-            width: 100%; padding: 10px 14px; border-radius: 10px; border: 2px solid var(--border-color);
-            font-size: 14px; background: #fff; color: var(--text-main); outline: none;
-        }
-        .form-control:focus { border-color: var(--primary-accent); }
+        .card h3 { margin-top: 0; color: #1e293b; font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
 
-        .btn-submit {
-            background: var(--success-color); color: white; border: none; width: 100%;
+        .btn-danger {
+            background: var(--danger-color); color: white; border: none; width: 100%;
             padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); transition: filter 0.2s;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); transition: filter 0.2s;
         }
-        .btn-submit:hover { filter: brightness(1.1); }
+        .btn-danger:hover { filter: brightness(1.1); }
 
         /* نیچے 4 بٹنوں والا فٹر بار (Bottom Navigation Bar) */
         .bottom-nav-bar {
@@ -681,93 +691,33 @@
     <div class="container">
 
         <!-- ایپ ہیڈر -->
-        <div class="app-header">📊 فیملی مین ڈیش بورڈ</div>
+        <div class="app-header">⚙️ ایپ سیٹنگز</div>
 
-        <!-- نیا کام یا انٹری کرنے کا کارڈ -->
+        <!-- سیٹنگز کارڈ -->
         <div class="card">
-            <h3>✍️ نیا کام درج کریں</h3>
-            
-            <div class="form-group">
-                <label>ممبر کا نام:</label>
-                <select id="dashMember" class="form-control">
-                    <option value="علی">👨‍✈️ علی (سینئر)</option>
-                    <option value="احمد">🧑‍ ہیلپر: احمد</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>کام کا نام:</label>
-                <input type="text" id="dashTaskName" class="form-control" placeholder="مثلاً: کمرے کی صفائی" autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label>فی کام پوائنٹ:</label>
-                <input type="number" id="dashPoints" class="form-control" value="10" autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label>کتنی بار ہوا (Count):</label>
-                <input type="number" id="dashCount" class="form-control" value="1" autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label>تاریخ:</label>
-                <input type="date" id="dashDate" class="form-control">
-            </div>
-
-            <button class="btn-submit" onclick="saveNewTaskToHistory()">💾 محفوظ کریں (Save)</button>
+            <h3>🧹 ڈیٹا مینجمنٹ</h3>
+            <p style="color: var(--text-muted); font-size: 14px;">یہاں سے آپ ایپ کا سارا محفوظ شدہ ڈیٹا کلئیر یا ری سیٹ کر سکتے ہیں:</p>
+            <button class="btn-danger" onclick="clearAllAppData()">🗑️ تمام ڈیٹا اور ہسٹری صاف کریں</button>
         </div>
 
     </div>
 
     <!-- نیچے 4 مستقل بٹنوں والا فٹر (Footer Navigation Bar) -->
     <div class="bottom-nav-bar">
-        <a href="index.html" class="active">📊 ڈیش بورڈ</a>
+        <a href="index.html">📊 ڈیش بورڈ</a>
         <a href="record.html">📂 ریکارڈ</a>
         <a href="alerts.html">🔔 الرٹس</a>
-        <a href="settings.html">⚙️ سیٹنگز</a>
+        <a href="settings.html" class="active">⚙️ سیٹنگز</a>
     </div>
 
     <script>
-        // پیج کھلتے ہی آج کی تاریخ خود بخود سلیکٹ ہو جائے
-        document.getElementById('dashDate').valueAsDate = new Date();
-
-        // ڈیش بورڈ سے کام سیو کر کے ریکارڈ میں بھیجنے کا فنکشن
-        function saveNewTaskToHistory() {
-            let member = document.getElementById('dashMember').value;
-            let taskName = document.getElementById('dashTaskName').value.trim();
-            let points = document.getElementById('dashPoints').value;
-            let count = document.getElementById('dashCount').value;
-            let date = document.getElementById('dashDate').value;
-
-            if(!taskName) {
-                alert("⚠️ براہ کرم کام کا نام درج کریں!");
-                return;
+        // تمام ڈیٹا صاف کرنے کا فنکشن جو لوکل اسسٹوری کو کلیئر کر دے گا
+        function clearAllAppData() {
+            if(confirm("⚠️ کیا آپ واقعی تمام ہسٹری اور ڈیٹا ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                localStorage.removeItem('familyTaskRecords');
+                alert("✅ تمام ڈیٹا کامیابی سے صاف کر دیا گیا है!");
+                location.reload();
             }
-
-            // براؤزر کی میموری (localStorage) سے پرانا ڈیٹا نکالیں
-            let allRecords = JSON.parse(localStorage.getItem('familyTaskRecords')) || [];
-
-            // نیا ریکارڈ تیار کریں
-            let newEntry = {
-                id: Date.now(),
-                member: member,
-                taskName: taskName,
-                pointsPerUnit: Number(points),
-                frequency: Number(count),
-                date: date
-            };
-
-            // لسٹ میں نیا ریکارڈ ڈالیں
-            allRecords.push(newEntry);
-
-            // دوبارہ براؤزر میں سیو کر دیں
-            localStorage.setItem('familyTaskRecords', JSON.stringify(allRecords));
-
-            alert("✅ کام کامیابی سے ریکارڈ میں محفوظ ہو گیا!");
-            
-            // فارم خالی کر دیں
-            document.getElementById('dashTaskName').value = '';
         }
     </script>
 </body>
