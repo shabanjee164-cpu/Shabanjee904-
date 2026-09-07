@@ -687,38 +687,4 @@ function saveTaskToLocalStorage(member, taskName, points, count, date) {
     </style>
 </head>
 <body>
-
-    <div class="container">
-
-        <!-- ایپ ہیڈر -->
-        <div class="app-header">⚙️ ایپ سیٹنگز</div>
-
-        <!-- سیٹنگز کارڈ -->
-        <div class="card">
-            <h3>🧹 ڈیٹا مینجمنٹ</h3>
-            <p style="color: var(--text-muted); font-size: 14px;">یہاں سے آپ ایپ کا سارا محفوظ شدہ ڈیٹا کلئیر یا ری سیٹ کر سکتے ہیں:</p>
-            <button class="btn-danger" onclick="clearAllAppData()">🗑️ تمام ڈیٹا اور ہسٹری صاف کریں</button>
-        </div>
-
-    </div>
-
-    <!-- نیچے 4 مستقل بٹنوں والا فٹر (Footer Navigation Bar) -->
-    <div class="bottom-nav-bar">
-        <a href="index.html">📊 ڈیش بورڈ</a>
-        <a href="record.html">📂 ریکارڈ</a>
-        <a href="alerts.html">🔔 الرٹس</a>
-        <a href="settings.html" class="active">⚙️ سیٹنگز</a>
-    </div>
-
-    <script>
-        // تمام ڈیٹا صاف کرنے کا فنکشن جو لوکل اسسٹوری کو کلیئر کر دے گا
-        function clearAllAppData() {
-            if(confirm("⚠️ کیا آپ واقعی تمام ہسٹری اور ڈیٹا ڈیلیٹ کرنا چاہتے ہیں؟")) {
-                localStorage.removeItem('familyTaskRecords');
-                alert("✅ تمام ڈیٹا کامیابی سے صاف کر دیا گیا है!");
-                location.reload();
-            }
-        }
-    </script>
-</body>
-</html>
+    
