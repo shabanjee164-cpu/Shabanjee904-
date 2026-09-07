@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پروفیشنل فیملی ٹاسک اینڈ پوائنٹس ڈیش بورڈ</title>
+    <title>پروفیشنل فیملی ٹاسک ہسٹری اینڈ پوائنٹس سسٹم</title>
     <style>
         :root {
             --primary: #1e293b;
@@ -35,64 +35,51 @@
             letter-spacing: 0.5px;
         }
 
-        /* مین کارڈ اسٹائل */
+        /* مین ہسٹری کارڈ (خوبصورت کلر شیڈ کے ساتھ) */
         .card {
-            background: var(--card-bg); padding: 28px; border-radius: var(--radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 24px; 
-            border: 2px solid var(--border);
+            background: linear-gradient(135deg, #ffffff, #fdf4ff); padding: 28px; border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.08); margin-bottom: 24px; 
+            border: 2px solid #e9d5ff;
             position: relative; overflow: hidden;
+            transition: all 0.3s ease;
         }
         .card::before {
             content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
-            background: var(--success-gradient);
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
         }
 
         .card-header-flex {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 20px;
+            border-bottom: 2px solid #f3e8ff; padding-bottom: 14px; margin-bottom: 20px;
         }
-        .card h3 { margin: 0; color: var(--primary); font-size: 20px; font-weight: 700; }
+        .card h3 { margin: 0; color: #6d28d9; font-size: 20px; font-weight: 700; }
 
         /* خوبصورت سیٹنگ پرو بٹن */
         .setting-btn-pro {
-            background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;
+            background: #faf5ff; border: 1px solid #d8b4fe; color: #7c3aed;
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
-            transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(124, 58, 237, 0.1);
         }
-        .setting-btn-pro:hover { background: #dbeafe; transform: translateY(-1px); }
-
-        /* نیو انٹری ایڈ کرنے کا سیکشن */
-        .add-task-box {
-            background: #f8fafc; border: 1px solid var(--border); padding: 16px;
-            border-radius: 12px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-        }
-        .add-task-box input {
-            padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: #fff;
-        }
-        .btn-add {
-            background: var(--success-gradient); color: white; border: none; padding: 10px 18px;
-            border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-        }
-        .btn-add:hover { filter: brightness(1.05); }
+        .setting-btn-pro:hover { background: #f3e8ff; transform: translateY(-1px); }
 
         /* کنٹرولز سیکشن (ڈراپ ڈاؤن اور ڈیٹس) */
         .controls-wrapper {
             display: flex; flex-direction: column; align-items: center; gap: 14px;
-            background: #f8fafc; padding: 18px; border-radius: 14px; border: 1px solid var(--border);
-            margin-bottom: 20px;
+            background: #ffffff; padding: 18px; border-radius: 14px; border: 1px solid #e9d5ff;
+            margin-bottom: 20px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.03);
         }
 
         /* پروفیشنل کلر فل ڈراپ ڈاؤن */
         .dropdown-center {
             width: 250px; padding: 10px 14px; border-radius: 10px; 
-            border: 2px solid #93c5fd;
+            border: 2px solid #c084fc;
             font-size: 14px; font-weight: bold; text-align: center; 
-            background: linear-gradient(135deg, #ffffff, #f0fdf4); 
+            background: linear-gradient(135deg, #ffffff, #faf5ff); 
             color: var(--primary); outline: none; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.08);
             transition: all 0.3s;
         }
-        .dropdown-center:hover, .dropdown-center:focus { border-color: var(--accent); background: #ffffff; }
+        .dropdown-center:hover, .dropdown-center:focus { border-color: #7c3aed; background: #ffffff; }
 
         .date-filter-group {
             display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;
@@ -104,18 +91,18 @@
 
         /* شاندار ٹیبل اسٹائل */
         .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
-        .clean-result-table th { background: #f1f5f9; color: var(--primary); padding: 12px; text-align: center; font-weight: 700; border-bottom: 2px solid var(--border); }
-        .clean-result-table td { padding: 14px 12px; text-align: center; background: #ffffff; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; box-shadow: 0 2px 5px rgba(0,0,0,0.01); }
+        .clean-result-table th { background: #f3e8ff; color: #6d28d9; padding: 12px; text-align: center; font-weight: 700; border-bottom: 2px solid #e9d5ff; }
+        .clean-result-table td { padding: 14px 12px; text-align: center; background: #ffffff; border-top: 1px solid #f3e8ff; border-bottom: 1px solid #f3e8ff; box-shadow: 0 2px 5px rgba(0,0,0,0.01); }
         .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
         .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
 
         /* گرینڈ ٹوٹل باکس */
         .grand-total-box {
-            margin-top: 20px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); 
-            border: 2px solid #a7f3d0; padding: 16px 20px;
+            margin-top: 20px; background: linear-gradient(135deg, #f3e8ff, #ede9fe); 
+            border: 2px solid #d8b4fe; padding: 16px 20px;
             border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
-            font-weight: bold; font-size: 16px; color: #065f46;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            font-weight: bold; font-size: 16px; color: #6d28d9;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
         }
     </style>
 </head>
@@ -124,28 +111,15 @@
     <div class="container">
 
         <!-- ایپ ہیڈر -->
-        <div class="app-header">🌟 فیملی اسمارٹ ٹاسک اینڈ پوائنٹس ڈیش بورڈ</div>
+        <div class="app-header">🌟 فیملی اسمارٹ ہسٹری اینڈ پوائنٹس سسٹم</div>
 
-        <!-- ریکارڈ کارڈ -->
-        <div class="card">
+        <!-- ہسٹری کارڈ (کلر فل اور خوبصورت) -->
+        <div class="card" id="historyCardSection">
             
             <div class="card-header-flex">
-                <h3>⭐ ممبر کا کارکردگی اور پوائنٹس رکارڈ</h3>
-                <!-- سیٹنگز کا بٹن -->
-                <button class="setting-btn-pro" onclick="openEasySettings()">⚙️ سیٹنگز (ترتیب، نام، ڈیلیٹ)</button>
-            </div>
-
-            <!-- نئی انٹری اور پوائنٹس ایڈ کرنے کا باکس -->
-            <div class="add-task-box">
-                <span style="font-weight: bold; font-size: 13px; color: var(--primary);">➕ نئی انٹری کریں:</span>
-                <select id="newEntryMember" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-weight: bold;">
-                    <option value="علی">علی</option>
-                    <option value="احمد">احمد</option>
-                </select>
-                <input type="text" id="newEntryTaskName" placeholder="کام کا نام (مثلاً: صفائی)" style="flex: 2; min-width: 150px;">
-                <input type="number" id="newEntryPoints" placeholder="فی کام پوائنٹس" style="width: 110px;" value="10">
-                <input type="date" id="newEntryDate" style="width: 130px;" value="2026-09-07">
-                <button class="btn-add" onclick="addNewTaskRecord()">انٹری شامل کریں</button>
+                <h3>⭐ ممبر ہسٹری، کارکردگی اور پوائنٹس رکارڈ</h3>
+                <!-- سیٹنگز کا بٹن (تمام فیچرز کے ساتھ) -->
+                <button class="setting-btn-pro" onclick="openAllFeaturesSettings()">⚙️ سیٹنگز (مینج، سلیکٹ، ڈیلیٹ، ترتیب)</button>
             </div>
 
             <!-- ڈراپ لائن اور ڈیٹ فلٹرز -->
@@ -168,6 +142,7 @@
             <table class="clean-result-table">
                 <thead>
                     <tr>
+                        <th>انتخاب / سلیکٹ</th>
                         <th>کام کا نام (Task)</th>
                         <th>فی کام پوائنٹ</th>
                         <th>کتنی بار ہوا (Count)</th>
@@ -192,39 +167,13 @@
     <script>
         // ماسٹر ڈیٹا بیس
         let masterTaskRecords = [
-            { member: "علی", taskName: "کمرے کی مکمل صفائی", pointsPerUnit: 15, frequency: 3, date: "2026-09-02" },
-            { member: "علی", taskName: "راشن انوینٹری چیک", pointsPerUnit: 10, frequency: 2, date: "2026-09-05" },
-            { member: "احمد", taskName: "شام کی چائے بنانا", pointsPerUnit: 10, frequency: 4, date: "2026-09-03" },
-            { member: "احمد", taskName: "کچن کاؤنٹر صفائی", pointsPerUnit: 5, frequency: 5, date: "2026-09-06" }
+            { id: 1, member: "علی", taskName: "کمرے کی مکمل صفائی", pointsPerUnit: 15, frequency: 3, date: "2026-09-02" },
+            { id: 2, member: "علی", taskName: "راشن انوینٹری چیک", pointsPerUnit: 10, frequency: 2, date: "2026-09-05" },
+            { id: 3, member: "احمد", taskName: "شام کی چائے بنانا", pointsPerUnit: 10, frequency: 4, date: "2026-09-03" },
+            { id: 4, member: "احمد", taskName: "کچن کاؤنٹر صفائی", pointsPerUnit: 5, frequency: 5, date: "2026-09-06" }
         ];
 
-        // نئی انٹری مع پوائنٹس ایڈ کرنے کا فنکشن
-        function addNewTaskRecord() {
-            let member = document.getElementById('newEntryMember').value;
-            let taskName = document.getElementById('newEntryTaskName').value.trim();
-            let points = parseInt(document.getElementById('newEntryPoints').value) || 0;
-            let date = document.getElementById('newEntryDate').value;
-
-            if(!taskName) {
-                alert("⚠️ براہ کرم کام کا نام درج کریں!");
-                return;
-            }
-
-            // چیک کریں کہ کیا یہ کام پہلے سے موجود ہے؟ اگر ہے تو فریکوئینسی بڑھا دیں ورنہ نئی قطار بنائیں
-            let existing = masterTaskRecords.find(x => x.member === member && x.taskName === taskName && x.date === date);
-            if(existing) {
-                existing.frequency += 1;
-                existing.pointsPerUnit = points;
-            } else {
-                masterTaskRecords.push({ member: member, taskName: taskName, pointsPerUnit: points, frequency: 1, date: date });
-            }
-
-            document.getElementById('newEntryTaskName').value = '';
-            renderMemberRecord();
-            alert("✅ نئی انٹری اور پوائنٹس کامیابی سے شامل ہو گئے!");
-        }
-
-        // ریکارڈ رینڈر کرنے کا فنکشن
+        // ریکارڈ رینڈر کرنے کا فنکشن (سلیکٹ باکس کے ساتھ)
         function renderMemberRecord() {
             let currentMember = document.getElementById('selectedMember').value;
             let start = document.getElementById('startDate').value;
@@ -238,19 +187,20 @@
             });
 
             if(filteredData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="color: #64748b; padding: 25px;">اس تاریخ اور ممبر کا کوئی ریکارڈ موجود نہیں۔</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="color: #64748b; padding: 25px;">اس تاریخ اور ممبر کا کوئی ریکارڈ موجود نہیں۔</td></tr>`;
                 document.getElementById('grandTotalPointsDisplay').innerText = "0 ⭐";
                 return;
             }
 
-            tbody.innerHTML = filteredData.map((item, index) => {
+            tbody.innerHTML = filteredData.map((item) => {
                 let totalTaskPoints = item.pointsPerUnit * item.frequency;
                 grandTotal += totalTaskPoints;
                 return `
                     <tr>
+                        <td><input type="checkbox" class="row-select-checkbox" data-id="${item.id}" style="width: 18px; height: 18px; cursor: pointer;"></td>
                         <td><b style="color: var(--primary);">${item.taskName}</b></td>
-                        <td><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px;">${item.pointsPerUnit}</span></td>
-                        <td><span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 6px; font-weight: bold;">${item.frequency} بار</span></td>
+                        <td><span style="background: #f3e8ff; padding: 4px 10px; border-radius: 6px; color: #6d28d9; font-weight: bold;">${item.pointsPerUnit}</span></td>
+                        <td><span style="background: #ede9fe; color: #5b21b6; padding: 4px 10px; border-radius: 6px; font-weight: bold;">${item.frequency} بار</span></td>
                         <td><span style="color: var(--success); font-weight: bold; font-size: 15px;">${totalTaskPoints} ⭐</span></td>
                     </tr>
                 `;
@@ -259,11 +209,43 @@
             document.getElementById('grandTotalPointsDisplay').innerText = grandTotal + " ⭐";
         }
 
-        // انتہائی آسان اور واضح سیٹنگز مینو
-        function openEasySettings() {
-            let choice = prompt("⚙️ [آسان سیٹنگز مینو]\n\n1. کام کا نام تبدیل کریں (Rename)\n2. ایک خاص کام ڈیلیٹ کریں (Delete One)\n3. تمام رکارڈ صاف کریں (Delete All)\n\nنمبر درج کریں (1، 2 یا 3):");
+        // تمام فیچرز پر مشتمل مکمل اور آسان سیٹنگز مینو
+        function openAllFeaturesSettings() {
+            let choice = prompt(
+                "⚙️ [ماسٹر سیٹنگز مینو]\n\n" +
+                "1. سب کو سلیکٹ کریں (Select All)\n" +
+                "2. سلیکٹ شدہ آئٹمز ڈیلیٹ کریں (Delete Selected)\n" +
+                "3. کام کا نام تبدیل کریں (Rename Task)\n" +
+                "4. تمام ہسٹری صاف کریں (Delete All History)\n" +
+                "5. ریکارڈ سیکشن بند کریں / کھولें (Toggle Section View)\n" +
+                "6. ترتیب سیٹ کریں (Sort Order / Tarteeb)\n\n" +
+                "نمبر درج کریں (1 تا 6):"
+            );
 
             if(choice === "1") {
+                // سلیکٹ آل
+                let checkboxes = document.querySelectorAll('.row-select-checkbox');
+                checkboxes.forEach(cb => cb.checked = true);
+                alert("✅ تمام ریکارڈ سلیکٹ ہو گئے ہیں!");
+            }
+            else if(choice === "2") {
+                // ایک یا سلیکٹ شدہ ڈیلیٹ کرنا
+                let checkboxes = document.querySelectorAll('.row-select-checkbox:checked');
+                if(checkboxes.length === 0) {
+                    alert("⚠️ براہ کرم پہلے کسی ریکارڈ کے باکس کو ٹک (Select) کریں!");
+                    return;
+                }
+                if(confirm("کیا آپ واقعی سلیکٹ شدہ ریکارڈ ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                    checkboxes.forEach(cb => {
+                        let id = parseInt(cb.getAttribute('data-id'));
+                        masterTaskRecords = masterTaskRecords.filter(x => x.id !== id);
+                    });
+                    renderMemberRecord();
+                    alert("🗑️ سلیکٹ شدہ ریکارڈ ڈیلیٹ کر دیا گیا!");
+                }
+            }
+            else if(choice === "3") {
+                // نام تبدیل کرنا (Rename)
                 let oldName = prompt("جس کام کا نام تبدیل کرنا ہے وہ ہو بہو لکھیں:");
                 let record = masterTaskRecords.find(x => x.taskName === oldName);
                 if(record) {
@@ -276,23 +258,37 @@
                 } else {
                     alert("❌ اس نام کا کوئی کام نہیں ملا!");
                 }
-            } 
-            else if(choice === "2") {
-                let targetName = prompt("جس کام کو ڈیلیٹ کرنا ہے اس کا نام لکھیں:");
-                let index = masterTaskRecords.findIndex(x => x.taskName === targetName);
-                if(index !== -1) {
-                    masterTaskRecords.splice(index, 1);
-                    renderMemberRecord();
-                    alert("🗑️ منتخب کردہ کام رکارڈ سے ہٹا دیا گیا!");
-                } else {
-                    alert("❌ کام نہیں ملا!");
-                }
-            } 
-            else if(choice === "3") {
-                if(confirm("⚠️ کیا آپ واقعی تمام رکارڈ کو کلیئر کرنا چاہتے ہیں؟")) {
+            }
+            else if(choice === "4") {
+                // تمام ہسٹری ڈیلیٹ (Delete All)
+                if(confirm("⚠️ کیا آپ واقعی تمام ہسٹری کو ہمیشہ کے لیے صاف کرنا چاہتے ہیں؟")) {
                     masterTaskRecords = [];
                     renderMemberRecord();
-                    alert("🧹 تمام رکارڈ صاف کر دیا گیا ہے!");
+                    alert("🧹 تمام ہسٹری صاف کر دی گئی ہے!");
+                }
+            }
+            else if(choice === "5") {
+                // سیکشن بند کرنا یا کھولنا (Close / Open Section)
+                let card = document.getElementById('historyCardSection');
+                if(card.style.display === "none") {
+                    card.style.display = "block";
+                    alert("📂 ہسٹری سیکشن کھول دیا گیا ہے!");
+                } else {
+                    card.style.display = "none";
+                    alert("📁 ہسٹری سیکشن بند کر دیا گیا ہے (دوباره کھولنے کے لیے یہ آپشن دوبارہ سلیکٹ کریں)!");
+                }
+            }
+            else if(choice === "6") {
+                // ترتیب سیٹ کرنا (Tarteeb - نام یا پوائنٹس کے لحاظ سے)
+                let sortType = prompt("ترتیب کا طریقہ منتخب کریں:\n1. پوائنٹس کے لحاظ سے ترتیب (زیادہ سے کم)\n2. کام کے نام کے لحاظ سے ترتیب (الف ب ج)\n\n1 یا 2 درج کریں:");
+                if(sortType === "1") {
+                    masterTaskRecords.sort((a, b) => (b.pointsPerUnit * b.frequency) - (a.pointsPerUnit * a.frequency));
+                    renderMemberRecord();
+                    alert("🔄 پوائنٹس کے حساب سے ترتیب دے دی گئی ہے!");
+                } else if(sortType === "2") {
+                    masterTaskRecords.sort((a, b) => a.taskName.localeCompare(b.taskName));
+                    renderMemberRecord();
+                    alert("🔄 نام کے حساب سے ترتیب دے دی گئی ہے!");
                 }
             }
         }
