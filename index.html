@@ -610,28 +610,12 @@
     </script>
 </body>
 </html>
-// ڈیش بورڈ پر جب بھی کوئی ٹاسک سیو ہو، اسے اس طرح لکھیں:
-function saveTaskToLocalStorage(member, taskName, points, count, date) {
-    let allRecords = JSON.parse(localStorage.getItem('familyTaskRecords')) || [];
-    
-    let newEntry = {
-        id: Date.now(),
-        member: member,
-        taskName: taskName,
-        pointsPerUnit: Number(points),
-        frequency: Number(count),
-        date: date
-    };
-
-    allRecords.push(newEntry);
-    localStorage.setItem('familyTaskRecords', JSON.stringify(allRecords));
-}
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سیٹنگز - فیملی ایپ</title>
+    <title>ممبر ہسٹری اور پوائنٹس ریکارڈ</title>
     <style>
         :root {
             --bg-light: #f8fafc;
@@ -640,39 +624,108 @@ function saveTaskToLocalStorage(member, taskName, points, count, date) {
             --text-main: #334155;
             --text-muted: #64748b;
             --border-color: #cbd5e1;
+            --success-color: #059669;
             --danger-color: #dc2626;
             --radius: 16px;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; autocomplete: off; }
         body { background-color: var(--bg-light); color: var(--text-main); margin: 0; padding: 25px; line-height: 1.6; padding-bottom: 90px; }
 
-        .container { max-width: 600px; margin: 0 auto; }
+        .container { max-width: 850px; margin: 0 auto; }
 
+        /* ہیڈر اور واپس جانے کا بٹن */
         .app-header {
             background: linear-gradient(135deg, #1e293b, #0f172a); 
             color: #ffffff; text-align: center;
-            padding: 24px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
+            padding: 22px; border-radius: var(--radius); font-size: 22px; font-weight: bold;
             box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1); margin-bottom: 24px;
             border-bottom: 4px solid var(--primary-accent);
+            position: relative;
         }
+        .back-btn {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            background: #334155; color: white; padding: 8px 14px; border-radius: 8px;
+            text-decoration: none; font-size: 13px; font-weight: bold; transition: background 0.2s;
+        }
+        .back-btn:hover { background: #475569; }
 
+        /* مین ہسٹری کارڈ */
         .card {
-            background: var(--card-bg); padding: 25px; border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 2px solid #e2e8f0;
-            margin-bottom: 20px; text-align: right;
+            background: var(--card-bg); padding: 26px; border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); margin-bottom: 24px; 
+            border: 2px solid #e2e8f0;
+            position: relative; overflow: hidden;
         }
 
-        .card h3 { margin-top: 0; color: #1e293b; font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-
-        .btn-danger {
-            background: var(--danger-color); color: white; border: none; width: 100%;
-            padding: 12px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); transition: filter 0.2s;
+        .card-header-flex {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 18px;
         }
-        .btn-danger:hover { filter: brightness(1.1); }
+        .card h3 { margin: 0; color: #1e293b; font-size: 19px; font-weight: 700; }
 
-        /* نیچے 4 بٹنوں والا فٹر بار (Bottom Navigation Bar) */
+        /* سیٹنگز مینو بٹن اور باکس */
+        .settings-dropdown-wrapper { position: relative; display: inline-block; }
+        .setting-btn-pro {
+            background: #eff6ff; border: 2px solid #3b82f6; color: #1d4ed8;
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: bold;
+            transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(59, 130, 246, 0.1);
+        }
+        .setting-btn-pro:hover { background: #dbeafe; }
+
+        .settings-menu-box {
+            display: none; position: absolute; left: 0; top: 45px; background: #ffffff;
+            min-width: 240px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border-radius: 12px;
+            border: 2px solid var(--border-color); z-index: 100; overflow: hidden;
+        }
+        .settings-menu-box button {
+            width: 100%; padding: 11px 14px; text-align: right; background: none; border: none;
+            border-bottom: 1px solid #f1f5f9; font-size: 13px; font-weight: bold; color: var(--text-main);
+            cursor: pointer; transition: background 0.2s;
+        }
+        .settings-menu-box button:hover { background: #f8fafc; color: var(--primary-accent); }
+        .settings-menu-box button:last-child { border-bottom: none; }
+
+        /* کنٹرولز سیکشن */
+        .controls-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 12px;
+            background: #f8fafc; padding: 16px; border-radius: 12px; border: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-center {
+            width: 240px; padding: 10px 14px; border-radius: 10px; 
+            border: 2px solid #93c5fd;
+            font-size: 14px; font-weight: bold; text-align: center; 
+            background: #ffffff; color: var(--text-main); outline: none; cursor: pointer;
+        }
+        .dropdown-center:focus { border-color: var(--primary-accent); }
+
+        .date-filter-group {
+            display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;
+            font-size: 13px; font-weight: 600; color: var(--text-muted);
+        }
+        .date-input {
+            padding: 8px 10px; border-radius: 8px; border: 2px solid var(--border-color); font-size: 13px; background: #fff; color: var(--text-main); font-weight: 600;
+        }
+
+        /* ٹیبل اسٹائل */
+        .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
+        .clean-result-table th { background: #e0f2fe; color: #0369a1; padding: 12px; text-align: center; font-weight: 700; border-bottom: 2px solid #bae6fd; }
+        .clean-result-table td { padding: 14px 12px; text-align: center; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; color: var(--text-main); }
+        .clean-result-table tr td:first-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+        .clean-result-table tr td:last-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+
+        /* گرینڈ ٹوٹل باکس */
+        .grand-total-box {
+            margin-top: 20px; background: linear-gradient(135deg, #ecfdf5, #d1fae5); 
+            border: 2px solid #6ee7b7; padding: 16px 20px;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+            font-weight: bold; font-size: 16px; color: #065f46;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+
+        /* نیچے 4 بٹنوں والا فٹر بار */
         .bottom-nav-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: #ffffff; border-top: 2px solid #e2e8f0;
@@ -687,4 +740,217 @@ function saveTaskToLocalStorage(member, taskName, points, count, date) {
     </style>
 </head>
 <body>
-    
+
+    <div class="container">
+
+        <!-- ایپ ہیڈر مع واپس جانے کا بٹن -->
+        <div class="app-header">
+            <a href="index.html" class="back-btn">🔙 ڈیش بورڈ</a>
+            🌟 ممبر ہسٹری اور پوائنٹس ریکارڈ
+        </div>
+
+        <!-- ہسٹری کارڈ -->
+        <div class="card" id="historyCardSection">
+            
+            <div class="card-header-flex">
+                <h3>⭐ ممبر کارکردگی رکارڈ</h3>
+                
+                <!-- سیٹنگز مینو -->
+                <div class="settings-dropdown-wrapper">
+                    <button class="setting-btn-pro" onclick="toggleSettingsMenu()">⚙️ سیٹنگز مینو</button>
+                    
+                    <div id="settingsMenuBox" class="settings-menu-box">
+                        <button onclick="toggleSelectMode()">☑️ سلیکٹ موڈ (باکس آن/آف)</button>
+                        <button onclick="selectAllRows()">✅ سب سلیکٹ کریں (All Select)</button>
+                        <button onclick="deleteSelectedRows()">🗑️ سلیکٹ شدہ ڈیلیٹ کریں</button>
+                        <button onclick="deleteAllHistory()">🧹 تمام ہسٹری ڈیلیٹ کریں (All Delete)</button>
+                        <button onclick="sortRecordsAZ()">🔤 ترتیب دیں (A to Z Tarteeb)</button>
+                        <button onclick="toggleSectionView()">📂 سیکشن آن/آف (Section View)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ڈراپ لائن اور ڈیٹ فلٹرز -->
+            <div class="controls-wrapper" id="mainControlsWrapper">
+                <div>
+                    <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px; text-align: center; color: var(--text-muted);">🔍 ممبر منتخب کریں:</label>
+                    <select id="selectedMember" class="dropdown-center" onchange="renderMemberRecord()">
+                        <option value="علی">👨‍✈️ علی (سینئر)</option>
+                        <option value="احمد">🧑‍ ہیلپر: احمد</option>
+                    </select>
+                </div>
+
+                <div class="date-filter-group">
+                    <span>فرسٹ ڈیٹ: <input type="date" id="startDate" class="date-input" value="2026-09-01" onchange="renderMemberRecord()"></span>
+                    <span>لاسٹ ڈیٹ: <input type="date" id="endDate" class="date-input" value="2026-09-30" onchange="renderMemberRecord()"></span>
+                </div>
+            </div>
+
+            <!-- رکارڈ ٹیبل -->
+            <table class="clean-result-table" id="mainResultTable">
+                <thead>
+                    <tr>
+                        <th id="selectHeaderTh" style="display: none;">انتخاب</th>
+                        <th>کام کا نام (Task)</th>
+                        <th>فی کام پوائنٹ</th>
+                        <th>کتنی بار ہوا (Count)</th>
+                        <th>کل پوائنٹس (Total)</th>
+                    </tr>
+                </thead>
+                <tbody id="memberRecordTableBody">
+                    <!-- ڈیٹا یہاں شو ہوگا -->
+                </tbody>
+            </table>
+
+            <!-- کل ٹوٹل پوائنٹس باکس -->
+            <div class="grand-total-box" id="grandTotalBoxContainer">
+                <span>🎯 تمام کاموں کے مجموعی پوائنٹس (Grand Total):</span>
+                <span id="grandTotalPointsDisplay" style="font-size: 20px;">0 ⭐</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- نیچے 4 مستقل بٹنوں والا فٹر -->
+    <div class="bottom-nav-bar">
+        <a href="index.html">📊 ڈیش بورڈ</a>
+        <a href="record.html" class="active">📂 ریکارڈ</a>
+        <a href="alerts.html">🔔 الرٹس</a>
+        <a href="settings.html">⚙️ سیٹنگز</a>
+    </div>
+
+    <script>
+        // ڈیش بورڈ سے آنے والا ڈیٹا لوڈ کرنا (localStorage)
+        let masterTaskRecords = JSON.parse(localStorage.getItem('familyTaskRecords')) || [];
+
+        let isSelectModeActive = false;
+
+        function saveToStorage() {
+            localStorage.setItem('familyTaskRecords', JSON.stringify(masterTaskRecords));
+        }
+
+        function toggleSettingsMenu() {
+            let menu = document.getElementById('settingsMenuBox');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.setting-btn-pro')) {
+                let menu = document.getElementById('settingsMenuBox');
+                if (menu && menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                }
+            }
+        }
+
+        function toggleSelectMode() {
+            isSelectModeActive = !isSelectModeActive;
+            renderMemberRecord();
+            toggleSettingsMenu();
+        }
+
+        function renderMemberRecord() {
+            let currentMember = document.getElementById('selectedMember').value;
+            let start = document.getElementById('startDate').value;
+            let end = document.getElementById('endDate').value;
+            
+            let tbody = document.getElementById('memberRecordTableBody');
+            let selectTh = document.getElementById('selectHeaderTh');
+            let grandTotal = 0;
+
+            selectTh.style.display = isSelectModeActive ? "" : "none";
+
+            let filteredData = masterTaskRecords.filter(item => {
+                return item.member === currentMember && item.date >= start && item.date <= end;
+            });
+
+            let colSpanCount = isSelectModeActive ? 5 : 4;
+
+            if(filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${colSpanCount}" style="color: var(--text-muted); padding: 25px;">اس تاریخ اور ممبر کا کوئی ریکارڈ موجود نہیں۔</td></tr>`;
+                document.getElementById('grandTotalPointsDisplay').innerText = "0 ⭐";
+                return;
+            }
+
+            tbody.innerHTML = filteredData.map((item) => {
+                let totalTaskPoints = item.pointsPerUnit * item.frequency;
+                grandTotal += totalTaskPoints;
+                
+                let checkboxTd = isSelectModeActive ? `<td><input type="checkbox" class="row-select-checkbox" data-id="${item.id}" style="width: 18px; height: 18px; cursor: pointer;"></td>` : '';
+
+                return `
+                    <tr>
+                        ${checkboxTd}
+                        <td><b style="color: #1e293b;">${item.taskName}</b></td>
+                        <td><span style="background: #e0f2fe; padding: 4px 10px; border-radius: 6px; color: #0369a1; font-weight: bold;">${item.pointsPerUnit}</span></td>
+                        <td><span style="background: #f1f5f9; color: #1e293b; padding: 4px 10px; border-radius: 6px; font-weight: bold;">${item.frequency} بار</span></td>
+                        <td><span style="color: var(--success-color); font-weight: bold; font-size: 15px;">${totalTaskPoints} ⭐</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('grandTotalPointsDisplay').innerText = grandTotal + " ⭐";
+        }
+
+        function selectAllRows() {
+            if (!isSelectModeActive) {
+                alert("⚠️ پہلے 'سلیکٹ موڈ' آن کریں!");
+                return;
+            }
+            let checkboxes = document.querySelectorAll('.row-select-checkbox');
+            checkboxes.forEach(cb => cb.checked = true);
+            toggleSettingsMenu();
+        }
+
+        function deleteSelectedRows() {
+            if (!isSelectModeActive) {
+                alert("⚠️ پہلے 'سلیکٹ موڈ' آن کر کے ریکارڈ ٹک کریں!");
+                return;
+            }
+            let checkboxes = document.querySelectorAll('.row-select-checkbox:checked');
+            if(checkboxes.length === 0) {
+                alert("⚠️ کوئی ریکارڈ سلیکٹ نہیں کیا گیا!");
+                return;
+            }
+            checkboxes.forEach(cb => {
+                let id = parseInt(cb.getAttribute('data-id'));
+                masterTaskRecords = masterTaskRecords.filter(x => x.id !== id);
+            });
+            saveToStorage();
+            renderMemberRecord();
+            toggleSettingsMenu();
+        }
+
+        function deleteAllHistory() {
+            masterTaskRecords = [];
+            saveToStorage();
+            renderMemberRecord();
+            toggleSettingsMenu();
+        }
+
+        function sortRecordsAZ() {
+            masterTaskRecords.sort((a, b) => a.taskName.localeCompare(b.taskName));
+            saveToStorage();
+            renderMemberRecord();
+            toggleSettingsMenu();
+        }
+
+        function toggleSectionView() {
+            let controls = document.getElementById('mainControlsWrapper');
+            let table = document.getElementById('mainResultTable');
+            let totalBox = document.getElementById('grandTotalBoxContainer');
+            
+            let isHidden = controls.style.display === "none";
+            controls.style.display = isHidden ? "flex" : "none";
+            table.style.display = isHidden ? "table" : "none";
+            totalBox.style.display = isHidden ? "flex" : "none";
+            toggleSettingsMenu();
+        }
+
+        window.onload = function() {
+            renderMemberRecord();
+        }
+    </script>
+</body>
+</html>
