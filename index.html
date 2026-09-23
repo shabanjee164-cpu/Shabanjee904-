@@ -1,612 +1,596 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر - فائنل ماسٹر ایڈیشن</title>
-    <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --success: #059669;
-            --purple: #7c3aed;
-            --golden: #b45309; 
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --text: #334155;
-            --border: #cbd5e1;
-            --radius: 16px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green Bus Manager</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:12px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;direction:rtl}
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.6; }
+.sec20-card{background:#fff;border:1px solid #cbd5e1;border-right:5px solid #16a34a;border-radius:14px;padding:14px 12px;box-shadow:0 8px 18px rgba(0,0,0,.06);width:100%;max-width:600px}
 
-        .container { max-width: 950px; margin: 0 auto; }
+.sec20-header-bar{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:8px;margin-bottom:12px;gap:6px}
+.sec20-title{font-size:16px;font-weight:700;color:#1e293b}
+.sec20-settings-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:30px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;cursor:pointer}
+.sec20-settings-btn:hover{background:#cbd5e1}
 
-        .app-header {
-            background: linear-gradient(135deg, #1e293b, #0f172a); 
-            color: white; text-align: center;
-            padding: 28px; border-radius: var(--radius); font-size: 28px; font-weight: bold;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15); margin-bottom: 24px;
-            border-bottom: 5px solid var(--accent);
-        }
+.sec20-settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:12px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px}
+.sec20-settings-panel.active{display:grid}
+.sec20-tool-btn{padding:6px 3px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sec20-tool-btn:hover{background:#e2e8f0}
+.sec20-tool-btn.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+.sec20-tool-btn.danger:hover{background:#fee2e2}
+.sec20-tool-btn.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
+.sec20-tool-btn.close-btn:hover{background:#fef3c7}
+.sec20-tool-btn.active-tool{background:#16a34a;color:#fff;border-color:#16a34a}
 
-        .ticker-box {
-            background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
-            overflow: hidden; white-space: nowrap; padding: 14px 18px; margin-bottom: 20px;
-            font-weight: 600; color: var(--golden); box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-        .ticker-text { 
-            display: inline-block; padding-left: 100%; 
-            animation: tickerSmooth 25s linear infinite; 
-        }
-        @keyframes tickerSmooth { 
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
+.sec20-subtitle{font-size:13px;font-weight:700;color:#16a34a;margin:12px 0 6px 0;padding-bottom:4px;border-bottom:2px dashed #bbf7d0;display:flex;justify-content:space-between;align-items:center}
+.sec20-subtitle .count-badge{background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
 
-        .alert-box {
-            background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 16px 22px;
-            border-radius: 12px; font-weight: 600; font-size: 15px; margin-bottom: 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 6px 15px rgba(220, 38, 38, 0.2);
-        }
-        .skip-btn {
-            background: rgba(255,255,255,0.2); border: none; color: white;
-            padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold;
-        }
-        .skip-btn:hover { background: rgba(255,255,255,0.35); }
+.sec20-form-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+.sec20-input,.sec20-select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-weight:600;outline:none;width:100%;background:#fff;height:42px;font-size:13px}
+.sec20-input:focus,.sec20-select:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.sec20-input::placeholder{font-size:12px;font-weight:400;color:#94a3b8}
 
-        .card {
-            background: var(--card); padding: 24px 28px; border-radius: var(--radius);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; border: 1px solid var(--border);
-        }
-        .card h3 { margin-top: 0; color: var(--primary); font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
+.sec20-save-btn{width:100%;padding:11px;background:#16a34a;color:#fff;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin-bottom:12px}
+.sec20-save-btn:hover{background:#15803d}
+.sec20-save-btn.secondary{background:#0891b2}
+.sec20-save-btn.secondary:hover{background:#0e7490}
 
-        .selection-center { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-        .select-box {
-            padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border);
-            font-size: 14px; width: 100%; background: #f8fafc; color: var(--text); outline: none;
-        }
-        .select-box:focus { border-color: var(--accent); background: #fff; }
+.sec20-day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.sec20-day-btn{padding:6px 2px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;transition:all .2s;text-align:center}
+.sec20-day-btn:hover{background:#f0fdf4}
+.sec20-day-btn.active{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 2px 5px rgba(22,163,74,.35)}
 
-        .btn-group { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-        .btn {
-            border: none; color: white; padding: 12px 18px; border-radius: 10px;
-            cursor: pointer; font-weight: bold; font-size: 14px; flex: 1; text-align: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06); min-width: 110px;
-        }
-        .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
-        .btn-done { background: var(--success); }
-        .btn-notdone { background: var(--warning); color: #fff; }
-        .btn-cancel { background: var(--danger); }
-        .btn-halt { background: var(--purple); }
-        .btn-primary { background: var(--accent); }
+.sec20-stop-list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:5px;background:#fafafa;min-height:50px;margin-bottom:10px}
+.sec20-stop-list::-webkit-scrollbar{width:5px}
+.sec20-stop-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
 
-        .fresh-task-display {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid var(--border); color: var(--primary);
-            padding: 24px; border-radius: 12px; font-weight: bold; font-size: 18px;
-            display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center;
-        }
-        .task-badge-large { background: var(--accent); color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; }
+.sec20-stop-item{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;margin-bottom:4px;font-size:12px;font-weight:600;flex-wrap:wrap}
+.sec20-stop-item:hover{background:#f0fdf4}
+.sec20-stop-item .stop-num{background:#16a34a;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0}
+.sec20-stop-item .stop-name{color:#1e293b;font-weight:700;flex:1;min-width:60px}
+.sec20-stop-item .stop-time{color:#0891b2;font-size:10px;font-weight:700;background:#cffafe;padding:2px 6px;border-radius:20px;white-space:nowrap}
+.sec20-stop-item .stop-gap{color:#92400e;font-size:10px;font-weight:700;background:#fef3c7;padding:2px 6px;border-radius:20px;white-space:nowrap}
+.sec20-stop-item .stop-del{background:#ef4444;color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:10px;cursor:pointer;font-weight:700}
 
-        .setting-btn-pro {
-            background: #f8fafc; border: 1px solid var(--border); color: var(--primary);
-            padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;
-        }
-        .setting-btn-pro:hover { background: #e2e8f0; }
+.sec20-list-container{max-height:320px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:5px;background:#fafafa;min-height:60px}
+.sec20-list-container::-webkit-scrollbar{width:5px}
+.sec20-list-container::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
 
-        .clean-result-table { width: 100%; border-collapse: separate; border-spacing: 0 6px; margin-top: 10px; font-size: 13px; }
-        .clean-result-table th { background: #f8fafc; color: var(--primary); padding: 10px 12px; text-align: center; font-weight: 700; border-bottom: 2px solid var(--border); }
-        .clean-result-table td { padding: 10px 12px; text-align: center; background: #fff; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+.sec20-list-item{display:flex;align-items:flex-start;justify-content:space-between;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 10px;margin-bottom:5px;gap:6px;border-right:3px solid #16a34a}
+.sec20-list-item:hover{background:#f0fdf4}
+.selection-mode .sec20-list-item{cursor:pointer;border-color:#cbd5e1}
+.selection-mode .sec20-list-item.selected-item{background:#dcfce7;border-color:#16a34a}
 
-        .partition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
-        @media(max-width: 768px) { .partition-grid { grid-template-columns: 1fr; } }
-        
-        .member-partition-box {
-            background: #faf5ff; border: 2px solid #e9d5ff; border-radius: 14px; padding: 18px;
-            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.05);
-        }
-        .member-big-title {
-            font-size: 20px; font-weight: 800; color: var(--purple); margin-bottom: 10px;
-            border-bottom: 2px dashed #d8b4fe; padding-bottom: 6px; text-align: center;
-        }
-        .date-badge-box {
-            background: #fff; border: 1px solid #c084fc; padding: 8px 12px; border-radius: 8px;
-            font-size: 13px; font-weight: bold; color: var(--danger); text-align: center; margin-bottom: 10px;
-        }
-        .skipped-tasks-list {
-            background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;
-            font-size: 13px; color: var(--text); min-height: 50px;
-        }
+.sec20-item-info{display:flex;align-items:flex-start;gap:7px;flex:1;flex-wrap:wrap;font-size:12px;font-weight:600;color:#1e293b}
+.sec20-checkbox{width:15px;height:15px;cursor:pointer;accent-color:#16a34a;flex-shrink:0;display:none;margin-top:2px}
+.selection-mode .sec20-checkbox{display:inline-block}
+.sec20-num{background:#16a34a;color:#fff;font-size:10px;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;flex-shrink:0;margin-top:1px}
 
-        .diet-horizontal-container { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-        .diet-column-box {
-            flex: 1; min-width: 240px; background: #ffffff; border: 1px solid var(--border);
-            border-radius: 12px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-        .diet-item-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; font-weight: 600; }
-    </style>
+.sec20-content{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.sec20-row1{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sec20-route-name{color:#1e293b;font-weight:700;font-size:13px}
+.sec20-bus-name{color:#16a34a;font-weight:700;font-size:13px}
+
+.sec20-date{font-size:9px;color:#64748b;font-weight:500;font-variant-numeric:tabular-nums;background:#f1f5f9;padding:2px 7px;border-radius:20px;white-space:nowrap}
+
+.sec20-total-footer{margin-top:10px;padding:10px 12px;background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:1px solid #86efac;border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.sec20-total-item{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#15803d}
+.sec20-total-item .num{background:#16a34a;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
+
+.sec20-empty-msg{text-align:center;color:#94a3b8;font-size:11px;padding:15px 10px}
+
+.sec20-route-banner{background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:10px 12px;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.sec20-route-banner .lbl{font-size:11px;opacity:.9;font-weight:600}
+.sec20-route-banner .route{font-size:13px;font-weight:800}
+
+@media(max-width:480px){
+body{padding:8px}
+.sec20-card{padding:12px 10px}
+.sec20-title{font-size:14px}
+.sec20-settings-btn{padding:4px 10px;font-size:10px}
+.sec20-input,.sec20-select{height:38px;font-size:12px}
+.sec20-day-btn{padding:5px 1px;font-size:9px}
+.sec20-item-info{font-size:11px;gap:4px}
+}
+</style>
 </head>
 <body>
 
-    <div class="container">
+<div class="sec20-card" id="sec20MainCard">
 
-        <!-- 1. ایپ کا نام -->
-        <div class="app-header">⚡ اسمارٹ فیملی مینجمنٹ اینڈ ہیلتھ ٹریکر</div>
+    <div class="sec20-header-bar">
+        <div class="sec20-title">🚌 Green Bus Manager</div>
+        <button class="sec20-settings-btn" onclick="toggleSec20Settings()">⚙️ سیٹنگز</button>
+    </div>
 
-        <!-- 2. ٹِکر پٹی -->
-        <div class="ticker-box">
-            <div class="ticker-text">📢 اہم نوٹ: یہ سسٹم فیملی کی روزمرہ کارکردگی اور ہیلتھ ریکارڈ کو مانیٹر کرنے کے لیے فعال ہے۔</div>
-        </div>
+    <div class="sec20-settings-panel" id="sec20SettingsPanel">
+        <button class="sec20-tool-btn" id="btnSec20SelectMode" onclick="sec20ToggleSelectMode()">☑️ سلیکٹ موڈ</button>
+        <button class="sec20-tool-btn" onclick="sec20SelectAll(true)">✅ تمام سلیکٹ</button>
+        <button class="sec20-tool-btn" onclick="sec20SelectAll(false)">⬜ سلیکشن ہٹائیں</button>
+        <button class="sec20-tool-btn" onclick="sec20EditSelected()">✏️ ایڈٹ</button>
+        <button class="sec20-tool-btn" onclick="sec20MoveOrder('up')">🔼 اوپر</button>
+        <button class="sec20-tool-btn" onclick="sec20MoveOrder('down')">🔽 نیچے</button>
+        <button class="sec20-tool-btn danger" onclick="sec20DeleteSelected()">🗑️ منتخب ڈیلیٹ</button>
+        <button class="sec20-tool-btn danger" onclick="sec20DeleteAll()">❌ سب صاف کریں</button>
+        <button class="sec20-tool-btn close-btn" onclick="sec20CloseSection()">🚪 بند/کھولیں</button>
+    </div>
 
-        <!-- 3. الرٹ پٹی -->
-        <div class="alert-box" id="alertBanner">
-            <span>🚨 اہم الرٹ: کچن کا پانی کا نلکا چیک کریں اور فیملی نوٹس پڑھیں!</span>
-            <button class="skip-btn" onclick="skipAlert()">اسکپ کریں ✕</button>
-        </div>
+    <div id="sec20ContentBody">
 
-        <!-- 4. ڈیوٹی ممبران -->
-        <div class="card" style="border-right: 5px solid var(--golden);">
-            <h3 style="color: var(--golden);">⭐ آج کی ڈیوٹی پر موجود ممبران</h3>
-            <div style="display: flex; justify-content: space-around; font-weight: bold; font-size: 16px; color: var(--primary); margin-top: 8px;">
-                <span>👨‍✈️ سینئر: علی</span>
-                <span>🧑‍ ہیلپر: احمد</span>
-            </div>
-        </div>
-
-        <!-- 5. چھٹی کی درخواست -->
-        <div class="card" style="border-right: 5px solid var(--danger);">
-            <h3 style="color: var(--danger);">📝 چھٹی کی درخواست</h3>
-            <div class="selection-center">
-                <select id="leaveMemberSelect" class="select-box" style="width: 280px;">
-                    <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (ہیلپر)</option>
-                </select>
-                <button class="btn btn-cancel" style="flex: none; padding: 12px 24px;" onclick="applyLeave()">چھٹی لگایئں</button>
-            </div>
-            <div id="leaveSubmitStatus" style="margin-top: 10px; font-weight: bold; font-size: 13px; text-align: center; color: var(--success);"></div>
-        </div>
-
-        <!-- 6. کام کی لسٹ، ممبر سلیکشن اور ٹاسک ایکشن ہسٹری -->
-        <div class="card" style="border-right: 5px solid var(--accent);">
-            <div style="text-align: center; margin-bottom: 14px;">
-                <label style="font-weight: bold; font-size: 14px; color: var(--primary); display: block; margin-bottom: 8px;">
-                    حاضری اور کام کرنے والا ممبر سلیکٹ کریں:
-                </label>
-                <select id="activeAttendant" class="select-box" style="max-width: 350px; margin: 0 auto; display: block; font-weight: bold; text-align: center;">
-                    <option value="علی">علی (سینئر)</option>
-                    <option value="احمد">احمد (ہیلپر)</option>
-                </select>
-            </div>
-            
-            <div class="fresh-task-display" id="currentFreshTask">
-                <span id="taskTitleText">🔥 ٹاسک: کمرے کی مکمل صفائی</span>
-                <span class="task-badge-large" id="taskPointsBadge">⭐ پوائنٹس: 15</span>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-done" onclick="handleTask('done')">✅ ہو گیا</button>
-                <button class="btn btn-notdone" onclick="handleTask('notdone')">⚠️ نہیں ہوا (اسکیپ)</button>
-                <button class="btn btn-cancel" onclick="handleTask('cancel')">❌ کرنا نہیں تھا</button>
-            </div>
-
-            <!-- ٹاسک ایکشن ہسٹری -->
-            <div style="margin-top: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-weight: bold; font-size: 13px; color: var(--primary);">📋 ٹاسک ایکشن ہسٹری (مع پوائنٹس):</span>
-                    <button class="setting-btn-pro" onclick="openTaskHistorySettings()">⚙️ ٹاسک ہسٹری سیٹنگ</button>
-                </div>
-                <div id="taskActionHistory" style="font-size: 12px; color: #64748b; max-height: 120px; overflow-y: auto;">
-                    کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔
-                </div>
-                <div id="taskHistoryTotalPoints" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-weight: bold; font-size: 13px; color: var(--success); text-align: left;">
-                    کل پوائنٹس (Total Points): 0
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. نامکمل کام: دو ممبروں کی الگ الگ بڑی پارٹیشنز -->
-        <div class="card" style="border-right: 5px solid var(--purple);">
-            <h3 style="color: var(--purple);">📊 نامکمل و پچھلے اسکیپ شدہ کاموں کی پروفیشنل ہسٹری</h3>
-            
-            <div class="partition-grid">
-                <div class="member-partition-box">
-                    <div class="member-big-title">👨‍✈️ علی</div>
-                    <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
-                    <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
-                    <div class="skipped-tasks-list">
-                        • کمرے کی مکمل صفائی<br>• راشن انوینٹری چیک
-                    </div>
-                </div>
-
-                <div class="member-partition-box">
-                    <div class="member-big-title">🧑‍ ہیلپر: احمد</div>
-                    <div class="date-badge-box">📅 پچھلی ڈیوٹی: اتوار، 06 ستمبر 2026</div>
-                    <div style="font-weight: bold; font-size: 12px; color: var(--primary); margin-bottom: 4px;">اسکیپ شدہ کام:</div>
-                    <div class="skipped-tasks-list">
-                        • چائے بنانا<br>• کچن کاؤنٹر صاف کرنا
-                    </div>
-                </div>
-            </div>
-
-            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-top: 16px;">
-                <div style="font-weight: bold; font-size: 13px; color: var(--primary); margin-bottom: 10px;">📌 نئی کمپلین / ریزن اور اسکیپ باکس:</div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="skipMemberSelect" class="select-box" style="flex: 1; min-width: 110px; background: #fff;">
-                        <option value="علی">علی</option>
-                        <option value="احمد">احمد</option>
-                    </select>
-                    <select id="skipTaskSelect" class="select-box" style="flex: 1.5; min-width: 140px; background: #fff;">
-                        <option value="کمرے کی صفائی">کمرے کی صفائی</option>
-                        <option value="راشن انوینٹری">راشن انوینٹری</option>
-                        <option value="چائے بنانا">چائے بنانا</option>
-                    </select>
-                    <input type="text" id="skipReasonInput" placeholder="ریزن درج کریں..." style="flex: 2; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; background: #fff;">
-                    <button class="btn btn-cancel" style="flex: none; padding: 10px 16px;" onclick="autoSkipTask()">اسکیپ کریں</button>
-                </div>
-                <div id="autoSkippedLogsList" style="font-size: 12px; color: #64748b; margin-top: 8px;">کوئی نیا اسکیپ ریکارڈ موجود نہیں۔</div>
-            </div>
-        </div>
-
-        <!-- 9. فائنل رزلٹ شیٹ -->
-        <div class="card" style="border-right: 5px solid var(--success);">
-            <h3 style="color: var(--success);">📈 ممبران فائنل رزلٹ شیٹ</h3>
-            <table class="clean-result-table">
-                <thead>
-                    <tr>
-                        <th>ممبر کا نام</th>
-                        <th>پوائنٹس</th>
-                        <th>کارکردگی گریڈ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>علی</b></td>
-                        <td><span style="font-weight: bold; color: var(--success);">45 پوائنٹس</span></td>
-                        <td><span style="background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Excellent</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>احمد</b></td>
-                        <td><span style="font-weight: bold; color: var(--accent);">35 پوائنٹس</span></td>
-                        <td><span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 12px; font-size: 12px;">Good</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 10. علامت ٹریکر -->
-        <div class="card" style="border-right: 5px solid var(--purple);">
-            <h3 style="color: var(--purple);">🩺 صحت اور علامات کا ٹریکر</h3>
-            <div style="margin-bottom: 14px;">
-                <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px;">ممبر سلیکٹ کریں:</label>
-                <select id="healthMemberSelect" class="select-box">
-                    <option value="علی">علی</option>
-                    <option value="احمد">احمد</option>
-                </select>
-            </div>
-            <div class="fresh-task-display" style="background: #f5f3ff; border-color: #ddd6fe; color: var(--purple);">
-                <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
-            </div>
-            <div class="btn-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-top: 14px;">
-                <button class="btn btn-done" onclick="handleSymptom('1. ٹھیک ہے')">1. ٹھیک ہے</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('2. نہیں ٹھیک')">2. نہیں ٹھیک</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('3. تھوڑا مسئلہ ہے')">3. تھوڑا مسئلہ ہے</button>
-                <button class="btn btn-halt" onclick="handleSymptom('4. کبھی کبھی مسئلہ ہوتا ہے')">4. کبھی کبھی</button>
-                <button class="btn btn-primary" onclick="handleSymptom('5. مسئلہ سیم پہلے کی طرح ہے')">5. سیم پہلے جیسا</button>
-                <button class="btn btn-done" onclick="handleSymptom('6. مسئلہ بہتر ہے پہلے سے')">6. بہتر ہے پہلے سے</button>
-                <button class="btn btn-notdone" onclick="handleSymptom('7. کبھی زیادہ ہے مسئلہ')">7. کبھی زیادہ ہے</button>
-                <button class="btn btn-cancel" onclick="handleSymptom('8. مسئلہ بہت زیادہ ہے')">8. بہت زیادہ ہے</button>
-                <button class="btn btn-danger" style="background:#b91c1c;" onclick="handleSymptom('9. مسئلہ زیادہ ہے')">9. مسئلہ زیادہ ہے</button>
-                <button class="btn btn-purple" style="background:#6d28d9;" onclick="handleSymptom('10. بار بار وہی مسئلہ ریپیٹ ہو رہا ہے')">10. بار بار ریپیٹ</button>
-                <button class="btn btn-primary" style="background:#0f766e;" onclick="handleSymptom('11. دیگر صورتحال')">11. دیگر صورتحال</button>
-            </div>
-        </div>
-
-        <!-- 11. ڈائٹ روٹین سسٹم -->
-        <div class="card" style="border-right: 5px solid var(--warning); background: #fffdf4;">
-            <h3 style="color: var(--warning);">🍽️ ڈائٹ روٹین (تین سیکشنز ایک ہی لائن میں)</h3>
-            <div style="border-bottom: 1px solid var(--border); margin-bottom: 16px;"></div>
-            
-            <div style="margin-bottom: 14px; text-align: center;">
-                <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: var(--primary);">⏰ کھانے یا پینے کا وقت (Time Slot):</label>
-                <select id="mealTimeSlot" class="select-box" style="max-width: 260px; margin: 0 auto; display: block; font-weight: bold; background: #fffbeb; border-color: var(--warning); text-align: center;">
-                    <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
-                    <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
-                    <option value="شام کی چائے">3. شام کی چائے</option>
-                    <option value="رات کا کھانا">4. رات کا کھانا</option>
-                </select>
-            </div>
-
-            <div class="diet-horizontal-container">
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">1️⃣ گندم / روٹی آئٹم:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck1" style="width: 15px; height: 15px;" checked>
-                        <span style="flex: 2;">گندم روٹی / نان</span>
-                        <select id="dietVal1" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>1</option><option>2</option><option>0</option></select>
-                    </div>
-                </div>
-
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">2️⃣ دودھ / لسی آئٹم:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck2" style="width: 15px; height: 15px;" checked>
-                        <span style="flex: 2;">خالص دودھ / لسی</span>
-                        <select id="dietVal2" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>گلاس</option><option>کپ</option><option>0</option></select>
-                    </div>
-                </div>
-
-                <div class="diet-column-box">
-                    <div style="font-weight: bold; color: var(--golden); margin-bottom: 6px; font-size: 12px;">3️⃣ مکس جنک فوڈ:</div>
-                    <div class="diet-item-row">
-                        <input type="checkbox" id="dietCheck3" style="width: 15px; height: 15px;">
-                        <span style="flex: 2;">جنک فوڈ / سنیکس</span>
-                        <select id="dietVal3" class="select-box" style="flex: 1; padding: 4px; font-size: 11px;"><option>0</option><option>تھوڑا</option><option>زیادہ</option></select>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn" style="background: var(--warning); width: 100%; padding: 12px; font-size: 14px;" onclick="saveMealRecordToStore()">💾 ڈائٹ روٹین سیو کریں</button>
-        </div>
-
-        <!-- ہسٹری باکسز مع سیٹنگ/ایڈیٹ/ڈیلیٹ بٹن -->
-        <div class="card" style="border-right: 5px solid var(--accent);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="color: var(--accent); margin: 0; border: none; padding: 0;">📋 ڈائٹ اور علامات ہسٹری ریکارڈ (مع سیٹنگز)</h3>
-                <button class="setting-btn-pro" onclick="openHistorySettings()">⚙️ ہسٹری سیٹنگ (ایڈیٹ/ڈیلیٹ)</button>
-            </div>
-            
-            <div style="margin-bottom: 14px;">
-                <div style="font-weight: bold; font-size: 13px; color: var(--warning); margin-bottom: 4px;">🍽️ ڈائٹ ہسٹری:</div>
-                <div id="dietHistoryLog" style="background: #fffdf4; border: 1px solid var(--warning); border-radius: 10px; padding: 10px; font-size: 13px; max-height: 100px; overflow-y: auto;">
-                    <div style="color: #64748b;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>
-                </div>
-            </div>
-
+        <!-- Route Info Banner -->
+        <div class="sec20-route-banner">
             <div>
-                <div style="font-weight: bold; font-size: 13px; color: var(--purple); margin-bottom: 4px;">🩺 علامات ٹریکر ہسٹری:</div>
-                <div id="symptomHistoryLog" style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 10px; font-size: 13px; max-height: 100px; overflow-y: auto;">
-                    <div style="color: #64748b;">کوئی علامت ہسٹری موجود نہیں۔</div>
-                </div>
+                <div class="lbl">🛣️ منتخب روٹ</div>
+                <div class="route" id="sec20RouteBanner">کوئی روٹ منتخب نہیں</div>
             </div>
+            <div style="font-size:22px;">🚌</div>
         </div>
 
-        <!-- ورکنگ پرسنٹیج اور کمپیریزن -->
-        <div class="card" style="border-right: 5px solid var(--success);">
-            <h3 style="color: var(--success);">📈 صحت بہتری اور ڈائٹ پرسنٹیج کمپیریزن سمری</h3>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
-                <div style="flex: 1; min-width: 200px; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #065f46; font-size: 12px;">🩺 علامات کی بہتری پرسنٹیج</h4>
-                    <span id="symptomPercentage" style="font-size: 20px; font-weight: bold; color: var(--success);">100%</span>
-                </div>
-                <div style="flex: 1; min-width: 200px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #1e40af; font-size: 12px;">🍽️ اچھی ڈائٹ (روٹی/دودھ) پرسنٹیج</h4>
-                    <span id="dietPercentage" style="font-size: 20px; font-weight: bold; color: #2563eb;">100%</span>
-                </div>
-                <div style="flex: 1; min-width: 200px; background: #fdf4ff; border: 1px solid #f5d0fe; padding: 14px; border-radius: 12px; text-align: center;">
-                    <h4 style="margin: 0 0 4px 0; color: #86198f; font-size: 12px;">⚖️ مجموعی صحت کمپیریزن پرسنٹیج</h4>
-                    <span id="totalPercentage" style="font-size: 20px; font-weight: bold; color: #7c3aed;">100%</span>
-                </div>
-            </div>
+        <!-- Step 1: Bus Name -->
+        <div class="sec20-subtitle">🚌 1. بس کا نام درج کریں</div>
+        <div class="sec20-form-grid">
+            <input type="text" id="sec20BusName" class="sec20-input" placeholder="مثلاً: گرین بس 1...">
+        </div>
+
+        <!-- Step 2: Route Select -->
+        <div class="sec20-subtitle">🛣️ 2. روٹ منتخب کریں</div>
+        <div class="sec20-form-grid">
+            <select id="sec20RouteSelect" class="sec20-select" onchange="sec20OnRouteChange()">
+                <option value="">روٹ منتخب کریں...</option>
+                <option value="gojra_toba">گوجرہ → ٹوبہ ٹیک سنگھ</option>
+                <option value="toba_gojra">ٹوبہ ٹیک سنگھ → گوجرہ</option>
+                <option value="peer_toba">پیر محل → ٹوبہ ٹیک سنگھ</option>
+                <option value="toba_peer">ٹوبہ ٹیک سنگھ → پیر محل</option>
+                <option value="kamalia_toba">کمالیہ → ٹوبہ ٹیک سنگھ</option>
+                <option value="toba_kamalia">ٹوبہ ٹیک سنگھ → کمالیہ</option>
+            </select>
+        </div>
+
+        <!-- Step 3: Add Bus Stop -->
+        <div class="sec20-subtitle">📍 3. بس اسٹاپ شامل کریں</div>
+        <div class="sec20-form-grid">
+            <input type="text" id="sec20StopInput" class="sec20-input" placeholder="اسٹاپ کا نام...">
+            <input type="text" id="sec20FirstTimeInput" class="sec20-input" placeholder="پہلے اسٹاپ سے چلنے کا وقت (مثلاً: 08:00 AM)">
+            <input type="number" id="sec20GapInput" class="sec20-input" placeholder="اگلی بس تک وقفہ (منٹ)" min="1" value="15">
+        </div>
+        <button class="sec20-save-btn secondary" onclick="sec20AddStop()">➕ اسٹاپ شامل کریں</button>
+
+        <!-- Stops List -->
+        <div class="sec20-subtitle">
+            <span>🛑 اسٹاپس (اس روٹ کے)</span>
+            <span class="count-badge" id="sec20StopsCount">0</span>
+        </div>
+        <div class="sec20-stop-list" id="sec20StopsList"></div>
+
+        <!-- Step 4: Save Complete Record -->
+        <button class="sec20-save-btn" onclick="sec20SaveRecord()">💾 مکمل ریکارڈ سیو کریں</button>
+
+        <!-- Day Filter -->
+        <div class="sec20-subtitle">📅 دن منتخب کریں</div>
+        <div class="sec20-day-row">
+            <button class="sec20-day-btn active" data-day="all" onclick="sec20SetDay('all')">📆 سب</button>
+            <button class="sec20-day-btn" data-day="Mon" onclick="sec20SetDay('Mon')">سوموار</button>
+            <button class="sec20-day-btn" data-day="Tue" onclick="sec20SetDay('Tue')">منگل</button>
+            <button class="sec20-day-btn" data-day="Wed" onclick="sec20SetDay('Wed')">بدھ</button>
+            <button class="sec20-day-btn" data-day="Thu" onclick="sec20SetDay('Thu')">جمعرات</button>
+            <button class="sec20-day-btn" data-day="Fri" onclick="sec20SetDay('Fri')">جمعہ</button>
+            <button class="sec20-day-btn" data-day="Sat" onclick="sec20SetDay('Sat')">ہفتہ</button>
+        </div>
+
+        <!-- Records List -->
+        <div class="sec20-subtitle">
+            <span>📋 بس ریکارڈ</span>
+            <span class="count-badge" id="sec20RecordsCount">0</span>
+        </div>
+        <div class="sec20-list-container" id="sec20ListBody"></div>
+
+        <!-- Footer -->
+        <div class="sec20-total-footer">
+            <div class="sec20-total-item">📋 ٹوٹل بس: <span class="num" id="sec20TotalRecords">0</span></div>
+            <div class="sec20-total-item">🛑 کل اسٹاپ: <span class="num" id="sec20TotalStops">0</span></div>
         </div>
 
     </div>
+</div>
 
-    <script>
-        let tasksList = [
-            { title: "کمرے کی مکمل صفائی", points: 15 },
-            { title: "راشن انوینٹری کا ریکارڈ چیک کرنا", points: 10 },
-            { title: "شام کی چائے تیار کرنا", points: 10 }
-        ];
+<script>
+/* ============================================================
+   GREEN BUS MANAGER — Section 20
+   ============================================================ */
+const SEC20_KEY = 'sec20_bus_manager_data';
 
-        let symptomsList = ["گیس / پیٹ میں ابھار", "قبض کی شکایت", "سر درد", "چکر آنا", "معدے کی جلن"];
-        let autoSkippedLogs = [];
-        let taskActionLogs = [];
-        let dietHistoryLogs = [
-            { slot: "صبح کا ناشتہ", v1: "1", v2: "گلاس", v3: "0", isGood: true }
-        ];
-        let symptomHistoryLogs = [
-            { member: "علی", symptom: "گیس / پیٹ میں ابھار", status: "1. ٹھیک ہے", isPositive: true }
-        ];
-        let currentSymptomIndex = 0;
+let sec20Records = [];
+let sec20TempStops = [];
+let sec20CurrentRoute = '';
+let sec20CurrentDay = 'all';
+let sec20SelectMode = false;
+let sec20EditingId = null;
+let sec20DeletePending = false;
 
-        function skipAlert() { document.getElementById('alertBanner').style.display = 'none'; }
-        
-        function applyLeave() {
-            let member = document.getElementById('leaveMemberSelect').value;
-            document.getElementById('leaveSubmitStatus').innerText = `✅ '${member}' کی چھٹی کی درخواست سبمٹ ہو گئی ہے!`;
-            setTimeout(() => { document.getElementById('leaveSubmitStatus').innerText = ""; }, 3000);
-        }
+/* Route Labels */
+const SEC20_ROUTES = {
+    gojra_toba: 'گوجرہ → ٹوبہ ٹیک سنگھ',
+    toba_gojra: 'ٹوبہ ٹیک سنگھ → گوجرہ',
+    peer_toba: 'پیر محل → ٹوبہ ٹیک سنگھ',
+    toba_peer: 'ٹوبہ ٹیک سنگھ → پیر محل',
+    kamalia_toba: 'کمالیہ → ٹوبہ ٹیک سنگھ',
+    toba_kamalia: 'ٹوبہ ٹیک سنگھ → کمالیہ'
+};
 
-        function autoSkipTask() {
-            let member = document.getElementById('skipMemberSelect').value;
-            let task = document.getElementById('skipTaskSelect').value;
-            let reason = document.getElementById('skipReasonInput').value;
-            if(!reason) return;
+/* ---------- Load ---------- */
+function sec20Load() {
+    try {
+        const d = localStorage.getItem(SEC20_KEY);
+        sec20Records = d ? JSON.parse(d) : [];
+        if (!Array.isArray(sec20Records)) sec20Records = [];
+        sec20Records.forEach(r => {
+            if (typeof r.selected === 'undefined') r.selected = false;
+            if (!r.timestamp) r.timestamp = Date.now();
+            if (!r.stops) r.stops = [];
+            if (!r.days) r.days = ['all'];
+        });
+    } catch(e) { sec20Records = []; }
+}
 
-            autoSkippedLogs.push({ member: member, task: task, reason: reason });
-            document.getElementById('skipReasonInput').value = '';
-            renderAutoSkipped();
-        }
+/* ---------- Save ---------- */
+function sec20Persist() {
+    try { localStorage.setItem(SEC20_KEY, JSON.stringify(sec20Records)); } catch(e) {}
+}
 
-        function renderAutoSkipped() {
-            let container = document.getElementById('autoSkippedLogsList');
-            if(autoSkippedLogs.length === 0) {
-                container.innerHTML = "کوئی نیا اسکیپ ریکارڈ موجود نہیں۔";
-                return;
-            }
-            container.innerHTML = autoSkippedLogs.map((item, idx) => `
-                <div style="padding: 3px 0; border-bottom: 1px dashed var(--border);">
-                    <span><b>${idx+1}. ممبر:</b> ${item.member} | <b>کام:</b> ${item.task} | <b>ریزن:</b> ${item.reason}</span>
+/* ---------- Escape HTML ---------- */
+function sec20Escape(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/* ---------- Toggle Settings ---------- */
+function toggleSec20Settings() {
+    document.getElementById('sec20SettingsPanel').classList.toggle('active');
+}
+
+/* ---------- On Route Change ---------- */
+function sec20OnRouteChange() {
+    sec20CurrentRoute = document.getElementById('sec20RouteSelect').value;
+    if (sec20CurrentRoute) {
+        document.getElementById('sec20RouteBanner').textContent = SEC20_ROUTES[sec20CurrentRoute];
+    } else {
+        document.getElementById('sec20RouteBanner').textContent = 'کوئی روٹ منتخب نہیں';
+    }
+    sec20TempStops = [];
+    sec20RenderStops();
+}
+
+/* ---------- Add Minutes to Time ---------- */
+function sec20AddMinutes(timeStr, minutes) {
+    try {
+        const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+        if (!match) return timeStr;
+
+        let h = parseInt(match[1]);
+        let m = parseInt(match[2]);
+        const ampm = match[3] ? match[3].toUpperCase() : null;
+
+        if (ampm === 'PM' && h !== 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+
+        let totalMin = h * 60 + m + minutes;
+        totalMin = totalMin % (24 * 60);
+        if (totalMin < 0) totalMin += 24 * 60;
+
+        let newH = Math.floor(totalMin / 60);
+        let newM = totalMin % 60;
+        const newAmpm = newH >= 12 ? 'PM' : 'AM';
+        let displayH = newH % 12;
+        if (displayH === 0) displayH = 12;
+
+        const hh = String(displayH).padStart(2, '0');
+        const mm = String(newM).padStart(2, '0');
+
+        if (ampm) return hh + ':' + mm + ' ' + newAmpm;
+        return hh + ':' + mm;
+    } catch(e) { return timeStr; }
+}
+
+/* ---------- Compute Stop Times ---------- */
+function sec20ComputeTimes(stop, index, allStops) {
+    if (index === 0) return stop.firstTime;
+    let totalGap = 0;
+    for (let i = 0; i < index; i++) {
+        totalGap += parseInt(allStops[i].gap) || 0;
+    }
+    return sec20AddMinutes(stop.firstTime, totalGap);
+}
+
+/* ---------- Add Stop ---------- */
+function sec20AddStop() {
+    const nameInp = document.getElementById('sec20StopInput');
+    const firstTimeInp = document.getElementById('sec20FirstTimeInput');
+    const gapInp = document.getElementById('sec20GapInput');
+
+    const name = nameInp.value.trim();
+    const firstTime = firstTimeInp.value.trim();
+    const gap = parseInt(gapInp.value) || 15;
+
+    if (!sec20CurrentRoute) {
+        const sel = document.getElementById('sec20RouteSelect');
+        sel.style.borderColor = '#ef4444';
+        setTimeout(() => { sel.style.borderColor = '#cbd5e1'; }, 1500);
+        return;
+    }
+    if (!name) {
+        nameInp.style.borderColor = '#ef4444';
+        nameInp.focus();
+        setTimeout(() => { nameInp.style.borderColor = '#cbd5e1'; }, 1500);
+        return;
+    }
+    if (!firstTime) {
+        firstTimeInp.style.borderColor = '#ef4444';
+        firstTimeInp.focus();
+        setTimeout(() => { firstTimeInp.style.borderColor = '#cbd5e1'; }, 1500);
+        return;
+    }
+
+    sec20TempStops.push({
+        id: Date.now(),
+        name: name,
+        firstTime: firstTime,
+        gap: gap
+    });
+
+    nameInp.value = '';
+    firstTimeInp.value = '';
+    gapInp.value = '15';
+    nameInp.focus();
+
+    sec20RenderStops();
+}
+
+/* ---------- Remove Stop ---------- */
+function sec20RemoveStop(id) {
+    sec20TempStops = sec20TempStops.filter(s => s.id !== id);
+    sec20RenderStops();
+}
+
+/* ---------- Render Stops ---------- */
+function sec20RenderStops() {
+    const c = document.getElementById('sec20StopsList');
+    if (!c) return;
+    c.innerHTML = '';
+
+    document.getElementById('sec20StopsCount').textContent = sec20TempStops.length;
+
+    if (sec20TempStops.length === 0) {
+        c.innerHTML = '<div class="sec20-empty-msg">📍 کوئی اسٹاپ شامل نہیں کیا گیا۔<br>اوپر سے اسٹاپ کا نام، پہلا وقت، اور وقفہ لکھ کر شامل کریں۔</div>';
+        return;
+    }
+
+    sec20TempStops.forEach((s, i) => {
+        const computedTime = sec20ComputeTimes(s, i, sec20TempStops);
+        const div = document.createElement('div');
+        div.className = 'sec20-stop-item';
+        div.innerHTML = `
+            <span class="stop-num">${i + 1}</span>
+            <span class="stop-name">${sec20Escape(s.name)}</span>
+            <span class="stop-time">⏰ ${computedTime}</span>
+            <span class="stop-gap">+${s.gap} منٹ</span>
+            <button class="stop-del" onclick="sec20RemoveStop(${s.id})">✕</button>
+        `;
+        c.appendChild(div);
+    });
+}
+
+/* ---------- Save Complete Record ---------- */
+function sec20SaveRecord() {
+    const busNameInp = document.getElementById('sec20BusName');
+    const busName = busNameInp.value.trim();
+
+    if (!busName) {
+        busNameInp.style.borderColor = '#ef4444';
+        busNameInp.focus();
+        setTimeout(() => { busNameInp.style.borderColor = '#cbd5e1'; }, 1500);
+        return;
+    }
+    if (!sec20CurrentRoute) {
+        const sel = document.getElementById('sec20RouteSelect');
+        sel.style.borderColor = '#ef4444';
+        setTimeout(() => { sel.style.borderColor = '#cbd5e1'; }, 1500);
+        return;
+    }
+    if (sec20TempStops.length === 0) {
+        const c = document.getElementById('sec20StopsList');
+        c.style.borderColor = '#ef4444';
+        setTimeout(() => { c.style.borderColor = '#e2e8f0'; }, 1500);
+        return;
+    }
+
+    const savedStops = sec20TempStops.map((s, i) => ({
+        id: s.id,
+        name: s.name,
+        firstTime: s.firstTime,
+        gap: s.gap,
+        computedTime: sec20ComputeTimes(s, i, sec20TempStops)
+    }));
+
+    sec20Records.unshift({
+        id: Date.now(),
+        busName: busName,
+        route: sec20CurrentRoute,
+        routeLabel: SEC20_ROUTES[sec20CurrentRoute],
+        stops: savedStops,
+        days: ['all'],
+        selected: false,
+        timestamp: Date.now()
+    });
+
+    sec20Persist();
+
+    /* ری سیٹ */
+    busNameInp.value = '';
+    document.getElementById('sec20RouteSelect').value = '';
+    sec20CurrentRoute = '';
+    document.getElementById('sec20RouteBanner').textContent = 'کوئی روٹ منتخب نہیں';
+    sec20TempStops = [];
+    sec20RenderStops();
+    sec20RenderAll();
+
+    /* کامیابی */
+    busNameInp.style.borderColor = '#16a34a';
+    setTimeout(() => { busNameInp.style.borderColor = '#cbd5e1'; }, 800);
+}
+
+/* ---------- Set Day Filter ---------- */
+function sec20SetDay(day) {
+    sec20CurrentDay = day;
+    document.querySelectorAll('.sec20-day-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.day === day);
+    });
+    sec20RenderAll();
+}
+
+/* ---------- Get Filtered ---------- */
+function sec20GetFiltered() {
+    if (sec20CurrentDay === 'all') return sec20Records;
+    return sec20Records.filter(r => r.days && (r.days.includes('all') || r.days.includes(sec20CurrentDay)));
+}
+
+/* ---------- Toggle Select Mode ---------- */
+function sec20ToggleSelectMode() {
+    sec20SelectMode = !sec20SelectMode;
+    const btn = document.getElementById('btnSec20SelectMode');
+    const c = document.getElementById('sec20ListBody');
+    if (sec20SelectMode) {
+        btn.classList.add('active-tool');
+        btn.textContent = '✅ سلیکٹ موڈ آن';
+        c.classList.add('selection-mode');
+    } else {
+        btn.classList.remove('active-tool');
+        btn.textContent = '☑️ سلیکٹ موڈ';
+        c.classList.remove('selection-mode');
+        sec20Records.forEach(r => r.selected = false);
+        sec20Persist();
+    }
+    sec20RenderAll();
+}
+
+/* ---------- Update Counts ---------- */
+function sec20UpdateCounts() {
+    const filtered = sec20GetFiltered();
+    let totalStops = 0;
+    sec20Records.forEach(r => totalStops += (r.stops ? r.stops.length : 0));
+    document.getElementById('sec20TotalRecords').textContent = sec20Records.length;
+    document.getElementById('sec20TotalStops').textContent = totalStops;
+}
+
+/* ---------- Format Date ---------- */
+function sec20FmtDate(ts) {
+    const d = new Date(ts);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+}
+
+/* ---------- Render Records ---------- */
+function sec20RenderList() {
+    const c = document.getElementById('sec20ListBody');
+    if (!c) return;
+    c.innerHTML = '';
+
+    if (sec20SelectMode) c.classList.add('selection-mode');
+    else c.classList.remove('selection-mode');
+
+    const filtered = sec20GetFiltered();
+
+    document.getElementById('sec20RecordsCount').textContent = filtered.length;
+
+    if (filtered.length === 0) {
+        c.innerHTML = '<div class="sec20-empty-msg">📭 کوئی بس ریکارڈ موجود نہیں ہے۔</div>';
+        return;
+    }
+
+    const sorted = [...filtered].sort((a, b) => b.timestamp - a.timestamp);
+
+    sorted.forEach((r, i) => {
+        const div = document.createElement('div');
+        div.className = 'sec20-list-item';
+        if (r.selected) div.classList.add('selected-item');
+
+        if (sec20EditingId === r.id) {
+            div.innerHTML = `
+                <div class="sec20-item-info" style="flex-direction:row;align-items:center;">
+                    <input type="text" class="sec20-input" id="eB_${r.id}" value="${sec20Escape(r.busName)}" placeholder="بس کا نام" style="height:32px;padding:5px 8px;">
+                    <button onclick="sec20SaveInlineEdit(${r.id})" style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-weight:700;cursor:pointer;">✓</button>
+                    <button onclick="sec20CancelEdit()" style="background:#e2e8f0;color:#475569;border:none;border-radius:6px;padding:5px 10px;font-weight:700;cursor:pointer;">✗</button>
                 </div>
-            `).join('');
-        }
+            `;
+        } else {
+            const firstTime = r.stops[0] ? r.stops[0].computedTime : '—';
+            const lastTime = r.stops[r.stops.length - 1] ? r.stops[r.stops.length - 1].computedTime : '—';
 
-        function renderUI() {
-            let titleText = document.getElementById('taskTitleText');
-            let pointsBadge = document.getElementById('taskPointsBadge');
-            
-            if(tasksList.length > 0) {
-                titleText.innerText = `🔥 ٹاسک: ${tasksList[0].title}`;
-                pointsBadge.innerText = `⭐ پوائنٹس: ${tasksList[0].points}`;
-            } else {
-                titleText.innerText = `🎉 تمام ٹاسک مکمل ہو چکے ہیں!`;
-                pointsBadge.innerText = `⭐ پوائنٹس: 0`;
-            }
-
-            document.getElementById('symptomTitleText').innerText = `🔍 علامت: ${symptomsList[currentSymptomIndex]}`;
-
-            // ٹاسک ایکشن ہسٹری رینڈر
-            let taskActCont = document.getElementById('taskActionHistory');
-            let totalTaskPoints = 0;
-            
-            if(taskActionLogs.length === 0) {
-                taskActCont.innerHTML = '<div style="color: #64748b;">کوئی ٹاسک ایکشن ریکارڈ موجود نہیں۔</div>';
-                document.getElementById('taskHistoryTotalPoints').innerText = "کل پوائنٹس (Total Points): 0";
-            } else {
-                taskActCont.innerHTML = taskActionLogs.map((item, i) => {
-                    totalTaskPoints += item.points;
-                    return `
-                        <div style="padding: 4px 0; border-bottom: 1px dashed #cbd5e1; display: flex; justify-content: space-between; align-items: center;">
-                            <span>👤 <b>${item.member}</b> ➔ کام: <b>${item.task}</b> | سٹیٹس: <b style="color: ${item.color};">${item.status}</b></span>
-                            <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-weight: bold; color: var(--primary);">⭐ ${item.points} پوائنٹس</span>
+            div.innerHTML = `
+                <div class="sec20-item-info">
+                    <input type="checkbox" class="sec20-checkbox" ${r.selected ? 'checked' : ''} onchange="sec20ToggleSelect(${r.id})">
+                    <span class="sec20-num">${i + 1}</span>
+                    <div class="sec20-content">
+                        <div class="sec20-row1">
+                            <span class="sec20-bus-name">🚌 ${sec20Escape(r.busName)}</span>
                         </div>
-                    `;
-                }).join('');
-                document.getElementById('taskHistoryTotalPoints').innerText = `کل پوائنٹس (Total Points): ${totalTaskPoints} ⭐`;
-            }
-
-            // ڈائٹ ہسٹری رینڈر
-            let dietCont = document.getElementById('dietHistoryLog');
-            if(dietHistoryLogs.length === 0) {
-                dietCont.innerHTML = '<div style="color: #64748b;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>';
-            } else {
-                dietCont.innerHTML = dietHistoryLogs.map((item, i) => `
-                    <div style="padding: 4px 0; border-bottom: 1px dashed #fde68a; display: flex; justify-content: space-between;">
-                        <span>⏰ <b>${item.slot}</b> (روٹی: ${item.v1}, دودھ: ${item.v2}, جنک: ${item.v3})</span>
-                        <span style="color:${item.isGood ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">${item.isGood ? '✅ اچھی خوراک (روٹی/دودھ)' : '⚠️ جنک فوڈ'}</span>
+                        <div class="sec20-row1">
+                            <span class="sec20-route-name">🛣️ ${sec20Escape(r.routeLabel)}</span>
+                        </div>
+                        <div class="sec20-row1" style="font-size:11px;color:#475569;margin-top:2px;">
+                            <span>🛑 ${r.stops.length} اسٹاپ</span>
+                            <span>⏰ ${firstTime} → ${lastTime}</span>
+                        </div>
+                        <div style="font-size:10px;color:#64748b;margin-top:2px;">
+                            📅 ${sec20FmtDate(r.timestamp)}
+                        </div>
                     </div>
-                `).join('');
-            }
-
-            // علامات ہسٹری رینڈر
-            let sympCont = document.getElementById('symptomHistoryLog');
-            if(symptomHistoryLogs.length === 0) {
-                sympCont.innerHTML = '<div style="color: #64748b;">کوئی علامت ہسٹری موجود نہیں۔</div>';
-            } else {
-                sympCont.innerHTML = symptomHistoryLogs.map((item, i) => `
-                    <div style="padding: 4px 0; border-bottom: 1px dashed #ddd6fe; display: flex; justify-content: space-between;">
-                        <span>👤 <b>${item.member}</b>: ${item.symptom} ➔ <b style="color:var(--purple);">${item.status}</b></span>
-                        <span style="color:${item.isPositive ? 'var(--success)' : 'var(--danger)'}; font-weight:bold;">${item.isPositive ? '👍 بہتر' : '⚠️ مسئلہ'}</span>
-                    </div>
-                `).join('');
-            }
-
-            // پرسنٹیج کیلکولیشن (پچھلے ورکنگ ورژن کی طرح درست کی گئی ہے)
-            let positiveSymps = symptomHistoryLogs.filter(x => x.isPositive).length;
-            let sympScore = symptomHistoryLogs.length > 0 ? Math.round((positiveSymps / symptomHistoryLogs.length) * 100) : 0;
-
-            let goodDiets = dietHistoryLogs.filter(x => x.isGood).length;
-            let dietScore = dietHistoryLogs.length > 0 ? Math.round((goodDiets / dietHistoryLogs.length) * 100) : 0;
-
-            let totalScore = Math.round((sympScore + dietScore) / 2);
-
-            document.getElementById('symptomPercentage').innerText = sympScore + '%';
-            document.getElementById('dietPercentage').innerText = dietScore + '%';
-            document.getElementById('totalPercentage').innerText = totalScore + '%';
-        }
-
-        function handleTask(actionType) {
-            if(tasksList.length === 0) return;
-            let member = document.getElementById('activeAttendant').value;
-            let currentTaskObj = tasksList[0];
-            
-            let statusText = "";
-            let colorCode = "";
-            let awardedPoints = 0;
-
-            if(actionType === 'done') { 
-                statusText = "✅ ہو گیا"; 
-                colorCode = "var(--success)"; 
-                awardedPoints = currentTaskObj.points; 
-            } else if(actionType === 'notdone') { 
-                statusText = "⚠️ نہیں ہوا (اسکیپ)"; 
-                colorCode = "var(--warning)"; 
-                awardedPoints = 0; 
-            } else if(actionType === 'cancel') { 
-                statusText = "❌ کرنا نہیں تھا"; 
-                colorCode = "var(--danger)"; 
-                awardedPoints = 0; 
-            }
-
-            taskActionLogs.unshift({ 
-                member: member, 
-                task: currentTaskObj.title, 
-                status: statusText, 
-                color: colorCode, 
-                points: awardedPoints 
+                </div>
+            `;
+            div.addEventListener('click', (e) => {
+                if (!sec20SelectMode) return;
+                if (e.target.type === 'checkbox') return;
+                sec20ToggleSelect(r.id);
             });
-            
-            tasksList.shift(); 
-            renderUI();
         }
+        c.appendChild(div);
+    });
 
-        function handleSymptom(status) {
-            let member = document.getElementById('healthMemberSelect').value;
-            let currentSymp = symptomsList[currentSymptomIndex];
-            let isPositive = status.includes("ٹھیک ہے") || status.includes("بہتر ہے") || status.includes("کم");
-            
-            symptomHistoryLogs.unshift({ member: member, symptom: currentSymp, status: status, isPositive: isPositive });
-            currentSymptomIndex = (currentSymptomIndex + 1) % symptomsList.length;
-            renderUI();
-        }
+    if (sec20EditingId !== null) {
+        const f = document.getElementById('eB_' + sec20EditingId);
+        if (f) { f.focus(); f.select(); }
+    }
+}
 
-        function saveMealRecordToStore() {
-            let slot = document.getElementById('mealTimeSlot').value;
-            let v1 = document.getElementById('dietVal1').value;
-            let v2 = document.getElementById('dietVal2').value;
-            let v3 = document.getElementById('dietVal3').value;
-            let check1 = document.getElementById('dietCheck1').checked;
-            let check2 = document.getElementById('dietCheck2').checked;
-            let check3 = document.getElementById('dietCheck3').checked;
+/* ---------- Toggle Select ---------- */
+function sec20ToggleSelect(id) {
+    const r = sec20Records.find(x => x.id === id);
+    if (r) { r.selected = !r.selected; sec20Persist(); sec20RenderAll(); }
+}
 
-            let hasGoodFood = (check1 || v1 !== "0") || (check2 || v2 !== "0");
-            let hasJunk = check3 || (v3 !== "0");
-            let isGood = hasGoodFood && !hasJunk;
+/* ---------- Select All ---------- */
+function sec20SelectAll(status) {
+    const filtered = sec20GetFiltered();
+    if (filtered.length === 0) return;
+    if (status && !sec20SelectMode) sec20ToggleSelectMode();
+    const ids = filtered.map(r => r.id);
+    sec20Records.forEach(r => { if (ids.includes(r.id)) r.selected = status; });
+    sec20Persist();
+    sec20RenderAll();
+}
 
-            dietHistoryLogs.unshift({ slot: slot, v1: v1, v2: v2, v3: v3, isGood: isGood });
-            renderUI();
-        }
+/* ---------- Edit Selected ---------- */
+function sec20EditSelected() {
+    const s = sec20Records.filter(r => r.selected);
+    if (s.length !== 1) { sec20FlashList(); return; }
+    sec20EditingId = s[0].id;
+    sec20RenderAll();
+}
 
-        function openTaskHistorySettings() {
-            let action = prompt("⚙️ [ٹاسک ہسٹری سیٹنگ]\n1. آخری انٹری ڈیلیٹ کریں (Delete Last Entry)\n2. تمام ٹاسک ہسٹری صاف کریں (Clear All Task History)\n\nنمبر درج کریں (1 یا 2):");
-            if(action === "1") {
-                if(taskActionLogs.length > 0) taskActionLogs.shift();
-                renderUI();
-            } else if(action === "2") {
-                taskActionLogs = [];
-                renderUI();
-            }
-        }
-
-        function openHistorySettings() {
-            let action = prompt("⚙️ [ڈائٹ اور علامات ہسٹری سیٹنگ]\n1. ہسٹری سے آخری انٹری ڈیلیٹ کریں (Delete Entry)\n2. تمام ہسٹری صاف کریں (Clear All)\n\nنمبر درج کریں (1 یا 2):");
-            if(action === "1") {
-                if(dietHistoryLogs.length > 0) dietHistoryLogs.shift();
-                else if(symptomHistoryLogs.length > 0) symptomHistoryLogs.shift();
-                renderUI();
-            } else if(action === "2") {
-                dietHistoryLogs = [];
-                symptomHistoryLogs = [];
-                renderUI();
-            }
-        }
-
-        window.onload = function() { renderUI(); }
-    </script>
-</body>
-</html>
+/* ---------- Save Inline Edit ---------- */
+function
