@@ -3,594 +3,631 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Green Bus Manager</title>
+<title>Alert Manager</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#eef2f6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:12px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;direction:rtl}
+body{background:#eef2f6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:10px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;direction:rtl}
 
-.sec20-card{background:#fff;border:1px solid #cbd5e1;border-right:5px solid #16a34a;border-radius:14px;padding:14px 12px;box-shadow:0 8px 18px rgba(0,0,0,.06);width:100%;max-width:600px}
+.alert-card{background:#fff;border:1px solid #cbd5e1;border-right:5px solid #dc2626;border-radius:12px;padding:12px 10px;box-shadow:0 6px 16px rgba(0,0,0,.06);width:100%;max-width:700px}
 
-.sec20-header-bar{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:8px;margin-bottom:12px;gap:6px}
-.sec20-title{font-size:16px;font-weight:700;color:#1e293b}
-.sec20-settings-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:30px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;cursor:pointer}
-.sec20-settings-btn:hover{background:#cbd5e1}
+.alert-header-bar{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:8px;margin-bottom:12px;gap:6px}
+.alert-title{font-size:15px;font-weight:800;color:#dc2626;display:flex;align-items:center;gap:6px}
+.alert-live-dot{width:8px;height:8px;background:#dc2626;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.alert-settings-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:30px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;cursor:pointer}
+.alert-settings-btn:hover{background:#cbd5e1}
 
-.sec20-settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:12px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px}
-.sec20-settings-panel.active{display:grid}
-.sec20-tool-btn{padding:6px 3px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sec20-tool-btn:hover{background:#e2e8f0}
-.sec20-tool-btn.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.sec20-tool-btn.danger:hover{background:#fee2e2}
-.sec20-tool-btn.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
-.sec20-tool-btn.close-btn:hover{background:#fef3c7}
-.sec20-tool-btn.active-tool{background:#16a34a;color:#fff;border-color:#16a34a}
+/* ===== SETTINGS PANEL ===== */
+.alert-settings-panel{display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:10px;margin-bottom:12px}
+.alert-settings-panel.active{display:block}
 
-.sec20-subtitle{font-size:13px;font-weight:700;color:#16a34a;margin:12px 0 6px 0;padding-bottom:4px;border-bottom:2px dashed #bbf7d0;display:flex;justify-content:space-between;align-items:center}
-.sec20-subtitle .count-badge{background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
+.alert-settings-group{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #fca5a5}
+.alert-settings-group:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.alert-settings-group .group-title{font-size:11px;font-weight:800;color:#991b1b;margin-bottom:6px;display:flex;align-items:center;gap:4px}
 
-.sec20-form-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px}
-.sec20-input,.sec20-select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-weight:600;outline:none;width:100%;background:#fff;height:42px;font-size:13px}
-.sec20-input:focus,.sec20-select:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
-.sec20-input::placeholder{font-size:12px;font-weight:400;color:#94a3b8}
+.alert-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.alert-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px}
+.alert-row-full{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:6px}
 
-.sec20-save-btn{width:100%;padding:11px;background:#16a34a;color:#fff;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin-bottom:12px}
-.sec20-save-btn:hover{background:#15803d}
-.sec20-save-btn.secondary{background:#0891b2}
-.sec20-save-btn.secondary:hover{background:#0e7490}
+.alert-input,.alert-select{padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-weight:600;outline:none;width:100%;background:#fff;height:36px;font-size:11px}
+.alert-input:focus,.alert-select:focus{border-color:#dc2626;box-shadow:0 0 0 2px rgba(220,38,38,.12)}
+.alert-input::placeholder{font-size:10px;font-weight:400;color:#94a3b8}
 
-.sec20-day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
-.sec20-day-btn{padding:6px 2px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;transition:all .2s;text-align:center}
-.sec20-day-btn:hover{background:#f0fdf4}
-.sec20-day-btn.active{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 2px 5px rgba(22,163,74,.35)}
+/* Time box */
+.alert-time-box{display:flex;align-items:center;border:1px solid #cbd5e1;border-radius:6px;background:#fff;height:36px;overflow:hidden}
+.alert-time-box input{border:none;outline:none;padding:0 8px;font-size:12px;font-weight:700;width:100%;height:100%;background:transparent;text-align:center}
+.alert-time-box select{border:none;outline:none;background:#f1f5f9;font-size:11px;font-weight:700;padding:0 6px;height:100%;cursor:pointer;width:60px;border-right:1px solid #cbd5e1;text-align:center}
 
-.sec20-stop-list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:5px;background:#fafafa;min-height:50px;margin-bottom:10px}
-.sec20-stop-list::-webkit-scrollbar{width:5px}
-.sec20-stop-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+/* Toggle switch */
+.alert-toggle-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:5px}
+.alert-toggle-row .lbl{font-size:11px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:5px}
+.alert-toggle{position:relative;width:42px;height:22px;background:#cbd5e1;border-radius:20px;cursor:pointer;transition:all .3s;flex-shrink:0}
+.alert-toggle.on{background:#16a34a}
+.alert-toggle::after{content:'';position:absolute;top:2px;right:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.alert-toggle.on::after{right:calc(100% - 20px)}
 
-.sec20-stop-item{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;margin-bottom:4px;font-size:12px;font-weight:600;flex-wrap:wrap}
-.sec20-stop-item:hover{background:#f0fdf4}
-.sec20-stop-item .stop-num{background:#16a34a;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0}
-.sec20-stop-item .stop-name{color:#1e293b;font-weight:700;flex:1;min-width:60px}
-.sec20-stop-item .stop-time{color:#0891b2;font-size:10px;font-weight:700;background:#cffafe;padding:2px 6px;border-radius:20px;white-space:nowrap}
-.sec20-stop-item .stop-gap{color:#92400e;font-size:10px;font-weight:700;background:#fef3c7;padding:2px 6px;border-radius:20px;white-space:nowrap}
-.sec20-stop-item .stop-del{background:#ef4444;color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:10px;cursor:pointer;font-weight:700}
+/* Radio group */
+.alert-radio-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px;margin-bottom:6px}
+.alert-radio{padding:8px 6px;font-size:10px;font-weight:700;border:2px solid #e2e8f0;border-radius:6px;background:#fff;color:#334155;cursor:pointer;text-align:center;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
+.alert-radio:hover{background:#fef2f2;border-color:#fca5a5}
+.alert-radio.active{background:#dc2626;color:#fff;border-color:#dc2626}
 
-.sec20-list-container{max-height:320px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:5px;background:#fafafa;min-height:60px}
-.sec20-list-container::-webkit-scrollbar{width:5px}
-.sec20-list-container::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+/* Buttons */
+.alert-btn{width:100%;padding:9px;font-size:12px;font-weight:800;border:none;border-radius:6px;cursor:pointer;margin-bottom:6px;transition:all .2s}
+.alert-btn.primary{background:#dc2626;color:#fff}
+.alert-btn.primary:hover{background:#b91c1c}
+.alert-btn.secondary{background:#0891b2;color:#fff}
+.alert-btn.secondary:hover{background:#0e7490}
+.alert-btn.success{background:#16a34a;color:#fff}
+.alert-btn.success:hover{background:#15803d}
+.alert-btn.test{background:#7c3aed;color:#fff}
+.alert-btn.test:hover{background:#6d28d9}
+.alert-btn.danger{background:#fef2f2;color:#ef4444;border:1px solid #fca5a5}
+.alert-btn.danger:hover{background:#fee2e2}
+.alert-btn.close{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}
 
-.sec20-list-item{display:flex;align-items:flex-start;justify-content:space-between;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 10px;margin-bottom:5px;gap:6px;border-right:3px solid #16a34a}
-.sec20-list-item:hover{background:#f0fdf4}
-.selection-mode .sec20-list-item{cursor:pointer;border-color:#cbd5e1}
-.selection-mode .sec20-list-item.selected-item{background:#dcfce7;border-color:#16a34a}
+/* Custom alert add form */
+.alert-add-form{display:grid;grid-template-columns:2fr 1fr auto;gap:5px;margin-bottom:6px}
 
-.sec20-item-info{display:flex;align-items:flex-start;gap:7px;flex:1;flex-wrap:wrap;font-size:12px;font-weight:600;color:#1e293b}
-.sec20-checkbox{width:15px;height:15px;cursor:pointer;accent-color:#16a34a;flex-shrink:0;display:none;margin-top:2px}
-.selection-mode .sec20-checkbox{display:inline-block}
-.sec20-num{background:#16a34a;color:#fff;font-size:10px;font-weight:700;min-width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;flex-shrink:0;margin-top:1px}
+/* ===== SUBTITLE ===== */
+.alert-subtitle{font-size:12px;font-weight:800;color:#dc2626;margin:12px 0 6px;padding-bottom:4px;border-bottom:2px dashed #fecaca;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.alert-subtitle .count-badge{background:#dc2626;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
 
-.sec20-content{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
-.sec20-row1{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.sec20-route-name{color:#1e293b;font-weight:700;font-size:13px}
-.sec20-bus-name{color:#16a34a;font-weight:700;font-size:13px}
+/* ===== ALERT STATUS BANNER ===== */
+.alert-status-banner{background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);border-radius:8px;padding:10px 12px;margin-bottom:10px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.alert-status-banner.ok{background:linear-gradient(135deg,#16a34a 0%,#15803d 100%)}
+.alert-status-banner .lbl{font-size:10px;font-weight:700;opacity:.9}
+.alert-status-banner .status{font-size:13px;font-weight:800}
+.alert-status-banner .time-info{font-size:10px;opacity:.85;margin-top:2px}
 
-.sec20-date{font-size:9px;color:#64748b;font-weight:500;font-variant-numeric:tabular-nums;background:#f1f5f9;padding:2px 7px;border-radius:20px;white-space:nowrap}
+/* ===== HISTORY SCROLL LIST ===== */
+.alert-history-scroll{max-height:340px;overflow-y:auto;border:2px solid #fca5a5;border-radius:8px;padding:6px;background:#fef2f2;min-height:80px}
+.alert-history-scroll::-webkit-scrollbar{width:5px}
+.alert-history-scroll::-webkit-scrollbar-thumb{background:#dc2626;border-radius:10px}
+.alert-history-scroll::-webkit-scrollbar-track{background:#fee2e2;border-radius:10px}
 
-.sec20-total-footer{margin-top:10px;padding:10px 12px;background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:1px solid #86efac;border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.sec20-total-item{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#15803d}
-.sec20-total-item .num{background:#16a34a;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;min-width:32px;text-align:center;font-variant-numeric:tabular-nums}
+.alert-record{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:9px 10px;margin-bottom:6px;border-right:4px solid #dc2626}
+.alert-record.sound-alert{border-right-color:#dc2626}
+.alert-record.custom-alert{border-right-color:#7c3aed}
 
-.sec20-empty-msg{text-align:center;color:#94a3b8;font-size:11px;padding:15px 10px}
+.alert-record-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.alert-record-title{font-size:12px;font-weight:800;color:#dc2626;display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.alert-record-badge{font-size:9px;font-weight:800;color:#fff;background:#dc2626;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.alert-record-badge.custom{background:#7c3aed}
+.alert-record-date{font-size:9px;font-weight:700;color:#64748b;background:#f1f5f9;padding:2px 7px;border-radius:20px;white-space:nowrap;font-variant-numeric:tabular-nums}
 
-.sec20-route-banner{background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:10px;padding:10px 12px;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.sec20-route-banner .lbl{font-size:11px;opacity:.9;font-weight:600}
-.sec20-route-banner .route{font-size:13px;font-weight:800}
+.alert-record-text{background:#fef2f2;border:1px solid #fecaca;border-radius:5px;padding:7px 9px;font-size:11px;font-weight:600;color:#1e293b;line-height:1.5;word-wrap:break-word;margin-bottom:6px}
+.alert-record.custom .alert-record-text{background:#faf5ff;border-color:#e9d5ff}
+
+.alert-record-footer{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.alert-record-category{font-size:9px;font-weight:700;color:#64748b}
+.alert-act-btn{padding:4px 9px;font-size:9px;font-weight:700;border:none;border-radius:4px;cursor:pointer;background:#ef4444;color:#fff}
+.alert-act-btn:hover{background:#dc2626}
+
+.alert-empty{text-align:center;color:#94a3b8;font-size:11px;padding:20px 10px}
+.alert-empty-icon{font-size:30px;display:block;margin-bottom:6px;opacity:.6}
+
+/* ===== POPUP ALERT BOX ===== */
+.alert-popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.alert-popup-overlay.active{display:flex}
+.alert-popup{background:#fff;border-radius:14px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.4);animation:popupIn .35s ease}
+@keyframes popupIn{from{transform:scale(.85) translateY(-20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+
+.alert-popup-header{background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);padding:14px 16px;color:#fff;display:flex;align-items:center;gap:10px}
+.alert-popup-header.custom{background:linear-gradient(135deg,#7c3aed 0%,#6d28d9 100%)}
+.alert-popup-icon{font-size:32px;animation:shake 0.6s infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.alert-popup-header .title{font-size:16px;font-weight:900}
+.alert-popup-header .subtitle{font-size:11px;opacity:.9;margin-top:2px}
+
+.alert-popup-body{padding:16px}
+.alert-popup-message{font-size:14px;font-weight:700;color:#1e293b;margin-bottom:10px;line-height:1.6}
+.alert-popup-category{display:inline-block;font-size:11px;font-weight:700;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;padding:4px 10px;border-radius:20px;margin-bottom:10px}
+.alert-popup-time{font-size:11px;color:#64748b;font-weight:600;margin-bottom:14px;font-variant-numeric:tabular-nums}
+
+.alert-popup-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.alert-popup-btn{padding:11px;font-size:13px;font-weight:800;border:none;border-radius:8px;cursor:pointer}
+.alert-popup-btn.ok{background:#16a34a;color:#fff}
+.alert-popup-btn.ok:hover{background:#15803d}
+.alert-popup-btn.later{background:#f1f5f9;color:#334155}
+.alert-popup-btn.later:hover{background:#e2e8f0}
+
+/* Big test btn */
+.alert-test-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px}
 
 @media(max-width:480px){
 body{padding:8px}
-.sec20-card{padding:12px 10px}
-.sec20-title{font-size:14px}
-.sec20-settings-btn{padding:4px 10px;font-size:10px}
-.sec20-input,.sec20-select{height:38px;font-size:12px}
-.sec20-day-btn{padding:5px 1px;font-size:9px}
-.sec20-item-info{font-size:11px;gap:4px}
+.alert-card{padding:12px 10px}
+.alert-row-3{grid-template-columns:1fr 1fr}
+.alert-add-form{grid-template-columns:1fr}
+.alert-test-bar{grid-template-columns:1fr}
+.alert-popup-actions{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<div class="sec20-card" id="sec20MainCard">
+<div class="alert-card" id="alertMainCard">
 
-    <div class="sec20-header-bar">
-        <div class="sec20-title">🚌 Green Bus Manager</div>
-        <button class="sec20-settings-btn" onclick="toggleSec20Settings()">⚙️ سیٹنگز</button>
+    <div class="alert-header-bar">
+        <div class="alert-title"><span class="alert-live-dot"></span> 🔔 Alert Manager</div>
+        <button class="alert-settings-btn" onclick="alertToggleSettings()">⚙️ سیٹنگز</button>
     </div>
 
-    <div class="sec20-settings-panel" id="sec20SettingsPanel">
-        <button class="sec20-tool-btn" id="btnSec20SelectMode" onclick="sec20ToggleSelectMode()">☑️ سلیکٹ موڈ</button>
-        <button class="sec20-tool-btn" onclick="sec20SelectAll(true)">✅ تمام سلیکٹ</button>
-        <button class="sec20-tool-btn" onclick="sec20SelectAll(false)">⬜ سلیکشن ہٹائیں</button>
-        <button class="sec20-tool-btn" onclick="sec20EditSelected()">✏️ ایڈٹ</button>
-        <button class="sec20-tool-btn" onclick="sec20MoveOrder('up')">🔼 اوپر</button>
-        <button class="sec20-tool-btn" onclick="sec20MoveOrder('down')">🔽 نیچے</button>
-        <button class="sec20-tool-btn danger" onclick="sec20DeleteSelected()">🗑️ منتخب ڈیلیٹ</button>
-        <button class="sec20-tool-btn danger" onclick="sec20DeleteAll()">❌ سب صاف کریں</button>
-        <button class="sec20-tool-btn close-btn" onclick="sec20CloseSection()">🚪 بند/کھولیں</button>
-    </div>
+    <!-- ============================================
+         FULL SETTINGS PANEL
+         ============================================ -->
+    <div class="alert-settings-panel" id="alertSettingsPanel">
 
-    <div id="sec20ContentBody">
-
-        <!-- Route Info Banner -->
-        <div class="sec20-route-banner">
-            <div>
-                <div class="lbl">🛣️ منتخب روٹ</div>
-                <div class="route" id="sec20RouteBanner">کوئی روٹ منتخب نہیں</div>
+        <!-- ============ 1. DEADLINE TIME ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">⏰ آخری وقت (Deadline)</div>
+            <div class="alert-row-3">
+                <input type="number" id="alertDeadlineH" class="alert-input" placeholder="گھنٹہ" value="9" min="1" max="12" style="text-align:center;" onchange="alertSaveDeadline()">
+                <input type="number" id="alertDeadlineM" class="alert-input" placeholder="منٹ" value="0" min="0" max="59" style="text-align:center;" onchange="alertSaveDeadline()">
+                <select id="alertDeadlineAp" class="alert-select" onchange="alertSaveDeadline()">
+                    <option value="AM">AM</option>
+                    <option value="PM" selected>PM</option>
+                </select>
             </div>
-            <div style="font-size:22px;">🚌</div>
         </div>
 
-        <!-- Step 1: Bus Name -->
-        <div class="sec20-subtitle">🚌 1. بس کا نام درج کریں</div>
-        <div class="sec20-form-grid">
-            <input type="text" id="sec20BusName" class="sec20-input" placeholder="مثلاً: گرین بس 1...">
+        <!-- ============ 2. REPEAT INTERVAL ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🔁 الرٹ کا فاصلہ (Repeat)</div>
+            <div class="alert-radio-group" id="alertIntervalGroup">
+                <div class="alert-radio" data-val="1" onclick="alertSetInterval(1)">ہر 1 منٹ</div>
+                <div class="alert-radio" data-val="2" onclick="alertSetInterval(2)">ہر 2 منٹ</div>
+                <div class="alert-radio" data-val="5" onclick="alertSetInterval(5)">ہر 5 منٹ</div>
+                <div class="alert-radio active" data-val="30" onclick="alertSetInterval(30)">ہر 30 منٹ</div>
+            </div>
         </div>
 
-        <!-- Step 2: Route Select -->
-        <div class="sec20-subtitle">🛣️ 2. روٹ منتخب کریں</div>
-        <div class="sec20-form-grid">
-            <select id="sec20RouteSelect" class="sec20-select" onchange="sec20OnRouteChange()">
-                <option value="">روٹ منتخب کریں...</option>
-                <option value="gojra_toba">گوجرہ → ٹوبہ ٹیک سنگھ</option>
-                <option value="toba_gojra">ٹوبہ ٹیک سنگھ → گوجرہ</option>
-                <option value="peer_toba">پیر محل → ٹوبہ ٹیک سنگھ</option>
-                <option value="toba_peer">ٹوبہ ٹیک سنگھ → پیر محل</option>
-                <option value="kamalia_toba">کمالیہ → ٹوبہ ٹیک سنگھ</option>
-                <option value="toba_kamalia">ٹوبہ ٹیک سنگھ → کمالیہ</option>
-            </select>
+        <!-- ============ 3. TOGGLES ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🔧 الرٹ کنٹرول</div>
+            <div class="alert-toggle-row">
+                <span class="lbl">🔊 ساؤنڈ</span>
+                <div class="alert-toggle on" id="alertSoundToggle" onclick="alertToggleSound()"></div>
+            </div>
+            <div class="alert-toggle-row">
+                <span class="lbl">📳 وائبریشن</span>
+                <div class="alert-toggle on" id="alertVibrateToggle" onclick="alertToggleVibrate()"></div>
+            </div>
+            <div class="alert-toggle-row">
+                <span class="lbl">🗣️ آواز</span>
+                <div class="alert-toggle on" id="alertVoiceToggle" onclick="alertToggleVoice()"></div>
+            </div>
         </div>
 
-        <!-- Step 3: Add Bus Stop -->
-        <div class="sec20-subtitle">📍 3. بس اسٹاپ شامل کریں</div>
-        <div class="sec20-form-grid">
-            <input type="text" id="sec20StopInput" class="sec20-input" placeholder="اسٹاپ کا نام...">
-            <input type="text" id="sec20FirstTimeInput" class="sec20-input" placeholder="پہلے اسٹاپ سے چلنے کا وقت (مثلاً: 08:00 AM)">
-            <input type="number" id="sec20GapInput" class="sec20-input" placeholder="اگلی بس تک وقفہ (منٹ)" min="1" value="15">
-        </div>
-        <button class="sec20-save-btn secondary" onclick="sec20AddStop()">➕ اسٹاپ شامل کریں</button>
-
-        <!-- Stops List -->
-        <div class="sec20-subtitle">
-            <span>🛑 اسٹاپس (اس روٹ کے)</span>
-            <span class="count-badge" id="sec20StopsCount">0</span>
-        </div>
-        <div class="sec20-stop-list" id="sec20StopsList"></div>
-
-        <!-- Step 4: Save Complete Record -->
-        <button class="sec20-save-btn" onclick="sec20SaveRecord()">💾 مکمل ریکارڈ سیو کریں</button>
-
-        <!-- Day Filter -->
-        <div class="sec20-subtitle">📅 دن منتخب کریں</div>
-        <div class="sec20-day-row">
-            <button class="sec20-day-btn active" data-day="all" onclick="sec20SetDay('all')">📆 سب</button>
-            <button class="sec20-day-btn" data-day="Mon" onclick="sec20SetDay('Mon')">سوموار</button>
-            <button class="sec20-day-btn" data-day="Tue" onclick="sec20SetDay('Tue')">منگل</button>
-            <button class="sec20-day-btn" data-day="Wed" onclick="sec20SetDay('Wed')">بدھ</button>
-            <button class="sec20-day-btn" data-day="Thu" onclick="sec20SetDay('Thu')">جمعرات</button>
-            <button class="sec20-day-btn" data-day="Fri" onclick="sec20SetDay('Fri')">جمعہ</button>
-            <button class="sec20-day-btn" data-day="Sat" onclick="sec20SetDay('Sat')">ہفتہ</button>
+        <!-- ============ 4. SOUND CHOICE ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🔔 ساؤنڈ کا انتخاب</div>
+            <div class="alert-radio-group" id="alertSoundGroup">
+                <div class="alert-radio active" data-val="bell" onclick="alertSetSound('bell')">🔔 بیل</div>
+                <div class="alert-radio" data-val="alarm" onclick="alertSetSound('alarm')">🚨 الارم</div>
+                <div class="alert-radio" data-val="beep" onclick="alertSetSound('beep')">📢 بیپ</div>
+                <div class="alert-radio" data-val="double" onclick="alertSetSound('double')">📣 ڈبل بیپ</div>
+            </div>
         </div>
 
-        <!-- Records List -->
-        <div class="sec20-subtitle">
-            <span>📋 بس ریکارڈ</span>
-            <span class="count-badge" id="sec20RecordsCount">0</span>
+        <!-- ============ 5. VOICE CHOICE ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🗣️ آواز کا انتخاب</div>
+            <div class="alert-radio-group" id="alertVoiceGroup">
+                <div class="alert-radio active" data-val="female" onclick="alertSetVoice('female')">👩 عورت</div>
+                <div class="alert-radio" data-val="male" onclick="alertSetVoice('male')">👨 مرد</div>
+                <div class="alert-radio" data-val="ur" onclick="alertSetVoice('ur')">🇵🇰 اردو</div>
+                <div class="alert-radio" data-val="en" onclick="alertSetVoice('en')">🇬🇧 انگریزی</div>
+            </div>
         </div>
-        <div class="sec20-list-container" id="sec20ListBody"></div>
 
-        <!-- Footer -->
-        <div class="sec20-total-footer">
-            <div class="sec20-total-item">📋 ٹوٹل بس: <span class="num" id="sec20TotalRecords">0</span></div>
-            <div class="sec20-total-item">🛑 کل اسٹاپ: <span class="num" id="sec20TotalStops">0</span></div>
+        <!-- ============ 6. TEST BUTTONS ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🧪 ٹیسٹ کریں</div>
+            <div class="alert-test-bar">
+                <button class="alert-btn test" style="margin:0;" onclick="alertTestSound()">🔊 ساؤنڈ</button>
+                <button class="alert-btn test" style="margin:0;" onclick="alertTestVibrate()">📳 وائبریشن</button>
+                <button class="alert-btn test" style="margin:0;" onclick="alertTestVoice()">🗣️ آواز</button>
+            </div>
+        </div>
+
+        <!-- ============ 7. CUSTOM ALERT ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">➕ اپنی مرضی کا الرٹ شامل کریں</div>
+            <div class="alert-add-form">
+                <input type="text" id="alertCustomText" class="alert-input" placeholder="الرٹ کا متن...">
+                <input type="time" id="alertCustomTime" class="alert-input" value="21:00">
+                <button class="alert-btn primary" style="margin:0;padding:0 12px;height:36px;" onclick="alertAddCustom()">➕</button>
+            </div>
+        </div>
+
+        <!-- ============ 8. HISTORY CLEAR ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🗑️ ہسٹری</div>
+            <button class="alert-btn danger" onclick="alertClearHistory()">❌ سب الرٹ ہسٹری صاف کریں</button>
+        </div>
+
+        <!-- ============ 9. SECTION ============ -->
+        <div class="alert-settings-group">
+            <div class="group-title">🚪 سیکشن</div>
+            <button class="alert-btn close" onclick="alertCloseSection()">📂 سیکشن بند/کھولیں</button>
+        </div>
+    </div>
+
+    <div id="alertContentBody">
+
+        <!-- ============ STATUS BANNER ============ -->
+        <div class="alert-status-banner" id="alertStatusBanner">
+            <div>
+                <div class="lbl">🔔 الرٹ سسٹم</div>
+                <div class="status" id="alertStatusText">چالو</div>
+                <div class="time-info" id="alertStatusTime">آخری وقت: 9:00 PM</div>
+            </div>
+            <div style="font-size:26px;">🔔</div>
+        </div>
+
+        <!-- ============ CUSTOM ALERTS SCROLL LIST ============ -->
+        <div class="alert-subtitle">
+            <span>📋 الرٹ ہسٹری</span>
+            <span class="count-badge" id="alertHistoryCount">0</span>
+        </div>
+
+        <div class="alert-history-scroll" id="alertHistoryScroll">
+            <div class="alert-empty">
+                <span class="alert-empty-icon">🔔</span>
+                کوئی الرٹ نہیں ہوا ابھی
+            </div>
         </div>
 
     </div>
 </div>
 
+<!-- ============================================
+     POPUP ALERT BOX (On-Screen)
+     ============================================ -->
+<div class="alert-popup-overlay" id="alertPopupOverlay">
+    <div class="alert-popup">
+        <div class="alert-popup-header" id="alertPopupHeader">
+            <div class="alert-popup-icon" id="alertPopupIcon">🔔</div>
+            <div>
+                <div class="title" id="alertPopupTitle">⚠️ الرٹ!</div>
+                <div class="subtitle" id="alertPopupSubtitle">یہ کام ادھورا ہے</div>
+            </div>
+        </div>
+        <div class="alert-popup-body">
+            <div class="alert-popup-message" id="alertPopupMessage">—</div>
+            <div class="alert-popup-category" id="alertPopupCategory">📂 —</div>
+            <div class="alert-popup-time" id="alertPopupTime">⏰ —</div>
+            <div class="alert-popup-actions">
+                <button class="alert-popup-btn ok" onclick="alertPopupClose()">✅ ٹھیک ہے</button>
+                <button class="alert-popup-btn later" onclick="alertPopupLater()">⏰ بعد میں</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 /* ============================================================
-   GREEN BUS MANAGER — Section 20
+   ALERT MANAGER — v1
+   پوری ایپ کے لیے خودکار الرٹ سسٹم
    ============================================================ */
-const SEC20_KEY = 'sec20_bus_manager_data';
+var ALERT_SETTINGS_KEY = "alert_manager_settings_v1";
+var ALERT_HISTORY_KEY = "alert_manager_history_v1";
+var ALERT_CHECKED_KEY = "alert_manager_checked_v1";
 
-let sec20Records = [];
-let sec20TempStops = [];
-let sec20CurrentRoute = '';
-let sec20CurrentDay = 'all';
-let sec20SelectMode = false;
-let sec20EditingId = null;
-let sec20DeletePending = false;
-
-/* Route Labels */
-const SEC20_ROUTES = {
-    gojra_toba: 'گوجرہ → ٹوبہ ٹیک سنگھ',
-    toba_gojra: 'ٹوبہ ٹیک سنگھ → گوجرہ',
-    peer_toba: 'پیر محل → ٹوبہ ٹیک سنگھ',
-    toba_peer: 'ٹوبہ ٹیک سنگھ → پیر محل',
-    kamalia_toba: 'کمالیہ → ٹوبہ ٹیک سنگھ',
-    toba_kamalia: 'ٹوبہ ٹیک سنگھ → کمالیہ'
+/* سیٹنگز */
+var alertSettings = {
+    deadlineH: 9,
+    deadlineM: 0,
+    deadlineAp: "PM",
+    interval: 30,       /* منٹ */
+    sound: true,
+    vibrate: true,
+    voice: true,
+    soundType: "bell",  /* bell | alarm | beep | double */
+    voiceType: "female" /* female | male | ur | en */
 };
 
-/* ---------- Load ---------- */
-function sec20Load() {
+var alertHistory = [];
+var alertCheckedItems = {};
+var alertAudioCtx = null;
+
+/* ============================================================
+   LOAD / SAVE
+   ============================================================ */
+function alertLoad() {
     try {
-        const d = localStorage.getItem(SEC20_KEY);
-        sec20Records = d ? JSON.parse(d) : [];
-        if (!Array.isArray(sec20Records)) sec20Records = [];
-        sec20Records.forEach(r => {
-            if (typeof r.selected === 'undefined') r.selected = false;
-            if (!r.timestamp) r.timestamp = Date.now();
-            if (!r.stops) r.stops = [];
-            if (!r.days) r.days = ['all'];
-        });
-    } catch(e) { sec20Records = []; }
-}
-
-/* ---------- Save ---------- */
-function sec20Persist() {
-    try { localStorage.setItem(SEC20_KEY, JSON.stringify(sec20Records)); } catch(e) {}
-}
-
-/* ---------- Escape HTML ---------- */
-function sec20Escape(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-/* ---------- Toggle Settings ---------- */
-function toggleSec20Settings() {
-    document.getElementById('sec20SettingsPanel').classList.toggle('active');
-}
-
-/* ---------- On Route Change ---------- */
-function sec20OnRouteChange() {
-    sec20CurrentRoute = document.getElementById('sec20RouteSelect').value;
-    if (sec20CurrentRoute) {
-        document.getElementById('sec20RouteBanner').textContent = SEC20_ROUTES[sec20CurrentRoute];
-    } else {
-        document.getElementById('sec20RouteBanner').textContent = 'کوئی روٹ منتخب نہیں';
-    }
-    sec20TempStops = [];
-    sec20RenderStops();
-}
-
-/* ---------- Add Minutes to Time ---------- */
-function sec20AddMinutes(timeStr, minutes) {
-    try {
-        const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
-        if (!match) return timeStr;
-
-        let h = parseInt(match[1]);
-        let m = parseInt(match[2]);
-        const ampm = match[3] ? match[3].toUpperCase() : null;
-
-        if (ampm === 'PM' && h !== 12) h += 12;
-        if (ampm === 'AM' && h === 12) h = 0;
-
-        let totalMin = h * 60 + m + minutes;
-        totalMin = totalMin % (24 * 60);
-        if (totalMin < 0) totalMin += 24 * 60;
-
-        let newH = Math.floor(totalMin / 60);
-        let newM = totalMin % 60;
-        const newAmpm = newH >= 12 ? 'PM' : 'AM';
-        let displayH = newH % 12;
-        if (displayH === 0) displayH = 12;
-
-        const hh = String(displayH).padStart(2, '0');
-        const mm = String(newM).padStart(2, '0');
-
-        if (ampm) return hh + ':' + mm + ' ' + newAmpm;
-        return hh + ':' + mm;
-    } catch(e) { return timeStr; }
-}
-
-/* ---------- Compute Stop Times ---------- */
-function sec20ComputeTimes(stop, index, allStops) {
-    if (index === 0) return stop.firstTime;
-    let totalGap = 0;
-    for (let i = 0; i < index; i++) {
-        totalGap += parseInt(allStops[i].gap) || 0;
-    }
-    return sec20AddMinutes(stop.firstTime, totalGap);
-}
-
-/* ---------- Add Stop ---------- */
-function sec20AddStop() {
-    const nameInp = document.getElementById('sec20StopInput');
-    const firstTimeInp = document.getElementById('sec20FirstTimeInput');
-    const gapInp = document.getElementById('sec20GapInput');
-
-    const name = nameInp.value.trim();
-    const firstTime = firstTimeInp.value.trim();
-    const gap = parseInt(gapInp.value) || 15;
-
-    if (!sec20CurrentRoute) {
-        const sel = document.getElementById('sec20RouteSelect');
-        sel.style.borderColor = '#ef4444';
-        setTimeout(() => { sel.style.borderColor = '#cbd5e1'; }, 1500);
-        return;
-    }
-    if (!name) {
-        nameInp.style.borderColor = '#ef4444';
-        nameInp.focus();
-        setTimeout(() => { nameInp.style.borderColor = '#cbd5e1'; }, 1500);
-        return;
-    }
-    if (!firstTime) {
-        firstTimeInp.style.borderColor = '#ef4444';
-        firstTimeInp.focus();
-        setTimeout(() => { firstTimeInp.style.borderColor = '#cbd5e1'; }, 1500);
-        return;
-    }
-
-    sec20TempStops.push({
-        id: Date.now(),
-        name: name,
-        firstTime: firstTime,
-        gap: gap
-    });
-
-    nameInp.value = '';
-    firstTimeInp.value = '';
-    gapInp.value = '15';
-    nameInp.focus();
-
-    sec20RenderStops();
-}
-
-/* ---------- Remove Stop ---------- */
-function sec20RemoveStop(id) {
-    sec20TempStops = sec20TempStops.filter(s => s.id !== id);
-    sec20RenderStops();
-}
-
-/* ---------- Render Stops ---------- */
-function sec20RenderStops() {
-    const c = document.getElementById('sec20StopsList');
-    if (!c) return;
-    c.innerHTML = '';
-
-    document.getElementById('sec20StopsCount').textContent = sec20TempStops.length;
-
-    if (sec20TempStops.length === 0) {
-        c.innerHTML = '<div class="sec20-empty-msg">📍 کوئی اسٹاپ شامل نہیں کیا گیا۔<br>اوپر سے اسٹاپ کا نام، پہلا وقت، اور وقفہ لکھ کر شامل کریں۔</div>';
-        return;
-    }
-
-    sec20TempStops.forEach((s, i) => {
-        const computedTime = sec20ComputeTimes(s, i, sec20TempStops);
-        const div = document.createElement('div');
-        div.className = 'sec20-stop-item';
-        div.innerHTML = `
-            <span class="stop-num">${i + 1}</span>
-            <span class="stop-name">${sec20Escape(s.name)}</span>
-            <span class="stop-time">⏰ ${computedTime}</span>
-            <span class="stop-gap">+${s.gap} منٹ</span>
-            <button class="stop-del" onclick="sec20RemoveStop(${s.id})">✕</button>
-        `;
-        c.appendChild(div);
-    });
-}
-
-/* ---------- Save Complete Record ---------- */
-function sec20SaveRecord() {
-    const busNameInp = document.getElementById('sec20BusName');
-    const busName = busNameInp.value.trim();
-
-    if (!busName) {
-        busNameInp.style.borderColor = '#ef4444';
-        busNameInp.focus();
-        setTimeout(() => { busNameInp.style.borderColor = '#cbd5e1'; }, 1500);
-        return;
-    }
-    if (!sec20CurrentRoute) {
-        const sel = document.getElementById('sec20RouteSelect');
-        sel.style.borderColor = '#ef4444';
-        setTimeout(() => { sel.style.borderColor = '#cbd5e1'; }, 1500);
-        return;
-    }
-    if (sec20TempStops.length === 0) {
-        const c = document.getElementById('sec20StopsList');
-        c.style.borderColor = '#ef4444';
-        setTimeout(() => { c.style.borderColor = '#e2e8f0'; }, 1500);
-        return;
-    }
-
-    const savedStops = sec20TempStops.map((s, i) => ({
-        id: s.id,
-        name: s.name,
-        firstTime: s.firstTime,
-        gap: s.gap,
-        computedTime: sec20ComputeTimes(s, i, sec20TempStops)
-    }));
-
-    sec20Records.unshift({
-        id: Date.now(),
-        busName: busName,
-        route: sec20CurrentRoute,
-        routeLabel: SEC20_ROUTES[sec20CurrentRoute],
-        stops: savedStops,
-        days: ['all'],
-        selected: false,
-        timestamp: Date.now()
-    });
-
-    sec20Persist();
-
-    /* ری سیٹ */
-    busNameInp.value = '';
-    document.getElementById('sec20RouteSelect').value = '';
-    sec20CurrentRoute = '';
-    document.getElementById('sec20RouteBanner').textContent = 'کوئی روٹ منتخب نہیں';
-    sec20TempStops = [];
-    sec20RenderStops();
-    sec20RenderAll();
-
-    /* کامیابی */
-    busNameInp.style.borderColor = '#16a34a';
-    setTimeout(() => { busNameInp.style.borderColor = '#cbd5e1'; }, 800);
-}
-
-/* ---------- Set Day Filter ---------- */
-function sec20SetDay(day) {
-    sec20CurrentDay = day;
-    document.querySelectorAll('.sec20-day-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.day === day);
-    });
-    sec20RenderAll();
-}
-
-/* ---------- Get Filtered ---------- */
-function sec20GetFiltered() {
-    if (sec20CurrentDay === 'all') return sec20Records;
-    return sec20Records.filter(r => r.days && (r.days.includes('all') || r.days.includes(sec20CurrentDay)));
-}
-
-/* ---------- Toggle Select Mode ---------- */
-function sec20ToggleSelectMode() {
-    sec20SelectMode = !sec20SelectMode;
-    const btn = document.getElementById('btnSec20SelectMode');
-    const c = document.getElementById('sec20ListBody');
-    if (sec20SelectMode) {
-        btn.classList.add('active-tool');
-        btn.textContent = '✅ سلیکٹ موڈ آن';
-        c.classList.add('selection-mode');
-    } else {
-        btn.classList.remove('active-tool');
-        btn.textContent = '☑️ سلیکٹ موڈ';
-        c.classList.remove('selection-mode');
-        sec20Records.forEach(r => r.selected = false);
-        sec20Persist();
-    }
-    sec20RenderAll();
-}
-
-/* ---------- Update Counts ---------- */
-function sec20UpdateCounts() {
-    const filtered = sec20GetFiltered();
-    let totalStops = 0;
-    sec20Records.forEach(r => totalStops += (r.stops ? r.stops.length : 0));
-    document.getElementById('sec20TotalRecords').textContent = sec20Records.length;
-    document.getElementById('sec20TotalStops').textContent = totalStops;
-}
-
-/* ---------- Format Date ---------- */
-function sec20FmtDate(ts) {
-    const d = new Date(ts);
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    return dd + '/' + mm + '/' + yyyy;
-}
-
-/* ---------- Render Records ---------- */
-function sec20RenderList() {
-    const c = document.getElementById('sec20ListBody');
-    if (!c) return;
-    c.innerHTML = '';
-
-    if (sec20SelectMode) c.classList.add('selection-mode');
-    else c.classList.remove('selection-mode');
-
-    const filtered = sec20GetFiltered();
-
-    document.getElementById('sec20RecordsCount').textContent = filtered.length;
-
-    if (filtered.length === 0) {
-        c.innerHTML = '<div class="sec20-empty-msg">📭 کوئی بس ریکارڈ موجود نہیں ہے۔</div>';
-        return;
-    }
-
-    const sorted = [...filtered].sort((a, b) => b.timestamp - a.timestamp);
-
-    sorted.forEach((r, i) => {
-        const div = document.createElement('div');
-        div.className = 'sec20-list-item';
-        if (r.selected) div.classList.add('selected-item');
-
-        if (sec20EditingId === r.id) {
-            div.innerHTML = `
-                <div class="sec20-item-info" style="flex-direction:row;align-items:center;">
-                    <input type="text" class="sec20-input" id="eB_${r.id}" value="${sec20Escape(r.busName)}" placeholder="بس کا نام" style="height:32px;padding:5px 8px;">
-                    <button onclick="sec20SaveInlineEdit(${r.id})" style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-weight:700;cursor:pointer;">✓</button>
-                    <button onclick="sec20CancelEdit()" style="background:#e2e8f0;color:#475569;border:none;border-radius:6px;padding:5px 10px;font-weight:700;cursor:pointer;">✗</button>
-                </div>
-            `;
-        } else {
-            const firstTime = r.stops[0] ? r.stops[0].computedTime : '—';
-            const lastTime = r.stops[r.stops.length - 1] ? r.stops[r.stops.length - 1].computedTime : '—';
-
-            div.innerHTML = `
-                <div class="sec20-item-info">
-                    <input type="checkbox" class="sec20-checkbox" ${r.selected ? 'checked' : ''} onchange="sec20ToggleSelect(${r.id})">
-                    <span class="sec20-num">${i + 1}</span>
-                    <div class="sec20-content">
-                        <div class="sec20-row1">
-                            <span class="sec20-bus-name">🚌 ${sec20Escape(r.busName)}</span>
-                        </div>
-                        <div class="sec20-row1">
-                            <span class="sec20-route-name">🛣️ ${sec20Escape(r.routeLabel)}</span>
-                        </div>
-                        <div class="sec20-row1" style="font-size:11px;color:#475569;margin-top:2px;">
-                            <span>🛑 ${r.stops.length} اسٹاپ</span>
-                            <span>⏰ ${firstTime} → ${lastTime}</span>
-                        </div>
-                        <div style="font-size:10px;color:#64748b;margin-top:2px;">
-                            📅 ${sec20FmtDate(r.timestamp)}
-                        </div>
-                    </div>
-                </div>
-            `;
-            div.addEventListener('click', (e) => {
-                if (!sec20SelectMode) return;
-                if (e.target.type === 'checkbox') return;
-                sec20ToggleSelect(r.id);
-            });
+        var s = localStorage.getItem(ALERT_SETTINGS_KEY);
+        if (s) {
+            var parsed = JSON.parse(s);
+            for (var k in parsed) {
+                if (alertSettings.hasOwnProperty(k)) alertSettings[k] = parsed[k];
+            }
         }
-        c.appendChild(div);
-    });
+        var h = localStorage.getItem(ALERT_HISTORY_KEY);
+        alertHistory = h ? JSON.parse(h) : [];
+        if (!Array.isArray(alertHistory)) alertHistory = [];
 
-    if (sec20EditingId !== null) {
-        const f = document.getElementById('eB_' + sec20EditingId);
-        if (f) { f.focus(); f.select(); }
+        var c = localStorage.getItem(ALERT_CHECKED_KEY);
+        alertCheckedItems = c ? JSON.parse(c) : {};
+        if (typeof alertCheckedItems !== "object") alertCheckedItems = {};
+    } catch(e) {}
+}
+
+function alertPersist() {
+    try {
+        localStorage.setItem(ALERT_SETTINGS_KEY, JSON.stringify(alertSettings));
+        localStorage.setItem(ALERT_HISTORY_KEY, JSON.stringify(alertHistory));
+        localStorage.setItem(ALERT_CHECKED_KEY, JSON.stringify(alertCheckedItems));
+    } catch(e) {}
+}
+
+/* ============================================================
+   ALERT SOUND (Web Audio API)
+   ============================================================ */
+function alertInitAudio() {
+    if (!alertAudioCtx) {
+        try {
+            alertAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch(e) {}
+    }
+    if (alertAudioCtx && alertAudioCtx.state === "suspended") {
+        alertAudioCtx.resume();
     }
 }
 
-/* ---------- Toggle Select ---------- */
-function sec20ToggleSelect(id) {
-    const r = sec20Records.find(x => x.id === id);
-    if (r) { r.selected = !r.selected; sec20Persist(); sec20RenderAll(); }
+function alertPlayTone(freq, duration, delay, type) {
+    if (!alertAudioCtx) return;
+    try {
+        var osc = alertAudioCtx.createOscillator();
+        var gain = alertAudioCtx.createGain();
+        osc.type = type || "sine";
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(alertAudioCtx.destination);
+        var startTime = alertAudioCtx.currentTime + (delay || 0);
+        gain.gain.setValueAtTime(0.001, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.6, startTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+    } catch(e) {}
 }
 
-/* ---------- Select All ---------- */
-function sec20SelectAll(status) {
-    const filtered = sec20GetFiltered();
-    if (filtered.length === 0) return;
-    if (status && !sec20SelectMode) sec20ToggleSelectMode();
-    const ids = filtered.map(r => r.id);
-    sec20Records.forEach(r => { if (ids.includes(r.id)) r.selected = status; });
-    sec20Persist();
-    sec20RenderAll();
+function alertPlaySound(type) {
+    if (!alertSettings.sound) return;
+    alertInitAudio();
+    type = type || alertSettings.soundType;
+
+    if (type === "bell") {
+        alertPlayTone(880, 0.8, 0, "sine");
+        alertPlayTone(1100, 0.8, 0.15, "sine");
+        alertPlayTone(880, 0.8, 0.3, "sine");
+    } else if (type === "alarm") {
+        var t = 0;
+        for (var i = 0; i < 6; i++) {
+            alertPlayTone(800, 0.15, t, "sawtooth");
+            alertPlayTone(1200, 0.15, t + 0.15, "sawtooth");
+            t += 0.3;
+        }
+    } else if (type === "beep") {
+        alertPlayTone(1000, 0.3, 0, "square");
+    } else if (type === "double") {
+        alertPlayTone(900, 0.2, 0, "square");
+        alertPlayTone(900, 0.2, 0.3, "square");
+    }
 }
 
-/* ---------- Edit Selected ---------- */
-function sec20EditSelected() {
-    const s = sec20Records.filter(r => r.selected);
-    if (s.length !== 1) { sec20FlashList(); return; }
-    sec20EditingId = s[0].id;
-    sec20RenderAll();
+/* ============================================================
+   VIBRATE
+   ============================================================ */
+function alertVibrate(pattern) {
+    if (!alertSettings.vibrate) return;
+    if (navigator.vibrate) {
+        try {
+            navigator.vibrate(pattern || [500, 200, 500, 200, 500]);
+        } catch(e) {}
+    }
 }
 
-/* ---------- Save Inline Edit ---------- */
-function
+/* ============================================================
+   VOICE (speechSynthesis)
+   ============================================================ */
+function alertSpeak(text) {
+    if (!alertSettings.voice) return;
+    if (!("speechSynthesis" in window)) return;
+
+    try {
+        window.speechSynthesis.cancel();
+        var utter = new SpeechSynthesisUtterance(text);
+        utter.lang = alertSettings.voiceType === "en" ? "en-US" : "ur-PK";
+        utter.rate = 0.9;
+        utter.pitch = alertSettings.voiceType === "female" ? 1.2 : 1.0;
+        utter.volume = 1.0;
+        window.speechSynthesis.speak(utter);
+    } catch(e) {}
+}
+
+/* ============================================================
+   SETTINGS TOGGLES & HANDLERS
+   ============================================================ */
+function alertToggleSettings() {
+    document.getElementById("alertSettingsPanel").classList.toggle("active");
+    alertLoadSettingsToUI();
+}
+
+function alertLoadSettingsToUI() {
+    document.getElementById("alertDeadlineH").value = alertSettings.deadlineH;
+    document.getElementById("alertDeadlineM").value = alertSettings.deadlineM;
+    document.getElementById("alertDeadlineAp").value = alertSettings.deadlineAp;
+
+    document.querySelectorAll("#alertIntervalGroup .alert-radio").forEach(function(el) {
+        el.classList.toggle("active", parseInt(el.dataset.val, 10) === alertSettings.interval);
+    });
+
+    document.querySelectorAll("#alertSoundGroup .alert-radio").forEach(function(el) {
+        el.classList.toggle("active", el.dataset.val === alertSettings.soundType);
+    });
+
+    document.querySelectorAll("#alertVoiceGroup .alert-radio").forEach(function(el) {
+        el.classList.toggle("active", el.dataset.val === alertSettings.voiceType);
+    });
+
+    document.getElementById("alertSoundToggle").classList.toggle("on", alertSettings.sound);
+    document.getElementById("alertVibrateToggle").classList.toggle("on", alertSettings.vibrate);
+    document.getElementById("alertVoiceToggle").classList.toggle("on", alertSettings.voice);
+
+    alertUpdateStatusBanner();
+}
+
+function alertSaveDeadline() {
+    var h = parseInt(document.getElementById("alertDeadlineH").value, 10) || 9;
+    var m = parseInt(document.getElementById("alertDeadlineM").value, 10) || 0;
+    var ap = document.getElementById("alertDeadlineAp").value;
+    alertSettings.deadlineH = Math.min(Math.max(h, 1), 12);
+    alertSettings.deadlineM = Math.min(Math.max(m, 0), 59);
+    alertSettings.deadlineAp = ap;
+    alertPersist();
+    alertUpdateStatusBanner();
+}
+
+function alertSetInterval(min) {
+    alertSettings.interval = min;
+    alertPersist();
+    alertLoadSettingsToUI();
+}
+
+function alertToggleSound() {
+    alertSettings.sound = !alertSettings.sound;
+    alertPersist();
+    alertLoadSettingsToUI();
+}
+
+function alertToggleVibrate() {
+    alertSettings.vibrate = !alertSettings.vibrate;
+    alertPersist();
+    alertLoadSettingsToUI();
+}
+
+function alertToggleVoice() {
+    alertSettings.voice = !alertSettings.voice;
+    alertPersist();
+    alertLoadSettingsToUI();
+}
+
+function alertSetSound(type) {
+    alertSettings.soundType = type;
+    alertPersist();
+    alertLoadSettingsToUI();
+    alertPlaySound(type);
+}
+
+function alertSetVoice(type) {
+    alertSettings.voiceType = type;
+    alertPersist();
+    alertLoadSettingsToUI();
+    alertSpeak("آواز کا ٹیسٹ");
+}
+
+function alertTestSound() {
+    alertPlaySound(alertSettings.soundType);
+}
+
+function alertTestVibrate() {
+    alertVibrate();
+}
+
+function alertTestVoice() {
+    alertSpeak("یہ الرٹ مینیجر کا ٹیسٹ ہے۔");
+}
+
+function alertAddCustom() {
+    var txt = document.getElementById("alertCustomText").value.trim();
+    var time = document.getElementById("alertCustomTime").value;
+    if (!txt) return;
+
+    alertHistory.unshift({
+        id: Date.now(),
+        title: "اپنی مرضی کا الرٹ",
+        text: txt,
+        category: "مرضی کا وقت: " + time,
+        date: new Date().toLocaleTimeString(),
+        type: "custom"
+    });
+    alertPersist();
+    alertRenderHistory();
+    document.getElementById("alertCustomText").value = "";
+}
+
+function alertClearHistory() {
+    alertHistory = [];
+    alertPersist();
+    alertRenderHistory();
+}
+
+function alertCloseSection() {
+    var body = document.getElementById("alertContentBody");
+    body.style.display = body.style.display === "none" ? "block" : "none";
+}
+
+function alertUpdateStatusBanner() {
+    var banner = document.getElementById("alertStatusBanner");
+    var statusText = document.getElementById("alertStatusText");
+    var timeInfo = document.getElementById("alertStatusTime");
+    
+    statusText.innerText = "چالو";
+    timeInfo.innerText = "آخری وقت: " + alertSettings.deadlineH + ":" + (alertSettings.deadlineM < 10 ? "0" : "") + alertSettings.deadlineM + " " + alertSettings.deadlineAp;
+}
+
+function alertRenderHistory() {
+    var scroll = document.getElementById("alertHistoryScroll");
+    var count = document.getElementById("alertHistoryCount");
+    count.innerText = alertHistory.length;
+
+    if (alertHistory.length === 0) {
+        scroll.innerHTML = '<div class="alert-empty"><span class="alert-empty-icon">🔔</span>کوئی الرٹ نہیں ہوا ابھی</div>';
+        return;
+    }
+
+    var html = "";
+    alertHistory.forEach(function(item) {
+        html += '<div class="alert-record ' + (item.type === 'custom' ? 'custom-alert' : 'sound-alert') + '">';
+        html += '<div class="alert-record-header">';
+        html += '<div class="alert-record-title"><span>🔔</span> ' + item.title + '</div>';
+        html += '<div class="alert-record-badge ' + (item.type === 'custom' ? 'custom' : '') + '">' + (item.type === 'custom' ? 'مرضی' : 'ساؤنڈ') + '</div>';
+        html += '<div class="alert-record-date">' + item.date + '</div>';
+        html += '</div>';
+        html += '<div class="alert-record-text">' + item.text + '</div>';
+        html += '<div class="alert-record-footer">';
+        html += '<div class="alert-record-category">📂 ' + item.category + '</div>';
+        html += '<button class="alert-act-btn" onclick="alertDeleteRecord(' + item.id + ')">حذف کریں</button>';
+        html += '</div>';
+        html += '</div>';
+    });
+    scroll.innerHTML = html;
+}
+
+function alertDeleteRecord(id) {
+    alertHistory = alertHistory.filter(function(item) { return item.id !== id; });
+    alertPersist();
+    alertRenderHistory();
+}
+
+function alertPopupClose() {
+    document.getElementById("alertPopupOverlay").classList.remove("active");
+}
+
+function alertPopupLater() {
+    alertPopupClose();
+}
+
+/* انیشلائزیشن */
+window.addEventListener("DOMContentLoaded", function() {
+    alertLoad();
+    alertLoadSettingsToUI();
+    alertRenderHistory();
+});
+</script>
+</body>
+</html>
