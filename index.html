@@ -3,97 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rashan App</title>
+<title>Smart Management App</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:system-ui; }
-  body { background:#eef2f6; height:100vh; overflow:hidden; direction:rtl; }
+  * { margin:0; padding:0; box-sizing:border-box;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  body { background:#eef2f6; min-height:100vh; padding:14px;
+         direction:rtl; color:#1e293b; }
 
-  #topbar { height:52px; background:#fff; border-bottom:2px solid #e2e8f0;
-            display:flex; align-items:center; padding:0 14px; gap:10px;
-            position:fixed; top:0; left:0; right:0; z-index:10; }
-  #hamburger { background:none; border:none; font-size:22px; cursor:pointer; }
-  .title { font-weight:800; color:#d97706; font-size:15px; flex:1; }
+  /* ---- HEADER ---- */
+  .app-header { background:#fff; border-radius:14px; padding:14px 16px;
+                display:flex; justify-content:space-between;
+                align-items:center; margin-bottom:14px;
+                box-shadow:0 4px 12px rgba(0,0,0,.05); }
+  .app-header .brand { font-size:17px; font-weight:800; color:#1e293b;
+                       display:flex; align-items:center; gap:8px; }
+  .app-header .brand .bolt { color:#facc15; font-size:20px; }
+  .menu-icon { background:none; border:none; font-size:22px;
+               cursor:pointer; color:#334155; padding:4px 8px;
+               border-radius:8px; }
+  .menu-icon:hover { background:#f1f5f9; }
 
-  #sidebar { position:fixed; top:52px; right:0; bottom:64px; width:220px;
-             background:#fff; border-left:2px solid #e2e8f0; padding:12px;
-             transform:translateX(100%); transition:.25s; z-index:20; }
+  /* ---- HERO ---- */
+  .hero { background:linear-gradient(135deg,#0f172a,#1e293b);
+          color:#fff; border-radius:14px; padding:26px 18px;
+          text-align:center; margin-bottom:16px;
+          border-bottom:5px solid #2563eb;
+          box-shadow:0 8px 20px rgba(15,23,42,.25); }
+  .hero h1 { font-size:20px; font-weight:800; line-height:1.4;
+             margin-bottom:8px; display:flex; justify-content:center;
+             align-items:center; gap:6px; }
+  .hero h1 .bolt { color:#facc15; }
+  .hero p { font-size:12px; color:#cbd5e1; font-weight:500; }
+
+  /* ---- CARD GRID ---- */
+  .cards { display:flex; flex-direction:column; gap:14px;
+           padding-bottom:20px; }
+
+  .card { border-radius:16px; padding:26px 16px; text-align:center;
+          color:#fff; cursor:pointer; user-select:none;
+          box-shadow:0 8px 20px rgba(0,0,0,.15);
+          transition: transform .15s, box-shadow .15s;
+          display:flex; flex-direction:column;
+          align-items:center; justify-content:center; gap:6px; }
+  .card:hover { transform:translateY(-3px);
+                box-shadow:0 12px 24px rgba(0,0,0,.2); }
+  .card:active { transform:translateY(0); }
+  .card .icon { font-size:46px; line-height:1; margin-bottom:4px; }
+  .card .title { font-size:18px; font-weight:800; }
+  .card .subtitle { font-size:12px; font-weight:500; opacity:.9; }
+
+  /* ---- CARD COLORS ---- */
+  .card.blue   { background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+  .card.green  { background:linear-gradient(135deg,#16a34a,#15803d); }
+  .card.red    { background:linear-gradient(135deg,#dc2626,#b91c1c); }
+  .card.purple { background:linear-gradient(135deg,#7c3aed,#6d28d9); }
+  .card.orange { background:linear-gradient(135deg,#d97706,#b45309); }
+  .card.teal   { background:linear-gradient(135deg,#0891b2,#0e7490); }
+
+  /* ---- SIDEBAR ---- */
+  #sidebar { position:fixed; top:0; right:0; bottom:0; width:230px;
+             background:#fff; box-shadow:-4px 0 20px rgba(0,0,0,.15);
+             padding:20px 14px; transform:translateX(100%);
+             transition:transform .25s ease; z-index:100;
+             overflow-y:auto; }
   #sidebar.open { transform:translateX(0); }
-  .menu-btn { width:100%; padding:12px; text-align:right; background:#f8fafc;
-              border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px;
-              cursor:pointer; font-weight:700; font-size:13px; }
-  .menu-btn:hover { background:#fef3c7; }
+  #sidebar .sb-title { font-size:16px; font-weight:800;
+                       color:#1e293b; margin-bottom:16px;
+                       padding-bottom:10px;
+                       border-bottom:2px solid #f1f5f9; }
+  .sb-btn { width:100%; padding:12px 14px; text-align:right;
+            background:#f8fafc; border:1px solid #e2e8f0;
+            border-radius:10px; margin-bottom:8px; cursor:pointer;
+            font-weight:700; font-size:13px; color:#334155;
+            display:flex; align-items:center; gap:10px; }
+  .sb-btn:hover { background:#fef3c7; border-color:#fcd34d; }
 
-  #content { position:fixed; top:52px; left:0; right:0; bottom:64px; }
-  #content iframe { width:100%; height:100%; border:none; }
-
-  #bottomNav { position:fixed; bottom:0; left:0; right:0; height:64px;
-               background:#fff; border-top:2px solid #e2e8f0; display:flex; }
-  .nav-btn { flex:1; background:none; border:none; color:#64748b;
-             cursor:pointer; display:flex; flex-direction:column;
-             align-items:center; justify-content:center; gap:3px;
-             font-size:11px; font-weight:700; }
-  .nav-btn .icon { font-size:22px; }
-  .nav-btn.active { color:#d97706; }
+  /* ---- OVERLAY ---- */
+  #overlay { position:fixed; inset:0; background:rgba(0,0,0,.4);
+             display:none; z-index:90; }
+  #overlay.open { display:block; }
 </style>
 </head>
 <body>
 
-<div id="topbar">
-  <button id="hamburger" onclick="toggleSidebar()">☰</button>
-  <div class="title" id="pageTitle">🛒 راشن مینیجر</div>
+<!-- HEADER -->
+<div class="app-header">
+  <div class="brand">
+    <span class="bolt">⚡</span> Smart Management App
+  </div>
+  <button class="menu-icon" onclick="toggleSidebar()">☰</button>
 </div>
 
+<!-- HERO -->
+<div class="hero">
+  <h1><span class="bolt">⚡</span> Smart Management & Life Tracker</h1>
+  <p>All features in one place — works 100% offline</p>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+  <div class="card blue" onclick="go('index.html')">
+    <div class="icon">🏠</div>
+    <div class="title">Home page</div>
+    <div class="subtitle">Dashboard</div>
+  </div>
+
+  <div class="card green" onclick="go('data-enter.html')">
+    <div class="icon">📝</div>
+    <div class="title">Data entry</div>
+    <div class="subtitle">Data Entry</div>
+  </div>
+
+  <div class="card red" onclick="go('setting.html')">
+    <div class="icon">🔔</div>
+    <div class="title">Alert Manager</div>
+    <div class="subtitle">Alert Manager</div>
+  </div>
+
+  <div class="card purple" onclick="go('history.html')">
+    <div class="icon">📜</div>
+    <div class="title">Record / History</div>
+    <div class="subtitle">History</div>
+  </div>
+
+  <!-- ✅ NAYA CARD — RASHAN MANAGER -->
+  <div class="card orange" onclick="go('dashboard.html')">
+    <div class="icon">🛒</div>
+    <div class="title">Rashan Manager</div>
+    <div class="subtitle">Rashan Manager</div>
+  </div>
+
+</div>
+
+<!-- SIDEBAR -->
+<div id="overlay" onclick="toggleSidebar()"></div>
 <div id="sidebar">
-  <button class="menu-btn" onclick="go('dashboard')">🏠 ڈیش بورڈ</button>
-  <button class="menu-btn" onclick="go('history')">🕘 ہسٹری</button>
-  <button class="menu-btn" onclick="go('entry')">✏️ انٹری</button>
-  <button class="menu-btn" onclick="go('manager')">📋 مینیجر</button>
-  <button class="menu-btn" onclick="exportData()">📤 ایکسپورٹ</button>
+  <div class="sb-title">📋 Menu</div>
+  <button class="sb-btn" onclick="go('index.html')">🏠 Home</button>
+  <button class="sb-btn" onclick="go('data-enter.html')">📝 Data Entry</button>
+  <button class="sb-btn" onclick="go('setting.html')">🔔 Alert Manager</button>
+  <button class="sb-btn" onclick="go('history.html')">📜 History</button>
+  <button class="sb-btn" onclick="go('dashboard.html')">🛒 Rashan Manager</button>
+  <button class="sb-btn" onclick="exportData()">📤 Export Data</button>
 </div>
-
-<div id="content"></div>
-
-<nav id="bottomNav">
-  <button class="nav-btn active" data-tab="dashboard" onclick="go('dashboard')">
-    <span class="icon">🏠</span><span>ڈیش بورڈ</span>
-  </button>
-  <button class="nav-btn" data-tab="history" onclick="go('history')">
-    <span class="icon">🕘</span><span>ہسٹری</span>
-  </button>
-  <button class="nav-btn" data-tab="entry" onclick="go('entry')">
-    <span class="icon">✏️</span><span>انٹری</span>
-  </button>
-  <button class="nav-btn" data-tab="manager" onclick="go('manager')">
-    <span class="icon">📋</span><span>مینیجر</span>
-  </button>
-</nav>
 
 <script>
-  const FILES = {
-    dashboard: 'dashboard.html',
-    history:   'history.html',
-    entry:     'data-enter.html',
-    manager:   'manager.html',
-  };
-  const TITLES = {
-    dashboard: '🛒 راشن مینیجر',
-    history:   '🕘 ہسٹری',
-    entry:     '✏️ انٹری',
-    manager:   '📋 مینیجر',
-  };
-
-  function go(tab) {
-    document.getElementById('content').innerHTML =
-      '<iframe src="' + FILES[tab] + '"></iframe>';
-    document.getElementById('pageTitle').textContent = TITLES[tab];
-    document.querySelectorAll('.nav-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.tab === tab);
-    });
-    document.getElementById('sidebar').classList.remove('open');
+  function go(page) {
+    window.location.href = page;
   }
 
   function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
   }
 
   function exportData() {
@@ -108,8 +170,6 @@
     a.download = 'rashan-export.json';
     a.click();
   }
-
-  go('dashboard');
 </script>
 
 </body>
