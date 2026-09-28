@@ -3,208 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Management — Home</title>
+<title>Rashan App</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#f1f5f9;font-family:system-ui,-apple-system,sans-serif;direction:rtl;padding:10px;min-height:100vh}
+  * { margin:0; padding:0; box-sizing:border-box; font-family:system-ui; }
+  body { background:#eef2f6; height:100vh; overflow:hidden; direction:rtl; }
 
-/* ═══ TOP BAR START ═══ */
-.top-bar{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.04);position:sticky;top:10px;z-index:100;max-width:800px;margin:0 auto 12px}
-.top-bar .title{font-size:15px;font-weight:900;color:#1e293b}
-.top-bar .menu-btn{width:38px;height:38px;border-radius:10px;background:#f1f5f9;border:1px solid #cbd5e1;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
-.top-bar .menu-btn span{width:18px;height:2px;background:#334155;border-radius:2px;transition:.3s}
-.top-bar .menu-btn.active span:nth-child(1){transform:rotate(45deg) translateY(6px)}
-.top-bar .menu-btn.active span:nth-child(2){opacity:0}
-.top-bar .menu-btn.active span:nth-child(3){transform:rotate(-45deg) translateY(-6px)}
-/* ═══ TOP BAR END ═══ */
+  #topbar { height:52px; background:#fff; border-bottom:2px solid #e2e8f0;
+            display:flex; align-items:center; padding:0 14px; gap:10px;
+            position:fixed; top:0; left:0; right:0; z-index:10; }
+  #hamburger { background:none; border:none; font-size:22px; cursor:pointer; }
+  .title { font-weight:800; color:#d97706; font-size:15px; flex:1; }
 
-/* ═══ SIDE MENU START ═══ */
-.side-menu{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:#fff;box-shadow:10px 0 25px rgba(0,0,0,.1);transition:left .3s;z-index:999;display:flex;flex-direction:column;overflow-y:auto}
-.side-menu.open{left:0}
-.sm-hdr{padding:14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:space-between;align-items:center}
-.sm-hdr .ttl{font-size:14px;font-weight:900;color:#1e293b;display:flex;gap:6px;align-items:center}
-.sm-hdr .cls{width:28px;height:28px;border-radius:50%;background:#e2e8f0;border:none;cursor:pointer;font-size:14px}
-.sm-list{padding:8px;flex:1}
-.sm-item{display:flex;align-items:center;gap:8px;padding:10px;margin-bottom:4px;font-size:12px;font-weight:700;color:#334155;background:#fff;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;transition:.2s;text-decoration:none}
-.sm-item:hover{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
-.sm-num{width:22px;height:22px;border-radius:6px;background:#f1f5f9;color:#475569;font-size:10.5px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sm-icon{font-size:15px}
-.sm-info{flex:1}
-.sm-title{font-size:11.5px;font-weight:800}
-.sm-desc{font-size:9.5px;color:#64748b;margin-top:1px}
-.sm-admin{background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca;color:#991b1b}
-.sm-admin .sm-num{background:#dc2626;color:#fff}
-.sm-admin:hover{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border-color:#dc2626}
-.sm-admin:hover .sm-num{background:#fff;color:#dc2626}
-.sm-footer{padding:10px;border-top:1px solid #e2e8f0;color:#94a3b8;font-size:9.5px;text-align:center}
-.menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.3);z-index:998;opacity:0;visibility:hidden;transition:.3s}
-.menu-overlay.active{opacity:1;visibility:visible}
-/* ═══ SIDE MENU END ═══ */
+  #sidebar { position:fixed; top:52px; right:0; bottom:64px; width:220px;
+             background:#fff; border-left:2px solid #e2e8f0; padding:12px;
+             transform:translateX(100%); transition:.25s; z-index:20; }
+  #sidebar.open { transform:translateX(0); }
+  .menu-btn { width:100%; padding:12px; text-align:right; background:#f8fafc;
+              border:1px solid #e2e8f0; border-radius:8px; margin-bottom:8px;
+              cursor:pointer; font-weight:700; font-size:13px; }
+  .menu-btn:hover { background:#fef3c7; }
 
-/* ═══ MAIN CONTENT START ═══ */
-.main{max-width:800px;margin:0 auto}
-.hero{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:20px;border-radius:14px;text-align:center;margin-bottom:14px;border-bottom:4px solid #2563eb}
-.hero h1{font-size:18px;font-weight:900;margin-bottom:6px}
-.hero p{font-size:11px;opacity:.85;font-weight:600}
+  #content { position:fixed; top:52px; left:0; right:0; bottom:64px; }
+  #content iframe { width:100%; height:100%; border:none; }
 
-.nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.nav-btn{padding:18px 12px;border-radius:12px;border:2px solid transparent;cursor:pointer;text-decoration:none;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;transition:.2s;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.nav-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.15)}
-.nav-btn .ico{font-size:28px}
-.nav-btn .lbl{font-size:13px;font-weight:900}
-.nav-btn .sub{font-size:10px;opacity:.85}
-.nav-home{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
-.nav-data{background:linear-gradient(135deg,#16a34a,#15803d)}
-.nav-alert{background:linear-gradient(135deg,#dc2626,#b91c1c)}
-.nav-history{background:linear-gradient(135deg,#7c3aed,#6d28d9)}
-
-.quick-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.stat-box{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03)}
-.stat-box .num{font-size:20px;font-weight:900;color:#1e293b}
-.stat-box .lbl{font-size:9.5px;font-weight:700;color:#64748b;margin-top:2px}
-
-.info-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.info-card h3{font-size:13px;font-weight:900;color:#1e293b;margin-bottom:8px;padding-bottom:6px;border-bottom:2px dashed #e2e8f0}
-.info-card p{font-size:11.5px;line-height:1.7;color:#475569;font-weight:600}
-.info-card ul{padding-right:18px;font-size:11px;line-height:1.8;color:#475569;font-weight:600}
-/* ═══ MAIN CONTENT END ═══ */
-
-.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:20px;font-size:11.5px;font-weight:700;z-index:99999;opacity:0;transition:.3s;border:1px solid #334155;max-width:90vw;text-align:center}
-.toast.active{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{background:#16a34a;border-color:#22c55e}
-.toast.error{background:#dc2626;border-color:#ef4444}
-
-@media(max-width:480px){.nav-grid{grid-template-columns:1fr}}
+  #bottomNav { position:fixed; bottom:0; left:0; right:0; height:64px;
+               background:#fff; border-top:2px solid #e2e8f0; display:flex; }
+  .nav-btn { flex:1; background:none; border:none; color:#64748b;
+             cursor:pointer; display:flex; flex-direction:column;
+             align-items:center; justify-content:center; gap:3px;
+             font-size:11px; font-weight:700; }
+  .nav-btn .icon { font-size:22px; }
+  .nav-btn.active { color:#d97706; }
 </style>
 </head>
 <body>
 
-<!-- ═══ TOP BAR START ═══ -->
-<div class="top-bar">
-  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
+<div id="topbar">
+  <button id="hamburger" onclick="toggleSidebar()">☰</button>
+  <div class="title" id="pageTitle">🛒 راشن مینیجر</div>
+</div>
+
+<div id="sidebar">
+  <button class="menu-btn" onclick="go('dashboard')">🏠 ڈیش بورڈ</button>
+  <button class="menu-btn" onclick="go('history')">🕘 ہسٹری</button>
+  <button class="menu-btn" onclick="go('entry')">✏️ انٹری</button>
+  <button class="menu-btn" onclick="go('manager')">📋 مینیجر</button>
+  <button class="menu-btn" onclick="exportData()">📤 ایکسپورٹ</button>
+</div>
+
+<div id="content"></div>
+
+<nav id="bottomNav">
+  <button class="nav-btn active" data-tab="dashboard" onclick="go('dashboard')">
+    <span class="icon">🏠</span><span>ڈیش بورڈ</span>
   </button>
-  <div class="title">⚡ Smart Management App</div>
-</div>
-<!-- ═══ TOP BAR END ═══ -->
-
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-
-<!-- ═══ SIDE MENU START ═══ -->
-<div class="side-menu" id="sideMenu">
-  <div class="sm-hdr">
-    <div class="ttl"><span>📑</span><span>مینو کنٹرول</span></div>
-    <button class="cls" onclick="toggleMenu()">✕</button>
-  </div>
-  <div class="sm-list">
-    <a class="sm-item" href="index.html">
-      <div class="sm-num">🏠</div>
-      <div class="sm-icon">🏠</div>
-      <div class="sm-info"><div class="sm-title">ہوم پیج</div><div class="sm-desc">مرکزی صفحہ</div></div>
-    </a>
-    <a class="sm-item" href="data-enter.html">
-      <div class="sm-num">1</div>
-      <div class="sm-icon">📝</div>
-      <div class="sm-info"><div class="sm-title">ڈیٹا انٹری</div><div class="sm-desc">تمام Managers</div></div>
-    </a>
-    <a class="sm-item" href="alert-manager.html">
-      <div class="sm-num">2</div>
-      <div class="sm-icon">🔔</div>
-      <div class="sm-info"><div class="sm-title">الرٹ مینیجر</div><div class="sm-desc">پاپ اپ سسٹم</div></div>
-    </a>
-    <a class="sm-item" href="record-history.html">
-      <div class="sm-num">3</div>
-      <div class="sm-icon">📜</div>
-      <div class="sm-info"><div class="sm-title">ریکارڈ / ہسٹری</div><div class="sm-desc">تمام ہسٹری</div></div>
-    </a>
-  </div>
-  <div class="sm-footer">Smart App v1.0 — 4 Pages</div>
-</div>
-<!-- ═══ SIDE MENU END ═══ -->
-
-<!-- ═══ MAIN START ═══ -->
-<div class="main">
-  <div class="hero">
-    <h1>⚡ Smart Management & Life Tracker</h1>
-    <p>تمام فیچرز ایک جگہ — 100% آف لائن کام کرتا ہے</p>
-  </div>
-
-  <div class="nav-grid">
-    <a class="nav-btn nav-home" href="index.html">
-      <span class="ico">🏠</span>
-      <span class="lbl">ہوم پیج</span>
-      <span class="sub">Dashboard</span>
-    </a>
-    <a class="nav-btn nav-data" href="data-enter.html">
-      <span class="ico">📝</span>
-      <span class="lbl">ڈیٹا انٹری</span>
-      <span class="sub">Data Entry</span>
-    </a>
-    <a class="nav-btn nav-alert" href="alert-manager.html">
-      <span class="ico">🔔</span>
-      <span class="lbl">الرٹ مینیجر</span>
-      <span class="sub">Alert Manager</span>
-    </a>
-    <a class="nav-btn nav-history" href="record-history.html">
-      <span class="ico">📜</span>
-      <span class="lbl">ریکارڈ / ہسٹری</span>
-      <span class="sub">History</span>
-    </a>
-  </div>
-
-  <div class="quick-stats">
-    <div class="stat-box"><div class="num" id="statTasks">0</div><div class="lbl">ٹاسک</div></div>
-    <div class="stat-box"><div class="num" id="statMembers">0</div><div class="lbl">ممبر</div></div>
-    <div class="stat-box"><div class="num" id="statRecords">0</div><div class="lbl">ریکارڈ</div></div>
-    <div class="stat-box"><div class="num" id="statAlerts">0</div><div class="lbl">الرٹ</div></div>
-  </div>
-
-  <div class="info-card">
-    <h3>📖 استعمال کا طریقہ</h3>
-    <ul>
-      <li>مینو بٹن (اوپر بائیں) سے تمام صفحات تک پہنچیں</li>
-      <li>نیچے چار بٹن ہر سیکشن کے لیے</li>
-      <li>ہر action پر خودکار alert نظر آئے گا</li>
-      <li>تمام ڈیٹا localStorage میں محفوظ ہو رہا ہے</li>
-      <li>GitHub Pages پر ڈالیں — فوراً چلے گا</li>
-    </ul>
-  </div>
-</div>
-<!-- ═══ MAIN END ═══ -->
-
-<div class="toast" id="toastBox"></div>
+  <button class="nav-btn" data-tab="history" onclick="go('history')">
+    <span class="icon">🕘</span><span>ہسٹری</span>
+  </button>
+  <button class="nav-btn" data-tab="entry" onclick="go('entry')">
+    <span class="icon">✏️</span><span>انٹری</span>
+  </button>
+  <button class="nav-btn" data-tab="manager" onclick="go('manager')">
+    <span class="icon">📋</span><span>مینیجر</span>
+  </button>
+</nav>
 
 <script>
-function toggleMenu(){
-  document.getElementById('sideMenu').classList.toggle('open');
-  document.getElementById('menuOverlay').classList.toggle('active');
-  document.getElementById('menuBtn').classList.toggle('active');
-}
+  const FILES = {
+    dashboard: 'dashboard.html',
+    history:   'history.html',
+    entry:     'data-enter.html',
+    manager:   'manager.html',
+  };
+  const TITLES = {
+    dashboard: '🛒 راشن مینیجر',
+    history:   '🕘 ہسٹری',
+    entry:     '✏️ انٹری',
+    manager:   '📋 مینیجر',
+  };
 
-function showToast(msg,type){
-  var t=document.getElementById('toastBox');
-  t.textContent=msg;
-  t.className='toast active '+(type||'');
-  clearTimeout(t._t);
-  t._t=setTimeout(function(){t.classList.remove('active');},2500);
-}
+  function go(tab) {
+    document.getElementById('content').innerHTML =
+      '<iframe src="' + FILES[tab] + '"></iframe>';
+    document.getElementById('pageTitle').textContent = TITLES[tab];
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === tab);
+    });
+    document.getElementById('sidebar').classList.remove('open');
+  }
 
-function loadStats(){
-  try{
-    var tasks=JSON.parse(localStorage.getItem('sec3_task_and_point_manager_data')||'[]');
-    var members=JSON.parse(localStorage.getItem('sec4_duty_manager_data_v2')||'[]');
-    var recs=JSON.parse(localStorage.getItem('sec12_task_history_data')||'[]');
-    var alerts=JSON.parse(localStorage.getItem('sec10_news_alerts_data')||'[]');
-    document.getElementById('statTasks').textContent=Array.isArray(tasks)?tasks.length:0;
-    document.getElementById('statMembers').textContent=Array.isArray(members)?members.length:0;
-    document.getElementById('statRecords').textContent=Array.isArray(recs)?recs.length:0;
-    document.getElementById('statAlerts').textContent=Array.isArray(alerts)?alerts.length:0;
-  }catch(e){}
-}
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
 
-document.addEventListener('keydown',function(e){if(e.key==='Escape')toggleMenu();});
-loadStats();
-setInterval(loadStats,3000);
+  function exportData() {
+    const data = {
+      items: localStorage.getItem('rashan_manager_items_v5') || '[]',
+      records: localStorage.getItem('rashan_manager_data_v5') || '[]',
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)],
+                          { type:'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'rashan-export.json';
+    a.click();
+  }
+
+  go('dashboard');
 </script>
 
 </body>
