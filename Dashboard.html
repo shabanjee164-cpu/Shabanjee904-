@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+<html lang="ur" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rashan Manager</title>
+
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{background:#eef2f6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:10px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;direction:rtl}
+
+
+.rashan-card{background:#fff;border:1px solid #cbd5e1;border-right:5px solid #d97706;border-radius:12px;padding:12px 10px;box-shadow:0 6px 16px rgba(0,0,0,.06);width:100%;max-width:700px}
+
+
+.rashan-header-bar{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:8px;margin-bottom:12px;gap:6px}
+
+.rashan-title{font-size:15px;font-weight:800;color:#d97706}
+
+.rashan-settings-btn{padding:5px 12px;font-size:11px;font-weight:700;border-radius:30px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;cursor:pointer}
+
+.rashan-settings-btn:hover{background:#cbd5e1}
+
+
+/* ===== SETTINGS PANEL ===== */
+
+.rashan-settings-panel{display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:10px;margin-bottom:12px}
+
+.rashan-settings-panel.active{display:block}
+
+.rashan-settings-group{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #fcd34d}
+
+.rashan-settings-group:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+
+.rashan-settings-group .title{font-size:11px;font-weight:800;color:#92400e;margin-bottom:6px}
+
+.rashan-add-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+
+.rashan-input{padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-weight:600;outline:none;width:100%;background:#fff;height:34px;font-size:11px}
+
+.rashan-input:focus{border-color:#d97706;box-shadow:0 0 0 2px rgba(217,119,6,.12)}
+
+.rashan-input::placeholder{font-size:10px;font-weight:400;color:#94a3b8}
+
+.rashan-add-btn{width:100%;padding:7px;font-size:11px;font-weight:800;background:#d97706;color:#fff;border:none;border-radius:6px;cursor:pointer}
+
+.rashan-add-btn:hover{background:#b45309}
+
+
+.rashan-tool-btn{padding:6px 4px;font-size:10px;font-weight:700;border-radius:5px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;margin-bottom:4px}
+
+.rashan-tool-btn:hover{background:#e2e8f0}
+
+.rashan-tool-btn.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+
+.rashan-tool-btn.danger:hover{background:#fee2e2}
+
+.rashan-tool-btn.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
+
+
+/* ===== ALERT ===== */
+
+.rashan-alert{display:none;border-radius:6px;padding:7px 10px;margin-bottom:8px;font-size:11px;font-weight:700}
+
+.rashan-alert.active{display:block}
+
+.rashan-alert.success{background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+
+.rashan-alert.error{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+
+.rashan-alert.warning{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}
+
+
+/* ===== SUBTITLE ===== */
+
+.rashan-subtitle{font-size:12px;font-weight:800;color:#d97706;margin:12px 0 6px;padding-bottom:4px;border-bottom:2px dashed #fde68a;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+
+.rashan-subtitle .count-badge{background:#d97706;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
+
+
+/* ===== ITEMS SCROLL LIST ===== */
+
+.rashan-items-scroll{max-height:260px;overflow-y:auto;border:2px solid #fcd34d;border-radius:8px;padding:6px;background:#fffbeb;margin-bottom:10px;scroll-behavior:smooth}
+
+.rashan-items-scroll::-webkit-scrollbar{width:5px}
+
+.rashan-items-scroll::-webkit-scrollbar-thumb{background:#d97706;border-radius:10px}
+
+.rashan-items-scroll::-webkit-scrollbar-track{background:#fef3c7;border-radius:10px}
+
+
+/* Item row */
+
+.rashan-row{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #e2e8f0;border-radius:6px;padding:7px 10px;margin-bottom:5px;cursor:pointer;transition:all .25s;user-select:none;min-height:44px;position:relative}
+
+.rashan-row:hover{border-color:#fcd34d;background:#fff8e1}
+
+.rashan-row.selected{border-color:#16a34a;background:#f0fdf4;box-shadow:0 2px 6px rgba(22,163,74,.15)}
+
+
+.rashan-row-checkbox{width:18px;height:18px;accent-color:#16a34a;cursor:pointer;flex-shrink:0}
+
+.rashan-row-info{flex:1;display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+
+.rashan-row-name{font-size:12px;font-weight:800;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.rashan-row-qty{background:#fef3c7;color:#92400e;font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;white-space:nowrap}
+
+
+/* ✅ NO X button outside — only inside settings */
+
+.rashan-row-del{display:none} /* hidden by default */
+
+
+/* Show X only in edit mode (from settings) */
+
+.rashan-edit-mode .rashan-row-del{display:flex;position:absolute;left:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:10px;font-weight:800;cursor:pointer;align-items:center;justify-content:center;padding:0;z-index:2}
+
+.rashan-edit-mode .rashan-row-del:hover{background:#dc2626}
+
+
+/* ===== LIVE LIST ===== */
+
+.rashan-live-box{max-height:180px;overflow-y:auto;border:2px solid #16a34a;border-radius:8px;padding:6px;background:#f0fdf4;margin-bottom:10px}
+
+.rashan-live-box::-webkit-scrollbar{width:5px}
+
+.rashan-live-box::-webkit-scrollbar-thumb{background:#16a34a;border-radius:10px}
+
+.rashan-live-box::-webkit-scrollbar-track{background:#dcfce7;border-radius:10px}
+
+
+.rashan-live-empty{text-align:center;color:#86efac;font-size:11px;padding:15px;font-weight:600}
+
+
+.rashan-live-row{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #86efac;border-radius:6px;padding:6px 9px;margin-bottom:4px;font-size:11px;font-weight:700;animation:slideIn .3s ease}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+
+.rashan-live-row .name{color:#1e293b;flex:1;display:flex;align-items:center;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.rashan-live-row .qty{color:#d97706;font-weight:800;background:#fef3c7;padding:2px 8px;border-radius:20px;font-size:10px;white-space:nowrap}
+
+
+/* ===== SAVE ===== */
+
+.rashan-save-btn{width:100%;padding:10px;background:#16a34a;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:7px;cursor:pointer;margin-bottom:10px}
+
+.rashan-save-btn:hover{background:#15803d}
+
+
+/* ===== HISTORY ===== */
+
+.rashan-history-box{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;min-height:60px}
+
+.rashan-history-box::-webkit-scrollbar{width:5px}
+
+.rashan-history-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+
+
+.rashan-record{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;border-right:4px solid #d97706}
+
+.rashan-record-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #fde68a}
+
+.rashan-record-date{font-size:11px;font-weight:800;color:#d97706;display:flex;align-items:center;gap:5px}
+
+.rashan-record-count{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #fcd34d}
+
+
+.rashan-record-items{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
+
+.rashan-record-item{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:5px 8px;border-radius:5px;font-size:10px;font-weight:700;gap:4px}
+
+.rashan-record-item .item-name{color:#1e293b;display:flex;align-items:center;gap:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+
+.rashan-record-item .item-qty{color:#d97706;font-weight:800;background:#fef3c7;padding:2px 6px;border-radius:20px;font-size:9px;white-space:nowrap}
+
+
+.rashan-record-actions{display:flex;gap:5px;justify-content:flex-end}
+
+.rashan-act-btn{padding:4px 10px;font-size:10px;font-weight:700;border:none;border-radius:5px;cursor:pointer}
+
+.rashan-act-btn.edit{background:#0891b2;color:#fff}
+
+.rashan-act-btn.edit:hover{background:#0e7490}
+
+.rashan-act-btn.del{background:#ef4444;color:#fff}
+
+.rashan-act-btn.del:hover{background:#dc2626}
+
+
+/* History edit mode indicator */
+
+.rashan-edit-indicator{display:none;background:#0891b2;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;margin-bottom:8px;text-align:center}
+
+.rashan-edit-indicator.active{display:block}
+
+
+.rashan-empty{text-align:center;color:#94a3b8;font-size:11px;padding:20px 10px}
+
+.rashan-empty-icon{font-size:30px;display:block;margin-bottom:6px;opacity:.6}
+
+
+@media(max-width:480px){
+
+body{padding:8px}
+
+.rashan-card{padding:12px 10px}
+
+.rashan-add-form-grid{grid-template-columns:1fr}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="rashan-card" id="rashanCard">
+
+
+    <div class="rashan-header-bar">
+
+        <div class="rashan-title">🛒 Rashan Manager</div>
+
+        <button class="rashan-settings-btn" onclick="rashanToggleSettings()">⚙️ سیٹنگز</button>
+
+    </div>
+
+
+    <!-- ============ SETTINGS PANEL (Sab kuch yahan) ============ -->
+
+    <div class="rashan-settings-panel" id="rashanSettingsPanel">
+
+
+        <!-- Add new item -->
+
+        <div class="rashan-settings-group">
+
+            <div class="title">➕ نیا آٹم شامل کریں</div>
+
+            <div class="rashan-add-form-grid">
+
+                <input type="text" id="rashanNewItemName" class="rashan-input" placeholder="آٹم کا نام">
+
+                <input type="text" id="rashanNewItemQty" class="rashan-input" placeholder="مقدار">
+
+            </div>
+
+            <button class="rashan-add-btn" onclick="rashanAddCustomItem()">➕ لسٹ میں شامل کریں</button>
+
+        </div>
+
+
+        <!-- Selection controls -->
+
+        <div class="rashan-settings-group">
+
+            <div class="title">🔧 سلیکشن</div>
+
+            <button class="rashan-tool-btn" onclick="rashanSelectAllItems()">✅ تمام سلیکٹ</button>
+
+            <button class="rashan-tool-btn" onclick="rashanUnselectAll()">⬜ سلیکشن ہٹائیں</button>
+
+        </div>
+
+
+        <!-- EDIT MODE toggle -->
+
+        <div class="rashan-settings-group">
+
+            <div class="title">✏️ ایڈٹ موڈ</div>
+
+            <button class="rashan-tool-btn" id="rashanEditModeBtn" onclick="rashanToggleEditMode()">✏️ ایڈٹ آن کریں</button>
+
+        </div>
+
+
+        <!-- Clear history -->
+
+        <div class="rashan-settings-group">
+
+            <div class="title">🗑️ ہسٹری</div>
+
+            <button class="rashan-tool-btn danger" onclick="rashanDeleteAllRecords()">❌ سب ہسٹری صاف</button>
+
+        </div>
+
+
+        <!-- Close section -->
+
+        <div class="rashan-settings-group">
+
+            <div class="title">🚪 سیکشن</div>
+
+            <button class="rashan-tool-btn close-btn" onclick="rashanCloseSection()">📂 سیکشن بند/کھولیں</button>
+
+        </div>
+
+    </div>
+
+
+    <div id="rashanContentBody">
+
+
+        <div class="rashan-alert" id="rashanAlert"></div>
+
+
+        <!-- Edit mode indicator -->
+
+        <div class="rashan-edit-indicator" id="rashanEditIndicator">✏️ ایڈٹ موڈ چالو — ڈیلیٹ کرنے کے لیے ✕ دبائیں</div>
+
+
+        <!-- ============ ITEMS SCROLL LIST ============ -->
+
+        <div class="rashan-subtitle">
+
+            <span>🏠 گھر کا سامان — منتخب کریں</span>
+
+            <span class="count-badge" id="rashanSelectedCount">0</span>
+
+        </div>
+
+
+        <div class="rashan-items-scroll" id="rashanItemsScroll">
+
+            <!-- Items render here -->
+
+        </div>
+
+
+        <!-- ============ SELECTED LIVE LIST ============ -->
+
+        <div class="rashan-subtitle">
+
+            <span>📝 سلیکٹڈ آٹم (لائیو)</span>
+
+            <span class="count-badge" id="rashanLiveCount">0</span>
+
+        </div>
+
+
+        <div class="rashan-live-box" id="rashanLiveBox">
+
+            <div class="rashan-live-empty">✨ کوئی آٹم سلیکٹ نہیں کیا</div>
+
+        </div>
+
+
+        <!-- ============ SAVE BUTTON ============ -->
+
+        <button class="rashan-save-btn" onclick="rashanSaveSelection()">💾 سلیکٹڈ آٹم سیو کریں</button>
+
+
+        <!-- ============ HISTORY (LAST) ============ -->
+
+        <div class="rashan-subtitle">
+
+            <span>📋 راشن ہسٹری</span>
+
+            <span class="count-badge" id="rashanHistoryCount">0</span>
+
+        </div>
+
+
+        <div class="rashan-history-box" id="rashanHistoryBox">
+
+            <div class="rashan-empty">
+
+                <span class="rashan-empty-icon">📋</span>
+
+                کوئی ریکارڈ موجود نہیں
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+
+   RASHAN MANAGER — Final Version with Edit Mode
+
+   ============================================================ */
+
+var RASHAN_KEY = "rashan_manager_data_v5";
+
+var RASHAN_ITEMS_KEY = "rashan_manager_items_v5";
+
+
+var DEFAULT_ITEMS = [
+
+    { id: "dal", name: "دال", qty: "1 کلو", icon: "🥘" },
+
+    { id: "chawal", name: "چاول", qty: "5 کلو", icon: "🍚" },
+
+    { id: "aata", name: "آٹا", qty: "10 کلو", icon: "🌾" },
+
+    { id: "cheeni", name: "چینی", qty: "2 کلو", icon: "🍬" },
+
+    { id: "ghee", name: "گھی", qty: "1 کلو", icon: "🧈" },
+
+    { id: "tel", name: "تیل", qty: "2 لیٹر", icon: "🛢️" },
+
+    { id: "aloo", name: "آلو", qty: "3 کلو", icon: "🥔" },
+
+    { id: "piyaz", name: "پیاز", qty: "2 کلو", icon: "🧅" },
+
+    { id: "sabzi", name: "سبزی", qty: "1 کلو", icon: "🥬" },
+
+    { id: "chani", name: "چنے", qty: "1 کلو", icon: "🫘" },
+
+    { id: "masalay", name: "مصالحے", qty: "مکس", icon: "🌶️" },
+
+    { id: "doodh", name: "دودھ", qty: "2 لیٹر", icon: "🥛" },
+
+    { id: "anda", name: "انڈے", qty: "1 درجن", icon: "🥚" },
+
+    { id: "chai", name: "چائے پتی", qty: "250 گرام", icon: "🍵" }
+
+];
+
+
+var rashanItems = [];
+
+var rashanRecords = [];
+
+var rashanSelected = {};
+
+var rashanEditingRecordId = null;
+
+var rashanDeleteAllPending = false;
+
+var rashanEditMode = false;   /* ✅ New: Edit Mode toggle */
+
+
+/* ---------- Load ---------- */
+
+function rashanLoad() {
+
+    try {
+
+        var itemsSaved = localStorage.getItem(RASHAN_ITEMS_KEY);
+
+        if (itemsSaved) {
+
+            var parsed = JSON.parse(itemsSaved);
+
+            rashanItems = Array.isArray(parsed) ? parsed : DEFAULT_ITEMS.slice();
+
+        } else {
+
+            rashanItems = DEFAULT_ITEMS.slice();
+
+        }
+
+        var recordsSaved = localStorage.getItem(RASHAN_KEY);
+
+        rashanRecords = recordsSaved ? JSON.parse(recordsSaved) : [];
+
+        if (!Array.isArray(rashanRecords)) rashanRecords = [];
+
+    } catch(e) {
+
+        rashanItems = DEFAULT_ITEMS.slice();
+
+        rashanRecords = [];
+
+    }
+
+}
+
+
+function rashanPersist() {
+
+    try {
+
+        localStorage.setItem(RASHAN_ITEMS_KEY, JSON.stringify(rashanItems));
+
+        localStorage.setItem(RASHAN_KEY, JSON.stringify(rashanRecords));
+
+    } catch(e) {}
+
+}
+
+
+function rashanEscape(v) {
+
+    var d = document.createElement("div");
+
+    d.textContent = String(v == null ? "" : v);
+
+    return d.innerHTML;
+
+}
+
+
+function rashanShowAlert(msg, type) {
+
+    var box = document.getElementById("rashanAlert");
+
+    box.textContent = msg;
+
+    box.className = "rashan-alert active " + (type || "success");
+
+    setTimeout(function() { box.classList.remove("active"); }, 3000);
+
+}
+
+
+function rashanToggleSettings() {
+
+    document.getElementById("rashanSettingsPanel").classList.toggle("active");
+
+}
+
+
+/* ============================================================
+
+   EDIT MODE TOGGLE (from settings)
+
+   ============================================================ */
+
+function rashanToggleEditMode() {
+
+    rashanEditMode = !rashanEditMode;
+
+    var btn = document.getElementById("rashanEditModeBtn");
+
+    var indicator = document.getElementById("rashanEditIndicator");
+
+    var card = document.getElementById("rashanCard");
+
+
+    if (rashanEditMode) {
+
+        btn.textContent = "✏️ ایڈٹ بند کریں";
+
+        btn.style.background = "#0891b2";
+
+        btn.style.color = "#fff";
+
+        indicator.classList.add("active");
+
+        card.classList.add("rashan-edit-mode");
+
+    } else {
+
+        btn.textContent = "✏️ ایڈٹ آن کریں";
+
+        btn.style.background = "";
+
+        btn.style.color = "";
+
+        indicator.classList.remove("active");
+
+        card.classList.remove("rashan-edit-mode");
+
+    }
+
+    rashanRenderItems();
+
+}
+
+
+/* ============================================================
+
+   RENDER ITEMS (single scroll list with smart sorting)
+
+   ============================================================ */
+
+function rashanRenderItems() {
+
+    var box = document.getElementById("rashanItemsScroll");
+
+    var scrollPos = box.scrollTop;  /* ✅ Save current scroll position */
+
+
+    box.innerHTML = "";
+
+
+    if (!rashanItems.length) {
+
+        box.innerHTML = '<div class="rashan-empty"><span class="rashan-empty-icon">🛒</span>کوئی آٹم نہیں</div>';
+
+        return;
+
+    }
+
+
+    /* ✅ Sort: selected items at top, unselected at bottom */
+
+    var sorted = rashanItems.slice().sort(function(a, b) {
+
+        var aSel = rashanSelected[a.id] ? 1 : 0;
+
+        var bSel = rashanSelected[b.id] ? 1 : 0;
+
+        return bSel - aSel;
+
+    });
+
+
+    sorted.forEach(function(item) {
+
+        var isSelected = !!rashanSelected[item.id];
+
+        var div = document.createElement("div");
+
+        div.className = "rashan-row" + (isSelected ? " selected" : "");
+
+
+        /* Custom item X button (only in edit mode) */
+
+        var deleteBtn = "";
+
+        if (item.isCustom && rashanEditMode) {
+
+            deleteBtn = '<button class="rashan-row-del" onclick="event.stopPropagation(); rashanDeleteCustomItem(\'' + item.id + '\')" title="ڈیلیٹ">✕</button>';
+
+        }
+
+
+        div.innerHTML = deleteBtn +
+
+            '<input type="checkbox" class="rashan-row-checkbox" ' + (isSelected ? "checked" : "") + ' data-id="' + item.id + '">' +
+
+            '<div class="rashan-row-info">' +
+
+                '<span class="rashan-row-name">' + (item.icon || "🛒") + ' ' + rashanEscape(item.name) + '</span>' +
+
+                '<span class="rashan-row-qty">' + rashanEscape(item.qty) + '</span>' +
+
+            '</div>';
+
+
+        div.addEventListener("click", function(e) {
+
+            if (e.target.tagName === "INPUT") return;
+
+            if (e.target.classList.contains("rashan-row-del")) return;
+
+            if (rashanEditMode) return;  /* Edit mode میں toggle نہیں */
+
+            rashanToggleItem(item.id);
+
+        });
+
+
+        var cb = div.querySelector("input");
+
+        cb.addEventListener("change", function() {
+
+            if (rashanEditMode) {
+
+                cb.checked = isSelected;  /* Edit mode میں toggle بند */
+
+                return;
+
+            }
+
+            rashanToggleItem(item.id);
+
+        });
+
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+/* ============================================================
+
+   RENDER LIVE LIST
+
+   ============================================================ */
+
+function rashanRenderLiveList() {
+
+    var box = document.getElementById("rashanLiveBox");
+
+    var selectedList = [];
+
+
+    rashanItems.forEach(function(item) {
+
+        if (rashanSelected[item.id]) {
+
+            selectedList.push(item);
+
+        }
+
+    });
+
+
+    document.getElementById("rashanSelectedCount").textContent = selectedList.length;
+
+    document.getElementById("rashanLiveCount").textContent = selectedList.length;
+
+
+    if (!selectedList.length) {
+
+        box.innerHTML = '<div class="rashan-live-empty">✨ کوئی آٹم سلیکٹ نہیں کیا</div>';
+
+        return;
+
+    }
+
+
+    var html = "";
+
+    selectedList.forEach(function(item) {
+
+        html += '<div class="rashan-live-row">';
+
+        html += '<span class="name">' + (item.icon || "🛒") + ' ' + rashanEscape(item.name) + '</span>';
+
+        html += '<span class="qty">' + rashanEscape(item.qty) + '</span>';
+
+        html += '</div>';
+
+    });
+
+    box.innerHTML = html;
+
+    box.scrollTop = box.scrollHeight;
+
+}
+
+
+/* ============================================================
+
+   TOGGLE ITEM — Smart scroll to next unselected item
+
+   ============================================================ */
+
+function rashanToggleItem(itemId) {
+
+    if (rashanEditMode) return;
+
+
+    if (rashanSelected[itemId]) {
+
+        delete rashanSelected[itemId];
+
+    } else {
+
+        rashanSelected[itemId] = true;
+
+    }
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+
+    /* ✅ Smooth scroll — نئے unselected آٹم پر لے جائیں */
+
+    if (rashanSelected[itemId]) {
+
+        setTimeout(function() {
+
+            var scrollBox = document.getElementById("rashanItemsScroll");
+
+            var rows = scrollBox.querySelectorAll(".rashan-row");
+
+            /* Find first unselected row */
+
+            for (var i = 0; i < rows.length; i++) {
+
+                if (!rows[i].classList.contains("selected")) {
+
+                    rows[i].scrollIntoView({ behavior: "smooth", block: "start" });
+
+                    break;
+
+                }
+
+            }
+
+        }, 100);
+
+    }
+
+}
+
+
+function rashanRemoveFromLive(itemId) {
+
+    delete rashanSelected[itemId];
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+}
+
+
+function rashanSelectAllItems() {
+
+    rashanItems.forEach(function(item) {
+
+        rashanSelected[item.id] = true;
+
+    });
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+}
+
+
+function rashanUnselectAll() {
+
+    rashanSelected = {};
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+}
+
+
+/* ============================================================
+
+   ADD CUSTOM ITEM
+
+   ============================================================ */
+
+function rashanAddCustomItem() {
+
+    var nameInp = document.getElementById("rashanNewItemName");
+
+    var qtyInp = document.getElementById("rashanNewItemQty");
+
+
+    var name = nameInp.value.trim();
+
+    var qty = qtyInp.value.trim();
+
+
+    if (!name) {
+
+        rashanShowAlert("⚠️ آٹم کا نام لکھیں!", "error");
+
+        nameInp.focus();
+
+        return;
+
+    }
+
+    if (!qty) qty = "1 عدد";
+
+
+    var newId = "custom_" + Date.now();
+
+    rashanItems.push({
+
+        id: newId,
+
+        name: name,
+
+        qty: qty,
+
+        icon: "🛒",
+
+        isCustom: true
+
+    });
+
+
+    rashanPersist();
+
+
+    nameInp.value = "";
+
+    qtyInp.value = "";
+
+
+    rashanSelected[newId] = true;
+
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+    rashanShowAlert("✅ نیا آٹم شامل ہو گیا!", "success");
+
+}
+
+
+function rashanDeleteCustomItem(id) {
+
+    /* صرف ایڈٹ موڈ میں کام کرے */
+
+    if (!rashanEditMode) {
+
+        rashanShowAlert("⚠️ پہلے سیٹنگز سے ایڈٹ موڈ آن کریں!", "warning");
+
+        return;
+
+    }
+
+
+    var btn = event.target;
+
+    if (btn.dataset.confirm !== "1") {
+
+        btn.dataset.confirm = "1";
+
+        btn.textContent = "⚠";
+
+        btn.style.background = "#7c2d12";
+
+        setTimeout(function() {
+
+            btn.dataset.confirm = "";
+
+            btn.textContent = "✕";
+
+            btn.style.background = "";
+
+        }, 2500);
+
+        return;
+
+    }
+
+    rashanItems = rashanItems.filter(function(item) { return item.id !== id; });
+
+    delete rashanSelected[id];
+
+    rashanPersist();
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+    rashanShowAlert("✅ آٹم ڈیلیٹ ہو گیا!", "success");
+
+}
+
+
+/* ============================================================
+
+   SAVE SELECTION
+
+   ============================================================ */
+
+function rashanSaveSelection() {
+
+    var selectedItems = [];
+
+    rashanItems.forEach(function(item) {
+
+        if (rashanSelected[item.id]) {
+
+            selectedItems.push({
+
+                id: item.id,
+
+                name: item.name,
+
+                qty: item.qty,
+
+                icon: item.icon || "🛒"
+
+            });
+
+        }
+
+    });
+
+
+    if (!selectedItems.length) {
+
+        rashanShowAlert("⚠️ پہلے کوئی آٹم سلیکٹ کریں!", "error");
+
+        return;
+
+    }
+
+
+    if (rashanEditingRecordId !== null) {
+
+        var idx = rashanRecords.findIndex(function(r) { return r.id === rashanEditingRecordId; });
+
+        if (idx > -1) {
+
+            rashanRecords[idx].items = selectedItems;
+
+            rashanRecords[idx].timestamp = Date.now();
+
+        }
+
+        rashanEditingRecordId = null;
+
+        document.querySelector(".rashan-save-btn").textContent = "💾 سلیکٹڈ آٹم سیو کریں";
+
+        rashanShowAlert("✅ ریکارڈ اپڈیٹ ہو گیا!", "success");
+
+    } else {
+
+        rashanRecords.unshift({
+
+            id: Date.now(),
+
+            items: selectedItems,
+
+            timestamp: Date.now()
+
+        });
+
+        rashanShowAlert("✅ " + selectedItems.length + " آٹم سیو ہو گئے!", "success");
+
+    }
+
+
+    rashanPersist();
+
+    rashanSelected = {};
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+    rashanRenderHistory();
+
+}
+
+
+/* ============================================================
+
+   RENDER HISTORY
+
+   ============================================================ */
+
+function rashanRenderHistory() {
+
+    var c = document.getElementById("rashanHistoryBox");
+
+    document.getElementById("rashanHistoryCount").textContent = rashanRecords.length;
+
+
+    if (!rashanRecords.length) {
+
+        c.innerHTML = '<div class="rashan-empty"><span class="rashan-empty-icon">📋</span>کوئی ریکارڈ موجود نہیں</div>';
+
+        return;
+
+    }
+
+
+    var html = "";
+
+    rashanRecords.forEach(function(rec) {
+
+        var date = new Date(rec.timestamp);
+
+        var dd = String(date.getDate()).padStart(2, "0");
+
+        var mm = String(date.getMonth() + 1).padStart(2, "0");
+
+        var yyyy = date.getFullYear();
+
+        var hh = String(date.getHours()).padStart(2, "0");
+
+        var mi = String(date.getMinutes()).padStart(2, "0");
+
+        var dateStr = dd + "/" + mm + "/" + yyyy + " — " + hh + ":" + mi;
+
+
+        html += '<div class="rashan-record">';
+
+        html += '<div class="rashan-record-header">';
+
+        html += '<span class="rashan-record-date">📅 ' + dateStr + '</span>';
+
+        html += '<span class="rashan-record-count">🛒 ' + rec.items.length + ' آٹم</span>';
+
+        html += '</div>';
+
+
+        html += '<div class="rashan-record-items">';
+
+        rec.items.forEach(function(item) {
+
+            html += '<div class="rashan-record-item">';
+
+            html += '<span class="item-name">' + (item.icon || "🛒") + ' ' + rashanEscape(item.name) + '</span>';
+
+            html += '<span class="item-qty">' + rashanEscape(item.qty) + '</span>';
+
+            html += '</div>';
+
+        });
+
+        html += '</div>';
+
+
+        html += '<div class="rashan-record-actions">';
+
+        html += '<button class="rashan-act-btn edit" onclick="rashanEditRecord(' + rec.id + ')">✏️ ایڈٹ</button>';
+
+        html += '<button class="rashan-act-btn del" onclick="rashanDeleteRecord(' + rec.id + ')">🗑️ ڈیلیٹ</button>';
+
+        html += '</div>';
+
+        html += '</div>';
+
+    });
+
+    c.innerHTML = html;
+
+}
+
+
+function rashanEditRecord(id) {
+
+    var rec = rashanRecords.find(function(r) { return r.id === id; });
+
+    if (!rec) return;
+
+
+    rashanSelected = {};
+
+    rec.items.forEach(function(item) {
+
+        rashanSelected[item.id] = true;
+
+    });
+
+
+    rashanEditingRecordId = id;
+
+    document.querySelector(".rashan-save-btn").textContent = "🔄 اپڈیٹ کریں";
+
+
+    rashanRenderItems();
+
+    rashanRenderLiveList();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    rashanShowAlert("✏️ ایڈٹ کے لیے لوڈ ہو گیا", "warning");
+
+}
+
+
+function rashanDeleteRecord(id) {
+
+    var btn = event.target;
+
+    if (btn.dataset.confirm !== "1") {
+
+        btn.dataset.confirm = "1";
+
+        btn.textContent = "⚠️ دوبارہ";
+
+        setTimeout(function() {
+
+            btn.dataset.confirm = "";
+
+            btn.textContent = "🗑️ ڈیلیٹ";
+
+        }, 2500);
+
+        return;
+
+    }
+
+    rashanRecords = rashanRecords.filter(function(r) { return r.id !== id; });
+
+    rashanPersist();
+
+    rashanRenderHistory();
+
+    rashanShowAlert("✅ ریکارڈ ڈیلیٹ ہو گیا!", "success");
+
+}
+
+
+function rashanDeleteAllRecords() {
+
+    if (!rashanRecords.length) {
+
+        rashanShowAlert("⚠️ کوئی ریکارڈ نہیں ہے!", "warning");
+
+        return;
+
+    }
+
+    var btn = event.target;
+
+    if (!rashanDeleteAllPending) {
+
+        rashanDeleteAllPending = true;
+
+        btn.textContent = "⚠️ دوبارہ دبائیں";
+
+        btn.style.background = "#dc2626";
+
+        btn.style.color = "#fff";
+
+        setTimeout(function() {
+
+            rashanDeleteAllPending = false;
+
+            btn.textContent = "❌ سب ہسٹری صاف";
+
+            btn.style.background = "";
+
+            btn.style.color = "";
+
+        }, 2500);
+
+        return;
+
+    }
+
+    rashanRecords = [];
+
+    rashanPersist();
+
+    rashanRenderHistory();
+
+    rashanDeleteAllPending = false;
+
+    btn.textContent = "❌ سب ہسٹری صاف";
+
+    btn.style.background = "";
+
+    btn.style.color = "";
+
+    rashanShowAlert("✅ تمام ہسٹری صاف ہو گئی!", "success");
+
+}
+
+
+function rashanCloseSection() {
+
+    var body = document.getElementById("rashanContentBody");
+
+    var panel = document.getElementById("rashanSettingsPanel");
+
+    var btn = document.querySelector(".rashan-settings-btn");
+
+
+    if (body.style.display === "none") {
+
+        body.style.display = "block";
+
+        btn.textContent = "⚙️ سیٹنگز";
+
+    } else {
+
+        body.style.display = "none";
+
+        panel.classList.remove("active");
+
+        btn.textContent = "📂 سیکشن کھولیں";
+
+    }
+
+}
+
+
+/* ---------- INIT ---------- */
+
+rashanLoad();
+
+rashanRenderItems();
+
+rashanRenderLiveList();
+
+rashanRenderHistory();
+
+</script>
+
+
+</body>
+
+</html<>
