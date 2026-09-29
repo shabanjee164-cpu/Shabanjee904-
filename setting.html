@@ -53,7 +53,7 @@ body{background:#eef2f6;display:flex;justify-content:center;align-items:flex-sta
 
 <div id="sec11MainCard">
   <div class="sec11-header-bar">
-    <div class="sec11-title">⚙️ Settings — آٹم مینیجر</div>
+    <div class="sec11-title">⚙️ Settings</div>
     <button class="sec11-settings-btn" onclick="toggleSec11Settings()">⚙️ سیٹنگز</button>
   </div>
 
@@ -254,7 +254,6 @@ window.sec11SaveItem = function() {
   renderAll();
 };
 
-/* ===== NAYA: Save to Live Records ===== */
 window.sec11SaveToRecords = function() {
   var selected = items.filter(function(it) { return it.selected; });
 
@@ -277,7 +276,6 @@ window.sec11SaveToRecords = function() {
     });
     localStorage.setItem(LIVE_KEY, JSON.stringify(recs));
 
-    // Selection clear
     items.forEach(function(it) { it.selected = false; });
     save();
     renderAll();
