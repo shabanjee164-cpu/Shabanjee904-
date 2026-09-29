@@ -439,6 +439,9 @@ function rashanDeleteCustomItem(id) {
   rashanShowAlert("✅ آٹم ڈیلیٹ ہو گیا!", "success");
 }
 
+/* ============================================================
+   SAVE SELECTION — yeh History mein bhi bhejta hai
+   ============================================================ */
 function rashanSaveSelection() {
   var selectedItems = [];
   rashanItems.forEach(function(item) {
@@ -476,6 +479,21 @@ function rashanSaveSelection() {
   }
 
   rashanPersist();
+
+  /* ✅ YEH NAYA HAI — History (rashan_live_records) mein bhi bhejo */
+  try {
+    var liveRecs = JSON.parse(localStorage.getItem(LIVE_KEY) || '[]');
+    if (!Array.isArray(liveRecs)) liveRecs = [];
+    liveRecs.unshift({
+      id: Date.now(),
+      items: selectedItems.map(function(it) {
+        return { name: it.name, qty: it.qty, icon: it.icon || '🛒' };
+      }),
+      timestamp: Date.now()
+    });
+    localStorage.setItem(LIVE_KEY, JSON.stringify(liveRecs));
+  } catch(e) {}
+
   rashanSelected = {};
   rashanRenderItems();
   rashanRenderLiveList();
@@ -604,23 +622,17 @@ function rashanCloseSection() {
   }
 }
 
-/* ---------- INIT ---------- */
-rashanLoad();
-rashanRenderItems();
-rashanRenderLiveList();
-rashanRenderHistory();
-
-/* ===== LIVE FROM SETTING ===== */
+/* ============================================================
+   LIVE RECORDS — Setting se aane wala data
+   ============================================================ */
 function renderLiveFromSetting() {
   try {
     var recs = JSON.parse(localStorage.getItem(LIVE_KEY) || '[]');
     if (!Array.isArray(recs)) recs = [];
 
-    // Badge update
     var badge = document.getElementById('rashanHistoryCount');
     if (badge) badge.textContent = recs.length;
 
-    // Box update — Setting se aane wale records dikhayein
     var box = document.getElementById('rashanHistoryBox');
     if (!box) return;
 
@@ -656,6 +668,11 @@ function renderLiveFromSetting() {
   } catch(e) {}
 }
 
+/* ---------- INIT ---------- */
+rashanLoad();
+rashanRenderItems();
+rashanRenderLiveList();
+rashanRenderHistory();
 renderLiveFromSetting();
 
 window.addEventListener('storage', function(e) {
