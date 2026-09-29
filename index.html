@@ -3,90 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> — Smart App</title>
+<title>786 — Smart App</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box;
       font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
   body { background:#eef2f6; height:100vh; overflow:hidden;
          direction:rtl; font-size:13px; }
-
-  /* ============ TOP BAR ============ */
   #topbar { height:46px; background:#fff; border-bottom:1px solid #e2e8f0;
             display:flex; align-items:center; padding:0 10px; gap:8px;
             position:fixed; top:0; left:0; right:0; z-index:10;
             box-shadow:0 1px 4px rgba(0,0,0,.04); }
-
-  /* Right side: hamburger + title */
-  .right-group { display:flex; align-items:center; gap:8px;
-                 flex:1; min-width:0; }
-  #hamburger { background:none; border:none; font-size:20px;
-               cursor:pointer; padding:3px 8px; border-radius:6px;
-               color:#334155; line-height:1; flex-shrink:0; }
-  #hamburger:hover { background:#f1f5f9; }
+  .right-group { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
+  #hamburger { background:none; border:none; font-size:20px; cursor:pointer;
+               padding:3px 8px; border-radius:6px; color:#334155; flex-shrink:0; }
   .title { font-weight:800; color:#d97706; font-size:13px;
            overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
            display:flex; align-items:center; gap:5px; }
-  .title .num786 { background:#d97706; color:#fff; font-size:10px;
-                   font-weight:900; padding:2px 7px; border-radius:8px;
-                   letter-spacing:.5px; }
-
-  /* Left side: online/offline badge */
+  .num786 { background:#d97706; color:#fff; font-size:10px;
+            font-weight:900; padding:2px 7px; border-radius:8px; }
   #statusBox { display:flex; align-items:center; gap:5px;
                font-size:10.5px; font-weight:700; padding:4px 10px;
                border-radius:20px; background:#f0fdf4; color:#16a34a;
-               border:1.5px solid #86efac; flex-shrink:0;
-               white-space:nowrap; }
+               border:1.5px solid #86efac; flex-shrink:0; }
   #statusBox .dot { width:7px; height:7px; border-radius:50%;
                     background:#16a34a; box-shadow:0 0 6px #16a34a;
                     animation:pulse 2s infinite; }
-  #statusBox.offline { background:#fef2f2; color:#dc2626;
-                       border-color:#fca5a5; }
-  #statusBox.offline .dot { background:#dc2626;
-                            box-shadow:0 0 6px #dc2626;
-                            animation:none; }
-  @keyframes pulse {
-    0%,100% { opacity:1; }
-    50% { opacity:.35; }
-  }
-
-  /* ============ SIDEBAR ============ */
+  #statusBox.offline { background:#fef2f2; color:#dc2626; border-color:#fca5a5; }
+  #statusBox.offline .dot { background:#dc2626; box-shadow:0 0 6px #dc2626; animation:none; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.35;} }
   #sidebar { position:fixed; top:0; right:0; bottom:0; width:210px;
              background:#fff; box-shadow:-3px 0 15px rgba(0,0,0,.12);
              padding:14px 10px; transform:translateX(100%);
-             transition:transform .22s ease; z-index:100;
-             overflow-y:auto; }
+             transition:transform .22s ease; z-index:100; overflow-y:auto; }
   #sidebar.open { transform:translateX(0); }
   .sb-title { font-size:13px; font-weight:800; color:#1e293b;
               margin-bottom:12px; padding-bottom:8px;
               border-bottom:2px solid #f1f5f9;
-              display:flex; align-items:center;
-              justify-content:space-between; }
-  .sb-close { background:none; border:none; font-size:16px;
-              cursor:pointer; color:#64748b; padding:2px 6px;
-              border-radius:4px; }
-  .sb-close:hover { background:#f1f5f9; }
-  .sb-btn { width:100%; padding:9px 10px; text-align:right;
-            background:#f8fafc; border:1px solid #e2e8f0;
-            border-radius:8px; margin-bottom:6px; cursor:pointer;
-            font-weight:700; font-size:11.5px; color:#334155;
-            display:flex; align-items:center; gap:8px; }
-  .sb-btn:hover { background:#fef3c7; border-color:#fcd34d; }
+              display:flex; align-items:center; justify-content:space-between; }
+  .sb-close { background:none; border:none; font-size:16px; cursor:pointer;
+              color:#64748b; padding:2px 6px; border-radius:4px; }
   .sb-coming { text-align:center; padding:24px 8px; color:#94a3b8;
                font-size:10.5px; line-height:1.6; }
-  .sb-coming .icon { font-size:32px; display:block;
-                     margin-bottom:6px; opacity:.5; }
-
-  /* ============ OVERLAY ============ */
+  .sb-coming .icon { font-size:32px; display:block; margin-bottom:6px; opacity:.5; }
   #overlay { position:fixed; inset:0; background:rgba(0,0,0,.35);
              display:none; z-index:90; }
   #overlay.open { display:block; }
-
-  /* ============ CONTENT ============ */
-  #content { position:fixed; top:46px; left:0; right:0; bottom:58px;
-             background:#eef2f6; }
+  #content { position:fixed; top:46px; left:0; right:0; bottom:58px; background:#eef2f6; }
   #content iframe { width:100%; height:100%; border:none; display:block; }
-
-  /* ============ BOTTOM NAV ============ */
   #bottomNav { position:fixed; bottom:0; left:0; right:0; height:58px;
                background:#fff; border-top:1px solid #e2e8f0;
                display:flex; z-index:30;
@@ -94,26 +57,20 @@
   .nav-btn { flex:1; background:none; border:none; color:#64748b;
              cursor:pointer; display:flex; flex-direction:column;
              align-items:center; justify-content:center; gap:2px;
-             font-size:10px; font-weight:700; padding:5px 2px;
-             transition:color .15s; position:relative; }
-  .nav-btn .icon { font-size:20px; line-height:1;
-                   transition:transform .15s; }
+             font-size:10px; font-weight:700; padding:5px 2px; position:relative; }
+  .nav-btn .icon { font-size:20px; line-height:1; }
   .nav-btn.active { color:#d97706; }
   .nav-btn.active .icon { transform:scale(1.12); }
-  .nav-btn.active::before {
-    content:''; position:absolute; top:0; left:25%; right:25%;
-    height:2.5px; background:#d97706; border-radius:0 0 2.5px 2.5px;
-  }
-  .nav-btn:active { background:#f8fafc; }
+  .nav-btn.active::before { content:''; position:absolute; top:0; left:25%; right:25%;
+    height:2.5px; background:#d97706; border-radius:0 0 2.5px 2.5px; }
 </style>
 </head>
 <body>
 
-<!-- ============ TOP BAR ============ -->
 <div id="topbar">
   <div class="right-group">
     <button id="hamburger" onclick="toggleSidebar()">☰</button>
-    <div class="title" id="pageTitle">
+    <div class="title">
       <span class="num786">786</span>
       <span id="pageTitleText">ڈیش بورڈ</span>
     </div>
@@ -124,7 +81,6 @@
   </div>
 </div>
 
-<!-- ============ SIDEBAR ============ -->
 <div id="overlay" onclick="toggleSidebar()"></div>
 <div id="sidebar">
   <div class="sb-title">
@@ -138,10 +94,8 @@
   </div>
 </div>
 
-<!-- ============ CONTENT ============ -->
 <div id="content"></div>
 
-<!-- ============ BOTTOM NAV ============ -->
 <nav id="bottomNav">
   <button class="nav-btn active" data-tab="dashboard" onclick="go('dashboard')">
     <span class="icon">🛒</span><span>ڈیش بورڈ</span>
@@ -160,7 +114,7 @@
 <script>
   const FILES = {
     dashboard: 'dashboard.html',
-    entry:     'data-enter.html',
+    entry:     'entry.html',
     history:   'history.html',
     manager:   'manager.html',
   };
@@ -190,23 +144,19 @@
     document.getElementById('overlay').classList.remove('open');
   }
 
-  /* ---- ONLINE / OFFLINE ---- */
   function updateStatus() {
     const box  = document.getElementById('statusBox');
     const text = document.getElementById('statusText');
     if (navigator.onLine) {
-      box.classList.remove('offline');
-      text.textContent = 'آن لائن';
+      box.classList.remove('offline'); text.textContent = 'آن لائن';
     } else {
-      box.classList.add('offline');
-      text.textContent = 'آف لائن';
+      box.classList.add('offline'); text.textContent = 'آف لائن';
     }
   }
   window.addEventListener('online',  updateStatus);
   window.addEventListener('offline', updateStatus);
   updateStatus();
 
-  /* Start */
   go('dashboard');
 </script>
 
