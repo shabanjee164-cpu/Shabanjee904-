@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ڈیٹا انٹری</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:#eef2f6; font-family:system-ui,sans-serif; direction:rtl;
+       display:flex; justify-content:center; min-height:100vh; padding:10px; }
+.card { background:#fff; border-radius:14px; width:100%; max-width:600px;
+        padding:14px 12px; border:1px solid #cbd5e1; border-right:5px solid #0891b2;
+        box-shadow:0 8px 18px rgba(0,0,0,.06); }
+.hd { padding-bottom:8px; margin-bottom:12px; border-bottom:2px solid #f1f5f9; }
+.ti { font-size:16px; font-weight:700; color:#0e7490; }
+.form { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
+.inp { padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;
+       font-weight:600; outline:none; font-size:13px; height:40px; background:#fff; }
+.inp:focus { border-color:#0891b2; }
+.btn { width:100%; padding:11px; background:#0891b2; color:#fff; font-size:14px;
+       font-weight:700; border:none; border-radius:8px; cursor:pointer; margin-bottom:12px; }
+.btn.d { background:#dc2626; }
+.btn:active { opacity:.85; }
+.sub { font-size:12px; font-weight:700; color:#0891b2; margin:12px 0 6px;
+       padding-bottom:4px; border-bottom:2px dashed #a5f3fc;
+       display:flex; justify-content:space-between; align-items:center; }
+.cnt { background:#0891b2; color:#fff; font-size:10px; padding:2px 8px; border-radius:20px; }
+.list { max-height:380px; overflow-y:auto; border:1px solid #e2e8f0;
+        border-radius:10px; padding:6px; background:#fafafa; min-height:60px; }
+.item { display:flex; align-items:center; gap:8px; background:#fff;
+        border:1px solid #e2e8f0; border-radius:8px; padding:10px;
+        margin-bottom:5px; font-weight:600; font-size:13px; }
+.item .nm { flex:1; color:#1e293b; }
+.item .qt { background:#cffafe; color:#0e7490; font-size:11px;
+            padding:2px 10px; border-radius:20px; font-weight:800; }
+.item .dl { background:#ef4444; color:#fff; border:none; width:24px; height:24px;
+            border-radius:50%; cursor:pointer; font-weight:800; line-height:1; }
+.empty { text-align:center; color:#94a3b8; font-size:12px; padding:30px 10px; }
+.empty i { font-size:40px; display:block; margin-bottom:8px; opacity:.5; font-style:normal; }
+.note { background:#ecfeff; border:1px solid #a5f3fc; padding:10px;
+        border-radius:8px; font-size:12px; color:#0e7490; margin-top:12px;
+        text-align:center; font-weight:700; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="hd"><div class="ti">✏️ ڈیٹا انٹری</div></div>
+
+  <div class="form">
+    <input id="inNm" class="inp" placeholder="آٹم کا نام">
+    <input id="inQt" class="inp" placeholder="مقدار">
+  </div>
+  <button class="btn" onclick="addItem()">➕ شامل کریں</button>
+
+  <div class="sub">
+    <span>📋 محفوظ آٹمز</span>
+    <span class="cnt" id="cnt">0</span>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <div class="note">💡 یہ آٹمز ڈیش بورڈ پر خود بخود نظر آئیں گی</div>
+
+  <button class="btn d" style="margin-top:12px" onclick="clearAll()">🗑️ سب صاف کریں</button>
+</div>
+
+<script>
+var KEY = "rashan_live_items";
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; }
+}
+function save(a) {
+  try { localStorage.setItem(KEY, JSON.stringify(a)); } catch(e) {}
+}
+function esc(s) {
+  var d = document.createElement("div");
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+function render() {
+  var items = load();
+  document.getElementById("cnt").textContent = items.length;
+  var box = document.getElementById("list");
+  if (!items.length) {
+    box.innerHTML = '<div class="empty"><i>📝</i>ابھی کوئی آٹم نہیں</div>';
+    return;
+  }
+  box.innerHTML = items.map(function(it, i) {
+    return '<div class="item">' +
+      '<span class="nm">' + esc(it.name) + '</span>' +
+      '<span class="qt">' + esc(it.qty) + '</span>' +
+      '<button class="dl" onclick="delItem(' + i + ')">✕</button>' +
+      '</div>';
+  }).join('');
+}
+
+function addItem() {
+  var nm = document.getElementById("inNm").value.trim();
+  var qt = document.getElementById("inQt").value.trim();
+  if (!nm) { alert("آٹم کا نام لکھیں"); return; }
+  if (!qt) qt = "1";
+  var items = load();
+  items.push({ id: Date.now(), name: nm, qty: qt });
+  save(items);
+  document.getElementById("inNm").value = "";
+  document.getElementById("inQt").value = "";
+  document.getElementById("inNm").focus();
+  render();
+}
+
+function delItem(i) {
+  var items = load();
+  items.splice(i, 1);
+  save(items);
+  render();
+}
+
+function clearAll() {
+  if (!confirm("سب آٹمز صاف کریں؟")) return;
+  save([]);
+  render();
+}
+
+render();
+window.addEventListener('storage', function(e) {
+  if (e.key === KEY) render();
+});
+</script>
+
+</body>
+</html>
