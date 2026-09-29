@@ -3,537 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rashan History</title>
+<title>ہسٹری</title>
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
-body { background:#eef2f6; display:flex; justify-content:center;
-       align-items:flex-start; min-height:100vh; padding:10px;
-       font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-       direction:rtl; }
-#sec16MainCard { background:#fff; border:1px solid #cbd5e1;
-                 border-right:5px solid #0891b2; border-radius:14px;
-                 padding:14px 12px; box-shadow:0 8px 18px rgba(0,0,0,.06);
-                 width:100%; max-width:600px; }
-.sec16-header-bar { display:flex; justify-content:space-between;
-                    align-items:center; border-bottom:2px solid #f1f5f9;
-                    padding-bottom:8px; margin-bottom:12px; gap:6px; }
-.sec16-title { font-size:16px; font-weight:700; color:#1e293b; }
-.sec16-settings-btn { padding:5px 12px; font-size:11px; font-weight:700;
-                      border-radius:30px; border:1px solid #94a3b8;
-                      background:#f1f5f9; color:#0f172a; cursor:pointer; }
-.sec16-settings-panel { display:none; background:#f8fafc;
-                        border:1px solid #cbd5e1; border-radius:10px;
-                        padding:8px; margin-bottom:12px;
-                        grid-template-columns:repeat(auto-fit,minmax(100px,1fr));
-                        gap:5px; }
-.sec16-settings-panel.active { display:grid; }
-.sec16-tool-btn { padding:6px 3px; font-size:10px; font-weight:700;
-                  border-radius:6px; border:1px solid #cbd5e1;
-                  background:#fff; color:#334155; cursor:pointer;
-                  white-space:nowrap; overflow:hidden;
-                  text-overflow:ellipsis; }
-.sec16-tool-btn.danger { color:#ef4444; border-color:#fca5a5; background:#fef2f2; }
-.sec16-tool-btn.close-btn { color:#d97706; border-color:#fcd34d; background:#fffbeb; }
-.sec16-tool-btn.active-tool { background:#0891b2; color:#fff; border-color:#0891b2; }
-.sec16-subtitle { font-size:13px; font-weight:700; color:#0891b2;
-                  margin:12px 0 6px 0; padding-bottom:4px;
-                  border-bottom:2px dashed #a5f3fc; }
-.sec16-filter-row { display:grid; grid-template-columns:repeat(4,1fr);
-                    gap:6px; margin-bottom:12px; }
-.sec16-filter-btn { padding:9px 4px; font-size:11px; font-weight:700;
-                    border-radius:8px; border:1px solid #cbd5e1;
-                    background:#fff; color:#334155; cursor:pointer; }
-.sec16-filter-btn.active { background:#0891b2; color:#fff; border-color:#0891b2; }
-.sec16-list-header { background:#cffafe; border-radius:8px; padding:7px 8px;
-                     margin-bottom:6px; display:grid;
-                     grid-template-columns:2fr 0.8fr 0.8fr 1fr;
-                     gap:5px; font-size:11px; font-weight:800;
-                     color:#0e7490; text-align:center; }
-.sec16-list-header span:first-child { text-align:right; }
-.sec16-list-container { max-height:320px; overflow-y:auto;
-                        border:1px solid #e2e8f0; border-radius:10px;
-                        padding:5px; background:#fafafa; min-height:60px; }
-.sec16-list-item { background:#fff; border:1px solid #e2e8f0;
-                   border-radius:8px; padding:8px; margin-bottom:5px;
-                   display:grid; grid-template-columns:2fr 0.8fr 0.8fr 1fr;
-                   gap:5px; align-items:center; font-size:12px;
-                   font-weight:600; }
-.selection-mode .sec16-list-item { cursor:pointer; }
-.selection-mode .sec16-list-item.selected-item { background:#cffafe;
-                                                 border-color:#0891b2; }
-.sec16-col-name { color:#1e293b; font-weight:700;
-                  display:flex; align-items:center; gap:5px;
-                  overflow:hidden; }
-.sec16-col-name span:last-child { overflow:hidden;
-                                   text-overflow:ellipsis;
-                                   white-space:nowrap; }
-.sec16-checkbox { width:15px; height:15px; cursor:pointer;
-                  accent-color:#0891b2; flex-shrink:0; display:none; }
-.selection-mode .sec16-checkbox { display:inline-block; }
-.sec16-num { background:#0891b2; color:#fff; font-size:10px;
-             font-weight:700; min-width:18px; height:18px;
-             border-radius:50%; display:inline-flex;
-             align-items:center; justify-content:center; padding:0 4px; }
-.sec16-col-qty { color:#7c3aed; font-weight:800; text-align:center; }
-.sec16-col-rate { color:#ea580c; font-weight:800; text-align:center; }
-.sec16-col-total { color:#16a34a; font-weight:800; text-align:center; }
-.sec16-date-row { grid-column:1/-1; font-size:10px; color:#64748b;
-                  font-weight:500; padding:0 4px; margin-top:-2px; }
-.sec16-edit-input { padding:4px 6px; border:1px solid #0891b2;
-                    border-radius:6px; font-size:11px; font-weight:600;
-                    outline:none; width:100%; min-width:40px; }
-.sec16-edit-btn { border:none; border-radius:6px; padding:4px 7px;
-                  font-weight:700; cursor:pointer; font-size:11px; }
-.sec16-edit-btn.save { background:#16a34a; color:#fff; }
-.sec16-edit-btn.cancel { background:#e2e8f0; color:#475569; }
-.sec16-total-footer { margin-top:10px; padding:10px 12px;
-                      background:linear-gradient(135deg,#ecfeff,#cffafe);
-                      border:1px solid #67e8f9; border-radius:10px;
-                      display:flex; justify-content:space-between;
-                      align-items:center; flex-wrap:wrap; gap:8px; }
-.sec16-total-item { display:flex; align-items:center; gap:5px;
-                    font-size:12px; font-weight:700; color:#0e7490; }
-.sec16-total-item .num { background:#0891b2; color:#fff;
-                         padding:3px 12px; border-radius:20px;
-                         font-size:12px; min-width:32px; text-align:center; }
-.sec16-budget-section { margin-top:14px; background:#fafafa;
-                        border:2px dashed #0891b2; border-radius:12px;
-                        padding:12px; }
-.sec16-budget-header { display:flex; justify-content:space-between;
-                       align-items:center; margin-bottom:10px;
-                       flex-wrap:wrap; gap:6px; }
-.sec16-budget-header .title { font-size:13px; font-weight:700;
-                              color:#0e7490; }
-.sec16-budget-controls { display:flex; gap:4px; flex-wrap:wrap; }
-.sec16-budget-ctrl { padding:5px 10px; font-size:10px; font-weight:700;
-                     border-radius:6px; border:1px solid #cbd5e1;
-                     background:#fff; color:#334155; cursor:pointer;
-                     white-space:nowrap; }
-.sec16-budget-ctrl.edit { color:#0891b2; border-color:#67e8f9; }
-.sec16-budget-ctrl.clear { color:#d97706; border-color:#fcd34d; }
-.sec16-budget-ctrl.delete { color:#dc2626; border-color:#fca5a5; }
-.sec16-budget-box { background:linear-gradient(135deg,#0891b2,#0e7490);
-                    border-radius:12px; padding:14px; color:#fff;
-                    box-shadow:0 4px 12px rgba(8,145,178,.3); }
-.sec16-budget-row { display:flex; justify-content:space-between;
-                    align-items:center; padding:5px 0;
-                    font-size:13px; font-weight:700; }
-.sec16-budget-row .val { font-size:17px; }
-.sec16-budget-divider { height:1px; background:rgba(255,255,255,.25);
-                        margin:6px 0; }
-.sec16-budget-edit-input { padding:4px 10px; border:2px solid #fff;
-                           border-radius:8px; font-size:15px;
-                           font-weight:700; outline:none;
-                           background:rgba(255,255,255,.2);
-                           color:#fff; width:120px; text-align:center; }
-.sec16-empty-msg { text-align:center; color:#94a3b8; font-size:12px;
-                   padding:20px 10px; }
+body { background:#eef2f6; font-family:system-ui,sans-serif; direction:rtl;
+       display:flex; justify-content:center; min-height:100vh; padding:10px; }
+.card { background:#fff; border-radius:14px; width:100%; max-width:600px;
+        padding:14px 12px; border:1px solid #cbd5e1; border-right:5px solid #7c3aed;
+        box-shadow:0 8px 18px rgba(0,0,0,.06); }
+.hd { padding-bottom:8px; margin-bottom:12px; border-bottom:2px solid #f1f5f9; }
+.ti { font-size:16px; font-weight:700; color:#7c3aed; }
+.sub { font-size:12px; font-weight:700; color:#7c3aed; margin:12px 0 6px;
+       padding-bottom:4px; border-bottom:2px dashed #ddd6fe;
+       display:flex; justify-content:space-between; align-items:center; }
+.cnt { background:#7c3aed; color:#fff; font-size:10px; padding:2px 8px; border-radius:20px; }
+.fil { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:10px; }
+.fil button { padding:8px 4px; font-size:11px; font-weight:700; border-radius:7px;
+              border:1px solid #cbd5e1; background:#fff; color:#334155; cursor:pointer; }
+.fil button.on { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+.list { max-height:500px; overflow-y:auto; border:1px solid #e2e8f0;
+        border-radius:10px; padding:6px; background:#fafafa; min-height:80px; }
+.rec { background:#fff; border:1px solid #e2e8f0; border-radius:8px;
+       padding:10px; margin-bottom:8px; border-right:4px solid #7c3aed; }
+.rh { display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:6px; margin-bottom:8px; padding-bottom:6px;
+      border-bottom:1px dashed #ddd6fe; }
+.rd { font-size:11px; font-weight:800; color:#7c3aed; }
+.rc { background:#ede9fe; color:#6d28d9; font-size:10px; font-weight:700;
+      padding:2px 8px; border-radius:20px; }
+.ri { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; }
+.rr { display:flex; justify-content:space-between; align-items:center;
+      background:#f8fafc; padding:6px 10px; border-radius:5px;
+      font-size:11px; font-weight:700; gap:6px; }
+.rr .nm { flex:1; color:#1e293b; }
+.rr .qt { color:#7c3aed; background:#ede9fe; padding:2px 8px;
+          border-radius:20px; font-size:10px; font-weight:800; }
+.rr input { width:80px; padding:5px 8px; border:1px solid #7c3aed;
+            border-radius:5px; font-size:11px; font-weight:700;
+            text-align:center; outline:none; }
+.acts { display:flex; gap:5px; justify-content:flex-end; }
+.acts button { padding:5px 12px; font-size:10px; font-weight:700;
+               border:none; border-radius:5px; cursor:pointer; }
+.bedit { background:#7c3aed; color:#fff; }
+.bsave { background:#16a34a; color:#fff; }
+.bcan { background:#e2e8f0; color:#475569; }
+.bdel { background:#ef4444; color:#fff; }
+.empty { text-align:center; color:#94a3b8; font-size:12px; padding:40px 10px; }
+.empty i { font-size:44px; display:block; margin-bottom:10px; opacity:.5; font-style:normal; }
+.empty small { font-size:10px; opacity:.8; }
+.stat { background:#f5f3ff; border:1px solid #ddd6fe; padding:10px;
+        border-radius:8px; margin-top:10px; text-align:center;
+        font-size:13px; font-weight:700; color:#6d28d9; }
+.stat b { color:#7c3aed; font-size:16px; }
 </style>
 </head>
 <body>
 
-<div id="sec16MainCard">
-  <div class="sec16-header-bar">
-    <div class="sec16-title">🕘 راشن ہسٹری</div>
-    <button class="sec16-settings-btn" onclick="toggleSec16Settings()">⚙️ سیٹنگز</button>
+<div class="card">
+  <div class="hd"><div class="ti">🕘 ہسٹری</div></div>
+
+  <div class="sub">🔍 فلٹر</div>
+  <div class="fil">
+    <button class="on" id="fD" onclick="setF('D')">📅 ڈیلی</button>
+    <button id="fW" onclick="setF('W')">📆 ویکلی</button>
+    <button id="fM" onclick="setF('M')">🗓️ منتھلی</button>
+    <button id="fY" onclick="setF('Y')">📅 ییرلی</button>
   </div>
 
-  <div class="sec16-settings-panel" id="sec16SettingsPanel">
-    <button class="sec16-tool-btn" id="btnSec16SelectMode" onclick="sec16ToggleSelectMode()">☑️ سلیکٹ موڈ</button>
-    <button class="sec16-tool-btn" onclick="sec16SelectAll(true)">✅ تمام سلیکٹ</button>
-    <button class="sec16-tool-btn" onclick="sec16SelectAll(false)">⬜ سلیکشن ہٹائیں</button>
-    <button class="sec16-tool-btn" onclick="sec16EditSelected()">✏️ ایڈٹ</button>
-    <button class="sec16-tool-btn" onclick="sec16MoveOrder('up')">🔼 اوپر</button>
-    <button class="sec16-tool-btn" onclick="sec16MoveOrder('down')">🔽 نیچے</button>
-    <button class="sec16-tool-btn danger" onclick="sec16DeleteSelected()">🗑️ منتخب ڈیلیٹ</button>
-    <button class="sec16-tool-btn danger" onclick="sec16DeleteAll(this)">❌ سب صاف کریں</button>
-    <button class="sec16-tool-btn close-btn" onclick="sec16CloseSection()">🚪 بند/کھولیں</button>
+  <div class="sub">
+    <span>📋 ریکارڈ</span>
+    <span class="cnt" id="cnt">0</span>
   </div>
 
-  <div id="sec16ContentBody">
-    <div class="sec16-subtitle">🔍 فلٹر منتخب کریں</div>
-    <div class="sec16-filter-row">
-      <button class="sec16-filter-btn active" id="sec16FiDaily" onclick="sec16SetFilter('Daily')">📅 ڈیلی</button>
-      <button class="sec16-filter-btn" id="sec16FiWeekly" onclick="sec16SetFilter('Weekly')">📆 ویکلی</button>
-      <button class="sec16-filter-btn" id="sec16FiMonthly" onclick="sec16SetFilter('Monthly')">🗓️ منتھلی</button>
-      <button class="sec16-filter-btn" id="sec16FiYearly" onclick="sec16SetFilter('Yearly')">📅 ییرلی</button>
-    </div>
+  <div class="list" id="list"></div>
 
-    <div class="sec16-subtitle" id="sec16ListTitle">📋 راشن لسٹ</div>
-
-    <div class="sec16-list-header">
-      <span>🛒 آٹم</span><span>مقدار</span><span>ریٹ</span><span>ٹوٹل</span>
-    </div>
-
-    <div class="sec16-list-container" id="sec16ListBody"></div>
-
-    <div class="sec16-total-footer">
-      <div class="sec16-total-item">📋 ٹوٹل: <span class="num" id="sec16TotalItems">0</span></div>
-      <div class="sec16-total-item">💵 خرچ: <span class="num" id="sec16TotalSpent">0</span></div>
-    </div>
-
-    <div class="sec16-budget-section">
-      <div class="sec16-budget-header">
-        <span class="title">💰 بجٹ معلومات</span>
-        <div class="sec16-budget-controls">
-          <button class="sec16-budget-ctrl edit" onclick="sec16EditBudget()">✏️ ایڈٹ</button>
-          <button class="sec16-budget-ctrl clear" onclick="sec16ClearBudget(this)">🧹 کلئیر</button>
-          <button class="sec16-budget-ctrl delete" onclick="sec16DeleteBudget(this)">🗑️ ڈیلیٹ</button>
-        </div>
-      </div>
-
-      <div class="sec16-budget-box" id="sec16BudgetDisplay">
-        <div class="sec16-budget-row"><span>💰 موجودہ بجٹ</span><span class="val" id="sec16CurrentBudget">0</span></div>
-        <div class="sec16-budget-row"><span>💸 خرچ شدہ</span><span class="val" id="sec16SpentBudget">0</span></div>
-        <div class="sec16-budget-divider"></div>
-        <div class="sec16-budget-row"><span>✅ بجٹ بیلنس</span><span class="val" id="sec16BalanceBudget">0</span></div>
-      </div>
-
-      <div class="sec16-budget-box" id="sec16BudgetEdit" style="display:none;">
-        <div class="sec16-budget-row">
-          <span>💰 نیا بجٹ</span>
-          <input type="number" id="sec16BudgetEditInput" class="sec16-budget-edit-input" min="0" placeholder="0">
-        </div>
-        <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
-          <button onclick="sec16SaveBudgetEdit()" style="background:#16a34a;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-weight:700;cursor:pointer;font-size:12px;">✓ سیو</button>
-          <button onclick="sec16CancelBudgetEdit()" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:7px 16px;font-weight:700;cursor:pointer;font-size:12px;">✗ کینسل</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="stat" id="stat">🛒 کل آٹمز: <b>0</b></div>
 </div>
 
 <script>
-(function(){
-const KEY  = 'rashan_live_records';
-const BKEY = 'sec11_rashan_budget_v2';
+var KEY = "rashan_live_records";
+var fTime = "D";
+var editId = null;
 
-let records = [];
-let budget = 0;
-let fTime = 'Daily';
-let selectMode = false;
-let editingId = null;
-let delPending = false;
-let clearPending = false;
-let delBudPending = false;
-
-const $ = id => document.getElementById(id);
-
-function load() {
-  try {
-    const d = localStorage.getItem(KEY);
-    var raw = d ? JSON.parse(d) : [];
-    if (!Array.isArray(raw)) raw = [];
-
-    // Har record ke andar items hain — unko flat list banao
-    records = [];
-    raw.forEach(function(rec) {
-      var items = rec.items || [];
-      items.forEach(function(it, idx) {
-        records.push({
-          id: rec.id + '_' + idx,
-          name: it.name,
-          qty: parseFloat(it.qty) || 1,
-          rate: 0,
-          total: 0,
-          timestamp: rec.timestamp || Date.now(),
-          selected: false
-        });
-      });
-    });
-
-    budget = parseFloat(localStorage.getItem(BKEY)) || 0;
-  } catch(e) { records = []; budget = 0; }
-}
-
-function save() {
-  // Yeh file sirf padhti hai — save nahi karti
-}
-
-function fmtN(n) {
-  if (isNaN(n)) return '0';
-  return Number(n).toLocaleString('en-PK', { maximumFractionDigits: 2 });
-}
-
-function esc(t) {
-  const d = document.createElement('div');
-  d.textContent = t;
+function esc(s) {
+  var d = document.createElement("div");
+  d.textContent = String(s);
   return d.innerHTML;
+}
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; }
+}
+function save(a) {
+  try { localStorage.setItem(KEY, JSON.stringify(a)); } catch(e) {}
 }
 
 function inTime(ts) {
-  const now = new Date();
-  const d = new Date(ts);
-  if (fTime === 'Daily')   return d.toDateString() === now.toDateString();
-  if (fTime === 'Weekly')  { const diff = (now - d) / 864e5; return diff >= 0 && diff < 7; }
-  if (fTime === 'Monthly') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  if (fTime === 'Yearly')  return d.getFullYear() === now.getFullYear();
+  var now = new Date();
+  var d = new Date(ts);
+  if (fTime === "D") return d.toDateString() === now.toDateString();
+  if (fTime === "W") { var diff = (now - d) / 864e5; return diff >= 0 && diff < 7; }
+  if (fTime === "M") return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  if (fTime === "Y") return d.getFullYear() === now.getFullYear();
   return true;
 }
 
-function fmtDT(ts) {
-  const d = new Date(ts);
-  return String(d.getDate()).padStart(2, '0') + '/' +
-         String(d.getMonth() + 1).padStart(2, '0') + '/' +
+function fmt(ts) {
+  var d = new Date(ts);
+  return String(d.getDate()).padStart(2,'0') + '/' +
+         String(d.getMonth()+1).padStart(2,'0') + '/' +
          d.getFullYear() + ' — ' +
-         String(d.getHours()).padStart(2, '0') + ':' +
-         String(d.getMinutes()).padStart(2, '0');
+         String(d.getHours()).padStart(2,'0') + ':' +
+         String(d.getMinutes()).padStart(2,'0');
 }
 
-function getFiltered() { return records.filter(r => inTime(r.timestamp)); }
-
-function computeTotals() {
-  let s = 0;
-  const f = getFiltered();
-  f.forEach(r => { s += (parseFloat(r.qty) || 0) * (parseFloat(r.rate) || 0); });
-  return { spent: s, filtered: f };
-}
-
-function updBudgetBox() {
-  const { spent } = computeTotals();
-  $('sec16CurrentBudget').textContent = fmtN(budget);
-  $('sec16SpentBudget').textContent = fmtN(spent);
-  $('sec16BalanceBudget').textContent = fmtN(budget - spent);
-}
-
-window.toggleSec16Settings = function() {
-  $('sec16SettingsPanel').classList.toggle('active');
-};
-
-window.sec16SetFilter = function(f) {
+function setF(f) {
   fTime = f;
-  $('sec16FiDaily').classList.toggle('active', f === 'Daily');
-  $('sec16FiWeekly').classList.toggle('active', f === 'Weekly');
-  $('sec16FiMonthly').classList.toggle('active', f === 'Monthly');
-  $('sec16FiYearly').classList.toggle('active', f === 'Yearly');
-  renderAll();
-};
-
-window.sec16EditBudget = function() {
-  $('sec16BudgetDisplay').style.display = 'none';
-  $('sec16BudgetEdit').style.display = 'block';
-  const i = $('sec16BudgetEditInput');
-  i.value = budget;
-  setTimeout(() => { i.focus(); i.select(); }, 50);
-};
-
-window.sec16SaveBudgetEdit = function() {
-  const i = $('sec16BudgetEditInput');
-  const v = parseFloat(i.value);
-  if (isNaN(v) || v < 0) {
-    i.style.borderColor = '#ef4444';
-    setTimeout(() => { i.style.borderColor = '#fff'; }, 1200);
-    return;
-  }
-  budget = v;
-  try { localStorage.setItem(BKEY, String(budget)); } catch(e) {}
-  sec16CancelBudgetEdit();
-  renderAll();
-};
-
-window.sec16CancelBudgetEdit = function() {
-  $('sec16BudgetDisplay').style.display = 'block';
-  $('sec16BudgetEdit').style.display = 'none';
-};
-
-window.sec16ClearBudget = function(btn) {
-  if (budget === 0) return;
-  if (!clearPending) {
-    clearPending = true;
-    btn.textContent = '⚠️ دوبارہ';
-    btn.style.background = '#fef3c7';
-    setTimeout(() => {
-      clearPending = false;
-      btn.textContent = '🧹 کلئیر';
-      btn.style.background = '';
-    }, 2500);
-    return;
-  }
-  budget = 0;
-  try { localStorage.setItem(BKEY, '0'); } catch(e) {}
-  renderAll();
-  clearPending = false;
-  btn.textContent = '🧹 کلئیر';
-  btn.style.background = '';
-};
-
-window.sec16DeleteBudget = function(btn) {
-  if (budget === 0) return;
-  if (!delBudPending) {
-    delBudPending = true;
-    btn.textContent = '⚠️ دوبارہ';
-    btn.style.background = '#fee2e2';
-    setTimeout(() => {
-      delBudPending = false;
-      btn.textContent = '🗑️ ڈیلیٹ';
-      btn.style.background = '';
-    }, 2500);
-    return;
-  }
-  try { localStorage.removeItem(BKEY); } catch(e) {}
-  budget = 0;
-  renderAll();
-  delBudPending = false;
-  btn.textContent = '🗑️ ڈیلیٹ';
-  btn.style.background = '';
-};
-
-window.sec16ToggleSelectMode = function() {
-  selectMode = !selectMode;
-  const b = $('btnSec16SelectMode');
-  const c = $('sec16ListBody');
-  if (selectMode) {
-    b.classList.add('active-tool');
-    b.textContent = '✅ سلیکٹ موڈ آن';
-    c.classList.add('selection-mode');
-  } else {
-    b.classList.remove('active-tool');
-    b.textContent = '☑️ سلیکٹ موڈ';
-    c.classList.remove('selection-mode');
-    records.forEach(r => r.selected = false);
-  }
-  renderAll();
-};
-
-function updCounts() {
-  const { spent, filtered } = computeTotals();
-  $('sec16TotalItems').textContent = filtered.length;
-  $('sec16TotalSpent').textContent = fmtN(spent);
-  const l = fTime === 'Daily'   ? '📅 ڈیلی'
-          : fTime === 'Weekly'  ? '📆 ویکلی'
-          : fTime === 'Monthly' ? '🗓️ منتھلی'
-          :                       '📅 ییرلی';
-  $('sec16ListTitle').textContent = '📋 ' + l + ' راشن لسٹ (' + filtered.length + ')';
+  document.getElementById("fD").classList.toggle("on", f === "D");
+  document.getElementById("fW").classList.toggle("on", f === "W");
+  document.getElementById("fM").classList.toggle("on", f === "M");
+  document.getElementById("fY").classList.toggle("on", f === "Y");
+  render();
 }
 
-function renderList() {
-  const c = $('sec16ListBody');
-  if (!c) return;
-  c.innerHTML = '';
-  c.classList.toggle('selection-mode', selectMode);
+function render() {
+  var all = load();
+  var recs = all.filter(function(r) { return inTime(r.timestamp); });
+  recs.sort(function(a,b) { return b.timestamp - a.timestamp; });
 
-  const f = getFiltered();
-  if (f.length === 0) {
-    c.innerHTML = '<div class="sec16-empty-msg">📭 اس فلٹر میں کوئی راشن موجود نہیں ہے۔</div>';
+  var totalItems = 0;
+  recs.forEach(function(r) { totalItems += (r.items || []).length; });
+
+  document.getElementById("cnt").textContent = recs.length;
+  document.getElementById("stat").innerHTML = "🛒 کل آٹمز: <b>" + totalItems + "</b>";
+
+  var box = document.getElementById("list");
+  if (!recs.length) {
+    box.innerHTML = '<div class="empty"><i>📋</i>اس فلٹر میں کوئی ریکارڈ نہیں<br><small>ڈیش بورڈ سے سیو کریں</small></div>';
     return;
   }
 
-  f.forEach((r, i) => {
-    const d = document.createElement('div');
-    d.className = 'sec16-list-item' + (r.selected ? ' selected-item' : '');
+  box.innerHTML = recs.map(function(rec) {
+    var isEdit = (editId === rec.id);
+    var rows = (rec.items || []).map(function(it, i) {
+      if (isEdit) {
+        return '<div class="rr">' +
+          '<span class="nm">' + esc(it.name) + '</span>' +
+          '<input id="qi_' + rec.id + '_' + i + '" value="' + esc(it.qty) + '">' +
+          '</div>';
+      }
+      return '<div class="rr">' +
+        '<span class="nm">' + esc(it.name) + '</span>' +
+        '<span class="qt">' + esc(it.qty) + '</span>' +
+        '</div>';
+    }).join('');
 
-    d.innerHTML =
-      '<div class="sec16-col-name">' +
-        '<input type="checkbox" class="sec16-checkbox" ' + (r.selected ? 'checked' : '') + ' onchange="sec16ToggleSelect(\'' + r.id + '\')">' +
-        '<span class="sec16-num">' + (i + 1) + '</span>' +
-        '<span>' + esc(r.name) + '</span>' +
+    var acts = isEdit
+      ? '<button class="bsave" onclick="saveEdit(' + rec.id + ')">✓ سیو</button>' +
+        '<button class="bcan" onclick="cancelEdit()">✗ کینسل</button>'
+      : '<button class="bedit" onclick="startEdit(' + rec.id + ')">✏️ ایڈٹ</button>' +
+        '<button class="bdel" onclick="delRec(' + rec.id + ', event)">🗑️ ڈیلیٹ</button>';
+
+    return '<div class="rec">' +
+      '<div class="rh">' +
+        '<span class="rd">📅 ' + fmt(rec.timestamp) + '</span>' +
+        '<span class="rc">🛒 ' + (rec.items || []).length + ' آٹم</span>' +
       '</div>' +
-      '<div class="sec16-col-qty">' + fmtN(r.qty) + '</div>' +
-      '<div class="sec16-col-rate">' + fmtN(r.rate) + '</div>' +
-      '<div class="sec16-col-total">' + fmtN(r.total || 0) + '</div>' +
-      '<div class="sec16-date-row">📅 ' + fmtDT(r.timestamp) + '</div>';
-
-    d.addEventListener('click', e => {
-      if (!selectMode) return;
-      if (e.target.type === 'checkbox') return;
-      sec16ToggleSelect(r.id);
-    });
-
-    c.appendChild(d);
-  });
+      '<div class="ri">' + rows + '</div>' +
+      '<div class="acts">' + acts + '</div>' +
+      '</div>';
+  }).join('');
 }
 
-window.sec16ToggleSelect = function(id) {
-  const r = records.find(x => x.id === id);
-  if (r) { r.selected = !r.selected; renderAll(); }
-};
+function startEdit(id) { editId = id; render(); }
+function cancelEdit() { editId = null; render(); }
 
-window.sec16SelectAll = function(st) {
-  const f = getFiltered();
-  if (f.length === 0) return;
-  if (st && !selectMode) sec16ToggleSelectMode();
-  const ids = f.map(r => r.id);
-  records.forEach(r => { if (ids.includes(r.id)) r.selected = st; });
-  renderAll();
-};
+function saveEdit(id) {
+  var recs = load();
+  var rec = recs.find(function(r) { return r.id === id; });
+  if (!rec) return;
+  (rec.items || []).forEach(function(it, i) {
+    var inp = document.getElementById("qi_" + id + "_" + i);
+    if (inp) {
+      var v = inp.value.trim();
+      if (v) it.qty = v;
+    }
+  });
+  save(recs);
+  editId = null;
+  render();
+}
 
-window.sec16EditSelected = function() { flash(); };
-window.sec16SaveInlineEdit = function() { flash(); };
-window.sec16CancelEdit = function() { flash(); };
-window.sec16MoveOrder = function() { flash(); };
-window.sec16DeleteSelected = function() { flash(); };
-
-window.sec16DeleteAll = function(btn) {
-  if (records.length === 0) return;
-  if (!delPending) {
-    delPending = true;
-    btn.textContent = '⚠️ دوبارہ دبائیں';
-    btn.style.background = '#dc2626';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      delPending = false;
-      btn.textContent = '❌ سب صاف کریں';
-      btn.style.background = '';
-      btn.style.color = '';
+function delRec(id, e) {
+  var btn = e.target;
+  if (btn.dataset.c !== "1") {
+    btn.dataset.c = "1";
+    btn.textContent = "⚠️ دوبارہ";
+    setTimeout(function() {
+      btn.dataset.c = "";
+      btn.textContent = "🗑️ ڈیلیٹ";
     }, 2500);
     return;
   }
-  try { localStorage.removeItem(KEY); } catch(e) {}
-  records = [];
-  renderAll();
-  delPending = false;
-  btn.textContent = '❌ سب صاف کریں';
-  btn.style.background = '';
-  btn.style.color = '';
-};
-
-function flash() {
-  const c = $('sec16ListBody');
-  c.style.borderColor = '#ef4444';
-  setTimeout(() => { c.style.borderColor = '#e2e8f0'; }, 1200);
+  var recs = load().filter(function(r) { return r.id !== id; });
+  save(recs);
+  render();
 }
 
-window.sec16CloseSection = function() {
-  const b = $('sec16ContentBody');
-  const p = $('sec16SettingsPanel');
-  const btn = document.querySelector('#sec16MainCard .sec16-settings-btn');
-  if (b.style.display === 'none') {
-    b.style.display = 'block';
-    btn.textContent = '⚙️ سیٹنگز';
-  } else {
-    b.style.display = 'none';
-    p.classList.remove('active');
-    btn.textContent = '📂 سیکشن کھولیں';
-  }
-};
+render();
 
-function renderAll() {
-  renderList();
-  updCounts();
-  updBudgetBox();
-}
-
-load();
-renderAll();
-
-// Auto refresh — jab Setting se naya record aaye
-setInterval(() => {
-  const nb = parseFloat(localStorage.getItem(BKEY)) || 0;
-  if (nb !== budget) { budget = nb; updBudgetBox(); }
-
-  const d = localStorage.getItem(KEY);
-  const raw = d ? JSON.parse(d) : [];
-  var count = 0;
-  raw.forEach(function(rec) {
-    count += (rec.items || []).length;
-  });
-  if (count !== records.length) {
-    load();
-    renderAll();
-  }
-}, 1500);
-
-})();
+window.addEventListener('storage', function(e) {
+  if (e.key === KEY) render();
+});
+setInterval(render, 1500);
 </script>
 
 </body>
