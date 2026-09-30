@@ -3,401 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Management And Life Tracker - Complete Integrated System</title>
+<title>Smart Management And Life Tracker</title>
 <style>
-/* ================================================================
-   سیکشن 1 شروع: بنیادی اسٹائلز (متغیرات، باڈی، کنٹینر)
-   ================================================================ */
-:root {
-    --primary: #1e293b;
-    --accent: #2563eb;
-    --danger: #ef4444;
-    --golden: #d97706;
-    --warning: #d97706;
-    --success: #10b981;
-    --purple: #8b5cf6;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #334155;
-    --border: #e2e8f0;
-    --radius: 16px;
+:root{
+--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--golden:#d97706;
+--success:#10b981;--purple:#8b5cf6;--bg:#f1f5f9;--card:#fff;
+--text:#334155;--border:#e2e8f0;
 }
-* { box-sizing: border-box; }
-body {
-    background-color: var(--bg);
-    font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 12px;
-    margin: 0;
-    color: var(--text);
-    line-height: 1.6;
-}
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-/* ہر سیکشن کی ہیڈنگ سینٹر */
-.section-heading {
-    text-align: center;
-    font-size: 17px;
-    font-weight: bold;
-    margin: 4px 0 12px;
-}
-/* ================================================================
-   سیکشن 1 ختم
-   ================================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;padding:12px;color:var(--text);line-height:1.6}
+.container{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.section-heading{text-align:center;font-size:16px;font-weight:800;margin-bottom:14px}
+.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:16px 12px;border-radius:12px;font-size:17px;font-weight:800;border-bottom:4px solid var(--accent)}
+.news-bar{background:#fffbeb;border:1px solid #fde68a;color:var(--golden);padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;overflow:hidden;white-space:nowrap}
+.news-text{display:inline-block;animation:tickerMove 30s linear infinite;padding-right:100%}
+@keyframes tickerMove{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.alert-bar{background:#fef2f2;border:1px solid #fecaca;color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:all .3s}
+.alert-bar.blink{animation:alertBlink .8s infinite alternate}
+@keyframes alertBlink{0%{opacity:1}100%{opacity:.35;background:#ef4444;color:#fff}}
+.alert-bar button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit}
+.duty-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:2px solid #e2e8f0;margin-bottom:14px;font-weight:800;color:var(--primary);font-size:15px;flex-wrap:wrap;gap:6px}
+.members-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.member-box{background:#f1f5f9;padding:14px;border-radius:10px;border-right:5px solid var(--accent)}
+.member-box.junior{border-right-color:var(--success)}
+.member-label{font-size:12px;color:#64748b;font-weight:700}
+.member-name{font-size:18px;font-weight:800;color:#0f172a;margin-top:4px}
+.leave-box{background:#fffbeb;border:1px solid #fde68a;padding:14px;border-radius:10px}
+.leave-box label{font-size:13px;font-weight:700;color:#854d0e;display:block;margin-bottom:8px}
+.select-input,.text-input,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:inherit;font-weight:600;color:#0f172a;background:#fff;outline:none}
+.select-input:focus,textarea:focus{border-color:var(--accent)}
+textarea{font-weight:400;resize:vertical}
+.btn{padding:10px 14px;border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit}
+.btn-primary{background:var(--accent)}
+.btn-golden{background:var(--golden)}
+.btn-danger{background:var(--danger)}
+.btn-success{background:var(--success)}
+.btn-secondary{background:#64748b}
+.btn-full{width:100%}
+.status-msg{display:none;padding:10px;border-radius:8px;font-size:13px;font-weight:700;text-align:center;margin-top:10px}
+.status-msg.success{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;display:block}
+.status-msg.error{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;display:block}
+.status-msg.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a;display:block}
+.task-display{background:#f8fafc;border:2px solid var(--accent);border-radius:10px;padding:20px 10px;text-align:center;margin:12px 0}
+.task-name{font-size:18px;font-weight:800;color:#0f172a;margin-bottom:8px}
+.task-points{display:inline-block;background:var(--golden);color:#fff;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.task-buttons{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.history-box{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:10px;max-height:280px;overflow-y:auto}
+.history-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #cbd5e1;font-size:12px;font-weight:700;color:var(--primary);flex-wrap:wrap;gap:6px}
+.history-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.history-item .info{flex:1;min-width:0}
+.history-item .info .line{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:2px}
+.history-item .info .date{font-size:10px;color:#64748b}
+.history-item .actions{display:flex;gap:4px;flex-shrink:0}
+.history-item .actions button{background:#f1f5f9;border:1px solid #cbd5e1;border-radius:5px;padding:3px 7px;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit}
+.history-item .actions button.del{background:#fef2f2;color:var(--danger);border-color:#fecaca}
+.history-item .actions button.edit{background:#eff6ff;color:var(--accent);border-color:#bfdbfe}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.tag-success{background:#ecfdf5;color:#047857}
+.tag-danger{background:#fef2f2;color:#b91c1c}
+.tag-warning{background:#fffbeb;color:#92400e}
+.tag-info{background:#eff6ff;color:#1d4ed8}
+.tag-purple{background:#f5f3ff;color:#6d28d9}
+.mini-toolbar{display:flex;gap:6px;justify-content:flex-end;margin-bottom:8px;flex-wrap:wrap}
+.mini-btn{background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;color:#334155;font-family:inherit}
+.mini-btn:hover{background:#f1f5f9}
+.mini-btn.danger{color:var(--danger);border-color:#fecaca}
+.mini-btn.edit-active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.skip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.skip-col{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px}
+.skip-col.senior{border-right:4px solid var(--accent)}
+.skip-col.junior{border-right:4px solid var(--success)}
+.skip-col h4{text-align:center;font-size:14px;font-weight:800;margin-bottom:8px;color:var(--primary)}
+.skip-list{max-height:200px;overflow-y:auto;min-height:60px}
+.skip-item{background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:5px;font-size:11px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.skip-item .name{flex:1;font-weight:700}
+.skip-item .reason{color:var(--golden);font-size:10px;display:block}
+.skip-item .actions{display:flex;gap:3px}
+.skip-item .actions button{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit}
+.result-table{width:100%;border-collapse:collapse}
+.result-table th,.result-table td{padding:10px;text-align:right;border-bottom:1px solid var(--border);font-size:13px}
+.result-table th{background:#f8fafc;font-weight:800;color:var(--primary)}
+.symptom-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;margin-bottom:14px}
+.symptom-btn{padding:10px 8px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:transform .1s;font-family:inherit}
+.symptom-btn:active{transform:scale(.97)}
+.diet-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.diet-cat{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px}
+.diet-cat label{display:block;font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px}
+.diet-cat select{width:100%;padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit}
+.percent-row{display:flex;gap:10px}
+.percent-box{flex:1;color:#fff;padding:14px 8px;border-radius:10px;text-align:center}
+.pct-green{background:linear-gradient(135deg,#059669,#10b981)}
+.pct-blue{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+.pct-purple{background:linear-gradient(135deg,#7c3aed,#8b5cf6)}
+.pct-label{font-size:11px;font-weight:700;opacity:.95}
+.pct-value{font-size:22px;font-weight:900;margin-top:4px}
+.mt-8{margin-top:8px}
+.mt-14{margin-top:14px}
+.empty-note{text-align:center;color:#94a3b8;font-size:12px;padding:16px 0}
 
-/* ================================================================
-   سیکشن 2 شروع: کارڈ، ایپ ہیڈر، ٹکر
-   ================================================================ */
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.app-header {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    color: #fff;
-    text-align: center;
-    padding: 12px 8px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    border-bottom: 4px solid var(--accent);
-}
-.ticker-bar {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: var(--golden);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    overflow: hidden;
-    white-space: nowrap;
-}
-.ticker-text {
-    display: inline-block;
-    animation: customTickerRight 35s linear infinite;
-}
-@keyframes customTickerRight {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-.alert-ticker-bar {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: var(--danger);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-.continuous-blink {
-    animation: fastBlink 0.8s infinite alternate !important;
-    background: #ffe4e6 !important;
-}
-@keyframes fastBlink {
-    0% { opacity: 1; background-color: #fef2f2; }
-    100% { opacity: 0.3; background-color: #ef4444; color: white; }
-}
-.alert-skip-btn {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-}
-/* ================================================================
-   سیکشن 2 ختم
-   ================================================================ */
+/* Rashan */
+.rashan-settings-panel{display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px;margin-bottom:12px}
+.rashan-settings-panel.active{display:block}
+.rashan-settings-group{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #fcd34d}
+.rashan-settings-group:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.rashan-settings-group .title{font-size:11px;font-weight:800;color:#92400e;margin-bottom:6px}
+.rashan-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.rashan-input{padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-weight:600;outline:none;width:100%;background:#fff;font-size:12px;font-family:inherit}
+.rashan-add-btn{width:100%;padding:8px;font-size:12px;font-weight:800;background:#d97706;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
+.rashan-tool-btn{padding:7px 8px;font-size:11px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;text-align:center;width:100%;margin-bottom:5px;font-family:inherit}
+.rashan-tool-btn:hover{background:#e2e8f0}
+.rashan-tool-btn.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+.rashan-items-scroll{max-height:280px;overflow-y:auto;border:2px solid #fcd34d;border-radius:8px;padding:6px;background:#fffbeb;margin-bottom:10px}
+.rashan-row{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;cursor:pointer;transition:all .2s;user-select:none;min-height:44px;position:relative}
+.rashan-row:hover{border-color:#fcd34d;background:#fff8e1}
+.rashan-row.selected{border-color:#16a34a;background:#f0fdf4}
+.rashan-row-checkbox{width:18px;height:18px;accent-color:#16a34a;cursor:pointer;flex-shrink:0}
+.rashan-row-info{flex:1;display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+.rashan-row-name{font-size:12px;font-weight:800;color:#1e293b}
+.rashan-row-qty{background:#fef3c7;color:#92400e;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.rashan-row-del{display:none}
+.rashan-edit-mode .rashan-row-del{display:flex;position:absolute;left:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:#ef4444;color:#fff;border:none;font-size:10px;font-weight:800;cursor:pointer;align-items:center;justify-content:center;padding:0;z-index:2}
+.rashan-live-box{max-height:180px;overflow-y:auto;border:2px solid #16a34a;border-radius:8px;padding:6px;background:#f0fdf4;margin-bottom:10px}
+.rashan-live-empty{text-align:center;color:#86efac;font-size:11px;padding:15px;font-weight:600}
+.rashan-live-row{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #86efac;border-radius:6px;padding:6px 9px;margin-bottom:4px;font-size:11px;font-weight:700}
+.rashan-live-row .name{color:#1e293b;flex:1}
+.rashan-live-row .qty{color:#d97706;font-weight:800;background:#fef3c7;padding:2px 8px;border-radius:20px;font-size:10px}
+.rashan-save-btn{width:100%;padding:10px;background:#16a34a;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:7px;cursor:pointer;margin-bottom:10px;font-family:inherit}
+.rashan-save-btn:hover{background:#15803d}
+.rashan-history-box{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;min-height:60px}
+.rashan-record{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;border-right:4px solid #d97706}
+.rashan-record-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #fde68a}
+.rashan-record-date{font-size:11px;font-weight:800;color:#d97706}
+.rashan-record-count{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #fcd34d}
+.rashan-record-items{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
+.rashan-record-item{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:700;gap:4px}
+.rashan-record-item .item-qty{color:#d97706;font-weight:800;background:#fef3c7;padding:2px 6px;border-radius:20px;font-size:10px;white-space:nowrap}
+.rashan-record-actions{display:flex;gap:5px;justify-content:flex-end}
+.rashan-act-btn{padding:4px 10px;font-size:10px;font-weight:700;border:none;border-radius:5px;cursor:pointer;font-family:inherit}
+.rashan-act-btn.edit{background:#0891b2;color:#fff}
+.rashan-act-btn.del{background:#ef4444;color:#fff}
+.rashan-edit-indicator{display:none;background:#0891b2;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;margin-bottom:8px;text-align:center}
+.rashan-edit-indicator.active{display:block}
 
-/* ================================================================
-   سیکشن 3 شروع: ڈیوٹی کارڈ اسٹائلز
-   ================================================================ */
-.duty-card {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    border: 2px solid #cbd5e1;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-.duty-header {
-    font-weight: bold;
-    color: var(--primary);
-    font-size: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 10px;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-.members-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-.member-box {
-    background: #f1f5f9;
-    padding: 14px;
-    border-radius: 10px;
-    border-right: 6px solid var(--accent);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.member-box-2 { border-right-color: var(--success); }
-.member-title { font-size: 13px; color: #64748b; font-weight: 600; }
-.member-name { font-size: 20px; font-weight: bold; color: #0f172a; }
-.leave-box {
-    background: #fffbe6;
-    border: 1px solid #ffe58f;
-    padding: 14px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.leave-select, .select-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 14px;
-    background: white;
-    color: #0f172a;
-    outline: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-.leave-btn {
-    background: var(--golden);
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.leave-btn:hover { background: #b45309; }
-.divider-line { border: 0; height: 2px; background: #e2e8f0; margin: 4px 0; }
-.status-message {
-    display: none;
-    background: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-}
-/* ================================================================
-   سیکشن 3 ختم
-   ================================================================ */
+/* Bus */
+.bus-clock-banner{background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:10px;padding:12px;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.bus-clock-time{font-size:22px;font-weight:900}
+.bus-large-box{display:none;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:14px;padding:16px;color:#fff;box-shadow:0 8px 20px rgba(22,163,74,.35);margin-top:12px}
+.bus-large-box.active{display:block}
+.bus-large-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.bus-large-row:last-child{border-bottom:none}
+.bus-large-lbl{font-size:12px;opacity:.9}
+.bus-large-val{font-size:14px;font-weight:900}
+.bus-large-timer{background:rgba(0,0,0,.25);border-radius:12px;padding:16px;text-align:center;margin-top:12px;border:1px solid rgba(255,255,255,.2)}
+.bus-large-timer-time{font-size:38px;font-weight:900;letter-spacing:2px}
+.bus-large-timer-sub{font-size:12px;font-weight:700;margin-top:6px;background:#fff;color:#15803d;padding:4px 10px;border-radius:20px;display:inline-block}
+.bus-empty{background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;color:#64748b;font-weight:700;font-size:11px;margin-top:12px}
+.bus-empty.hide{display:none}
+.bus-live{background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+.bus-live-dot{width:7px;height:7px;background:#16a34a;border-radius:50%;animation:pulseDot 1.2s infinite}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* ================================================================
-   سیکشن 4 شروع: ٹاسک ٹریکر اسٹائلز
-   ================================================================ */
-.task-box {
-    width: 100%;
-    background: white;
-    border: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 20px 10px;
-    text-align: center;
-    box-sizing: border-box;
-}
-.task-name { font-size: 20px; font-weight: bold; color: #0f172a; margin-bottom: 8px; }
-.task-points {
-    display: inline-block;
-    background: var(--golden);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
-}
-.buttons-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-}
-.btn {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-}
-.btn-done { background: var(--success); }
-.btn-not-done { background: var(--danger); }
-.btn-na { background: #64748b; }
-.history-card {
-    width: 100%;
-    background: white;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    padding: 15px;
-    box-sizing: border-box;
-}
-.total-score-bar {
-    background: var(--primary);
-    color: white;
-    padding: 10px;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: bold;
-}
-.status-done { background: #ecfdf5; color: #047857; }
-.status-not-done { background: #fef2f2; color: #ef4444; }
-.status-na { background: #f1f5f9; color: #475569; }
-/* ================================================================
-   سیکشن 4 ختم
-   ================================================================ */
-
-/* ================================================================
-   سیکشن 5 شروع: فائنل رزلٹ ٹیبل اسٹائلز
-   ================================================================ */
-.clean-result-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-.clean-result-table th, .clean-result-table td {
-    padding: 10px;
-    text-align: right;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-}
-/* ================================================================
-   سیکشن 5 ختم
-   ================================================================ */
-
-/* ================================================================
-   سیکشن 6 شروع: ہسٹری اسکرول باکس اسٹائلز (ڈائٹ + علامات)
-   ================================================================ */
-.history-scroll-box {
-    border-radius: 10px;
-    padding: 12px;
-    font-size: 13px;
-    height: 220px;
-    max-height: 220px;
-    overflow-y: auto;
-}
-.diet-history-container {
-    background: #fffdf4;
-    border: 1px solid var(--warning);
-}
-.symptom-history-container {
-    background: #fdf4ff;
-    border: 1px solid #f5d0fe;
-}
-.log-row {
-    padding: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-.diet-row { border-bottom: 1px dashed #fde68a; }
-.symptom-row { border-bottom: 1px dashed #f5d0fe; }
-.log-row:last-child { border-bottom: none; }
-.row-left { display: flex; align-items: center; gap: 10px; }
-.setting-btn-pro {
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    color: var(--primary);
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-}
-.setting-btn-pro:hover { background: #e2e8f0; }
-.inline-settings-panel {
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 14px;
-    display: none;
-}
-.diet-panel { background: #fffbeb; border: 1px solid #fde68a; }
-.symptom-panel { background: #f5f3ff; border: 1px solid #ddd6fe; }
-.btn-group-custom { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-.btn-danger { background: var(--danger); }
-.btn-success { background: var(--success); }
-.btn-primary { background: var(--accent); }
-.btn-secondary { background: #64748b; }
-/* ================================================================
-   سیکشن 6 ختم
-   ================================================================ */
-
-/* ================================================================
-   سیکشن 7 شروع: پرسنٹیج باکسز اسٹائلز
-   ================================================================ */
-.percent-row { display: flex; gap: 8px; width: 100%; }
-.percent-box {
-    flex: 1;
-    color: #fff;
-    padding: 12px 6px;
-    border-radius: 10px;
-    text-align: center;
-}
-.percent-box-green { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 12px rgba(5,150,105,0.2); }
-.percent-box-blue { background: linear-gradient(135deg, #2563eb, #3b82f6); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
-.percent-box-purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); box-shadow: 0 4px 12px rgba(124,58,237,0.2); }
-.task-history-scroll { max-height:220px; overflow-y:auto; margin-bottom:10px; }
-.summary-heading { margin-bottom:12px; color:var(--primary); text-align:center; }
-.percent-label { font-weight:800; font-size:13px; margin-bottom:6px; }
-.percent-value { font-size:25px; font-weight:900; line-height:1.1; }
-.diet-item-section { background:#fffdf4; border:1px solid #fde68a; border-radius:8px; padding:8px 10px; }
-.diet-item-section summary { cursor:pointer; color:#d97706; font-weight:800; font-size:12px; list-style-position:inside; }
-.diet-item-content { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.diet-item-content span { flex:2; font-size:12px; color:#334155; }
-.diet-item-content select { flex:1; min-width:70px; padding:4px; font-size:11px; border-radius:4px; border:1px solid #cbd5e1; }
-@media (max-width:700px) { .percent-row { flex-direction:column; } }
-.percent-label { font-size: 11px; font-weight: bold; opacity: 0.9; }
-.percent-value { font-size: 16px; font-weight: bold; margin-top: 4px; }
-/* ================================================================
-   سیکشن 7 ختم
-   ================================================================ */
-
-@media (max-width: 480px) {
-    .members-group { grid-template-columns: 1fr; }
-    .buttons-grid { grid-template-columns: 1fr; }
+@media (max-width:520px){
+.members-grid,.skip-grid,.task-buttons,.rashan-add-grid{grid-template-columns:1fr}
+.percent-row{flex-direction:column}
 }
 </style>
 </head>
@@ -405,841 +174,1315 @@ body {
 
 <div class="container">
 
-<!-- ================================================================
-     سیکشن 1 شروع: ایپ ہیڈر + ٹکر پٹیاں
-     ================================================================ -->
-*
-
+    <!-- Header + News + Alert -->
     <div class="app-header">⚡ Smart Management And Life Tracker</div>
-
-    <div class="ticker-bar">
-        <div class="ticker-text">📢 تمام بٹنز 100% فعال ہیں - آپ کا ڈیٹا خودکار طریقے سے نیچے محفوظ اور لائیو اپ ڈیٹ ہو رہا ہے۔</div>
+    <div class="news-bar">
+        <div class="news-text">📢 تمام سیکشنز فعال ہیں — ڈیٹا خودکار محفوظ — ہر سیکشن میں ایڈٹ / ڈیلیٹ / کلئیر کی سہولت موجود ہے</div>
+    </div>
+    <div class="alert-bar" id="alertBar">
+        <span id="alertMsg">🚨 اہم الرٹ: <b id="alertTimer">25</b> سیکنڈ کا ٹائمر جاری ہے...</span>
+        <button onclick="skipAlert()">اسکیپ ❌</button>
     </div>
 
-    <div class="alert-ticker-bar" id="alertTickerBar">
-        <span id="alertMsgText">🚨 اہم الرٹ 25 سیکنڈ کا ٹائمر جاری ہے... (<b id="alertTimer">25</b>s)</span>
-        <button class="alert-skip-btn" onclick="skipAlertTicker()">اسکیپ ❌</button>
-    </div>
-
-#
-<!-- ============ سیکشن 1 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 2 شروع: ڈیوٹی اور چھٹی کارڈ
-     ================================================================ -->
-*
-
+    <!-- 1. Duty -->
     <div class="card">
         <div class="section-heading" style="color:var(--primary);">📌 آج کی ڈیوٹی ممبران</div>
-        <div class="duty-card">
-            <div class="duty-header">
-                <span>🔄 24 گھنٹے ڈیوٹی</span>
-                <span style="font-size: 12px; color: #64748b; font-weight: normal;">🔄 رات 12:00 بجے تبدیلی</span>
+        <div class="duty-header">
+            <span>🔄 24 گھنٹے ڈیوٹی</span>
+            <span style="font-size:11px;color:#64748b;font-weight:600;">رات 12:00 بجے تبدیلی</span>
+        </div>
+        <div class="members-grid">
+            <div class="member-box senior">
+                <div class="member-label">👤 سینئر ممبر</div>
+                <div class="member-name" id="seniorName">—</div>
             </div>
-
-            <div class="members-group">
-                <div class="member-box">
-                    <span class="member-title">👤 ڈیوٹی ممبر 1:</span>
-                    <span class="member-name" id="member1Name">علی احمد</span>
-                </div>
-                <div class="member-box member-box-2">
-                    <span class="member-title">👤 ڈیوٹی ممبر 2:</span>
-                    <span class="member-name" id="member2Name">محمد عثمان</span>
-                </div>
+            <div class="member-box junior">
+                <div class="member-label">👤 جونیئر ممبر</div>
+                <div class="member-name" id="juniorName">—</div>
             </div>
-
-            <div class="leave-box">
-                <span style="font-size: 13px; font-weight: bold; color: #854d0e;">📝 چھٹی کے لیے ممبر منتخب کریں (Drop Line):</span>
-
-                <select id="leaveMemberSelect" class="leave-select">
-                    <option value="">-- ممبر منتخب کریں --</option>
-                </select>
-
-                <button class="leave-btn" onclick="submitLeaveRequest()">🏖️ چھٹی سبمٹ کریں</button>
-            </div>
-
-            <hr class="divider-line">
-            <div class="status-message" id="leaveStatusMsg"></div>
+        </div>
+        <div class="leave-box">
+            <label>📝 چھٹی کے لیے ممبر منتخب کریں</label>
+            <select id="leaveMemberSelect" class="select-input">
+                <option value="">-- ممبر منتخب کریں --</option>
+            </select>
+            <button class="btn btn-golden btn-full mt-8" onclick="submitLeave()">🏖️ چھٹی سبمٹ کریں</button>
+            <div id="leaveMsg" class="status-msg"></div>
         </div>
     </div>
 
-#
-<!-- ============ سیکشن 2 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 3 شروع: ٹاسک ٹریکر اور پوائنٹس سسٹم
-     ================================================================ -->
-*
-
+    <!-- 2. Task Tracker -->
     <div class="card">
         <div class="section-heading" style="color:var(--accent);">📋 ٹاسک ٹریکر اور پوائنٹس سسٹم</div>
-        <div class="duty-card">
-            <select id="memberSelect" class="select-field" onchange="startTasks()">
-                <option value="">-- ممبر منتخب کریں --</option>
-                <option value="علی">علی</option>
-                <option value="احمد">احمد</option>
-            </select>
-
-            <div class="task-box">
-                <div class="task-name" id="taskText">پہلے ممبر منتخب کریں</div>
-                <div class="task-points" id="taskPoints">0 Points</div>
+        <select id="taskMemberSelect" class="select-input" onchange="startTaskTracking()">
+            <option value="">-- ممبر منتخب کریں --</option>
+        </select>
+        <div class="task-display">
+            <div class="task-name" id="taskName">پہلے ممبر منتخب کریں</div>
+            <div class="task-points" id="taskPoints">0 Points</div>
+        </div>
+        <div class="task-buttons">
+            <button class="btn btn-success" onclick="submitTask('ہو گیا')">✅ ہو گیا</button>
+            <button class="btn btn-danger" onclick="submitTask('نہیں ہوا')">❌ نہیں ہوا</button>
+            <button class="btn btn-secondary" onclick="submitTask('کرنا نہیں تھا')">⚪ کرنا نہیں تھا</button>
+        </div>
+        <div class="mini-toolbar">
+            <button class="mini-btn" id="taskEditBtn" onclick="toggleEdit('taskHistory')">✏️ ایڈٹ</button>
+            <button class="mini-btn danger" onclick="clearSection('taskHistory')">🧹 کلئیر</button>
+        </div>
+        <div class="history-box">
+            <div class="history-header">
+                <span>📜 ٹاسک ہسٹری</span>
+                <span id="taskHistMember">— ممبر سلیکٹ کریں —</span>
             </div>
-
-            <div class="buttons-grid">
-                <button class="btn btn-done" onclick="submitTask('ہو گیا')">✅ ہو گیا</button>
-                <button class="btn btn-not-done" onclick="submitTask('نہیں ہوا')">❌ نہیں ہوا</button>
-                <button class="btn btn-na" onclick="submitTask('کرنا نہیں تھا')">⚪ کرنا نہیں تھا</button>
-            </div>
-
-            <div class="history-card">
-                <div id="historyList" class="task-history-scroll"></div>
-                <div class="total-score-bar" id="totalScoreText">ٹوٹل پوائنٹس: 0</div>
-            </div>
+            <div id="taskHistoryList"></div>
+            <div style="text-align:center;padding:10px;background:var(--primary);color:#fff;border-radius:8px;font-weight:800;margin-top:8px;font-size:13px;" id="taskTotalScore">ٹوٹل پوائنٹس: 0</div>
         </div>
     </div>
 
-#
-<!-- ============ سیکشن 3 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 4 شروع: چھوڑے گئے / اسکیپ شدہ کام
-     ================================================================ -->
-*
-
+    <!-- 3. Skipped Tasks -->
     <div class="card">
-        <div class="section-heading" style="color:#0284c7;">✨ چھوڑے گئے / اسکیپ شدہ کام</div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 14px;">
-            <button class="setting-btn-pro" onclick="toggleSkipSettingsPanel()">⚙️ سیٹنگ پینل</button>
-        </div>
-
-        <div id="skipSettingsPanel" class="inline-settings-panel diet-panel" style="background:#f8fafc; border-color:#cbd5e1;">
-            <div style="font-weight: bold; font-size: 13px; color: var(--golden); margin-bottom: 8px; text-align:center;">⚙️ اسکیپ شدہ ہسٹری کنٹرول پینل</div>
-            <div class="btn-group-custom">
-                <button class="btn btn-secondary" onclick="selectAllSkippedItems()">✅ ال سلیکٹ</button>
-                <button class="btn btn-primary" onclick="deleteSelectedSkippedItems()">🗑️ سلیکٹڈ ڈیلیٹ</button>
-                <button class="btn btn-danger" onclick="clearAllSkippedItems()">❌ ال ڈیلیٹ</button>
-                <button class="btn btn-success" onclick="window.print()">🖨️ پرنٹ</button>
-                <button class="btn btn-secondary" onclick="toggleSkipSettingsPanel()">✖️ کلوز</button>
+        <div class="section-heading" style="color:#0284c7;">✨ اسکیپ شدہ کام (ڈیوٹی ممبران کے)</div>
+        <div class="skip-grid">
+            <div class="skip-col senior">
+                <h4 id="skipSeniorTitle">سینئر</h4>
+                <div class="skip-list" id="skipSeniorList"></div>
+            </div>
+            <div class="skip-col junior">
+                <h4 id="skipJuniorTitle">جونیئر</h4>
+                <div class="skip-list" id="skipJuniorList"></div>
             </div>
         </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; border-right: 5px solid #0284c7;">
-                <h4 style="text-align:center; margin-top: 0; color: #0284c7; margin-bottom: 10px; font-size: 14px;">👤 علی (Ali)</h4>
-                <div style="font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 6px;">فعال کام:</div>
-                <ul id="ali-active-list" style="list-style: none; padding: 0; margin: 0 0 12px 0;"></ul>
-                <div style="font-size: 12px; font-weight: bold; color: var(--golden); margin-bottom: 4px;">اسکیپ شدہ کام (لست):</div>
-                <div id="ali-skipped-scroll-list" style="max-height: 140px; overflow-y: auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px;"></div>
-            </div>
-
-            <div style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; border-right: 5px solid #16a34a;">
-                <h4 style="text-align:center; margin-top: 0; color: #16a34a; margin-bottom: 10px; font-size: 14px;">👤 احمد (Ahmad)</h4>
-                <div style="font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 6px;">فعال کام:</div>
-                <ul id="ahmad-active-list" style="list-style: none; padding: 0; margin: 0 0 12px 0;"></ul>
-                <div style="font-size: 12px; font-weight: bold; color: var(--golden); margin-bottom: 4px;">اسکیپ شدہ کام (لست):</div>
-                <div id="ahmad-skipped-scroll-list" style="max-height: 140px; overflow-y: auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px;"></div>
-            </div>
-        </div>
-
-        <div style="background: #fffdf4; padding: 15px; border-radius: 10px; border: 1px solid #fde68a;">
-            <h4 style="text-align:center; margin-top: 0; color: var(--golden); margin-bottom: 12px; font-size: 14px;">⚡ کام اسکیپ کریں (لسٹ سے خارج کریں)</h4>
-
-            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1.5fr auto; gap: 10px; align-items: center;">
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px;">
+            <div style="font-weight:800;color:var(--golden);text-align:center;margin-bottom:10px;font-size:13px;">⚡ نیا کام اسکیپ کریں</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:8px;align-items:end;">
                 <div>
-                    <label style="font-size: 0.85em; color: #334155; display: block; margin-bottom: 4px;">ممبر:</label>
-                    <select id="skip-member-select" onchange="updateTaskDropdown()" class="select-field">
-                        <option value="ali">علی (Ali)</option>
-                        <option value="ahmad">احمد (Ahmad)</option>
-                    </select>
+                    <label style="font-size:11px;font-weight:700;display:block;margin-bottom:4px;">ممبر</label>
+                    <select id="skipMemberSelect" class="select-input" onchange="updateSkipTaskDropdown()"></select>
                 </div>
                 <div>
-                    <label style="font-size: 0.85em; color: #334155; display: block; margin-bottom: 4px;">کام:</label>
-                    <select id="skip-task-select" class="select-field"></select>
+                    <label style="font-size:11px;font-weight:700;display:block;margin-bottom:4px;">کام</label>
+                    <select id="skipTaskSelect" class="select-input"></select>
                 </div>
                 <div>
-                    <label style="font-size: 0.85em; color: #334155; display: block; margin-bottom: 4px;">ریزن (وجہ):</label>
-                    <input type="text" id="skip-reason-input" placeholder="اسکیپ کی وجہ درج کریں..." class="select-field">
+                    <label style="font-size:11px;font-weight:700;display:block;margin-bottom:4px;">وجہ</label>
+                    <input type="text" id="skipReasonInput" class="select-input" placeholder="وجہ لکھیں...">
                 </div>
-                <div style="align-self: end;">
-                    <button class="btn btn-danger" style="white-space:nowrap;" onclick="submitAndRemoveTask()">سبمٹ کریں</button>
-                </div>
+                <button class="btn btn-danger" onclick="submitSkipTask()">سبمٹ</button>
             </div>
+            <div id="skipMsg" class="status-msg"></div>
         </div>
     </div>
 
-#
-<!-- ============ سیکشن 4 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 5 شروع: ممبران فائنل رزلٹ شیٹ
-     ================================================================ -->
-*
-
-    <div class="card" style="border: 1px solid var(--border); border-right: 5px solid var(--success);">
+    <!-- 4. Results -->
+    <div class="card" style="border-right:5px solid var(--success);">
         <div class="section-heading" style="color:var(--success);">📈 ممبران فائنل رزلٹ شیٹ</div>
-        <table class="clean-result-table">
-            <thead><tr><th>ممبر کا نام</th><th>پوائنٹس</th><th>کارکردگی گریڈ</th></tr></thead>
-            <tbody id="finalResultTableBody"></tbody>
+        <table class="result-table">
+            <thead>
+                <tr><th>ممبر کا نام</th><th>پوائنٹس</th><th>کارکردگی گریڈ</th></tr>
+            </thead>
+            <tbody id="resultTableBody"></tbody>
         </table>
     </div>
 
-#
-<!-- ============ سیکشن 5 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 6 شروع: صحت اور علامات کا ٹریکر (11 بٹن + تفصیل)
-     ================================================================ -->
-*
-
-    <div class="card" style="border-right: 5px solid var(--purple);">
+    <!-- 5. Symptoms -->
+    <div class="card" style="border-right:5px solid var(--purple);">
         <div class="section-heading" style="color:var(--purple);">🩺 صحت اور علامات کا ٹریکر</div>
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">ممبر سلیکٹ کریں:</label>
+        <select id="healthMemberSelect" class="select-input" style="margin-bottom:14px;" onchange="onHealthMemberChange()"></select>
 
-        <div style="margin-bottom: 14px; text-align: center;">
-            <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: #334155;">ممبر سلیکٹ کریں:</label>
-            <select id="healthMemberSelect" class="select-field" style="max-width:300px; margin:0 auto; text-align:center;">
-                <option value="علی">علی</option>
-                <option value="احمد">احمد</option>
-            </select>
+        <div style="background:#f5f3ff;border:1px solid #ddd6fe;color:var(--purple);padding:12px;border-radius:8px;font-weight:700;font-size:14px;text-align:center;margin-bottom:14px;">
+            <span id="symptomTitle">🔍 کوئی علامت بٹن دبائیں</span>
         </div>
 
-        <div style="background: #f5f3ff; border: 1px solid #ddd6fe; color: var(--purple); padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; margin-bottom: 14px;">
-            <span id="symptomTitleText">🔍 علامت: گیس / پیٹ میں ابھار</span>
+        <div class="symptom-buttons" id="symptomButtons"></div>
+
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">تفصیل درج کریں:</label>
+        <textarea id="symptomDetails" rows="3" placeholder="یہاں تفصیل لکھیں..." class="select-input" style="font-weight:400;margin-bottom:12px;"></textarea>
+
+        <button class="btn btn-full" style="background:var(--purple);" onclick="saveSymptomFromSelection()">💾 تفصیل اپڈیٹ کریں</button>
+        <div id="symptomMsg" class="status-msg"></div>
+
+        <div class="mini-toolbar mt-14">
+            <button class="mini-btn" id="sympEditBtn" onclick="toggleEdit('symptomHistory')">✏️ ایڈٹ</button>
+            <button class="mini-btn danger" onclick="clearSection('symptomHistory')">🧹 کلئیر</button>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-bottom: 16px;">
-            <button type="button" class="btn" style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-size:12px;" onclick="handleSymptom('1. ٹھیک ہے')">1. ٹھیک ہے</button>
-            <button type="button" class="btn" style="background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; font-size:12px;" onclick="handleSymptom('2. نہیں ٹھیک')">2. نہیں ٹھیک</button>
-            <button type="button" class="btn" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size:12px;" onclick="handleSymptom('3. تھوڑا مسئلہ ہے')">3. تھوڑا مسئلہ ہے</button>
-            <button type="button" class="btn" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size:12px;" onclick="handleSymptom('4. کبھی کبھی مسئلہ ہوتا ہے')">4. کبھی کبھی</button>
-            <button type="button" class="btn" style="background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; font-size:12px;" onclick="handleSymptom('5. مسئلہ سیم پہلے کی طرح ہے')">5. سیم پہلے جیسا</button>
-            <button type="button" class="btn" style="background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; font-size:12px;" onclick="handleSymptom('6. مسئلہ بہتر ہے پہلے سے')">6. بہتر ہے پہلے سے</button>
-            <button type="button" class="btn" style="background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; font-size:12px;" onclick="handleSymptom('7. کبھی زیادہ ہے مسئلہ')">7. کبھی زیادہ ہے</button>
-            <button type="button" class="btn" style="background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; font-size:12px;" onclick="handleSymptom('8. مسئلہ بہت زیادہ ہے')">8. بہت زیادہ ہے</button>
-            <button type="button" class="btn" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-size:12px;" onclick="handleSymptom('9. مسئلہ زیادہ ہے')">9. مسئلہ زیادہ ہے</button>
-            <button type="button" class="btn" style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; font-size:12px;" onclick="handleSymptom('10. بار بار وہی مسئلہ ریپیٹ ہو رہا ہے')">10. بار بار ریپیٹ</button>
-            <button type="button" class="btn" style="background: #ccfbf1; color: #0f766e; border: 1px solid #5eead4; font-size:12px;" onclick="handleSymptom('11. دیگر صورتحال')">11. دیگر صورتحال</button>
+        <div class="history-box">
+            <div class="history-header">
+                <span>📜 علامات ہسٹری</span>
+                <span id="symptomHistMember">—</span>
+            </div>
+            <div id="symptomHistoryList"></div>
         </div>
-
-        <div style="margin-bottom: 16px;">
-            <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: #334155;">تفصیل درج کریں:</label>
-            <textarea id="symptomDetailedNotes" rows="3" placeholder="یہاں تفصیل لکھیں..." class="select-field" style="font-weight:normal;"></textarea>
-        </div>
-
-        <button type="button" class="btn" style="background: var(--purple); width: 100%;" onclick="submitSymptomForm()">💾 سبمٹ کریں</button>
-        <div id="symptomStatusMsg" style="font-size: 12px; margin-top: 8px; font-weight: bold; text-align: center;"></div>
     </div>
 
-#
-<!-- ============ سیکشن 6 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 7 شروع: ڈائٹ روٹین سسٹم (انٹری فارم)
-     ================================================================ -->
-*
-
-    <div class="card" style="border-right: 5px solid var(--warning); background: #fffdf4;">
-        <div class="section-heading" style="color:var(--warning);">🍽️ ڈائٹ روٹین سسٹم</div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 12px;">
-            <button class="setting-btn-pro" onclick="toggleDietSettingsPanel()">⚙️ سیٹنگ</button>
+    <!-- 6. Diet -->
+    <div class="card" style="border-right:5px solid var(--golden);background:#fffdf4;">
+        <div class="section-heading" style="color:var(--golden);">🍽️ ڈائٹ روٹین سسٹم</div>
+        <div style="background:#fef3c7;border:1px solid #fcd34d;color:#92400e;padding:10px;border-radius:8px;font-size:12px;font-weight:700;text-align:center;margin-bottom:12px;">
+            👤 ممبر: <span id="dietMemberLabel" style="font-weight:800;">—</span> &nbsp;|&nbsp; (علامات سیکشن سے تبدیل کریں)
         </div>
 
-        <div id="dietSettingsPanel" class="inline-settings-panel diet-panel">
-            <div style="font-weight: bold; font-size: 12px; color: var(--warning); margin-bottom: 8px; text-align:center;">⚙️ ڈائٹ روٹین کنٹرول پینل</div>
-            <div class="btn-group-custom">
-                <button class="btn btn-secondary" onclick="selectAllDietItems()">✅ ال سلیکٹ</button>
-                <button class="btn btn-primary" onclick="deleteSelectedDietItems()">🗑️ سلیکٹڈ ڈیلیٹ</button>
-                <button class="btn btn-danger" onclick="clearAllDietItems()">❌ ال ڈیلیٹ</button>
-                <button class="btn btn-success" onclick="window.print()">🖨️ پرنٹ</button>
-                <button class="btn btn-secondary" onclick="toggleDietSettingsPanel()">✖️ کلوز</button>
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">⏰ کھانے کا وقت:</label>
+        <select id="dietTimeSlot" class="select-input" style="margin-bottom:12px;">
+            <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
+            <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
+            <option value="شام کی چائے">3. شام کی چائے</option>
+            <option value="رات کا کھانا">4. رات کا کھانا</option>
+        </select>
+
+        <div class="diet-categories">
+            <div class="diet-cat">
+                <label>🍞 روزانہ کا آٹم</label>
+                <select id="dietDaily">
+                    <option value="گندم روٹی">گندم روٹی</option>
+                    <option value="دودھ">دودھ</option>
+                    <option value="چاول">چاول</option>
+                    <option value="سبزی">سبزی</option>
+                    <option value="لسی">لسی</option>
+                </select>
+            </div>
+            <div class="diet-cat">
+                <label>🍽️ کبھی کبھی کا آٹم</label>
+                <select id="dietSometimes">
+                    <option value="0">نہیں کھایا</option>
+                    <option value="تھوڑا">تھوڑا</option>
+                    <option value="زیادہ">زیادہ</option>
+                </select>
+            </div>
+            <div class="diet-cat">
+                <label>🍟 مکس جنک فوڈ</label>
+                <select id="dietJunk">
+                    <option value="0">نہیں کھایا</option>
+                    <option value="تھوڑا">تھوڑا</option>
+                    <option value="زیادہ">زیادہ</option>
+                </select>
             </div>
         </div>
 
-        <div style="margin-bottom: 14px; text-align: center;">
-            <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: #334155;">ممبر سلیکٹ کریں:</label>
-            <select id="dietMemberSelect" class="select-field" style="max-width:300px; margin:0 auto; text-align:center;">
-                <option value="علی">علی</option>
-                <option value="احمد">احمد</option>
-            </select>
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">تفصیل:</label>
+        <textarea id="dietDetails" rows="2" placeholder="مزید تفصیل..." class="select-input" style="font-weight:400;margin-bottom:12px;"></textarea>
+
+        <button class="btn btn-full" style="background:var(--golden);" onclick="saveDiet()">💾 ڈائٹ محفوظ کریں</button>
+        <div id="dietMsg" class="status-msg"></div>
+    </div>
+
+    <!-- 7. Diet History -->
+    <div class="card" style="border-right:5px solid var(--golden);">
+        <div class="section-heading" style="color:var(--golden);">🍽️ ڈائٹ ہسٹری</div>
+        <div class="mini-toolbar">
+            <button class="mini-btn" id="dietEditBtn" onclick="toggleEdit('dietHistory')">✏️ ایڈٹ</button>
+            <button class="mini-btn danger" onclick="clearSection('dietHistory')">🧹 کلئیر</button>
+        </div>
+        <div class="history-box" style="max-height:320px;">
+            <div class="history-header">
+                <span>📜 ڈائٹ ریکارڈ</span>
+                <span id="dietHistMember">—</span>
+            </div>
+            <div id="dietHistoryList"></div>
+        </div>
+    </div>
+
+    <!-- 8. Summary -->
+    <div class="card">
+        <div class="section-heading">📊 مجموعی کارکردگی اور بہتری کا خلاصہ</div>
+        <div class="percent-row">
+            <div class="percent-box pct-blue">
+                <div class="pct-label">🍽️ ڈائٹ پرسنٹیج</div>
+                <div class="pct-value" id="dietPct">0%</div>
+            </div>
+            <div class="percent-box pct-green">
+                <div class="pct-label">🩺 علامات پرسنٹیج</div>
+                <div class="pct-value" id="symptomPct">0%</div>
+            </div>
+            <div class="percent-box pct-purple">
+                <div class="pct-label">📈 مجموعی بہتری</div>
+                <div class="pct-value" id="overallPct">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Green Bus -->
+    <div class="card" style="border-right:5px solid #16a34a;">
+        <div class="duty-header">
+            <span style="color:#16a34a;">🚌 Green Bus Schedule</span>
+            <span class="bus-live"><span class="bus-live-dot"></span> LIVE</span>
+        </div>
+        <div class="bus-clock-banner">
+            <div>
+                <div style="font-size:10px;opacity:.8;">🕒 موجودہ وقت</div>
+                <div class="bus-clock-time" id="busClock">--:--:-- --</div>
+            </div>
+            <div style="font-size:34px;">⏰</div>
         </div>
 
-        <div style="margin-bottom: 14px; text-align: center;">
-            <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: #0f172a;">⏰ کھانے یا پینے کا وقت (Time Slot):</label>
-            <select id="mealTimeSlot" class="select-field" style="max-width:300px; margin:0 auto; text-align:center; background:#fffbeb; border:1px solid #d97706;">
-                <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
-                <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
-                <option value="شام کی چائے">3. شام کی چائے</option>
-                <option value="رات کا کھانا">4. رات کا کھانا</option>
-            </select>
+        <div class="section-heading" style="text-align:right;font-size:12px;color:#16a34a;border-bottom:2px dashed #bbf7d0;padding-bottom:4px;margin-bottom:6px;">1️⃣ روٹ منتخب کریں</div>
+        <select id="busRouteSelect" class="select-input" onchange="busOnRouteChange()"></select>
+
+        <div class="section-heading" style="text-align:right;font-size:12px;color:#16a34a;border-bottom:2px dashed #bbf7d0;padding-bottom:4px;margin:10px 0 6px;">2️⃣ دن منتخب کریں</div>
+        <select id="busDaySelect" class="select-input" onchange="busOnDayChange()"></select>
+
+        <div class="section-heading" style="text-align:right;font-size:12px;color:#16a34a;border-bottom:2px dashed #bbf7d0;padding-bottom:4px;margin:10px 0 6px;">3️⃣ اسٹاپ منتخب کریں</div>
+        <select id="busStopSelect" class="select-input"></select>
+
+        <button class="btn btn-success btn-full mt-14" onclick="busTrackNow()">🔍 ابھی ٹریک کریں</button>
+
+        <div class="bus-empty" id="busEmpty">👆 اوپر سے 1,2,3 منتخب کریں اور ٹریک کریں دبائیں</div>
+
+        <div class="bus-large-box" id="busLargeBox">
+            <div class="bus-large-row"><span class="bus-large-lbl">🕐 ٹائم رینج</span><span class="bus-large-val" id="busRange">--</span></div>
+            <div class="bus-large-row"><span class="bus-large-lbl">🚌 آنے والی بس</span><span class="bus-large-val" id="busNo">--</span></div>
+            <div class="bus-large-row"><span class="bus-large-lbl">⏰ اتنے بجے آئے گی</span><span class="bus-large-val" id="busArrival">--</span></div>
+            <div class="bus-large-row"><span class="bus-large-lbl">📊 ایسٹیمیٹ ٹائم</span><span class="bus-large-val" id="busEstimate">--</span></div>
+            <div class="bus-large-timer">
+                <div style="font-size:11px;font-weight:700;opacity:.9;">⏳ اتنے ٹائم میں بس آ رہی ہے</div>
+                <div class="bus-large-timer-time" id="busCountdown">00:00:00</div>
+                <div class="bus-large-timer-sub" id="busCountdownSub">--</div>
+                <div style="margin-top:8px;font-size:11px;opacity:.9;" id="busFakeText">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. Rashan Manager -->
+    <div class="card" style="border-right:5px solid var(--golden);">
+        <div class="duty-header">
+            <span style="color:var(--golden);">🛒 Rashan Manager</span>
+            <button class="mini-btn" onclick="rashanToggleSettings()">⚙️ سیٹنگز</button>
         </div>
 
-        <div style="max-height: 220px; overflow-y: auto; border: 1px solid #fde68a; border-radius: 8px; padding: 10px; background: #ffffff; margin-bottom: 16px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-
-                <details class="diet-item-section" open><summary>1️⃣ گندم / روٹی آئٹم</summary><div class="diet-item-content"><input type="checkbox" class="diet-item-chk" style="width:15px;height:15px;" checked><span>گندم روٹی / نان</span><select id="dietVal1"><option>1</option><option>2</option><option>0</option></select></div></details>
-
-                <details class="diet-item-section" open><summary>2️⃣ دودھ / لسی آئٹم</summary><div class="diet-item-content"><input type="checkbox" class="diet-item-chk" style="width:15px;height:15px;" checked><span>خالص دودھ / لسی</span><select id="dietVal2"><option>گلاس</option><option>کپ</option><option>0</option></select></div></details>
-
-                <details class="diet-item-section" open><summary>3️⃣ مکس جنک فوڈ</summary><div class="diet-item-content"><input type="checkbox" class="diet-item-chk" style="width:15px;height:15px;"><span>جنک فوڈ / سنیکس</span><select id="dietVal3"><option>0</option><option>تھوڑا</option><option>زیادہ</option></select></div></details>
-
+        <div class="rashan-settings-panel" id="rashanSettingsPanel">
+            <div class="rashan-settings-group">
+                <div class="title">➕ نیا آٹم شامل کریں</div>
+                <div class="rashan-add-grid">
+                    <input type="text" id="rashanNewItemName" class="rashan-input" placeholder="آٹم کا نام">
+                    <input type="text" id="rashanNewItemQty" class="rashan-input" placeholder="مقدار">
+                </div>
+                <button class="rashan-add-btn" onclick="rashanAddCustomItem()">➕ لسٹ میں شامل کریں</button>
+            </div>
+            <div class="rashan-settings-group">
+                <div class="title">🔧 سلیکشن</div>
+                <button class="rashan-tool-btn" onclick="rashanSelectAllItems()">✅ تمام سلیکٹ</button>
+                <button class="rashan-tool-btn" onclick="rashanUnselectAll()">⬜ سلیکشن ہٹائیں</button>
+            </div>
+            <div class="rashan-settings-group">
+                <div class="title">✏️ ایڈٹ موڈ</div>
+                <button class="rashan-tool-btn" id="rashanEditModeBtn" onclick="rashanToggleEditMode()">✏️ ایڈٹ آن کریں</button>
+            </div>
+            <div class="rashan-settings-group">
+                <div class="title">🗑️ ہسٹری</div>
+                <button class="rashan-tool-btn danger" onclick="rashanDeleteAllRecords()">❌ سب ہسٹری صاف</button>
             </div>
         </div>
 
-        <div style="margin-bottom: 16px;">
-            <label style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 6px; color: #334155;">ڈائٹ کی مزید تفصیل:</label>
-            <textarea id="dietDetailedNotes" rows="3" placeholder="یہاں مزید تفصیل لکھیں..." class="select-field" style="font-weight:normal;"></textarea>
+        <div class="rashan-edit-indicator" id="rashanEditIndicator">✏️ ایڈٹ موڈ چالو — ڈیلیٹ کرنے کے لیے ✕ دبائیں</div>
+
+        <div class="history-header">
+            <span>🏠 گھر کا سامان — منتخب کریں</span>
+            <span class="tag tag-warning" id="rashanSelectedCount">0</span>
+        </div>
+        <div class="rashan-items-scroll" id="rashanItemsScroll"></div>
+
+        <div class="history-header">
+            <span>📝 سلیکٹڈ آٹم (لائیو)</span>
+            <span class="tag tag-success" id="rashanLiveCount">0</span>
+        </div>
+        <div class="rashan-live-box" id="rashanLiveBox">
+            <div class="rashan-live-empty">✨ کوئی آٹم سلیکٹ نہیں کیا</div>
         </div>
 
-        <button class="btn" style="background: #d97706; width: 100%; padding: 16px; font-size: 16px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" onclick="saveMealRecordToStore()">💾 ڈائٹ روٹین محفوظ کریں (سیو)</button>
-        <div id="dietStatusMsg" style="font-size: 13px; margin-top: 10px; font-weight: bold; text-align: center;"></div>
+        <button class="rashan-save-btn" onclick="rashanSaveSelection()">💾 سلیکٹڈ آٹم سیو کریں</button>
+
+        <div class="history-header">
+            <span>📋 راشن ہسٹری</span>
+            <span class="tag tag-info" id="rashanHistoryCount">0</span>
+        </div>
+        <div class="rashan-history-box" id="rashanHistoryBox">
+            <div class="empty-note">📋 کوئی ریکارڈ موجود نہیں</div>
+        </div>
     </div>
 
-#
-<!-- ============ سیکشن 7 ختم ============ -->
+</div>
 
-
-<!-- ================================================================
-     سیکشن 8 شروع: ڈائٹ ہسٹری ریکارڈ (اسکرول ایبل)
-     ================================================================ -->
-*
-
-    <div class="card" style="border-right: 5px solid var(--warning);">
-        <div class="section-heading" style="color:var(--warning);">🍽️ ڈائٹ ہسٹری ریکارڈ</div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 12px;">
-            <button class="setting-btn-pro" onclick="toggleDietHistorySettings()">⚙️ سیٹنگ</button>
-        </div>
-
-        <div id="dietHistorySettingsPanel" class="inline-settings-panel diet-panel">
-            <div style="font-weight: bold; font-size: 12px; color: var(--warning); margin-bottom: 8px; text-align:center;">⚙️ ڈائٹ ہسٹری کنٹرول پینل</div>
-            <div class="btn-group-custom">
-                <button class="btn btn-secondary" onclick="selectAllDietHistory()">✅ ال سلیکٹ</button>
-                <button class="btn btn-primary" onclick="deleteSelectedDietHistory()">🗑️ سلیکٹڈ ڈیلیٹ</button>
-                <button class="btn btn-danger" onclick="clearAllDietHistory()">❌ ال ڈیلیٹ</button>
-                <button class="btn btn-success" onclick="window.print()">🖨️ پرنٹ</button>
-                <button class="btn btn-secondary" onclick="toggleDietHistorySettings()">✖️ کلوز</button>
-            </div>
-        </div>
-
-        <div id="dietHistoryLog" class="history-scroll-box diet-history-container"></div>
-    </div>
-
-#
-<!-- ============ سیکشن 8 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 9 شروع: علامات ٹریکر ہسٹری ریکارڈ (اسکرول ایبل)
-     ================================================================ -->
-*
-
-    <div class="card" style="border-right: 5px solid var(--purple);">
-        <div class="section-heading" style="color:var(--purple);">🩺 علامات ٹریکر ہسٹری ریکارڈ</div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 12px;">
-            <button class="setting-btn-pro" onclick="toggleSymptomHistorySettings()">⚙️ سیٹنگ</button>
-        </div>
-
-        <div id="symptomHistorySettingsPanel" class="inline-settings-panel symptom-panel">
-            <div style="font-weight: bold; font-size: 12px; color: var(--purple); margin-bottom: 8px; text-align:center;">⚙️ علامات ٹریکر کنٹرول پینل</div>
-            <div class="btn-group-custom">
-                <button class="btn btn-secondary" onclick="selectAllSymptomHistory()">✅ ال سلیکٹ</button>
-                <button class="btn btn-primary" onclick="deleteSelectedSymptomHistory()">🗑️ سلیکٹڈ ڈیلیٹ</button>
-                <button class="btn btn-danger" onclick="clearAllSymptomHistory()">❌ ال ڈیلیٹ</button>
-                <button class="btn btn-success" onclick="window.print()">🖨️ پرنٹ</button>
-                <button class="btn btn-secondary" onclick="toggleSymptomHistorySettings()">✖️ کلوز</button>
-            </div>
-        </div>
-
-        <div id="symptomHistoryLog" class="history-scroll-box symptom-history-container"></div>
-    </div>
-
-#
-<!-- ============ سیکشن 9 ختم ============ -->
-
-
-<!-- ================================================================
-     سیکشن 10 شروع: پرسنٹیج / خلاصہ باکسز (آخری حصہ)
-     ================================================================ -->
-*
-
-    <div class="section-heading summary-heading">📊 مجموعی کارکردگی اور بہتری کا خلاصہ</div>
-    <div class="percent-row">
-        <div class="percent-box percent-box-blue"><div class="percent-label">🍽️ ڈائٹ پرسنٹیج</div><div class="percent-value" id="dietPercentageValue">0%</div></div>
-        <div class="percent-box percent-box-green"><div class="percent-label">🩺 علامات پرسنٹیج</div><div class="percent-value" id="symptomPercentageValue">0%</div></div>
-        <div class="percent-box percent-box-purple"><div class="percent-label">📈 مجموعی بہتری</div><div class="percent-value" id="overallImprovementValue">0%</div></div>
-    </div>
-
-#
-<!-- ============ سیکشن 10 ختم ============ -->
-
-</div><!-- container ختم -->
-
-
-<!-- ================================================================
-     سیکشن 11 شروع: تمام جاوا اسکرپٹ منطق (ایک جگہ، نام الگ الگ)
-     ================================================================ -->
-*
 <script>
-/* ---------- الرٹ ٹائمر ---------- */
+/* =========================================================
+   CONSTANTS
+   ========================================================= */
+const DUTY_ROTATION = [
+    ['علی احمد','محمد عثمان'],
+    ['بلال حسن','حمزہ خان'],
+    ['طارق محمود','یاسر عرفات'],
+    ['سفیان علی','زاہد خان']
+];
+const TASKS = [
+    { title:'کمرے کی صفائی اور ترتیب', points:10 },
+    { title:'حاضری لاگ بک کی تیاری', points:5 },
+    { title:'سیکیورٹی کیمرہ چیکنگ', points:10 },
+    { title:'سامان کا جائزہ', points:5 },
+    { title:'لائٹس اور سوئچ چیکنگ', points:5 },
+    { title:'روزانہ کی فائنینشل رپورٹ', points:10 }
+];
+const SYMPTOM_BUTTONS = [
+    { text:'1. ٹھیک ہے', bg:'#d1fae5', fg:'#065f46', positive:true },
+    { text:'2. نہیں ٹھیک', bg:'#fee2e2', fg:'#991b1b', positive:false },
+    { text:'3. تھوڑا مسئلہ', bg:'#fef3c7', fg:'#92400e', positive:false },
+    { text:'4. کبھی کبھی', bg:'#e0f2fe', fg:'#0369a1', positive:false },
+    { text:'5. سیم پہلے جیسا', bg:'#e0e7ff', fg:'#3730a3', positive:false },
+    { text:'6. بہتر ہے پہلے سے', bg:'#ccfbf1', fg:'#115e59', positive:true },
+    { text:'7. کبھی زیادہ', bg:'#ffedd5', fg:'#9a3412', positive:false },
+    { text:'8. بہت زیادہ', bg:'#fce7f3', fg:'#9d174d', positive:false },
+    { text:'9. مسئلہ زیادہ', bg:'#fee2e2', fg:'#b91c1c', positive:false },
+    { text:'10. بار بار ریپیٹ', bg:'#ede9fe', fg:'#6d28d9', positive:false },
+    { text:'11. دیگر صورتحال', bg:'#ccfbf1', fg:'#0f766e', positive:false }
+];
+const BUS_DAYS = {Mon:'پیر',Tue:'منگل',Wed:'بدھ',Thu:'جمعرات',Fri:'جمعہ',Sat:'ہفتہ',Sun:'اتوار'};
+const BUS_ALL_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const BUS_ROUTES = [
+    {route:'Route 1 - Metro Line', stops:['Central Station','Mall Road','Kalma Chowk','University Chowk','Airport Terminal']},
+    {route:'Route 2 - Express', stops:['Model Town','Liberty Market','Blue Area','Tech Park']},
+    {route:'Route 3 - City Circular', stops:['Data Darbar','Anarkali','Ichhra','Shahdara']},
+    {route:'Route 4 - Green Town Link', stops:['Green Town','Johar Town','Thokar','Motorway Chowk']}
+];
+const RASHAN_DEFAULT_ITEMS = [
+    { id:'dal', name:'دال', qty:'1 کلو', icon:'🥘' },
+    { id:'chawal', name:'چاول', qty:'5 کلو', icon:'🍚' },
+    { id:'aata', name:'آٹا', qty:'10 کلو', icon:'🌾' },
+    { id:'cheeni', name:'چینی', qty:'2 کلو', icon:'🍬' },
+    { id:'ghee', name:'گھی', qty:'1 کلو', icon:'🧈' },
+    { id:'tel', name:'تیل', qty:'2 لیٹر', icon:'🛢️' },
+    { id:'aloo', name:'آلو', qty:'3 کلو', icon:'🥔' },
+    { id:'piyaz', name:'پیاز', qty:'2 کلو', icon:'🧅' },
+    { id:'sabzi', name:'سبزی', qty:'1 کلو', icon:'🥬' },
+    { id:'chani', name:'چنے', qty:'1 کلو', icon:'🫘' },
+    { id:'masalay', name:'مصالحے', qty:'مکس', icon:'🌶️' },
+    { id:'doodh', name:'دودھ', qty:'2 لیٹر', icon:'🥛' },
+    { id:'anda', name:'انڈے', qty:'1 درجن', icon:'🥚' },
+    { id:'chai', name:'چائے پتی', qty:'250 گرام', icon:'🍵' }
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+const state = {
+    dutyPair: DUTY_ROTATION[0],
+    currentTaskMember: '',
+    currentTaskIndex: 0,
+    selectedSymptom: null,
+    selectedSymptomPos: null,
+    taskScores: JSON.parse(localStorage.getItem('taskScores') || '{}'),
+    taskHistory: JSON.parse(localStorage.getItem('taskHistory') || '{}'),
+    skipped: JSON.parse(localStorage.getItem('skippedTasks') || '[]'),
+    symptoms: JSON.parse(localStorage.getItem('symptoms') || '[]'),
+    diets: JSON.parse(localStorage.getItem('diets') || '[]'),
+    healthMember: ''
+};
+function persist() {
+    localStorage.setItem('taskScores', JSON.stringify(state.taskScores));
+    localStorage.setItem('taskHistory', JSON.stringify(state.taskHistory));
+    localStorage.setItem('skippedTasks', JSON.stringify(state.skipped));
+    localStorage.setItem('symptoms', JSON.stringify(state.symptoms));
+    localStorage.setItem('diets', JSON.stringify(state.diets));
+}
+function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = String(s == null ? '' : s);
+    return d.innerHTML;
+}
+function nowStr() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} — ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'status-msg ' + type;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.className = 'status-msg'; }, 3000);
+}
+
+/* =========================================================
+   ALERT
+   ========================================================= */
 let alertCountdown = 25;
 let alertTimerId = null;
-let alertSoundInterval = null;
-
-function playBellSound() {
+let bellInterval = null;
+function playBell() {
     try {
-        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = "sine";
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
         osc.frequency.value = 900;
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
-    } catch (e) {
-        console.log("Audio permission required");
+        osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+}
+function startAlert() {
+    alertTimerId = setInterval(() => {
+        alertCountdown--;
+        const t = document.getElementById('alertTimer');
+        if (t) t.textContent = alertCountdown;
+        if (alertCountdown <= 0) {
+            clearInterval(alertTimerId);
+            document.getElementById('alertBar').classList.add('blink');
+            document.getElementById('alertMsg').innerHTML = '🚨 وقت ختم! فوری توجہ فرمائیں — الرٹ جاری ہے!';
+            bellInterval = setInterval(playBell, 1000);
+        }
+    }, 1000);
+}
+function skipAlert() {
+    clearInterval(alertTimerId);
+    clearInterval(bellInterval);
+    document.getElementById('alertBar').style.display = 'none';
+}
+
+/* =========================================================
+   DUTY + LEAVE
+   ========================================================= */
+function loadDuty() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const day = Math.floor((now - start) / 86400000);
+    state.dutyPair = DUTY_ROTATION[day % DUTY_ROTATION.length];
+
+    document.getElementById('seniorName').textContent = state.dutyPair[0];
+    document.getElementById('juniorName').textContent = state.dutyPair[1];
+
+    const leave = document.getElementById('leaveMemberSelect');
+    leave.innerHTML = `<option value="">-- ممبر منتخب کریں --</option>
+        <option value="${esc(state.dutyPair[0])}">1. ${esc(state.dutyPair[0])}</option>
+        <option value="${esc(state.dutyPair[1])}">2. ${esc(state.dutyPair[1])}</option>`;
+
+    const taskSel = document.getElementById('taskMemberSelect');
+    taskSel.innerHTML = `<option value="">-- ممبر منتخب کریں --</option>
+        <option value="${esc(state.dutyPair[0])}">${esc(state.dutyPair[0])}</option>
+        <option value="${esc(state.dutyPair[1])}">${esc(state.dutyPair[1])}</option>`;
+
+    const skipSel = document.getElementById('skipMemberSelect');
+    skipSel.innerHTML = `<option value="0">${esc(state.dutyPair[0])} (سینئر)</option>
+        <option value="1">${esc(state.dutyPair[1])} (جونیئر)</option>`;
+
+    const healthSel = document.getElementById('healthMemberSelect');
+    healthSel.innerHTML = `<option value="${esc(state.dutyPair[0])}">${esc(state.dutyPair[0])}</option>
+        <option value="${esc(state.dutyPair[1])}">${esc(state.dutyPair[1])}</option>`;
+    state.healthMember = state.dutyPair[0];
+
+    document.getElementById('skipSeniorTitle').textContent = '👤 ' + state.dutyPair[0];
+    document.getElementById('skipJuniorTitle').textContent = '👤 ' + state.dutyPair[1];
+    document.getElementById('symptomHistMember').textContent = state.healthMember;
+    document.getElementById('dietHistMember').textContent = state.healthMember;
+    document.getElementById('dietMemberLabel').textContent = state.healthMember;
+}
+function submitLeave() {
+    const name = document.getElementById('leaveMemberSelect').value;
+    if (!name) { showMsg('leaveMsg','⚠️ پہلے ممبر منتخب کریں!','error'); return; }
+    showMsg('leaveMsg', `✅ ${name} کی چھٹی کامیابی سے سبمٹ ہو گئی`, 'success');
+}
+
+/* =========================================================
+   TASK TRACKER
+   ========================================================= */
+function startTaskTracking() {
+    state.currentTaskMember = document.getElementById('taskMemberSelect').value;
+    const taskNameEl = document.getElementById('taskName');
+    const taskPointsEl = document.getElementById('taskPoints');
+    const totalEl = document.getElementById('taskTotalScore');
+    const memberLbl = document.getElementById('taskHistMember');
+    if (!state.currentTaskMember) {
+        taskNameEl.textContent = 'پہلے ممبر منتخب کریں';
+        taskPointsEl.textContent = '0 Points';
+        totalEl.textContent = 'ٹوٹل پوائنٹس: 0';
+        memberLbl.textContent = '— ممبر سلیکٹ کریں —';
+        renderTaskHistory();
+        return;
     }
+    state.currentTaskIndex = 0;
+    memberLbl.textContent = '👤 ' + state.currentTaskMember;
+    renderTaskHistory();
+    showCurrentTask();
 }
-
-alertTimerId = setInterval(() => {
-    alertCountdown--;
-    const timerEl = document.getElementById('alertTimer');
-    if (timerEl) timerEl.innerText = alertCountdown;
-
-    if (alertCountdown <= 0) {
-        clearInterval(alertTimerId);
-        let alertBar = document.getElementById('alertTickerBar');
-        alertBar.classList.add('continuous-blink');
-        document.getElementById('alertMsgText').innerText = "🚨 وقت ختم! فوری توجہ فرمائیں - الرٹ جاری ہے!";
-        alertSoundInterval = setInterval(playBellSound, 1000);
-    }
-}, 1000);
-
-function skipAlertTicker() {
-    if (alertSoundInterval) clearInterval(alertSoundInterval);
-    if (alertTimerId) clearInterval(alertTimerId);
-    document.getElementById('alertTickerBar').style.display = 'none';
-}
-
-/* ---------- ڈیوٹی ممبران روٹیشن ---------- */
-const allMembers = [
-    ["علی احمد", "محمد عثمان"],
-    ["بلال حسن", "حمزہ خان"],
-    ["طارق محمود", "یاسر عرفات"],
-    ["سفیان علی", "زاہد خان"]
-];
-
-function updateDutyRoster() {
-    let today = new Date();
-    let dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-    let dutyGroupIndex = dayOfYear % allMembers.length;
-    let currentPair = allMembers[dutyGroupIndex];
-
-    document.getElementById('member1Name').innerText = currentPair[0];
-    document.getElementById('member2Name').innerText = currentPair[1];
-
-    let select = document.getElementById('leaveMemberSelect');
-    select.innerHTML = `
-        <option value="">-- ممبر منتخب کریں --</option>
-        <option value="${currentPair[0]}">1. ${currentPair[0]}</option>
-        <option value="${currentPair[1]}">2. ${currentPair[1]}</option>
-    `;
-}
-
-function submitLeaveRequest() {
-    let selectElement = document.getElementById('leaveMemberSelect');
-    let selectedName = selectElement.value;
-    let msgBox = document.getElementById('leaveStatusMsg');
-
-    if (selectedName !== "") {
-        msgBox.style.display = 'block';
-        msgBox.style.background = '#ecfdf5';
-        msgBox.style.color = '#047857';
-        msgBox.style.borderColor = '#a7f3d0';
-        msgBox.innerText = "✅ " + selectedName + " کی چھٹی باقاعدہ سبمٹ ہو گئی ہے۔";
+function showCurrentTask() {
+    const total = Number(state.taskScores[state.currentTaskMember] || 0);
+    document.getElementById('taskTotalScore').textContent = 'ٹوٹل پوائنٹس: ' + total;
+    if (state.currentTaskIndex < TASKS.length) {
+        const t = TASKS[state.currentTaskIndex];
+        document.getElementById('taskName').textContent = t.title;
+        document.getElementById('taskPoints').textContent = t.points + ' Points';
     } else {
-        msgBox.style.display = 'block';
-        msgBox.style.background = '#fef2f2';
-        msgBox.style.color = '#ef4444';
-        msgBox.style.borderColor = '#fecaca';
-        msgBox.innerText = "⚠️ براے مہربانی ڈراپ ڈاؤن لسٹ سے کسی ایک ممبر کا انتخاب کریں!";
+        document.getElementById('taskName').textContent = '🎉 تمام کام مکمل!';
+        document.getElementById('taskPoints').textContent = 'حتمی اسکور: ' + total;
     }
 }
-
-/* ---------- ٹاسک ٹریکر منطق ---------- */
-const tasksList = [
-    { title: "کمرے کی صفائی اور ترتیب", points: 10 },
-    { title: "حاضری لاگ بک کی تیاری", points: 5 },
-    { title: "سیکیورٹی کیمرہ چیکنگ", points: 10 },
-    { title: "سامان کا جائزہ", points: 5 },
-    { title: "لائٹس اور سوئچ چیکنگ", points: 5 },
-    { title: "روزانہ کی فائنینشل رپورٹ", points: 10 }
-];
-let taskCurrentIndex=0, taskTotalPoints=0, selectedMemberTask="";
-let memberTaskScores=JSON.parse(localStorage.getItem('memberTaskScores'))||{};
-let memberTaskHistory=JSON.parse(localStorage.getItem('memberTaskHistory'))||{};
-function getTaskMemberKey(member){return member==='علی'?'ali':(member==='احمد'?'ahmad':member);}
-function getPerformanceGrade(points){const pct=Math.min(100,Math.round((points/45)*100));if(pct>=80)return'Excellent';if(pct>=60)return'Good';if(pct>=40)return'Average';return'Needs Improvement';}
-function renderFinalResults(){const body=document.getElementById('finalResultTableBody');if(!body)return;body.innerHTML=['علی','احمد'].map(member=>{const points=Number(memberTaskScores[member]||0);return`<tr><td><b>${member}</b></td><td><span style="font-weight:bold;color:var(--success);">${points} پوائنٹس</span></td><td><span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:12px;font-size:12px;">${getPerformanceGrade(points)}</span></td></tr>`}).join('');}
-function renderTaskHistory(){const list=document.getElementById('historyList');if(!list)return;const history=memberTaskHistory[selectedMemberTask]||[];list.innerHTML=history.length?history.map(item=>`<div class="history-item ${item.statusClass}"><span>${item.title} (${item.points} Pts)</span><span>${item.status}</span></div>`).join(''):'<div style="color:#94a3b8;text-align:center;padding:18px 0;font-size:12px;">اس ممبر کی ٹاسک ہسٹری ابھی خالی ہے۔</div>'; }
-function startTasks(){selectedMemberTask=document.getElementById('memberSelect').value;if(!selectedMemberTask){document.getElementById('taskText').innerText='پہلے ممبر منتخب کریں';document.getElementById('taskPoints').innerText='0 Points';document.getElementById('totalScoreText').innerText='ٹوٹل پوائنٹس: 0';document.getElementById('historyList').innerHTML='';return;}taskCurrentIndex=0;taskTotalPoints=Number(memberTaskScores[selectedMemberTask]||0);renderTaskHistory();showTask();}
-function showTask(){document.getElementById('totalScoreText').innerText=`ٹوٹل پوائنٹس: ${taskTotalPoints}`;if(taskCurrentIndex<tasksList.length){document.getElementById('taskText').innerText=tasksList[taskCurrentIndex].title;document.getElementById('taskPoints').innerText=`${tasksList[taskCurrentIndex].points} Points`;}else{document.getElementById('taskText').innerText='🎉 تمام کام مکمل!';document.getElementById('taskPoints').innerText=`حتمی اسکور: ${taskTotalPoints}`;}}
-function submitTask(status){if(!selectedMemberTask){document.getElementById('taskText').innerText='⚠️ پہلے ممبر منتخب کریں!';return;}if(taskCurrentIndex>=tasksList.length)return;const currentTask=tasksList[taskCurrentIndex];const statusClass=status==='ہو گیا'?'status-done':(status==='نہیں ہوا'?'status-not-done':'status-na');if(status==='ہو گیا')taskTotalPoints+=currentTask.points;memberTaskScores[selectedMemberTask]=taskTotalPoints;if(!memberTaskHistory[selectedMemberTask])memberTaskHistory[selectedMemberTask]=[];memberTaskHistory[selectedMemberTask].unshift({title:currentTask.title,points:currentTask.points,status,statusClass});localStorage.setItem('memberTaskScores',JSON.stringify(memberTaskScores));localStorage.setItem('memberTaskHistory',JSON.stringify(memberTaskHistory));if(status==='کرنا نہیں تھا')addTaskTrackerSkippedRecord(selectedMemberTask,currentTask.title);renderTaskHistory();renderFinalResults();taskCurrentIndex++;showTask();}
-function addTaskTrackerSkippedRecord(memberName,taskTitle){const memberKey=getTaskMemberKey(memberName);if(typeof skippedHistoryLogs==='undefined')return;if(skippedHistoryLogs.some(item=>item.source==='task-tracker'&&item.member===memberName&&item.task===taskTitle))return;skippedHistoryLogs.push({id:Date.now(),memberKey,member:memberName,task:taskTitle,reason:'ٹاسک ٹریکر سے اسکیپ کیا گیا',source:'task-tracker'});localStorage.setItem('skippedHistoryLogs',JSON.stringify(skippedHistoryLogs));if(typeof renderTasksUI==='function')renderTasksUI();}
-
-/* ---------- اسکیپ اور ریموو منطق ---------- */
-let memberTasks = JSON.parse(localStorage.getItem('memberActiveTasks')) || {
-    ali: ["صبح کی چیکنگ", "شام کی رپورٹ", "ڈیٹا بیک اپ"],
-    ahmad: ["سائٹ وزٹ", "صفائی کا معائنہ", "کیمپ کی سیکیورٹی"]
-};
-
-let skippedHistoryLogs = JSON.parse(localStorage.getItem('skippedHistoryLogs')) || [
-    { id: 1, memberKey: "ali", member: "علی", task: "ہفتہ وار میٹنگ", reason: "طبی طبیعت ناساز تھی" }
-];
-
-function toggleSkipSettingsPanel() {
-    let panel = document.getElementById('skipSettingsPanel');
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-}
-
-function renderTasksUI() {
-    const aliList = document.getElementById('ali-active-list');
-    const ahmadList = document.getElementById('ahmad-active-list');
-
-    if (memberTasks.ali.length === 0) {
-        aliList.innerHTML = `<li style="color: #16a34a; padding: 4px 0; font-size: 12px;">تمام کام مکمل ہو چکے ہیں</li>`;
+function submitTask(status) {
+    if (!state.currentTaskMember) { showMsg('taskMsg','⚠️ پہلے ممبر منتخب کریں!','error'); return; }
+    if (state.currentTaskIndex >= TASKS.length) return;
+    const task = TASKS[state.currentTaskIndex];
+    const member = state.currentTaskMember;
+    if (!state.taskHistory[member]) state.taskHistory[member] = [];
+    if (!state.taskScores[member]) state.taskScores[member] = 0;
+    let tagClass, tagText;
+    if (status === 'ہو گیا') {
+        state.taskScores[member] += task.points;
+        tagClass = 'tag-success'; tagText = '✅ ہو گیا';
+    } else if (status === 'نہیں ہوا') {
+        tagClass = 'tag-danger'; tagText = '❌ نہیں ہوا';
     } else {
-        aliList.innerHTML = memberTasks.ali.map(task => `
-            <li style="padding: 5px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                <span>• ${task}</span>
-                <span style="background: rgba(2, 132, 199, 0.1); color: #0284c7; font-size: 0.75em; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Active</span>
-            </li>
-        `).join('');
+        tagClass = 'tag-info'; tagText = '⚪ کرنا نہیں تھا';
+        addSkippedTask(member, task.title, 'ٹاسک ٹریکر سے اسکیپ');
     }
-
-    if (memberTasks.ahmad.length === 0) {
-        ahmadList.innerHTML = `<li style="color: #16a34a; padding: 4px 0; font-size: 12px;">تمام کام مکمل ہو چکے ہیں</li>`;
-    } else {
-        ahmadList.innerHTML = memberTasks.ahmad.map(task => `
-            <li style="padding: 5px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                <span>• ${task}</span>
-                <span style="background: rgba(22, 163, 74, 0.1); color: #16a34a; font-size: 0.75em; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Active</span>
-            </li>
-        `).join('');
-    }
-
-    updateTaskDropdown();
-    renderMemberSkippedLists();
-}
-
-function renderMemberSkippedLists() {
-    let aliContainer = document.getElementById('ali-skipped-scroll-list');
-    let ahmadContainer = document.getElementById('ahmad-skipped-scroll-list');
-
-    let aliSkipped = skippedHistoryLogs.filter(item => item.memberKey === 'ali');
-    let ahmadSkipped = skippedHistoryLogs.filter(item => item.memberKey === 'ahmad');
-
-    if (aliSkipped.length === 0) {
-        aliContainer.innerHTML = '<div style="color: #94a3b8; text-align: center; padding: 10px 0; font-size: 12px;">کوئی اسکیپ نہیں ہوا۔</div>';
-    } else {
-        aliContainer.innerHTML = aliSkipped.map(item => `
-            <div style="padding: 6px; border-bottom: 1px dashed #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <input type="checkbox" class="skipped-checkbox" data-id="${item.id}" style="width: 14px; height: 14px; cursor: pointer;">
-                    <span><b>${item.task}</b> <span style="color: var(--golden);">(${item.reason})</span></span>
-                </div>
-                <button style="background: var(--danger); color: white; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;" onclick="deleteSingleSkipped(${item.id})">ڈیلیٹ</button>
-            </div>
-        `).join('');
-    }
-
-    if (ahmadSkipped.length === 0) {
-        ahmadContainer.innerHTML = '<div style="color: #94a3b8; text-align: center; padding: 10px 0; font-size: 12px;">کوئی اسکیپ نہیں ہوا۔</div>';
-    } else {
-        ahmadContainer.innerHTML = ahmadSkipped.map(item => `
-            <div style="padding: 6px; border-bottom: 1px dashed #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <input type="checkbox" class="skipped-checkbox" data-id="${item.id}" style="width: 14px; height: 14px; cursor: pointer;">
-                    <span><b>${item.task}</b> <span style="color: var(--golden);">(${item.reason})</span></span>
-                </div>
-                <button style="background: var(--danger); color: white; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;" onclick="deleteSingleSkipped(${item.id})">ڈیلیٹ</button>
-            </div>
-        `).join('');
-    }
-}
-
-function updateTaskDropdown() {
-    const member = document.getElementById('skip-member-select').value;
-    const taskSelect = document.getElementById('skip-task-select');
-    const currentTasks = memberTasks[member];
-
-    if (!currentTasks || currentTasks.length === 0) {
-        taskSelect.innerHTML = `<option value="">کوئی کام موجود نہیں</option>`;
-    } else {
-        taskSelect.innerHTML = currentTasks.map(task => `<option value="${task}">${task}</option>`).join('');
-    }
-}
-
-function submitAndRemoveTask() {
-    const memberKey = document.getElementById('skip-member-select').value;
-    const memberName = (memberKey === 'ali') ? 'علی' : 'احمد';
-    const taskSelect = document.getElementById('skip-task-select');
-    const selectedTask = taskSelect.value;
-    const reasonInput = document.getElementById('skip-reason-input');
-    const reason = reasonInput.value.trim();
-
-    if (!selectedTask || memberTasks[memberKey].length === 0 || !reason) return;
-
-    memberTasks[memberKey] = memberTasks[memberKey].filter(task => task !== selectedTask);
-
-    skippedHistoryLogs.push({
-        id: Date.now(),
-        memberKey: memberKey,
-        member: memberName,
-        task: selectedTask,
-        reason: reason
+    state.taskHistory[member].unshift({
+        id: Date.now() + Math.random(),
+        title: task.title,
+        points: task.points,
+        status,
+        tagClass,
+        tagText,
+        date: nowStr()
     });
-
-    localStorage.setItem('memberActiveTasks', JSON.stringify(memberTasks));
-    localStorage.setItem('skippedHistoryLogs', JSON.stringify(skippedHistoryLogs));
-
-    renderTasksUI();
-    reasonInput.value = '';
+    persist();
+    renderTaskHistory();
+    renderSkippedLists();
+    renderResults();
+    state.currentTaskIndex++;
+    showCurrentTask();
 }
-
-function deleteSingleSkipped(id) {
-    skippedHistoryLogs = skippedHistoryLogs.filter(item => item.id !== id);
-    localStorage.setItem('skippedHistoryLogs', JSON.stringify(skippedHistoryLogs));
-    renderTasksUI();
-}
-
-function selectAllSkippedItems() {
-    document.querySelectorAll('.skipped-checkbox').forEach(chk => chk.checked = true);
-}
-
-function deleteSelectedSkippedItems() {
-    let checkboxes = document.querySelectorAll('.skipped-checkbox:checked');
-    let idsToDelete = Array.from(checkboxes).map(chk => parseInt(chk.getAttribute('data-id')));
-    if (idsToDelete.length === 0) return;
-
-    skippedHistoryLogs = skippedHistoryLogs.filter(item => !idsToDelete.includes(item.id));
-    localStorage.setItem('skippedHistoryLogs', JSON.stringify(skippedHistoryLogs));
-    renderTasksUI();
-}
-
-function clearAllSkippedItems() {
-    skippedHistoryLogs = [];
-    localStorage.setItem('skippedHistoryLogs', JSON.stringify(skippedHistoryLogs));
-    renderTasksUI();
-}
-
-/* ---------- علامات ٹریکر فارم منطق ---------- */
-let selectedSymptomStatus = "1. ٹھیک ہے";
-
-function handleSymptom(statusText) {
-    selectedSymptomStatus = statusText;
-    document.getElementById('symptomTitleText').innerText = `🔍 کیفیت: ${statusText}`;
-}
-
-function submitSymptomForm() {
-    let member = document.getElementById('healthMemberSelect').value;
-    let details = document.getElementById('symptomDetailedNotes').value;
-    let statusMsgEl = document.getElementById('symptomStatusMsg');
-
-    if (!details) {
-        statusMsgEl.style.color = "#ef4444";
-        statusMsgEl.innerText = "⚠️ براہ کرم تفصیل کا باکس پُر کریں!";
+function renderTaskHistory() {
+    const box = document.getElementById('taskHistoryList');
+    const member = state.currentTaskMember;
+    if (!member) {
+        box.innerHTML = '<div class="empty-note">ممبر منتخب کریں تاکہ ہسٹری دکھائی جائے</div>';
         return;
     }
-
-    statusMsgEl.style.color = "#10b981";
-    statusMsgEl.innerText = `✅ ${member} کے لیے اسٹیٹس (${selectedSymptomStatus}) کا ریکارڈ کامیابی سے سبمٹ ہو گیا!`;
-    symptomHistoryLogs.push({id:Date.now(),member,symptom:document.getElementById('symptomTitleText').innerText.replace(/^🔍 (علامت|کیفیت):\s*/,''),status:selectedSymptomStatus,details,isPositive:['1. ٹھیک ہے','6. بہتر ہے پہلے سے'].includes(selectedSymptomStatus)});
-    renderSymptomHistory();
-    updateSummaryPercentages();
-    setTimeout(() => { statusMsgEl.innerText = ""; }, 3500);
-}
-
-/* ---------- ڈائٹ روٹین سسٹم منطق ---------- */
-function toggleDietSettingsPanel() {
-    let panel = document.getElementById('dietSettingsPanel');
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-}
-
-function selectAllDietItems() {
-    document.querySelectorAll('.diet-item-chk').forEach(chk => chk.checked = true);
-}
-
-function deleteSelectedDietItems() {
-    document.querySelectorAll('.diet-item-chk:checked').forEach(chk => chk.checked = false);
-}
-
-function clearAllDietItems() {
-    document.querySelectorAll('.diet-item-chk').forEach(chk => chk.checked = false);
-    document.getElementById('dietDetailedNotes').value = '';
-}
-
-function saveMealRecordToStore() {
-    let member = document.getElementById('dietMemberSelect').value;
-    let timeSlot = document.getElementById('mealTimeSlot').value;
-    let statusMsgEl = document.getElementById('dietStatusMsg');
-
-    statusMsgEl.style.opacity = "1";
-    statusMsgEl.style.color = "#10b981";
-    statusMsgEl.innerText = `✅ (${member}) کے لیے (${timeSlot}) کا ڈائٹ ریکارڈ کامیابی سے محفوظ ہو گیا!`;
-    dietHistoryLogs.push({id:Date.now(),member,slot:timeSlot,v1:`گندم روٹی: ${document.getElementById('dietVal1').value}`,v2:`دودھ: ${document.getElementById('dietVal2').value}`,v3:`جنک: ${document.getElementById('dietVal3').value}`,isGood:document.getElementById('dietVal3').value==='0'});
-    renderDietHistory();
-    updateSummaryPercentages();
-    setTimeout(() => { statusMsgEl.innerText = ""; }, 3500);
-}
-
-/* ---------- ڈائٹ ہسٹری ریکارڈ منطق ---------- */
-let dietHistoryLogs = [
-    { id: 1, slot: "صبح کا ناشتہ", v1: "گندم روٹی: 2", v2: "دودھ: 1 گلاس", v3: "جنک: 0", isGood: true },
-    { id: 2, slot: "دوپہر کا کھانا", v1: "گندم روٹی: 1", v2: "دودھ: 0", v3: "جنک: تھوڑا", isGood: false },
-    { id: 3, slot: "شام کی چائے", v1: "گندم روٹی: 0", v2: "دودھ: 1 کپ", v3: "جنک: 0", isGood: true },
-    { id: 4, slot: "رات کا کھانا", v1: "گندم روٹی: 2", v2: "دودھ: 1 گلاس", v3: "جنک: 0", isGood: true },
-    { id: 5, slot: "اگلا دن - ناشتہ", v1: "گندم روٹی: 1", v2: "دودھ: 1 کپ", v3: "جنک: 0", isGood: true },
-    { id: 6, slot: "اگلا دن - دوپہر", v1: "گندم روٹی: 2", v2: "دودھ: 0", v3: "جنک: زیادہ", isGood: false }
-];
-
-function toggleDietHistorySettings() {
-    let panel = document.getElementById('dietHistorySettingsPanel');
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-}
-
-function renderDietHistory() {
-    let dietCont = document.getElementById('dietHistoryLog');
-    if (dietHistoryLogs.length === 0) {
-        dietCont.innerHTML = '<div style="color: #64748b; text-align: center; padding: 40px 0;">کوئی ڈائٹ ہسٹری موجود نہیں۔</div>';
+    const hist = state.taskHistory[member] || [];
+    if (!hist.length) {
+        box.innerHTML = '<div class="empty-note">اس ممبر کی ٹاسک ہسٹری خالی ہے</div>';
         return;
     }
-    dietCont.innerHTML = dietHistoryLogs.map((item) => `
-        <div class="log-row diet-row">
-            <div class="row-left">
-                <input type="checkbox" class="diet-history-checkbox" data-id="${item.id}" style="width: 16px; height: 16px; cursor: pointer;">
-                <span>👤 <b>${item.member || 'ممبر'}</b> · ⏰ <b>${item.slot}</b> (${item.v1} | ${item.v2} | ${item.v3})</span>
+    box.innerHTML = hist.map(item => `
+        <div class="history-item">
+            <div class="info">
+                <div class="line">
+                    <b>${esc(item.title)}</b>
+                    <span class="tag ${item.tagClass}">${item.tagText}</span>
+                    <span class="tag tag-warning">${item.points} Pts</span>
+                </div>
+                <div class="date">🕒 ${item.date}</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="color:${item.isGood ? 'var(--success)' : 'var(--danger)'}; font-weight:bold; font-size: 11px;">
-                    ${item.isGood ? '✅ اچھی خوراک' : '⚠️ جنک فوڈ'}
-                </span>
-                <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" onclick="deleteSingleDietItem(${item.id})">ڈیلیٹ</button>
+            <div class="actions">
+                <button class="edit" onclick="editTaskHistory('${esc(member)}', ${item.id})">✏️</button>
+                <button class="del" onclick="deleteTaskHistory('${esc(member)}', ${item.id})">🗑️</button>
             </div>
         </div>
     `).join('');
 }
+function deleteTaskHistory(member, id) {
+    state.taskHistory[member] = (state.taskHistory[member] || []).filter(i => i.id !== id);
+    persist();
+    renderTaskHistory();
+}
+function editTaskHistory(member, id) {
+    const item = (state.taskHistory[member] || []).find(i => i.id === id);
+    if (!item) return;
+    const newTitle = prompt('کام کا نام:', item.title);
+    if (newTitle === null) return;
+    const newPts = prompt('پوائنٹس:', item.points);
+    if (newPts === null) return;
+    item.title = newTitle.trim() || item.title;
+    item.points = Number(newPts) || item.points;
+    persist();
+    renderTaskHistory();
+}
 
-function deleteSingleDietItem(id) {
-    dietHistoryLogs = dietHistoryLogs.filter(item => item.id !== id);
+/* =========================================================
+   SKIP TASKS
+   ========================================================= */
+function addSkippedTask(memberName, taskTitle, reason) {
+    if (state.dutyPair.indexOf(memberName) === -1) return;
+    if (state.skipped.some(s => s.member === memberName && s.task === taskTitle)) return;
+    state.skipped.push({
+        id: Date.now() + Math.random(),
+        member: memberName,
+        task: taskTitle,
+        reason: reason || 'وجہ نہیں دی گئی',
+        date: nowStr()
+    });
+    persist();
+}
+function updateSkipTaskDropdown() {
+    const taskSel = document.getElementById('skipTaskSelect');
+    taskSel.innerHTML = TASKS.map(t => `<option value="${esc(t.title)}">${esc(t.title)}</option>`).join('');
+}
+function submitSkipTask() {
+    const idx = Number(document.getElementById('skipMemberSelect').value);
+    const member = state.dutyPair[idx];
+    const task = document.getElementById('skipTaskSelect').value;
+    const reason = document.getElementById('skipReasonInput').value.trim();
+    if (!task) { showMsg('skipMsg','⚠️ کوئی کام منتخب کریں!','error'); return; }
+    if (!reason) { showMsg('skipMsg','⚠️ وجہ لکھیں!','error'); return; }
+    if (!TASKS.some(t => t.title === task)) {
+        showMsg('skipMsg','⚠️ ایسا کوئی کام لسٹ میں موجود نہیں!','error');
+        return;
+    }
+    if (state.skipped.some(s => s.member === member && s.task === task)) {
+        showMsg('skipMsg','⚠️ یہ کام پہلے ہی اسکیپ ہو چکا ہے!','error');
+        return;
+    }
+    state.skipped.push({
+        id: Date.now() + Math.random(),
+        member,
+        task,
+        reason,
+        date: nowStr()
+    });
+    persist();
+    document.getElementById('skipReasonInput').value = '';
+    renderSkippedLists();
+    showMsg('skipMsg', `✅ ${member} کا کام اسکیپ ہو گیا`, 'success');
+}
+function renderSkippedLists() {
+    const senior = state.dutyPair[0];
+    const junior = state.dutyPair[1];
+    const seniorBox = document.getElementById('skipSeniorList');
+    const juniorBox = document.getElementById('skipJuniorList');
+    const seniorItems = state.skipped.filter(s => s.member === senior);
+    const juniorItems = state.skipped.filter(s => s.member === junior);
+    const render = list => list.length ? list.map(s => `
+        <div class="skip-item">
+            <div class="name">${esc(s.task)}<span class="reason">📝 ${esc(s.reason)}</span></div>
+            <div class="actions"><button onclick="deleteSkipped(${s.id})">🗑️</button></div>
+        </div>
+    `).join('') : '<div class="empty-note">کوئی اسکیپ شدہ کام نہیں</div>';
+    seniorBox.innerHTML = render(seniorItems);
+    juniorBox.innerHTML = render(juniorItems);
+}
+function deleteSkipped(id) {
+    state.skipped = state.skipped.filter(s => s.id !== id);
+    persist();
+    renderSkippedLists();
+}
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+function gradeFromScore(points) {
+    const maxPts = TASKS.reduce((a, b) => a + b.points, 0);
+    const pct = Math.min(100, Math.round((points / maxPts) * 100));
+    if (pct >= 80) return 'Excellent';
+    if (pct >= 60) return 'Good';
+    if (pct >= 40) return 'Average';
+    return 'Needs Improvement';
+}
+function renderResults() {
+    const body = document.getElementById('resultTableBody');
+    body.innerHTML = state.dutyPair.map(m => {
+        const pts = Number(state.taskScores[m] || 0);
+        const grade = gradeFromScore(pts);
+        const color = grade === 'Excellent' ? '#10b981' :
+                      grade === 'Good' ? '#2563eb' :
+                      grade === 'Average' ? '#d97706' : '#ef4444';
+        return `<tr>
+            <td><b>${esc(m)}</b></td>
+            <td><b style="color:var(--success);">${pts} پوائنٹس</b></td>
+            <td><span style="background:${color};color:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;">${grade}</span></td>
+        </tr>`;
+    }).join('');
+}
+
+/* =========================================================
+   SYMPTOMS
+   ========================================================= */
+function buildSymptomButtons() {
+    const box = document.getElementById('symptomButtons');
+    box.innerHTML = SYMPTOM_BUTTONS.map((b, i) => `
+        <button type="button" class="symptom-btn"
+            style="background:${b.bg};color:${b.fg};border:1px solid ${b.fg}33;"
+            onclick="pressSymptom(${i})">${esc(b.text)}</button>
+    `).join('');
+}
+function pressSymptom(i) {
+    const b = SYMPTOM_BUTTONS[i];
+    state.selectedSymptom = b.text;
+    state.selectedSymptomPos = b.positive;
+    document.getElementById('symptomTitle').textContent = '🔍 علامت: ' + b.text;
+    const member = state.healthMember || state.dutyPair[0];
+    const details = document.getElementById('symptomDetails').value.trim();
+    state.symptoms.push({
+        id: Date.now() + Math.random(),
+        member,
+        symptom: b.text,
+        details: details || '—',
+        positive: b.positive,
+        date: nowStr()
+    });
+    persist();
+    renderSymptomHistory();
+    updateSummary();
+    document.getElementById('symptomDetails').value = '';
+    showMsg('symptomMsg', '✅ علامت ہسٹری میں شامل ہو گئی', 'success');
+}
+function saveSymptomFromSelection() {
+    if (!state.selectedSymptom) {
+        showMsg('symptomMsg','⚠️ پہلے کوئی علامت بٹن دبائیں!','error');
+        return;
+    }
+    const member = state.healthMember || state.dutyPair[0];
+    const details = document.getElementById('symptomDetails').value.trim();
+    const last = state.symptoms.slice().reverse().find(s => s.member === member && s.symptom === state.selectedSymptom);
+    if (last) {
+        last.details = details || last.details;
+        last.date = nowStr();
+    } else {
+        state.symptoms.push({
+            id: Date.now() + Math.random(),
+            member,
+            symptom: state.selectedSymptom,
+            details: details || '—',
+            positive: state.selectedSymptomPos,
+            date: nowStr()
+        });
+    }
+    persist();
+    renderSymptomHistory();
+    updateSummary();
+    document.getElementById('symptomDetails').value = '';
+    showMsg('symptomMsg', '✅ تفصیل محفوظ ہو گئی', 'success');
+}
+function onHealthMemberChange() {
+    state.healthMember = document.getElementById('healthMemberSelect').value;
+    document.getElementById('symptomHistMember').textContent = state.healthMember;
+    document.getElementById('dietHistMember').textContent = state.healthMember;
+    document.getElementById('dietMemberLabel').textContent = state.healthMember;
+    renderSymptomHistory();
     renderDietHistory();
-    updateSummaryPercentages();
+    updateSummary();
 }
-
-function selectAllDietHistory() {
-    document.querySelectorAll('.diet-history-checkbox').forEach(chk => chk.checked = true);
-}
-
-function deleteSelectedDietHistory() {
-    let checkboxes = document.querySelectorAll('.diet-history-checkbox:checked');
-    let idsToDelete = Array.from(checkboxes).map(chk => parseInt(chk.getAttribute('data-id')));
-    if (idsToDelete.length === 0) return;
-    dietHistoryLogs = dietHistoryLogs.filter(item => !idsToDelete.includes(item.id));
-    renderDietHistory();
-    updateSummaryPercentages();
-}
-
-function clearAllDietHistory() {
-    dietHistoryLogs = [];
-    renderDietHistory();
-    updateSummaryPercentages();
-}
-
-/* ---------- علامات ہسٹری ریکارڈ منطق ---------- */
-let symptomHistoryLogs = [
-    { id: 1, member: "علی", symptom: "گیس / پیٹ میں ابھار", status: "1. ٹھیک ہے", isPositive: true },
-    { id: 2, member: "احمد", symptom: "قبض کی شکایت", status: "2. نہیں ٹھیک", isPositive: false },
-    { id: 3, member: "علی", symptom: "سر درد", status: "6. بہتر ہے پہلے سے", isPositive: true },
-    { id: 4, member: "احمد", symptom: "چکر آنا", status: "8. مسئلہ بہت زیادہ ہے", isPositive: false },
-    { id: 5, member: "علی", symptom: "معدے کی جلن", status: "3. تھوڑا مسئلہ ہے", isPositive: false },
-    { id: 6, member: "احمد", symptom: "گیس / پیٹ میں ابھار", status: "1. ٹھیک ہے", isPositive: true }
-];
-
-function toggleSymptomHistorySettings() {
-    let panel = document.getElementById('symptomHistorySettingsPanel');
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-}
-
 function renderSymptomHistory() {
-    let sympCont = document.getElementById('symptomHistoryLog');
-    if (symptomHistoryLogs.length === 0) {
-        sympCont.innerHTML = '<div style="color: #64748b; text-align: center; padding: 40px 0;">کوئی علامت ہسٹری موجود نہیں۔</div>';
+    const box = document.getElementById('symptomHistoryList');
+    const member = state.healthMember;
+    const items = state.symptoms.filter(s => s.member === member);
+    if (!items.length) {
+        box.innerHTML = '<div class="empty-note">اس ممبر کی کوئی علامت ریکارڈ نہیں</div>';
         return;
     }
-    sympCont.innerHTML = symptomHistoryLogs.map((item) => `
-        <div class="log-row symptom-row">
-            <div class="row-left">
-                <input type="checkbox" class="symptom-history-checkbox" data-id="${item.id}" style="width: 16px; height: 16px; cursor: pointer;">
-                <span>👤 <b>${item.member}</b>: ${item.symptom} ➔ <b style="color:var(--purple);">${item.status}</b></span>
+    box.innerHTML = items.slice().reverse().map(s => `
+        <div class="history-item">
+            <div class="info">
+                <div class="line">
+                    <span class="tag ${s.positive ? 'tag-success' : 'tag-danger'}">${esc(s.symptom)}</span>
+                </div>
+                <div style="font-size:11px;color:#334155;margin-top:2px;">📝 ${esc(s.details)}</div>
+                <div class="date">🕒 ${s.date}</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="color:${item.isPositive ? 'var(--success)' : 'var(--danger)'}; font-weight:bold; font-size: 11px;">
-                    ${item.isPositive ? '👍 بہتر' : '⚠️ مسئلہ'}
-                </span>
-                <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" onclick="deleteSingleSymptomItem(${item.id})">ڈیلیٹ</button>
+            <div class="actions">
+                <button class="edit" onclick="editSymptom(${s.id})">✏️</button>
+                <button class="del" onclick="deleteSymptom(${s.id})">🗑️</button>
             </div>
         </div>
     `).join('');
 }
-
-function deleteSingleSymptomItem(id) {
-    symptomHistoryLogs = symptomHistoryLogs.filter(item => item.id !== id);
+function deleteSymptom(id) {
+    state.symptoms = state.symptoms.filter(s => s.id !== id);
+    persist();
     renderSymptomHistory();
-    updateSummaryPercentages();
+    updateSummary();
 }
-
-function selectAllSymptomHistory() {
-    document.querySelectorAll('.symptom-history-checkbox').forEach(chk => chk.checked = true);
-}
-
-function deleteSelectedSymptomHistory() {
-    let checkboxes = document.querySelectorAll('.symptom-history-checkbox:checked');
-    let idsToDelete = Array.from(checkboxes).map(chk => parseInt(chk.getAttribute('data-id')));
-    if (idsToDelete.length === 0) return;
-    symptomHistoryLogs = symptomHistoryLogs.filter(item => !idsToDelete.includes(item.id));
+function editSymptom(id) {
+    const item = state.symptoms.find(s => s.id === id);
+    if (!item) return;
+    const newDetails = prompt('تفصیل:', item.details);
+    if (newDetails === null) return;
+    item.details = newDetails.trim() || item.details;
+    item.date = nowStr();
+    persist();
     renderSymptomHistory();
-    updateSummaryPercentages();
 }
 
-function clearAllSymptomHistory() {
-    symptomHistoryLogs = [];
-    renderSymptomHistory();
-    updateSummaryPercentages();
-}
-
-function updateSummaryPercentages(){const dietTotal=dietHistoryLogs.length,dietGood=dietHistoryLogs.filter(item=>item.isGood).length;const symptomTotal=symptomHistoryLogs.length,symptomPositive=symptomHistoryLogs.filter(item=>item.isPositive).length;const dietPct=dietTotal?Math.round(dietGood/dietTotal*100):0,symptomPct=symptomTotal?Math.round(symptomPositive/symptomTotal*100):0,overall=Math.round((dietPct+symptomPct)/2);const a=document.getElementById('dietPercentageValue'),b=document.getElementById('symptomPercentageValue'),c=document.getElementById('overallImprovementValue');if(a)a.innerText=`${dietPct}%`;if(b)b.innerText=`${symptomPct}%`;if(c)c.innerText=`${overall}%`;}
-
-/* ---------- صفحہ لوڈ پر سب کچھ رینڈر ---------- */
-document.addEventListener("DOMContentLoaded", function () {
-    updateDutyRoster();
-    renderTasksUI();
-    renderFinalResults();
+/* =========================================================
+   DIET
+   ========================================================= */
+function saveDiet() {
+    const member = state.healthMember || state.dutyPair[0];
+    const slot = document.getElementById('dietTimeSlot').value;
+    const daily = document.getElementById('dietDaily').value;
+    const sometimes = document.getElementById('dietSometimes').value;
+    const junk = document.getElementById('dietJunk').value;
+    const details = document.getElementById('dietDetails').value.trim();
+    const good = (junk === '0');
+    state.diets.push({
+        id: Date.now() + Math.random(),
+        member,
+        slot,
+        daily,
+        sometimes,
+        junk,
+        details: details || '—',
+        good,
+        date: nowStr()
+    });
+    persist();
     renderDietHistory();
+    updateSummary();
+    document.getElementById('dietDetails').value = '';
+    showMsg('dietMsg', '✅ ڈائٹ ریکارڈ محفوظ ہو گیا', 'success');
+}
+function renderDietHistory() {
+    const box = document.getElementById('dietHistoryList');
+    const member = state.healthMember;
+    const items = state.diets.filter(d => d.member === member);
+    if (!items.length) {
+        box.innerHTML = '<div class="empty-note">اس ممبر کا کوئی ڈائٹ ریکارڈ نہیں</div>';
+        return;
+    }
+    box.innerHTML = items.slice().reverse().map(d => `
+        <div class="history-item">
+            <div class="info">
+                <div class="line">
+                    <span class="tag tag-info">⏰ ${esc(d.slot)}</span>
+                    <span class="tag ${d.good ? 'tag-success' : 'tag-danger'}">${d.good ? '✅ اچھی خوراک' : '⚠️ جنک شامل'}</span>
+                </div>
+                <div style="font-size:11px;color:#334155;margin-top:2px;">
+                    🍞 ${esc(d.daily)} &nbsp;|&nbsp; 🍽️ ${esc(d.sometimes)} &nbsp;|&nbsp; 🍟 ${esc(d.junk)}
+                </div>
+                <div style="font-size:11px;color:#64748b;margin-top:2px;">📝 ${esc(d.details)}</div>
+                <div class="date">🕒 ${d.date}</div>
+            </div>
+            <div class="actions">
+                <button class="edit" onclick="editDiet(${d.id})">✏️</button>
+                <button class="del" onclick="deleteDiet(${d.id})">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+function deleteDiet(id) {
+    state.diets = state.diets.filter(d => d.id !== id);
+    persist();
+    renderDietHistory();
+    updateSummary();
+}
+function editDiet(id) {
+    const item = state.diets.find(d => d.id === id);
+    if (!item) return;
+    const newDetails = prompt('تفصیل:', item.details);
+    if (newDetails === null) return;
+    item.details = newDetails.trim() || item.details;
+    item.date = nowStr();
+    persist();
+    renderDietHistory();
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+function updateSummary() {
+    const member = state.healthMember;
+    const diets = state.diets.filter(d => d.member === member);
+    const symps = state.symptoms.filter(s => s.member === member);
+    const dietGood = diets.filter(d => d.good).length;
+    const dietPct = diets.length ? Math.round(dietGood / diets.length * 100) : 0;
+    const sympPos = symps.filter(s => s.positive).length;
+    const sympPct = symps.length ? Math.round(sympPos / symps.length * 100) : 0;
+    const overall = Math.round((dietPct + sympPct) / 2);
+    document.getElementById('dietPct').textContent = dietPct + '%';
+    document.getElementById('symptomPct').textContent = sympPct + '%';
+    document.getElementById('overallPct').textContent = overall + '%';
+}
+
+/* =========================================================
+   EDIT / CLEAR
+   ========================================================= */
+function toggleEdit(section) {
+    const btnId = section === 'taskHistory' ? 'taskEditBtn' :
+                  section === 'symptomHistory' ? 'sympEditBtn' : 'dietEditBtn';
+    const btn = document.getElementById(btnId);
+    const active = btn.classList.toggle('edit-active');
+    btn.textContent = active ? '✏️ ایڈٹ موڈ آن' : '✏️ ایڈٹ';
+}
+function clearSection(section) {
+    const member = section === 'taskHistory' ? state.currentTaskMember : state.healthMember;
+    if (!member) return;
+    if (!confirm('کیا آپ مکمل ہسٹری صاف کرنا چاہتے ہیں؟')) return;
+    if (section === 'taskHistory') state.taskHistory[member] = [];
+    else if (section === 'symptomHistory') state.symptoms = state.symptoms.filter(s => s.member !== member);
+    else if (section === 'dietHistory') state.diets = state.diets.filter(d => d.member !== member);
+    persist();
+    if (section === 'taskHistory') renderTaskHistory();
+    if (section === 'symptomHistory') renderSymptomHistory();
+    if (section === 'dietHistory') renderDietHistory();
+    updateSummary();
+}
+
+/* =========================================================
+   GREEN BUS
+   ========================================================= */
+let busTimer = null;
+function updateBusClock() {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const s = now.getSeconds();
+    const ap = h >= 12 ? 'PM' : 'AM';
+    const dh = h % 12 || 12;
+    const el = document.getElementById('busClock');
+    if (el) el.textContent = `${String(dh).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ap}`;
+}
+function busPopulate() {
+    const sel = document.getElementById('busRouteSelect');
+    sel.innerHTML = BUS_ROUTES.map(r => `<option value="${esc(r.route)}">${esc(r.route)}</option>`).join('');
+    busOnRouteChange(true);
+}
+function busOnRouteChange(auto) {
+    const route = document.getElementById('busRouteSelect').value;
+    const daySel = document.getElementById('busDaySelect');
+    daySel.innerHTML = BUS_ALL_DAYS.map(d => `<option value="${d}">${esc(BUS_DAYS[d])}</option>`).join('');
+    busOnDayChange(auto);
+}
+function busOnDayChange(auto) {
+    const route = document.getElementById('busRouteSelect').value;
+    const obj = BUS_ROUTES.find(f => f.route === route);
+    const stopSel = document.getElementById('busStopSelect');
+    stopSel.innerHTML = obj ? obj.stops.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('') : '';
+    if (!auto) {
+        document.getElementById('busLargeBox').classList.remove('active');
+        document.getElementById('busEmpty').classList.remove('hide');
+        if (busTimer) clearInterval(busTimer);
+    }
+}
+function busTimeToFake(hAdd, mAdd) {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + hAdd*60 + mAdd);
+    const h = now.getHours();
+    const m = now.getMinutes();
+    const ap = h >= 12 ? 'PM' : 'AM';
+    const dh = h % 12 || 12;
+    return `${String(dh).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ap}`;
+}
+function busTrackNow() {
+    const route = document.getElementById('busRouteSelect').value;
+    const day = document.getElementById('busDaySelect').value;
+    const stop = document.getElementById('busStopSelect').value;
+    if (!route || !day || !stop) return;
+
+    document.getElementById('busEmpty').classList.add('hide');
+    document.getElementById('busLargeBox').classList.add('active');
+
+    const fakeBusNo = Math.floor(Math.random()*12) + 1;
+    const fakeGapMinutes = [8,12,15,18,22,25][Math.floor(Math.random()*6)];
+    const fakeEta = [2,3,4][Math.floor(Math.random()*3)];
+    const fakeArrivalTime = busTimeToFake(0, fakeGapMinutes);
+    const fakeEstimateFrom = busTimeToFake(0, fakeGapMinutes - fakeEta);
+    const fakeEstimateTo = busTimeToFake(0, fakeGapMinutes + fakeEta);
+    const fakeStartTime = '06:00 AM';
+    const fakeLastTime = '10:30 PM';
+
+    document.getElementById('busRange').textContent = `${fakeStartTime} - ${fakeLastTime}`;
+    document.getElementById('busNo').textContent = `بس #${fakeBusNo} | ${stop}`;
+    document.getElementById('busArrival').textContent = fakeArrivalTime;
+    document.getElementById('busEstimate').textContent = `${fakeEstimateFrom} تا ${fakeEstimateTo}`;
+
+    let totalSec = fakeGapMinutes*60 + Math.floor(Math.random()*60);
+    if (busTimer) clearInterval(busTimer);
+    function tick() {
+        if (totalSec <= 0) {
+            document.getElementById('busCountdown').textContent = '00:00:00';
+            document.getElementById('busCountdownSub').textContent = 'بس اسٹاپ پر پہنچ چکی ہے!';
+            clearInterval(busTimer);
+            return;
+        }
+        const hrs = Math.floor(totalSec/3600);
+        const mins = Math.floor((totalSec%3600)/60);
+        const secs = totalSec % 60;
+        document.getElementById('busCountdown').textContent = `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        let txt = '';
+        if (hrs > 0) txt += hrs + ' گھنٹہ ';
+        if (mins > 0) txt += mins + ' منٹ ';
+        txt += secs + ' سیکنڈ میں بس آ رہی ہے';
+        document.getElementById('busCountdownSub').textContent = txt;
+        document.getElementById('busFakeText').textContent = `بس ${fakeArrivalTime} پر ${stop} اسٹاپ پر پہنچے گی | روٹ: ${route}`;
+        totalSec--;
+    }
+    tick();
+    busTimer = setInterval(tick, 1000);
+}
+
+/* =========================================================
+   RASHAN MANAGER
+   ========================================================= */
+const RASHAN_ITEMS_KEY = 'rashanItems_v1';
+const RASHAN_RECORDS_KEY = 'rashanRecords_v1';
+
+let rashanItems = [];
+let rashanRecords = [];
+let rashanSelected = {};
+let rashanEditingRecordId = null;
+let rashanDeleteAllPending = false;
+let rashanEditMode = false;
+
+function rashanLoad() {
+    try {
+        const itemsSaved = localStorage.getItem(RASHAN_ITEMS_KEY);
+        rashanItems = itemsSaved ? JSON.parse(itemsSaved) : RASHAN_DEFAULT_ITEMS.slice();
+        if (!Array.isArray(rashanItems)) rashanItems = RASHAN_DEFAULT_ITEMS.slice();
+        const recSaved = localStorage.getItem(RASHAN_RECORDS_KEY);
+        rashanRecords = recSaved ? JSON.parse(recSaved) : [];
+        if (!Array.isArray(rashanRecords)) rashanRecords = [];
+    } catch(e) {
+        rashanItems = RASHAN_DEFAULT_ITEMS.slice();
+        rashanRecords = [];
+    }
+}
+function rashanPersist() {
+    try {
+        localStorage.setItem(RASHAN_ITEMS_KEY, JSON.stringify(rashanItems));
+        localStorage.setItem(RASHAN_RECORDS_KEY, JSON.stringify(rashanRecords));
+    } catch(e) {}
+}
+function rashanToggleSettings() {
+    document.getElementById('rashanSettingsPanel').classList.toggle('active');
+}
+function rashanToggleEditMode() {
+    rashanEditMode = !rashanEditMode;
+    const btn = document.getElementById('rashanEditModeBtn');
+    const ind = document.getElementById('rashanEditIndicator');
+    if (rashanEditMode) {
+        btn.textContent = '✏️ ایڈٹ بند کریں';
+        btn.style.background = '#0891b2';
+        btn.style.color = '#fff';
+        ind.classList.add('active');
+    } else {
+        btn.textContent = '✏️ ایڈٹ آن کریں';
+        btn.style.background = '';
+        btn.style.color = '';
+        ind.classList.remove('active');
+    }
+    rashanRenderItems();
+}
+function rashanRenderItems() {
+    const box = document.getElementById('rashanItemsScroll');
+    if (!rashanItems.length) {
+        box.innerHTML = '<div class="empty-note">کوئی آٹم نہیں</div>';
+        return;
+    }
+    const sorted = rashanItems.slice().sort((a, b) => (rashanSelected[b.id]?1:0) - (rashanSelected[a.id]?1:0));
+    box.innerHTML = '';
+    sorted.forEach(item => {
+        const isSelected = !!rashanSelected[item.id];
+        const div = document.createElement('div');
+        div.className = 'rashan-row' + (isSelected ? ' selected' : '');
+        let deleteBtn = '';
+        if (item.isCustom && rashanEditMode) {
+            deleteBtn = `<button class="rashan-row-del" onclick="event.stopPropagation(); rashanDeleteCustomItem('${item.id}')">✕</button>`;
+        }
+        div.innerHTML = deleteBtn +
+            `<input type="checkbox" class="rashan-row-checkbox" ${isSelected ? 'checked' : ''}>` +
+            `<div class="rashan-row-info">` +
+                `<span class="rashan-row-name">${item.icon || '🛒'} ${esc(item.name)}</span>` +
+                `<span class="rashan-row-qty">${esc(item.qty)}</span>` +
+            `</div>`;
+        div.addEventListener('click', e => {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.target.classList.contains('rashan-row-del')) return;
+            if (rashanEditMode) return;
+            rashanToggleItem(item.id);
+        });
+        const cb = div.querySelector('input');
+        cb.addEventListener('change', () => {
+            if (rashanEditMode) { cb.checked = isSelected; return; }
+            rashanToggleItem(item.id);
+        });
+        box.appendChild(div);
+    });
+}
+function rashanRenderLiveList() {
+    const box = document.getElementById('rashanLiveBox');
+    const list = rashanItems.filter(i => rashanSelected[i.id]);
+    document.getElementById('rashanSelectedCount').textContent = list.length;
+    document.getElementById('rashanLiveCount').textContent = list.length;
+    if (!list.length) {
+        box.innerHTML = '<div class="rashan-live-empty">✨ کوئی آٹم سلیکٹ نہیں کیا</div>';
+        return;
+    }
+    box.innerHTML = list.map(item => `
+        <div class="rashan-live-row">
+            <span class="name">${item.icon || '🛒'} ${esc(item.name)}</span>
+            <span class="qty">${esc(item.qty)}</span>
+        </div>
+    `).join('');
+    box.scrollTop = box.scrollHeight;
+}
+function rashanToggleItem(id) {
+    if (rashanEditMode) return;
+    if (rashanSelected[id]) delete rashanSelected[id];
+    else rashanSelected[id] = true;
+    rashanRenderItems();
+    rashanRenderLiveList();
+}
+function rashanSelectAllItems() {
+    rashanItems.forEach(i => { rashanSelected[i.id] = true; });
+    rashanRenderItems();
+    rashanRenderLiveList();
+}
+function rashanUnselectAll() {
+    rashanSelected = {};
+    rashanRenderItems();
+    rashanRenderLiveList();
+}
+function rashanAddCustomItem() {
+    const nameInp = document.getElementById('rashanNewItemName');
+    const qtyInp = document.getElementById('rashanNewItemQty');
+    const name = nameInp.value.trim();
+    let qty = qtyInp.value.trim();
+    if (!name) return;
+    if (!qty) qty = '1 عدد';
+    const newId = 'custom_' + Date.now();
+    rashanItems.push({ id: newId, name, qty, icon: '🛒', isCustom: true });
+    rashanPersist();
+    nameInp.value = '';
+    qtyInp.value = '';
+    rashanSelected[newId] = true;
+    rashanRenderItems();
+    rashanRenderLiveList();
+}
+function rashanDeleteCustomItem(id) {
+    if (!rashanEditMode) return;
+    const btn = event.target;
+    if (btn.dataset.confirm !== '1') {
+        btn.dataset.confirm = '1';
+        btn.textContent = '⚠';
+        setTimeout(() => { btn.dataset.confirm = ''; btn.textContent = '✕'; }, 2500);
+        return;
+    }
+    rashanItems = rashanItems.filter(i => i.id !== id);
+    delete rashanSelected[id];
+    rashanPersist();
+    rashanRenderItems();
+    rashanRenderLiveList();
+}
+function rashanSaveSelection() {
+    const selectedItems = rashanItems.filter(i => rashanSelected[i.id]).map(i => ({
+        id: i.id, name: i.name, qty: i.qty, icon: i.icon || '🛒'
+    }));
+    if (!selectedItems.length) return;
+    if (rashanEditingRecordId !== null) {
+        const idx = rashanRecords.findIndex(r => r.id === rashanEditingRecordId);
+        if (idx > -1) {
+            rashanRecords[idx].items = selectedItems;
+            rashanRecords[idx].timestamp = Date.now();
+        }
+        rashanEditingRecordId = null;
+        document.querySelector('.rashan-save-btn').textContent = '💾 سلیکٹڈ آٹم سیو کریں';
+    } else {
+        rashanRecords.unshift({ id: Date.now(), items: selectedItems, timestamp: Date.now() });
+    }
+    rashanPersist();
+    rashanSelected = {};
+    rashanRenderItems();
+    rashanRenderLiveList();
+    rashanRenderHistory();
+}
+function rashanRenderHistory() {
+    const c = document.getElementById('rashanHistoryBox');
+    document.getElementById('rashanHistoryCount').textContent = rashanRecords.length;
+    if (!rashanRecords.length) {
+        c.innerHTML = '<div class="empty-note">📋 کوئی ریکارڈ موجود نہیں</div>';
+        return;
+    }
+    c.innerHTML = rashanRecords.map(rec => {
+        const d = new Date(rec.timestamp);
+        const pad = n => String(n).padStart(2,'0');
+        const dateStr = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} — ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        return `<div class="rashan-record">
+            <div class="rashan-record-header">
+                <span class="rashan-record-date">📅 ${dateStr}</span>
+                <span class="rashan-record-count">🛒 ${rec.items.length} آٹم</span>
+            </div>
+            <div class="rashan-record-items">
+                ${rec.items.map(it => `<div class="rashan-record-item"><span>${it.icon||'🛒'} ${esc(it.name)}</span><span class="item-qty">${esc(it.qty)}</span></div>`).join('')}
+            </div>
+            <div class="rashan-record-actions">
+                <button class="rashan-act-btn edit" onclick="rashanEditRecord(${rec.id})">✏️ ایڈٹ</button>
+                <button class="rashan-act-btn del" onclick="rashanDeleteRecord(${rec.id})">🗑️ ڈیلیٹ</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+function rashanEditRecord(id) {
+    const rec = rashanRecords.find(r => r.id === id);
+    if (!rec) return;
+    rashanSelected = {};
+    rec.items.forEach(i => { rashanSelected[i.id] = true; });
+    rashanEditingRecordId = id;
+    document.querySelector('.rashan-save-btn').textContent = '🔄 اپڈیٹ کریں';
+    rashanRenderItems();
+    rashanRenderLiveList();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function rashanDeleteRecord(id) {
+    const btn = event.target;
+    if (btn.dataset.confirm !== '1') {
+        btn.dataset.confirm = '1';
+        btn.textContent = '⚠️ دوبارہ';
+        setTimeout(() => { btn.dataset.confirm = ''; btn.textContent = '🗑️ ڈیلیٹ'; }, 2500);
+        return;
+    }
+    rashanRecords = rashanRecords.filter(r => r.id !== id);
+    rashanPersist();
+    rashanRenderHistory();
+}
+function rashanDeleteAllRecords() {
+    if (!rashanRecords.length) return;
+    const btn = event.target;
+    if (!rashanDeleteAllPending) {
+        rashanDeleteAllPending = true;
+        btn.textContent = '⚠️ دوبارہ دبائیں';
+        btn.style.background = '#dc2626';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+            rashanDeleteAllPending = false;
+            btn.textContent = '❌ سب ہسٹری صاف';
+            btn.style.background = '';
+            btn.style.color = '';
+        }, 2500);
+        return;
+    }
+    rashanRecords = [];
+    rashanPersist();
+    rashanRenderHistory();
+    rashanDeleteAllPending = false;
+    btn.textContent = '❌ سب ہسٹری صاف';
+    btn.style.background = '';
+    btn.style.color = '';
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init() {
+    loadDuty();
+    buildSymptomButtons();
+    startAlert();
+    renderTaskHistory();
+    renderSkippedLists();
+    renderResults();
     renderSymptomHistory();
-    updateSummaryPercentages();
-});
+    renderDietHistory();
+    updateSummary();
+    updateSkipTaskDropdown();
+    showCurrentTask();
+    busPopulate();
+    updateBusClock();
+    setInterval(updateBusClock, 1000);
+    rashanLoad();
+    rashanRenderItems();
+    rashanRenderLiveList();
+    rashanRenderHistory();
+}
+document.addEventListener('DOMContentLoaded', init);
 </script>
-#
-<!-- ============ سیکشن 11 ختم ============ -->
 
 </body>
 </html>
