@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مینیجر</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:14px;
+     display:flex;justify-content:center;align-items:flex-start;min-height:100vh}
+.card{background:#fff;max-width:500px;width:100%;border-radius:14px;padding:40px 20px;
+      border-right:5px solid #4f46e5;box-shadow:0 8px 18px rgba(0,0,0,.08);text-align:center}
+.ic{font-size:60px;margin-bottom:14px;opacity:.7}
+h1{font-size:20px;color:#4f46e5;margin-bottom:10px}
+p{color:#94a3b8;font-size:13px;line-height:1.8;font-weight:600}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="ic">👔</div>
+    <h1>مینیجر</h1>
+    <p>یہ سیکشن جلد تیار ہو رہا ہے</p>
+  </div>
+</body>
+</html>
