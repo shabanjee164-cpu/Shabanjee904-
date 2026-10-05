@@ -5,216 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ہسٹری</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { background:#eef2f6; font-family:system-ui,sans-serif; direction:rtl;
-       display:flex; justify-content:center; min-height:100vh; padding:10px; }
-.card { background:#fff; border-radius:14px; width:100%; max-width:600px;
-        padding:14px 12px; border:1px solid #cbd5e1; border-right:5px solid #7c3aed;
-        box-shadow:0 8px 18px rgba(0,0,0,.06); }
-.hd { padding-bottom:8px; margin-bottom:12px; border-bottom:2px solid #f1f5f9; }
-.ti { font-size:16px; font-weight:700; color:#7c3aed; }
-.sub { font-size:12px; font-weight:700; color:#7c3aed; margin:12px 0 6px;
-       padding-bottom:4px; border-bottom:2px dashed #ddd6fe;
-       display:flex; justify-content:space-between; align-items:center; }
-.cnt { background:#7c3aed; color:#fff; font-size:10px; padding:2px 8px; border-radius:20px; }
-.fil { display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-bottom:10px; }
-.fil button { padding:8px 4px; font-size:11px; font-weight:700; border-radius:7px;
-              border:1px solid #cbd5e1; background:#fff; color:#334155; cursor:pointer; }
-.fil button.on { background:#7c3aed; color:#fff; border-color:#7c3aed; }
-.list { max-height:500px; overflow-y:auto; border:1px solid #e2e8f0;
-        border-radius:10px; padding:6px; background:#fafafa; min-height:80px; }
-.rec { background:#fff; border:1px solid #e2e8f0; border-radius:8px;
-       padding:10px; margin-bottom:8px; border-right:4px solid #7c3aed; }
-.rh { display:flex; justify-content:space-between; align-items:center;
-      flex-wrap:wrap; gap:6px; margin-bottom:8px; padding-bottom:6px;
-      border-bottom:1px dashed #ddd6fe; }
-.rd { font-size:11px; font-weight:800; color:#7c3aed; }
-.rc { background:#ede9fe; color:#6d28d9; font-size:10px; font-weight:700;
-      padding:2px 8px; border-radius:20px; }
-.ri { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; }
-.rr { display:flex; justify-content:space-between; align-items:center;
-      background:#f8fafc; padding:6px 10px; border-radius:5px;
-      font-size:11px; font-weight:700; gap:6px; }
-.rr .nm { flex:1; color:#1e293b; }
-.rr .qt { color:#7c3aed; background:#ede9fe; padding:2px 8px;
-          border-radius:20px; font-size:10px; font-weight:800; }
-.rr input { width:80px; padding:5px 8px; border:1px solid #7c3aed;
-            border-radius:5px; font-size:11px; font-weight:700;
-            text-align:center; outline:none; }
-.acts { display:flex; gap:5px; justify-content:flex-end; }
-.acts button { padding:5px 12px; font-size:10px; font-weight:700;
-               border:none; border-radius:5px; cursor:pointer; }
-.bedit { background:#7c3aed; color:#fff; }
-.bsave { background:#16a34a; color:#fff; }
-.bcan { background:#e2e8f0; color:#475569; }
-.bdel { background:#ef4444; color:#fff; }
-.empty { text-align:center; color:#94a3b8; font-size:12px; padding:40px 10px; }
-.empty i { font-size:44px; display:block; margin-bottom:10px; opacity:.5; font-style:normal; }
-.empty small { font-size:10px; opacity:.8; }
-.stat { background:#f5f3ff; border:1px solid #ddd6fe; padding:10px;
-        border-radius:8px; margin-top:10px; text-align:center;
-        font-size:13px; font-weight:700; color:#6d28d9; }
-.stat b { color:#7c3aed; font-size:16px; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
+.card{background:#fff;max-width:700px;margin:0 auto;border-radius:14px;padding:16px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+h1{font-size:18px;color:#7c3aed;margin-bottom:12px;padding-bottom:10px;border-bottom:2px dashed #ddd6fe}
+.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.filters button{padding:9px 4px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.filters button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.list{border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px;max-height:500px;overflow-y:auto}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-right:4px solid #7c3aed;font-size:12px}
+.item.news{border-right-color:#2563eb}
+.item.alert{border-right-color:#dc2626}
+.item.complaint{border-right-color:#ea580c}
+.item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
+.item .badge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
+.item .badge.news{background:#dbeafe;color:#1e40af}
+.item .badge.alert{background:#fee2e2;color:#991b1b}
+.item .badge.complaint{background:#ffedd5;color:#9a3412}
+.item .time-badge{background:#fef3c7;color:#92400e;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;border:1px solid #fcd34d}
+.item .date{font-size:10px;color:#64748b;font-weight:600}
+.item .content{color:#1e293b;font-weight:700;line-height:1.6;word-break:break-word}
+.empty{text-align:center;color:#94a3b8;font-size:12px;padding:30px;font-weight:700}
+.empty .ic{font-size:40px;display:block;margin-bottom:8px;opacity:.5}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
+.stat .n{font-size:20px;font-weight:900;color:#7c3aed}
+.stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="hd"><div class="ti">🕘 ہسٹری</div></div>
+  <h1>📜 ہسٹری</h1>
 
-  <div class="sub">🔍 فلٹر</div>
-  <div class="fil">
-    <button class="on" id="fD" onclick="setF('D')">📅 ڈیلی</button>
-    <button id="fW" onclick="setF('W')">📆 ویکلی</button>
-    <button id="fM" onclick="setF('M')">🗓️ منتھلی</button>
-    <button id="fY" onclick="setF('Y')">📅 ییرلی</button>
+  <div class="filters">
+    <button class="on" id="fNews" onclick="setF('all')">📋 سب</button>
+    <button id="fA" onclick="setF('news')">📰 News</button>
+    <button id="fB" onclick="setF('alert')">🚨 Alert</button>
   </div>
 
-  <div class="sub">
-    <span>📋 ریکارڈ</span>
-    <span class="cnt" id="cnt">0</span>
+  <div class="list" id="list">
+    <div class="empty"><span class="ic">📋</span>کوئی ریکارڈ نہیں</div>
   </div>
 
-  <div class="list" id="list"></div>
-
-  <div class="stat" id="stat">🛒 کل آٹمز: <b>0</b></div>
+  <div class="stats">
+    <div class="stat"><div class="n" id="sNews">0</div><div class="l">📰 News</div></div>
+    <div class="stat"><div class="n" id="sAlert">0</div><div class="l">🚨 Alert</div></div>
+    <div class="stat"><div class="n" id="sComp">0</div><div class="l">⏰ Time</div></div>
+  </div>
 </div>
 
 <script>
-var KEY = "rashan_live_records";
-var fTime = "D";
-var editId = null;
+const KEY = 'sec10_news_alerts_data';
+const $ = id => document.getElementById(id);
+let filter = 'all';
 
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } }
 function esc(s) {
-  var d = document.createElement("div");
-  d.textContent = String(s);
+  const d = document.createElement('div');
+  d.textContent = String(s == null ? '' : s);
   return d.innerHTML;
 }
-function load() {
-  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; }
-}
-function save(a) {
-  try { localStorage.setItem(KEY, JSON.stringify(a)); } catch(e) {}
-}
-
-function inTime(ts) {
-  var now = new Date();
-  var d = new Date(ts);
-  if (fTime === "D") return d.toDateString() === now.toDateString();
-  if (fTime === "W") { var diff = (now - d) / 864e5; return diff >= 0 && diff < 7; }
-  if (fTime === "M") return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  if (fTime === "Y") return d.getFullYear() === now.getFullYear();
-  return true;
-}
-
 function fmt(ts) {
-  var d = new Date(ts);
-  return String(d.getDate()).padStart(2,'0') + '/' +
-         String(d.getMonth()+1).padStart(2,'0') + '/' +
+  const d = new Date(ts);
+  return String(d.getDate()).padStart(2, '0') + '/' +
+         String(d.getMonth() + 1).padStart(2, '0') + '/' +
          d.getFullYear() + ' — ' +
-         String(d.getHours()).padStart(2,'0') + ':' +
-         String(d.getMinutes()).padStart(2,'0');
+         String(d.getHours()).padStart(2, '0') + ':' +
+         String(d.getMinutes()).padStart(2, '0');
 }
 
-function setF(f) {
-  fTime = f;
-  document.getElementById("fD").classList.toggle("on", f === "D");
-  document.getElementById("fW").classList.toggle("on", f === "W");
-  document.getElementById("fM").classList.toggle("on", f === "M");
-  document.getElementById("fY").classList.toggle("on", f === "Y");
+window.setF = function(f) {
+  filter = f;
+  $('fNews').classList.toggle('on', f === 'all');
+  $('fA').classList.toggle('on', f === 'news');
+  $('fB').classList.toggle('on', f === 'alert');
   render();
-}
+};
 
 function render() {
-  var all = load();
-  var recs = all.filter(function(r) { return inTime(r.timestamp); });
-  recs.sort(function(a,b) { return b.timestamp - a.timestamp; });
+  const all = load().sort((a, b) => b.timestamp - a.timestamp);
 
-  var totalItems = 0;
-  recs.forEach(function(r) { totalItems += (r.items || []).length; });
+  $('sNews').textContent = all.filter(x => x.type === 'news').length;
+  $('sAlert').textContent = all.filter(x => x.type === 'alert').length;
+  $('sComp').textContent = all.filter(x => x.type === 'complaint').length;
 
-  document.getElementById("cnt").textContent = recs.length;
-  document.getElementById("stat").innerHTML = "🛒 کل آٹمز: <b>" + totalItems + "</b>";
+  let items = all;
+  if (filter === 'news') items = all.filter(x => x.type === 'news');
+  else if (filter === 'alert') items = all.filter(x => x.type === 'alert' || x.type === 'complaint');
 
-  var box = document.getElementById("list");
-  if (!recs.length) {
-    box.innerHTML = '<div class="empty"><i>📋</i>اس فلٹر میں کوئی ریکارڈ نہیں<br><small>ڈیش بورڈ سے سیو کریں</small></div>';
+  const list = $('list');
+  if (!items.length) {
+    list.innerHTML = '<div class="empty"><span class="ic">📋</span>اس فلٹر میں کوئی ریکارڈ نہیں</div>';
     return;
   }
 
-  box.innerHTML = recs.map(function(rec) {
-    var isEdit = (editId === rec.id);
-    var rows = (rec.items || []).map(function(it, i) {
-      if (isEdit) {
-        return '<div class="rr">' +
-          '<span class="nm">' + esc(it.name) + '</span>' +
-          '<input id="qi_' + rec.id + '_' + i + '" value="' + esc(it.qty) + '">' +
-          '</div>';
-      }
-      return '<div class="rr">' +
-        '<span class="nm">' + esc(it.name) + '</span>' +
-        '<span class="qt">' + esc(it.qty) + '</span>' +
-        '</div>';
-    }).join('');
-
-    var acts = isEdit
-      ? '<button class="bsave" onclick="saveEdit(' + rec.id + ')">✓ سیو</button>' +
-        '<button class="bcan" onclick="cancelEdit()">✗ کینسل</button>'
-      : '<button class="bedit" onclick="startEdit(' + rec.id + ')">✏️ ایڈٹ</button>' +
-        '<button class="bdel" onclick="delRec(' + rec.id + ', event)">🗑️ ڈیلیٹ</button>';
-
-    return '<div class="rec">' +
-      '<div class="rh">' +
-        '<span class="rd">📅 ' + fmt(rec.timestamp) + '</span>' +
-        '<span class="rc">🛒 ' + (rec.items || []).length + ' آٹم</span>' +
+  list.innerHTML = items.map(it => {
+    const cls = it.type;
+    const label = it.type === 'news' ? '📰 نیوز' :
+                  it.type === 'alert' ? '🚨 الرٹ' : '⏰ ٹائم';
+    const timeBadge = (it.type === 'complaint' && it.fireTime)
+      ? '<span class="time-badge">⏰ ' + esc(it.fireTime) + '</span>' : '';
+    return '<div class="item ' + cls + '">' +
+      '<div class="row1">' +
+        '<span class="badge ' + cls + '">' + label + '</span>' +
+        timeBadge +
+        '<span class="date">' + fmt(it.timestamp) + '</span>' +
       '</div>' +
-      '<div class="ri">' + rows + '</div>' +
-      '<div class="acts">' + acts + '</div>' +
-      '</div>';
+      '<div class="content">' + esc(it.content) + '</div>' +
+    '</div>';
   }).join('');
 }
 
-function startEdit(id) { editId = id; render(); }
-function cancelEdit() { editId = null; render(); }
-
-function saveEdit(id) {
-  var recs = load();
-  var rec = recs.find(function(r) { return r.id === id; });
-  if (!rec) return;
-  (rec.items || []).forEach(function(it, i) {
-    var inp = document.getElementById("qi_" + id + "_" + i);
-    if (inp) {
-      var v = inp.value.trim();
-      if (v) it.qty = v;
-    }
-  });
-  save(recs);
-  editId = null;
-  render();
-}
-
-function delRec(id, e) {
-  var btn = e.target;
-  if (btn.dataset.c !== "1") {
-    btn.dataset.c = "1";
-    btn.textContent = "⚠️ دوبارہ";
-    setTimeout(function() {
-      btn.dataset.c = "";
-      btn.textContent = "🗑️ ڈیلیٹ";
-    }, 2500);
-    return;
-  }
-  var recs = load().filter(function(r) { return r.id !== id; });
-  save(recs);
-  render();
-}
-
 render();
-
-window.addEventListener('storage', function(e) {
-  if (e.key === KEY) render();
-});
-setInterval(render, 1500);
+setInterval(render, 2000);
+window.addEventListener('storage', e => { if (e.key === KEY) render(); });
 </script>
 
 </body>
