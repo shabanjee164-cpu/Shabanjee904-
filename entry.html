@@ -5,129 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ڈیٹا انٹری</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { background:#eef2f6; font-family:system-ui,sans-serif; direction:rtl;
-       display:flex; justify-content:center; min-height:100vh; padding:10px; }
-.card { background:#fff; border-radius:14px; width:100%; max-width:600px;
-        padding:14px 12px; border:1px solid #cbd5e1; border-right:5px solid #0891b2;
-        box-shadow:0 8px 18px rgba(0,0,0,.06); }
-.hd { padding-bottom:8px; margin-bottom:12px; border-bottom:2px solid #f1f5f9; }
-.ti { font-size:16px; font-weight:700; color:#0e7490; }
-.form { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
-.inp { padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;
-       font-weight:600; outline:none; font-size:13px; height:40px; background:#fff; }
-.inp:focus { border-color:#0891b2; }
-.btn { width:100%; padding:11px; background:#0891b2; color:#fff; font-size:14px;
-       font-weight:700; border:none; border-radius:8px; cursor:pointer; margin-bottom:12px; }
-.btn.d { background:#dc2626; }
-.btn:active { opacity:.85; }
-.sub { font-size:12px; font-weight:700; color:#0891b2; margin:12px 0 6px;
-       padding-bottom:4px; border-bottom:2px dashed #a5f3fc;
-       display:flex; justify-content:space-between; align-items:center; }
-.cnt { background:#0891b2; color:#fff; font-size:10px; padding:2px 8px; border-radius:20px; }
-.list { max-height:380px; overflow-y:auto; border:1px solid #e2e8f0;
-        border-radius:10px; padding:6px; background:#fafafa; min-height:60px; }
-.item { display:flex; align-items:center; gap:8px; background:#fff;
-        border:1px solid #e2e8f0; border-radius:8px; padding:10px;
-        margin-bottom:5px; font-weight:600; font-size:13px; }
-.item .nm { flex:1; color:#1e293b; }
-.item .qt { background:#cffafe; color:#0e7490; font-size:11px;
-            padding:2px 10px; border-radius:20px; font-weight:800; }
-.item .dl { background:#ef4444; color:#fff; border:none; width:24px; height:24px;
-            border-radius:50%; cursor:pointer; font-weight:800; line-height:1; }
-.empty { text-align:center; color:#94a3b8; font-size:12px; padding:30px 10px; }
-.empty i { font-size:40px; display:block; margin-bottom:8px; opacity:.5; font-style:normal; }
-.note { background:#ecfeff; border:1px solid #a5f3fc; padding:10px;
-        border-radius:8px; font-size:12px; color:#0e7490; margin-top:12px;
-        text-align:center; font-weight:700; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:14px}
+.card{background:#fff;max-width:600px;margin:0 auto;border-radius:14px;padding:16px;border-right:5px solid #ea580c;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+h1{font-size:18px;color:#ea580c;margin-bottom:14px;padding-bottom:10px;border-bottom:2px dashed #fed7aa}
+label{display:block;font-size:12px;font-weight:700;color:#334155;margin-top:10px;margin-bottom:4px}
+select,input{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;outline:none;background:#fff}
+select:focus,input:focus{border-color:#ea580c;box-shadow:0 0 0 3px rgba(234,88,12,.12)}
+button{width:100%;padding:12px;background:#ea580c;color:#fff;font-size:15px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:14px;font-family:inherit}
+button:active{opacity:.85}
+.hint{background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:8px;font-size:11px;color:#9a3412;margin-top:10px;font-weight:700;line-height:1.7}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
+.stat .n{font-size:20px;font-weight:900;color:#ea580c}
+.stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
+.msg{display:none;padding:10px;border-radius:8px;font-size:12px;font-weight:700;margin-top:10px}
+.msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+.msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="hd"><div class="ti">✏️ ڈیٹا انٹری</div></div>
+  <h1>📝 ڈیٹا انٹری — نیوز / الرٹ</h1>
 
-  <div class="form">
-    <input id="inNm" class="inp" placeholder="آٹم کا نام">
-    <input id="inQt" class="inp" placeholder="مقدار">
+  <label>قسم منتخب کریں</label>
+  <select id="type">
+    <option value="news">📰 News (خبر)</option>
+    <option value="alert">🚨 Alert (الرٹ)</option>
+    <option value="complaint">⏰ Time Alert (مقررہ وقت)</option>
+  </select>
+
+  <label>متن لکھیں</label>
+  <input type="text" id="content" placeholder="یہاں لکھیں...">
+
+  <div id="timeWrap" style="display:none;">
+    <label>وقت منتخب کریں</label>
+    <input type="time" id="fireTime" value="09:00">
+    <div class="hint">⏰ یہ الرٹ اس وقت پر چلے گا — اور ہر 10 منٹ بعد دوبارہ</div>
   </div>
-  <button class="btn" onclick="addItem()">➕ شامل کریں</button>
 
-  <div class="sub">
-    <span>📋 محفوظ آٹمز</span>
-    <span class="cnt" id="cnt">0</span>
+  <button onclick="saveItem()">💾 محفوظ کریں</button>
+  <div class="msg" id="msg"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="cNews">0</div><div class="l">📰 News</div></div>
+    <div class="stat"><div class="n" id="cAlert">0</div><div class="l">🚨 Alert</div></div>
+    <div class="stat"><div class="n" id="cComp">0</div><div class="l">⏰ Time</div></div>
   </div>
-
-  <div class="list" id="list"></div>
-
-  <div class="note">💡 یہ آٹمز ڈیش بورڈ پر خود بخود نظر آئیں گی</div>
-
-  <button class="btn d" style="margin-top:12px" onclick="clearAll()">🗑️ سب صاف کریں</button>
 </div>
 
 <script>
-var KEY = "rashan_live_items";
+const KEY = 'sec10_news_alerts_data';
+const $ = id => document.getElementById(id);
 
-function load() {
-  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; }
-}
-function save(a) {
-  try { localStorage.setItem(KEY, JSON.stringify(a)); } catch(e) {}
-}
-function esc(s) {
-  var d = document.createElement("div");
-  d.textContent = String(s);
-  return d.innerHTML;
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } }
+function save(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
+
+function updateStats() {
+  const all = load();
+  $('cNews').textContent = all.filter(x => x.type === 'news').length;
+  $('cAlert').textContent = all.filter(x => x.type === 'alert').length;
+  $('cComp').textContent = all.filter(x => x.type === 'complaint').length;
 }
 
-function render() {
-  var items = load();
-  document.getElementById("cnt").textContent = items.length;
-  var box = document.getElementById("list");
-  if (!items.length) {
-    box.innerHTML = '<div class="empty"><i>📝</i>ابھی کوئی آٹم نہیں</div>';
-    return;
+$('type').onchange = function() {
+  $('timeWrap').style.display = this.value === 'complaint' ? 'block' : 'none';
+};
+
+function showMsg(text, type) {
+  const m = $('msg');
+  m.textContent = text;
+  m.className = 'msg ' + type;
+  setTimeout(() => { m.className = 'msg'; }, 2500);
+}
+
+function saveItem() {
+  const type = $('type').value;
+  const content = $('content').value.trim();
+  if (!content) { showMsg('⚠️ متن لکھیں', 'err'); return; }
+
+  let fireTime = null;
+  if (type === 'complaint') {
+    fireTime = $('fireTime').value;
+    if (!fireTime) { showMsg('⚠️ وقت منتخب کریں', 'err'); return; }
   }
-  box.innerHTML = items.map(function(it, i) {
-    return '<div class="item">' +
-      '<span class="nm">' + esc(it.name) + '</span>' +
-      '<span class="qt">' + esc(it.qty) + '</span>' +
-      '<button class="dl" onclick="delItem(' + i + ')">✕</button>' +
-      '</div>';
-  }).join('');
-}
 
-function addItem() {
-  var nm = document.getElementById("inNm").value.trim();
-  var qt = document.getElementById("inQt").value.trim();
-  if (!nm) { alert("آٹم کا نام لکھیں"); return; }
-  if (!qt) qt = "1";
-  var items = load();
-  items.push({ id: Date.now(), name: nm, qty: qt });
+  const items = load();
+  items.unshift({
+    id: Date.now(),
+    type: type,
+    content: content,
+    fireTime: fireTime,
+    fired: false,
+    timestamp: Date.now()
+  });
   save(items);
-  document.getElementById("inNm").value = "";
-  document.getElementById("inQt").value = "";
-  document.getElementById("inNm").focus();
-  render();
+
+  $('content').value = '';
+  showMsg('✅ محفوظ ہو گیا — ڈیش بورڈ پر دیکھیں', 'ok');
+  updateStats();
 }
 
-function delItem(i) {
-  var items = load();
-  items.splice(i, 1);
-  save(items);
-  render();
-}
-
-function clearAll() {
-  if (!confirm("سب آٹمز صاف کریں؟")) return;
-  save([]);
-  render();
-}
-
-render();
-window.addEventListener('storage', function(e) {
-  if (e.key === KEY) render();
-});
+updateStats();
 </script>
 
 </body>
