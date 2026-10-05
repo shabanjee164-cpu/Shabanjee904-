@@ -2,286 +2,298 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#2563eb">
-<title>مکمل ڈیش بورڈ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ڈیش بورڈ</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{
-  font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Naskh Arabic',sans-serif;
-  direction:rtl;background:#eef2f6;color:#1e293b;
-  display:flex;flex-direction:column;
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:10px}
+.wrap{max-width:700px;margin:0 auto}
+h1{font-size:16px;color:#2563eb;margin-bottom:10px;text-align:center}
+
+/* ═══ NEWS BAR (scrolling) ═══ */
+.news-bar{
+  background:#fffbeb;border:1px solid #fde68a;
+  color:#92400e;padding:11px 14px;border-radius:10px;
+  font-size:13px;font-weight:700;overflow:hidden;
+  white-space:nowrap;margin-bottom:10px;
+}
+.news-text{
+  display:inline-block;
+  animation:ticker 40s linear infinite;
+  padding-right:100%;
+}
+.news-text.slow{animation-duration:60s}
+@keyframes ticker{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
 }
 
-/* ═══ TOP HEADER ═══ */
-.app-header{
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  color:#fff;padding:12px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 2px 10px rgba(0,0,0,.15);
-  position:sticky;top:0;z-index:50;
-  flex-shrink:0;
+/* ═══ ALERT BAR ═══ */
+.alert-bar{
+  display:none;
+  background:#fef2f2;border:2px solid #fca5a5;
+  color:#dc2626;padding:12px 14px;border-radius:10px;
+  font-size:14px;font-weight:800;
+  justify-content:space-between;align-items:center;
+  gap:10px;transition:all .3s;margin-bottom:10px;
 }
-.app-header .hamburger{
-  background:rgba(255,255,255,.2);border:none;color:#fff;
-  width:40px;height:40px;border-radius:10px;font-size:20px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:.2s;
+.alert-bar.show{display:flex}
+.alert-bar.blink{animation:blink .8s infinite alternate}
+@keyframes blink{
+  0%{background:#fef2f2;color:#dc2626}
+  100%{background:#dc2626;color:#fff}
 }
-.app-header .hamburger:active{background:rgba(255,255,255,.35);transform:scale(.95)}
-.app-header .app-title{font-size:17px;font-weight:800;letter-spacing:.3px}
-.app-header .coming-btn{
-  background:rgba(251,191,36,.95);border:none;color:#78350f;
-  height:40px;padding:0 14px;border-radius:10px;font-size:12px;
-  font-weight:800;cursor:pointer;
-  display:flex;align-items:center;gap:6px;
-  transition:.2s;font-family:inherit;
-  box-shadow:0 2px 8px rgba(251,191,36,.4);
-  white-space:nowrap;
+.alert-bar .txt{flex:1;line-height:1.5}
+.alert-bar .skip{
+  background:#dc2626;color:#fff;border:none;
+  padding:9px 14px;border-radius:8px;cursor:pointer;
+  font-size:12px;font-weight:800;font-family:inherit;
+  white-space:nowrap;flex-shrink:0;
 }
-.app-header .coming-btn:active{transform:scale(.95);background:rgba(251,191,36,1)}
-.app-header .coming-btn .spark{
-  font-size:14px;
-  animation:sparkle 1.8s infinite;
-}
-@keyframes sparkle{
-  0%,100%{transform:scale(1) rotate(0deg);opacity:1}
-  50%{transform:scale(1.2) rotate(15deg);opacity:.8}
-}
+.alert-bar.blink .skip{background:#fff;color:#dc2626}
 
-/* ═══ MAIN CONTENT ═══ */
-.app-main{
-  flex:1;position:relative;overflow:hidden;background:#eef2f6;
-}
-.app-main iframe{
-  width:100%;height:100%;border:none;display:block;background:#eef2f6;
-}
-
-/* ═══ BOTTOM NAV ═══ */
-.bottom-nav{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  background:#fff;border-top:1px solid #e2e8f0;
-  box-shadow:0 -2px 12px rgba(0,0,0,.06);
-  flex-shrink:0;z-index:40;
-  padding-bottom:env(safe-area-inset-bottom);
-}
-.bottom-nav button{
-  background:transparent;border:none;padding:9px 4px 8px;
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  cursor:pointer;color:#94a3b8;font-family:inherit;
-  transition:.2s;position:relative;
-}
-.bottom-nav button .nav-icon{font-size:20px;line-height:1}
-.bottom-nav button .nav-label{font-size:10px;font-weight:700;letter-spacing:.2px}
-.bottom-nav button.active{color:#2563eb}
-.bottom-nav button.active::before{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:28px;height:3px;background:#2563eb;border-radius:0 0 4px 4px;
-}
-.bottom-nav button:active{background:#f1f5f9}
-
-/* ═══ SIDE MENU ═══ */
-.side-overlay{
-  position:fixed;inset:0;background:rgba(15,23,42,.5);
-  backdrop-filter:blur(2px);
-  opacity:0;visibility:hidden;transition:.28s;z-index:100;
-}
-.side-overlay.open{opacity:1;visibility:visible}
-
-.side-menu{
-  position:fixed;top:0;right:0;height:100%;
-  width:290px;max-width:85vw;
-  background:#fff;z-index:110;
-  transform:translateX(100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  display:flex;flex-direction:column;
-  box-shadow:-6px 0 24px rgba(0,0,0,.18);
-}
-.side-menu.open{transform:translateX(0)}
-
-.side-header{
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  color:#fff;padding:18px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
-}
-.side-header .side-title{font-size:16px;font-weight:800}
-.side-header .close-btn{
-  background:rgba(255,255,255,.2);border:none;color:#fff;
-  width:34px;height:34px;border-radius:8px;font-size:16px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-}
-.side-header .close-btn:active{background:rgba(255,255,255,.35)}
-
-.side-body{
-  flex:1;overflow-y:auto;padding:10px 0;
-  display:flex;flex-direction:column;
-}
-.side-coming{
-  flex:1;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:14px;padding:30px 20px;text-align:center;
-}
-.side-coming .coming-icon{
-  font-size:70px;
-  animation:float 3s ease-in-out infinite;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-.side-coming .coming-title{
-  font-size:22px;font-weight:900;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.side-coming .coming-sub{
-  font-size:12px;color:#94a3b8;line-height:1.8;
-  font-weight:600;max-width:220px;
-}
-
-.side-footer{
-  padding:12px 18px;border-top:1px solid #e2e8f0;
-  font-size:11px;color:#94a3b8;text-align:center;flex-shrink:0;
-  background:#f8fafc;
-}
-
-/* ═══ TOAST ═══ */
-.toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#1e293b;color:#fff;padding:10px 20px;border-radius:30px;
-  font-size:12px;font-weight:700;z-index:200;
-  opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ═══ INFO CARD ═══ */
+.info{background:#fff;border:1px solid #e2e8f0;border-radius:12px;
+      padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.05);text-align:center}
+.info .big{font-size:60px;margin-bottom:10px;opacity:.6}
+.info h2{font-size:15px;color:#1e293b;margin-bottom:8px}
+.info p{font-size:12px;color:#64748b;line-height:1.8;font-weight:600}
 </style>
 </head>
 <body>
 
-<!-- ═══ TOP HEADER ═══ -->
-<header class="app-header">
-  <button class="hamburger" onclick="openSideMenu()" aria-label="مینو">☰</button>
-  <div class="app-title" id="headerTitle">ڈیش بورڈ</div>
-  <button class="coming-btn" onclick="showComingSoon('Feature')">
-    <span class="spark">✨</span>
-    <span>Coming Soon</span>
-  </button>
-</header>
+<div class="wrap">
 
-<!-- ═══ MAIN CONTENT ═══ -->
-<main class="app-main" id="appMain">
-  <iframe id="contentFrame" title="content"></iframe>
-</main>
-
-<!-- ═══ SIDE OVERLAY ═══ -->
-<div class="side-overlay" id="sideOverlay" onclick="closeSideMenu()"></div>
-
-<!-- ═══ SIDE MENU ═══ -->
-<aside class="side-menu" id="sideMenu" aria-label="سائیڈ مینو">
-  <div class="side-header">
-    <div class="side-title">📋 مینو</div>
-    <button class="close-btn" onclick="closeSideMenu()">✕</button>
+  <!-- NEWS BAR -->
+  <div class="news-bar">
+    <div class="news-text slow" id="newsText">📰 لوڈ ہو رہا ہے...</div>
   </div>
-  <div class="side-body" id="sideBody">
-    <div class="side-coming">
-      <div class="coming-icon">🚧</div>
-      <div class="coming-title">Coming Soon</div>
-      <div class="coming-sub">یہ سیکشن جلد ہی دستیاب ہو گا۔</div>
-    </div>
+
+  <!-- ALERT BAR -->
+  <div class="alert-bar" id="alertBar">
+    <span class="txt" id="alertTxt">—</span>
+    <button class="skip" onclick="skipAlert()">اسکیپ ❌</button>
   </div>
-  <div class="side-footer">ورژن 1.0 — مکمل ڈیش بورڈ</div>
-</aside>
 
-<!-- ═══ BOTTOM NAV ═══ -->
-<nav class="bottom-nav">
-  <button class="active" data-nav="dashboard" onclick="navigateTo('dashboard','dashboard.html','📊 ڈیش بورڈ')">
-    <span class="nav-icon">📊</span>
-    <span class="nav-label">ڈیش بورڈ</span>
-  </button>
-  <button data-nav="manager" onclick="navigateTo('manager','manager.html','👔 مینیجر')">
-    <span class="nav-icon">👔</span>
-    <span class="nav-label">مینیجر</span>
-  </button>
-  <button data-nav="dataentry" onclick="navigateTo('dataentry','entry.html','📝 ڈیٹا انٹری')">
-    <span class="nav-icon">📝</span>
-    <span class="nav-label">ڈیٹا انٹری</span>
-  </button>
-  <button data-nav="history" onclick="navigateTo('history','history.html','📜 ہسٹری')">
-    <span class="nav-icon">📜</span>
-    <span class="nav-label">ہسٹری</span>
-  </button>
-</nav>
+  <!-- INFO -->
+  <div class="info">
+    <div class="big">📊</div>
+    <h2>ڈیش بورڈ</h2>
+    <p>
+      یہاں نیوز بار (اوپر) اور الرٹ بار دکھتی ہے۔<br>
+      نیوز چلتی رہے گی — نیا آئے تو بیل بجے گی۔<br>
+      الرٹ ایک ایک کر کے آئے گا — بیل + وائبریٹ + آواز۔<br>
+      Skip دبائیں تو رک جائے گا — اگلا لوڈ پر آئے گا۔
+    </p>
+  </div>
 
-<!-- ═══ TOAST ═══ -->
-<div class="toast" id="toast"></div>
+</div>
 
 <script>
-const $ = id => document.getElementById(id);
+/* ═══════════════════════════════════════════════════════════════
+   LIVE SYSTEM — sec10_news_alerts_data se juda hua
+   ═══════════════════════════════════════════════════════════════ */
+const KEY = 'sec10_news_alerts_data';
+const IDX_KEY = 'sec10_alert_index';
+const LAST_NEWS = 'sec10_last_news_ids';
+const FIRED_KEY = 'sec10_complaint_fired';
 
-function openSideMenu(){
-  $('sideMenu').classList.add('open');
-  $('sideOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeSideMenu(){
-  $('sideMenu').classList.remove('open');
-  $('sideOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') closeSideMenu();
-});
+let bellLoop = null;
+let vibrateLoop = null;
+let voiceToggle = 0;
 
-function showToast(msg){
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 1800);
-}
-function showComingSoon(name){
-  showToast('✨ ' + (name || 'Feature') + ' — Coming Soon');
+/* ─── Data ─── */
+function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } }
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s == null ? '' : s);
+  return d.innerHTML;
 }
 
-function setActiveBottomNav(target){
-  document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector('.bottom-nav button[data-nav="' + target + '"]');
-  if(btn) btn.classList.add('active');
+/* ─── BELL (Full Volume) ─── */
+function playBell() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    [0, 0.35, 0.7].forEach(delay => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.value = 1000;
+      const t = ctx.currentTime + delay;
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.exponentialRampToValueAtTime(1.0, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+      o.start(t); o.stop(t + 0.5);
+    });
+  } catch(e) {}
 }
 
-function navigateTo(sectionId, file, title){
-  $('headerTitle').textContent = title || 'ڈیش بورڈ';
-  setActiveBottomNav(sectionId);
-  closeSideMenu();
+/* ─── VOICE (Male/Female Alternate) ─── */
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ur-PK';
+    u.rate = 0.9;
+    u.pitch = (voiceToggle % 2 === 0) ? 1.3 : 0.8;
+    u.volume = 1.0;
+    window.speechSynthesis.speak(u);
+    voiceToggle++;
+  } catch(e) {}
+}
 
-  const iframe = $('contentFrame');
-  if(file){
-    iframe.src = file + '?t=' + Date.now();
+/* ─── VIBRATE LOOP ─── */
+function startVibrate() {
+  if (!navigator.vibrate) return;
+  try { navigator.vibrate([400, 200, 400, 200, 400]); } catch(e) {}
+  if (vibrateLoop) clearInterval(vibrateLoop);
+  vibrateLoop = setInterval(() => {
+    if (navigator.vibrate) try { navigator.vibrate([400, 200, 400]); } catch(e) {}
+  }, 2500);
+}
+
+/* ─── STOP ALL ─── */
+function stopAll() {
+  if (bellLoop) { clearInterval(bellLoop); bellLoop = null; }
+  if (vibrateLoop) { clearInterval(vibrateLoop); vibrateLoop = null; }
+  if (navigator.vibrate) try { navigator.vibrate(0); } catch(e) {}
+  if (window.speechSynthesis) try { window.speechSynthesis.cancel(); } catch(e) {}
+}
+
+/* ─── SHOW ALERT ─── */
+function showAlert(idx) {
+  const all = load();
+  const alerts = all.filter(x => x.type === 'alert')
+                    .sort((a, b) => b.timestamp - a.timestamp);
+  const bar = document.getElementById('alertBar');
+  const txt = document.getElementById('alertTxt');
+
+  if (!alerts.length) { bar.classList.remove('show'); return; }
+  if (idx >= alerts.length) idx = 0;
+
+  const a = alerts[idx];
+  bar.classList.add('show', 'blink');
+  txt.innerHTML = '🚨 ' + (idx + 1) + '/' + alerts.length + ' — ' + esc(a.content);
+
+  playBell();
+  bellLoop = setInterval(playBell, 1200);
+  startVibrate();
+  speak(a.content);
+}
+
+/* ─── SKIP ─── */
+window.skipAlert = function() {
+  stopAll();
+  const bar = document.getElementById('alertBar');
+  bar.classList.remove('show', 'blink');
+
+  const all = load();
+  const alerts = all.filter(x => x.type === 'alert');
+  let idx = parseInt(localStorage.getItem(IDX_KEY) || '0', 10);
+  idx++;
+  if (idx >= alerts.length) idx = 0;
+  localStorage.setItem(IDX_KEY, String(idx));
+};
+
+/* ─── NEWS BAR ─── */
+function updateNewsBar() {
+  const all = load();
+  const news = all.filter(x => x.type === 'news');
+  const el = document.getElementById('newsText');
+  if (!news.length) {
+    el.textContent = '📢 کوئی نیوز موجود نہیں — ڈیٹا انٹری سے ایڈ کریں';
+    return;
   }
+  el.textContent = news.map(n => '📰 ' + n.content).join('   •   ') + '   •   ';
 }
 
-// Swipe from right edge
-let touchStartX = 0, touchStartY = 0;
-document.addEventListener('touchstart', e => {
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-}, {passive:true});
-document.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].screenX - touchStartX;
-  const dy = e.changedTouches[0].screenY - touchStartY;
-  if(Math.abs(dx) > 60 && Math.abs(dy) < 50){
-    if(dx < 0 && $('sideMenu').classList.contains('open')) closeSideMenu();
-    else if(dx > 0 && !$('sideMenu').classList.contains('open') && touchStartX < 40) openSideMenu();
+/* ─── NEW NEWS CHECK ─── */
+function checkNewNews() {
+  const all = load();
+  const news = all.filter(x => x.type === 'news');
+  const ids = news.map(n => n.id).join(',');
+  const last = localStorage.getItem(LAST_NEWS) || '';
+  if (last && ids !== last && news.length) {
+    playBell();
+    speak(news[0].content);
   }
-}, {passive:true});
+  localStorage.setItem(LAST_NEWS, ids);
+}
 
-// Load dashboard on start
-window.addEventListener('load', () => {
-  navigateTo('dashboard','dashboard.html','📊 ڈیش بورڈ');
-});
+/* ─── COMPLAINTS (Time Alerts) ─── */
+function checkComplaints() {
+  const all = load();
+  const comps = all.filter(x => x.type === 'complaint' && x.fireTime);
+  if (!comps.length) return;
+
+  const now = new Date();
+  const nowStr = String(now.getHours()).padStart(2, '0') + ':' +
+                 String(now.getMinutes()).padStart(2, '0');
+  const today = now.toDateString();
+
+  let fired = {};
+  try { fired = JSON.parse(localStorage.getItem(FIRED_KEY) || '{}'); } catch(e) {}
+
+  comps.forEach(c => {
+    if (c.fireTime !== nowStr) return;
+    const k = c.id + '_' + today;
+    const last = fired[k] || 0;
+    if (Date.now() - last < 10 * 60 * 1000) return;
+
+    const bar = document.getElementById('alertBar');
+    const txt = document.getElementById('alertTxt');
+    stopAll();
+    bar.classList.add('show', 'blink');
+    txt.innerHTML = '⏰ ' + esc(c.fireTime) + ' — ' + esc(c.content);
+
+    playBell();
+    bellLoop = setInterval(playBell, 1200);
+    startVibrate();
+    speak(c.content);
+
+    fired[k] = Date.now();
+  });
+
+  localStorage.setItem(FIRED_KEY, JSON.stringify(fired));
+}
+
+/* ─── BOOT ─── */
+function boot() {
+  updateNewsBar();
+  checkNewNews();
+
+  setTimeout(() => {
+    const idx = parseInt(localStorage.getItem(IDX_KEY) || '0', 10);
+    showAlert(idx);
+  }, 1200);
+
+  window.addEventListener('storage', e => {
+    if (e.key === KEY) { updateNewsBar(); checkNewNews(); }
+  });
+
+  setInterval(() => { updateNewsBar(); checkNewNews(); }, 3000);
+  setInterval(checkComplaints, 20000);
+  checkComplaints();
+}
+
+/* Audio unlock on first tap */
+document.addEventListener('click', function unlock() {
+  try {
+    const c = new (window.AudioContext || window.webkitAudioContext)();
+    if (c.state === 'suspended') c.resume();
+  } catch(e) {}
+  document.removeEventListener('click', unlock);
+}, { once: true });
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 </script>
+
 </body>
 </html>
