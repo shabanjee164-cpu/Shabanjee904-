@@ -6,109 +6,639 @@
 <title>ڈیٹا انٹری</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:14px}
-.card{background:#fff;max-width:600px;margin:0 auto;border-radius:14px;padding:16px;border-right:5px solid #ea580c;box-shadow:0 8px 18px rgba(0,0,0,.08)}
-h1{font-size:18px;color:#ea580c;margin-bottom:14px;padding-bottom:10px;border-bottom:2px dashed #fed7aa}
-label{display:block;font-size:12px;font-weight:700;color:#334155;margin-top:10px;margin-bottom:4px}
-select,input{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;outline:none;background:#fff}
-select:focus,input:focus{border-color:#ea580c;box-shadow:0 0 0 3px rgba(234,88,12,.12)}
-button{width:100%;padding:12px;background:#ea580c;color:#fff;font-size:15px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:14px;font-family:inherit}
-button:active{opacity:.85}
-.hint{background:#fff7ed;border:1px solid #fed7aa;padding:10px;border-radius:8px;font-size:11px;color:#9a3412;margin-top:10px;font-weight:700;line-height:1.7}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
-.stat .n{font-size:20px;font-weight:900;color:#ea580c}
-.stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
-.msg{display:none;padding:10px;border-radius:8px;font-size:12px;font-weight:700;margin-top:10px}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card.news{border-right-color:#ea580c}
+h1{font-size:16px;color:#7c3aed;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe}
+.card.news h1{color:#ea580c;border-color:#fed7aa}
+label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
+select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none}
+select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+.btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn.orange{background:#ea580c}
+.btn.green{background:#16a34a}
+.btn.red{background:#dc2626}
+.btn.small{width:auto;padding:8px 14px;font-size:12px;margin-top:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.duty-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-radius:10px;padding:10px;margin-top:10px}
+.duty-box .line{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;font-weight:800;color:#4c1d95}
+.duty-box .timer{text-align:center;margin-top:8px;font-size:14px;font-weight:900;color:#4c1d95}
+.list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.item .info{flex:1;min-width:0}
+.item .badge{background:#f1f5f9;color:#475569;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:800}
+.item .del{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0}
+.msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
 .msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
 .msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+.leave-table{width:100%;border-collapse:collapse;font-size:11px}
+.leave-table th{background:#fff7ed;color:#9a3412;font-weight:800;padding:6px 4px;border-bottom:2px solid #fdba74;font-size:10px}
+.leave-table td{padding:6px 4px;border-bottom:1px solid #fed7aa;font-weight:700;color:#1e293b;text-align:center}
+.leave-table tr:hover{background:#fff7ed}
+.rules-list{max-height:200px;overflow-y:auto;border:1px solid #bfdbfe;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
+.rule-item{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.rule-item .rule-txt{flex:1;min-width:0}
+.rule-item .rule-txt b{color:#1e40af;display:block}
+.rule-item .rule-txt small{color:#64748b;font-size:9px}
+.rule-item .acts{display:flex;gap:3px}
+.rule-item .acts button{border:none;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:800;padding:0}
+.rule-item .edit{background:#0891b2;color:#fff}
+.rule-item .del{background:#ef4444;color:#fff}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;text-align:center}
+.stat .n{font-size:16px;font-weight:900;color:#7c3aed}
+.card.news .stat .n{color:#ea580c}
+.stat .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
 </style>
 </head>
 <body>
 
+<!-- ═══ DUTY MANAGER ═══ -->
 <div class="card">
-  <h1>📝 ڈیٹا انٹری — نیوز / الرٹ</h1>
+  <h1>👮 Member & Duty Control System</h1>
+
+  <div class="duty-box">
+    <div class="line"><span>🟢 سینئر:</span><span id="curSenior">—</span></div>
+    <div class="line"><span>🔵 جونیئر:</span><span id="curJunior">—</span></div>
+    <div class="timer">⏱️ <span id="dutyTimer">00:00:00</span></div>
+  </div>
+
+  <label style="margin-top:14px;">👤 مستقل ممبرز رجسٹریشن</label>
+  <input type="text" id="mName" placeholder="ممبر کا نام...">
+  <div class="row" style="margin-top:6px;">
+    <select id="mRank">
+      <option value="Junior">🔵 جونیئر</option>
+      <option value="Senior">🟢 سینئر</option>
+    </select>
+    <button class="btn small green" onclick="addMember()">➕ شامل</button>
+  </div>
+
+  <label style="margin-top:14px;">⚡ مینوئل ڈیوٹی تفویض</label>
+  <div class="row">
+    <select id="dutySenior"><option value="">🟢 سینئر منتخب...</option></select>
+    <select id="dutyJunior"><option value="">🔵 جونیئر منتخب...</option></select>
+  </div>
+  <button class="btn" onclick="saveDuty()">✅ ڈیوٹی سیو کریں</button>
+
+  <div class="row" style="margin-top:8px;">
+    <button class="btn small red" onclick="stopJunior()">⏹️ جونیئر بند</button>
+    <button class="btn small red" onclick="stopAll()">❌ سب بند</button>
+  </div>
+
+  <!-- ═══ LEAVE BOX ═══ -->
+  <label style="margin-top:16px;color:#9a3412;">🏖️ منظور شدہ چھٹیاں (<span id="sec4LeaveTotal">0</span>)</label>
+  <button class="btn small" onclick="sec4LeaveToggleSettings()" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;margin-top:4px;">⚙️ سیٹنگ</button>
+
+  <div id="sec4LeaveSettings" style="display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:6px;margin-top:6px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px;">
+    <button class="btn small" id="sec4LeaveSelBtn" onclick="sec4LeaveToggleSelectMode()" style="background:#f8fafc;color:#334155;border:1px solid #cbd5e1;">☑️ سلیکٹ موڈ</button>
+    <button class="btn small" onclick="sec4LeaveSelectAll(true)" style="background:#f8fafc;color:#334155;border:1px solid #cbd5e1;">✅ تمام</button>
+    <button class="btn small" onclick="sec4LeaveSelectAll(false)" style="background:#f8fafc;color:#334155;border:1px solid #cbd5e1;">⬜ ہٹائیں</button>
+    <button class="btn small" onclick="sec4LeaveEditSelected()" style="background:#f8fafc;color:#334155;border:1px solid #cbd5e1;">✏️ ایڈٹ</button>
+    <button class="btn small red" onclick="sec4LeaveDeleteSelected()">🗑️ ڈیلیٹ</button>
+    <button class="btn small red" onclick="sec4LeaveDeleteAll(this)">❌ سب صاف</button>
+    <button class="btn small" onclick="sec4LeaveToggleSettings()" style="background:#fffbeb;color:#d97706;border:1px solid #fcd34d;">🚪 بند</button>
+  </div>
+
+  <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:8px;margin-top:8px;">
+    <label style="margin:0 0 4px 0;font-size:10px;color:#92400e;">ممبر منتخب کریں:</label>
+    <select id="sec4LeaveMemberFilter" onchange="sec4LeaveRender()" style="height:34px;font-size:12px;">
+      <option value="">تمام ممبران</option>
+    </select>
+  </div>
+
+  <div id="sec4LeaveTable" style="max-height:280px;overflow-y:auto;border:1px solid #fdba74;border-radius:8px;padding:4px;background:#fff7ed;min-height:60px;margin-top:6px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی چھٹی ریکارڈ نہیں</div>
+  </div>
+
+  <div id="sec4LeaveFooter" style="margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:11px;font-weight:800;color:#9a3412;">
+    <span>🏖️ چھٹیاں: <span id="sec4LeaveCntLeave">0</span></span>
+    <span>✅ کام: <span id="sec4LeaveCntWork">0</span></span>
+    <span>📋 کل: <span id="sec4LeaveCntAll">0</span></span>
+  </div>
+
+  <!-- ═══ RULES PANEL ═══ -->
+  <label style="margin-top:16px;color:#1e40af;">⚙️ الرٹ کے قواعد</label>
+  <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:8px;margin-top:6px;">
+    <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+      <select id="sec4B4Type" style="flex:1;min-width:90px;height:34px;font-size:11px;padding:0 6px;">
+        <option value="leave">🏖️ زیادہ چھٹیاں</option>
+        <option value="work">💪 زیادہ دن کام</option>
+      </select>
+      <input type="number" id="sec4B4Value" placeholder="تعداد" min="1" style="width:70px;height:34px;font-size:11px;padding:0 6px;text-align:center;">
+      <select id="sec4B4Rank" style="width:90px;height:34px;font-size:11px;padding:0 6px;">
+        <option value="both">دونوں</option>
+        <option value="senior">سینئر</option>
+        <option value="junior">جونیئر</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:800;color:#1e40af;margin:0;">چھٹی دن:</label>
+      <input type="number" id="sec4B4ChuttiDays" value="1" min="1" style="width:70px;height:32px;font-size:11px;padding:0 6px;text-align:center;">
+      <button class="btn small" onclick="sec4B4Add()" style="background:#1e40af;">➕ شامل</button>
+    </div>
+
+    <div class="rules-list" id="sec4B4List">
+      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>
+    </div>
+  </div>
+
+  <label style="margin-top:14px;">👥 ایکٹو ممبرز (<span id="memCount">0</span>)</label>
+  <div class="list" id="memList">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>
+  </div>
+
+  <label style="margin-top:14px;">📜 مکمل ڈیوٹی ہسٹری</label>
+  <div class="list" id="dutyHist">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>
+  </div>
+</div>
+
+<!-- ═══ NEWS & ALERTS ═══ -->
+<div class="card news">
+  <h1>📰 News & Alerts Manager</h1>
 
   <label>قسم منتخب کریں</label>
-  <select id="type">
-    <option value="news">📰 News (خبر)</option>
-    <option value="alert">🚨 Alert (الرٹ)</option>
+  <select id="nType" onchange="onTypeChange()">
+    <option value="news">📰 News Add</option>
+    <option value="alert">🚨 Alert Patty</option>
     <option value="complaint">⏰ Time Alert (مقررہ وقت)</option>
   </select>
 
-  <label>متن لکھیں</label>
-  <input type="text" id="content" placeholder="یہاں لکھیں...">
+  <label>متن</label>
+  <input type="text" id="nContent" placeholder="نیوز یا الرٹ لکھیں...">
 
   <div id="timeWrap" style="display:none;">
-    <label>وقت منتخب کریں</label>
-    <input type="time" id="fireTime" value="09:00">
-    <div class="hint">⏰ یہ الرٹ اس وقت پر چلے گا — اور ہر 10 منٹ بعد دوبارہ</div>
+    <label>وقت</label>
+    <input type="time" id="nFireTime" value="21:00">
+    <p style="font-size:10px;color:#ea580c;background:#ffedd5;padding:6px 8px;border-radius:6px;margin-top:6px;font-weight:700;">
+      ⏰ یہ الرٹ اس وقت پر چلے گا — اور ہر 10 منٹ بعد دوبارہ
+    </p>
   </div>
 
-  <button onclick="saveItem()">💾 محفوظ کریں</button>
-  <div class="msg" id="msg"></div>
+  <button class="btn orange" onclick="saveNewsAlert()">💾 محفوظ کریں</button>
+  <div class="msg" id="newsMsg"></div>
 
   <div class="stats">
     <div class="stat"><div class="n" id="cNews">0</div><div class="l">📰 News</div></div>
     <div class="stat"><div class="n" id="cAlert">0</div><div class="l">🚨 Alert</div></div>
     <div class="stat"><div class="n" id="cComp">0</div><div class="l">⏰ Time</div></div>
   </div>
+
+  <label style="margin-top:14px;">📋 ریکارڈز (<span id="recCount">0</span>)</label>
+  <div class="list" id="newsList">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>
+  </div>
 </div>
 
 <script>
-const KEY = 'sec10_news_alerts_data';
-const $ = id => document.getElementById(id);
+/* ═══════════════════════════════════════════
+   KEYS
+   ═══════════════════════════════════════════ */
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var HIST_KEY = 'sec4_duty_history_data_v4';
+var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
+var RULES_KEY = 'sec4_duty_alert_rules';
+var NEWS_KEY = 'sec10_news_alerts_data';
 
-function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } }
-function save(a) { localStorage.setItem(KEY, JSON.stringify(a)); }
-
-function updateStats() {
-  const all = load();
-  $('cNews').textContent = all.filter(x => x.type === 'news').length;
-  $('cAlert').textContent = all.filter(x => x.type === 'alert').length;
-  $('cComp').textContent = all.filter(x => x.type === 'complaint').length;
+function $(id){return document.getElementById(id);}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function pad(n){return String(n).padStart(2,'0');}
+function getDayName(dateStr){
+  try{
+    var parts=String(dateStr).split(' ')[0].split('/');
+    if(parts.length!==3) return '—';
+    var d=new Date(parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
+    var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
+    return days[d.getDay()]||'—';
+  }catch(e){return '—';}
 }
 
-$('type').onchange = function() {
-  $('timeWrap').style.display = this.value === 'complaint' ? 'block' : 'none';
+/* ═══════════════════════════════════════════
+   DUTY MANAGER
+   ═══════════════════════════════════════════ */
+function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
+function addHistory(rec, reason){
+  if(!rec.dutyStart) return;
+  var h=ls(HIST_KEY,[]); if(!Array.isArray(h)) h=[];
+  var s=new Date(rec.dutyStart), e=new Date();
+  h.push({name:rec.name, rank:rec.rank,
+    start:pad(s.getHours())+':'+pad(s.getMinutes()),
+    end:pad(e.getHours())+':'+pad(e.getMinutes()),
+    reason:reason});
+  if(h.length>100) h=h.slice(-100);
+  lss(HIST_KEY,h);
+}
+
+window.addMember = function(){
+  var name=$('mName').value.trim(), rank=$('mRank').value;
+  if(!name){alert('نام لکھیں');return;}
+  var m=getMembers();
+  m.push({id:Date.now(),name:name,rank:rank,dutyCount:0,leaveCount:0,onDuty:false,dutyStart:null,onLeave:false});
+  lss(DUTY_KEY,m); $('mName').value=''; render();
+  alert('✅ ممبر شامل');
 };
 
-function showMsg(text, type) {
-  const m = $('msg');
-  m.textContent = text;
-  m.className = 'msg ' + type;
-  setTimeout(() => { m.className = 'msg'; }, 2500);
-}
+window.saveDuty = function(){
+  var sid=$('dutySenior').value, jid=$('dutyJunior').value;
+  if(!sid && !jid){alert('کوئی ممبر منتخب کریں');return;}
+  var m=getMembers();
+  if(sid){
+    var s=m.find(function(x){return String(x.id)===String(sid);});
+    if(s){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Senior' && String(x.id)!==String(sid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!s.onDuty){s.onDuty=true;s.dutyStart=Date.now();s.dutyCount=(s.dutyCount||0)+1;}
+    }
+  }
+  if(jid){
+    var j=m.find(function(x){return String(x.id)===String(jid);});
+    if(j){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Junior' && String(x.id)!==String(jid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!j.onDuty){j.onDuty=true;j.dutyStart=Date.now();j.dutyCount=(j.dutyCount||0)+1;}
+    }
+  }
+  lss(DUTY_KEY,m); render();
+};
 
-function saveItem() {
-  const type = $('type').value;
-  const content = $('content').value.trim();
-  if (!content) { showMsg('⚠️ متن لکھیں', 'err'); return; }
+window.stopJunior = function(){
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty && x.rank==='Junior'){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
 
-  let fireTime = null;
-  if (type === 'complaint') {
-    fireTime = $('fireTime').value;
-    if (!fireTime) { showMsg('⚠️ وقت منتخب کریں', 'err'); return; }
+window.stopAll = function(){
+  if(!confirm('سب ڈیوٹی بند کریں؟')) return;
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
+
+window.delMember = function(id){
+  if(!confirm('ممبر ڈیلیٹ کریں؟')) return;
+  lss(DUTY_KEY, getMembers().filter(function(x){return x.id!==id;}));
+  render();
+};
+
+window.returnFromLeave = function(id){
+  var m=getMembers(), t=m.find(function(x){return x.id===id;});
+  if(!t) return;
+  t.onLeave=false; lss(DUTY_KEY,m); render();
+};
+
+/* ═══════════════════════════════════════════
+   RENDER DUTY
+   ═══════════════════════════════════════════ */
+function render(){
+  var m=getMembers();
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  $('curSenior').textContent = s?s.name:'—';
+  $('curJunior').textContent = j?j.name:'—';
+
+  var sSel=$('dutySenior'), jSel=$('dutyJunior');
+  var sV=sSel.value, jV=jSel.value;
+  sSel.innerHTML='<option value="">🟢 سینئر منتخب...</option>';
+  jSel.innerHTML='<option value="">🔵 جونیئر منتخب...</option>';
+  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
+    var lbl=x.name+(x.onDuty?' • ڈیوٹی پر':'');
+    if(x.rank==='Senior') sSel.appendChild(new Option(lbl,x.id));
+    else jSel.appendChild(new Option(lbl,x.id));
+  });
+  if(sV) sSel.value=sV; else if(s) sSel.value=s.id;
+  if(jV) jSel.value=jV; else if(j) jSel.value=j.id;
+
+  var ml=$('memList');
+  $('memCount').textContent=m.length;
+  if(!m.length){
+    ml.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>';
+  } else {
+    ml.innerHTML=m.map(function(x){
+      var status = x.onLeave ? '🏖️ چھٹی' : (x.onDuty ? '🟢 ڈیوٹی پر' : '');
+      var bg = x.onLeave ? 'background:#fef2f2;' : '';
+      var btn = x.onLeave
+        ? '<button class="del" style="background:#16a34a;" onclick="returnFromLeave('+x.id+')">✓</button>'
+        : '<button class="del" onclick="delMember('+x.id+')">✕</button>';
+      return '<div class="item" style="'+bg+'"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢':'🔵')+'</span> '+status+'</div>'+
+        '<div style="font-size:9px;color:#64748b;margin-top:2px;">D:'+(x.dutyCount||0)+' | L:'+(x.leaveCount||0)+'</div>'+
+        '</div>'+btn+'</div>';
+    }).join('');
   }
 
-  const items = load();
-  items.unshift({
-    id: Date.now(),
-    type: type,
-    content: content,
-    fireTime: fireTime,
-    fired: false,
-    timestamp: Date.now()
-  });
-  save(items);
-
-  $('content').value = '';
-  showMsg('✅ محفوظ ہو گیا — ڈیش بورڈ پر دیکھیں', 'ok');
-  updateStats();
+  var h=ls(HIST_KEY,[]);
+  if(!h.length){
+    $('dutyHist').innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>';
+  } else {
+    $('dutyHist').innerHTML=h.slice().reverse().slice(0,20).map(function(x){
+      return '<div class="item"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢':'🔵')+'</span></div>'+
+        '<div style="font-size:9px;color:#64748b;margin-top:2px;">'+esc(x.start)+' → '+esc(x.end)+' ('+esc(x.reason)+')</div>'+
+        '</div></div>';
+    }).join('');
+  }
 }
 
-updateStats();
-</script>
+/* Timer */
+setInterval(function(){
+  var m=getMembers();
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  var active = s||j;
+  if(active && active.dutyStart){
+    var el=Math.floor((Date.now()-active.dutyStart)/1000);
+    $('dutyTimer').textContent = pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
+  } else {
+    $('dutyTimer').textContent = '00:00:00';
+  }
+}, 1000);
 
+/* ═══════════════════════════════════════════
+   LEAVE BOX
+   ═══════════════════════════════════════════ */
+var leaveSelected = {};
+var leaveSelMode = false;
+var leaveEditingId = null;
+var leaveDelPending = false;
+
+function ensureLeaveIds(){
+  var arr=ls(LEAVE_KEY,[]); if(!Array.isArray(arr)) return [];
+  var changed=false;
+  arr.forEach(function(r,i){
+    if(!r.id){r.id=Date.now()+i;changed=true;}
+    if(!r.status){r.status='leave';changed=true;}
+    if(!r.ts){r.ts=Date.now()-(arr.length-i)*60000;changed=true;}
+  });
+  if(changed) lss(LEAVE_KEY,arr);
+  return arr;
+}
+
+window.sec4LeaveRender = function(){
+  var arr=ensureLeaveIds();
+  var filterSel=$('sec4LeaveMemberFilter');
+  if(filterSel){
+    var curVal=filterSel.value;
+    filterSel.innerHTML='<option value="">تمام ممبران</option>';
+    var names={}; arr.forEach(function(r){names[r.name]=true;});
+    Object.keys(names).forEach(function(n){filterSel.appendChild(new Option(n,n));});
+    if(curVal) filterSel.value=curVal;
+  }
+  var filterName = filterSel?filterSel.value:'';
+  var list = arr.slice().reverse();
+  if(filterName) list = list.filter(function(r){return r.name===filterName;});
+
+  var allLeave = arr.filter(function(r){return r.status!=='work';}).length;
+  var allWork = arr.filter(function(r){return r.status==='work';}).length;
+  if($('sec4LeaveTotal')) $('sec4LeaveTotal').textContent = arr.length;
+  if($('sec4LeaveCntLeave')) $('sec4LeaveCntLeave').textContent = allLeave;
+  if($('sec4LeaveCntWork')) $('sec4LeaveCntWork').textContent = allWork;
+  if($('sec4LeaveCntAll')) $('sec4LeaveCntAll').textContent = arr.length;
+
+  var box=$('sec4LeaveTable');
+  if(!box) return;
+  if(!list.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی ریکارڈ نہیں</div>';
+    return;
+  }
+  box.innerHTML='';
+  list.forEach(function(r){
+    var isSelected=!!leaveSelected[r.id];
+    var isEditing=leaveEditingId===r.id;
+    var dayName=getDayName(r.date);
+    var isLeave = r.status!=='work';
+
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:5px;padding:8px 10px;background:'+
+      (isSelected?'#fef3c7':'#fff')+';border:1px solid '+
+      (isSelected?'#f59e0b':'#fed7aa')+';border-radius:6px;margin-bottom:4px;font-size:11px;cursor:'+
+      (leaveSelMode?'pointer':'default')+';';
+
+    if(isEditing){
+      var opts='<option value="leave"'+(isLeave?' selected':'')+'>🏖️ چھٹی</option>'+
+               '<option value="work"'+(!isLeave?' selected':'')+'>✅ کام</option>';
+      row.innerHTML='<span style="flex:1;font-weight:800;color:#1e293b;">'+esc(r.name)+'</span>'+
+        '<select id="sec4LeaveEdSt_'+r.id+'" style="padding:3px 6px;border:1px solid #7c3aed;border-radius:5px;font-size:11px;font-weight:700;width:auto;">'+opts+'</select>'+
+        '<button onclick="sec4LeaveSaveEdit('+r.id+')" style="background:#16a34a;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;">✓</button>'+
+        '<button onclick="sec4LeaveCancelEdit()" style="background:#e2e8f0;color:#475569;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;">✗</button>';
+    } else {
+      var statusBadge = isLeave
+        ? '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:800;border:1px solid #fcd34d;">🏖️ چھٹی</span>'
+        : '<span style="background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:800;border:1px solid #86efac;">✅ کام</span>';
+      row.innerHTML=(leaveSelMode?'<input type="checkbox" '+(isSelected?'checked':'')+' onclick="event.stopPropagation();sec4LeaveToggleSelect('+r.id+')" style="width:15px;height:15px;accent-color:#f59e0b;cursor:pointer;flex-shrink:0;">':'')+
+        '<span style="flex:1;min-width:50px;font-weight:800;color:#1e293b;">'+esc(r.name)+'</span>'+
+        '<span style="color:#64748b;font-size:10px;font-weight:700;">'+esc(r.date)+'</span>'+
+        '<span style="color:#0891b2;font-size:10px;font-weight:800;">'+dayName+'</span>'+
+        statusBadge;
+      row.onclick = function(ev){
+        if(!leaveSelMode) return;
+        if(ev.target.tagName==='INPUT') return;
+        sec4LeaveToggleSelect(r.id);
+      };
+    }
+    box.appendChild(row);
+  });
+};
+
+window.sec4LeaveToggleSettings = function(){
+  var p=$('sec4LeaveSettings');
+  if(p) p.style.display = p.style.display==='grid'?'none':'grid';
+};
+
+window.sec4LeaveToggleSelect = function(id){
+  if(leaveSelected[id]) delete leaveSelected[id];
+  else leaveSelected[id]=true;
+  sec4LeaveRender();
+};
+
+window.sec4LeaveToggleSelectMode = function(){
+  leaveSelMode=!leaveSelMode;
+  var btn=$('sec4LeaveSelBtn');
+  if(btn){btn.textContent = leaveSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';}
+  if(!leaveSelMode) leaveSelected={};
+  sec4LeaveRender();
+};
+
+window.sec4LeaveSelectAll = function(st){
+  if(st && !leaveSelMode) sec4LeaveToggleSelectMode();
+  leaveSelected={};
+  if(st){
+    var arr=ensureLeaveIds();
+    var filterName=$('sec4LeaveMemberFilter')?$('sec4LeaveMemberFilter').value:'';
+    arr.forEach(function(r){if(!filterName||r.name===filterName)leaveSelected[r.id]=true;});
+  }
+  sec4LeaveRender();
+};
+
+window.sec4LeaveEditSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(ids.length!==1){alert('⚠️ ایک ریکارڈ منتخب کریں');return;}
+  leaveEditingId = parseInt(ids[0],10);
+  sec4LeaveRender();
+};
+
+window.sec4LeaveCancelEdit = function(){leaveEditingId=null;sec4LeaveRender();};
+
+window.sec4LeaveSaveEdit = function(id){
+  var sel=$('sec4LeaveEdSt_'+id); if(!sel) return;
+  var arr=ls(LEAVE_KEY,[]);
+  var rec=arr.find(function(x){return String(x.id)===String(id);});
+  if(rec){rec.status=sel.value;lss(LEAVE_KEY,arr);}
+  leaveEditingId=null; sec4LeaveRender();
+};
+
+window.sec4LeaveDeleteSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(!ids.length){alert('⚠️ کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
+  lss(LEAVE_KEY, ls(LEAVE_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  leaveSelected={}; sec4LeaveRender();
+};
+
+window.sec4LeaveDeleteAll = function(btn){
+  var arr=ls(LEAVE_KEY,[]);
+  if(!arr.length) return;
+  if(!leaveDelPending){
+    leaveDelPending=true;
+    btn.textContent='⚠️ دوبارہ'; btn.style.background='#dc2626'; btn.style.color='#fff';
+    setTimeout(function(){leaveDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';}, 2500);
+    return;
+  }
+  lss(LEAVE_KEY,[]); leaveSelected={}; leaveDelPending=false;
+  btn.textContent='❌ سب صاف'; btn.style.background=''; btn.style.color='';
+  sec4LeaveRender();
+};
+
+/* ═══════════════════════════════════════════
+   RULES PANEL
+   ═══════════════════════════════════════════ */
+window.sec4B4Add = function(){
+  var type=$('sec4B4Type').value;
+  var value=parseInt($('sec4B4Value').value,10);
+  var rank=$('sec4B4Rank').value;
+  var cd=parseInt($('sec4B4ChuttiDays').value,10)||1;
+  if(!value||value<1){alert('تعداد لکھیں');return;}
+  var rules=ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  rules.push({id:Date.now(),type:type,value:value,rank:rank,chuttiDays:cd});
+  lss(RULES_KEY,rules);
+  $('sec4B4Value').value='';
+  renderRules();
+};
+
+window.sec4B4Delete = function(id){
+  if(!confirm('یہ قاعدہ ڈیلیٹ کریں؟')) return;
+  lss(RULES_KEY, ls(RULES_KEY,[]).filter(function(r){return r.id!==id;}));
+  renderRules();
+};
+
+window.sec4B4Edit = function(id){
+  var rules=ls(RULES_KEY,[]);
+  var rule=rules.find(function(r){return r.id===id;});
+  if(!rule) return;
+  var nv=prompt('نیا تعداد:',rule.value);
+  if(nv===null) return;
+  nv=parseInt(nv,10);
+  if(!nv||nv<1) return;
+  rule.value=nv; lss(RULES_KEY,rules); renderRules();
+};
+
+function renderRules(){
+  var list=$('sec4B4List');
+  if(!list) return;
+  var rules=ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  if(!rules.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>';
+    return;
+  }
+  list.innerHTML=rules.map(function(r){
+    var tl=r.type==='leave'?'🏖️ زیادہ چھٹیاں':'💪 زیادہ دن کام';
+    var rl=r.rank==='both'?'دونوں':(r.rank==='senior'?'سینئر':'جونیئر');
+    var ds=r.type==='leave' ? r.value+'+ چھٹیاں → الرٹ' : r.value+'+ دن کام → '+r.chuttiDays+' دن چھٹی دو';
+    return '<div class="rule-item"><div class="rule-txt">'+
+      '<b>'+tl+'</b><small>'+ds+' — '+rl+'</small></div>'+
+      '<div class="acts"><button class="edit" onclick="sec4B4Edit('+r.id+')">✏️</button>'+
+      '<button class="del" onclick="sec4B4Delete('+r.id+')">🗑️</button></div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   NEWS & ALERTS
+   ═══════════════════════════════════════════ */
+window.onTypeChange = function(){
+  $('timeWrap').style.display = $('nType').value==='complaint'?'block':'none';
+};
+
+window.saveNewsAlert = function(){
+  var type=$('nType').value;
+  var content=$('nContent').value.trim();
+  if(!content){showMsg('⚠️ متن لکھیں','err');return;}
+  var fireTime=null;
+  if(type==='complaint'){
+    fireTime=$('nFireTime').value;
+    if(!fireTime){showMsg('⚠️ وقت منتخب کریں','err');return;}
+  }
+  var items=ls(NEWS_KEY,[]);
+  if(!Array.isArray(items)) items=[];
+  items.unshift({id:Date.now(),type:type,content:content,fireTime:fireTime,timestamp:Date.now()});
+  lss(NEWS_KEY,items);
+  $('nContent').value='';
+  showMsg('✅ محفوظ ہو گیا — ڈیش بورڈ پر دیکھیں','ok');
+  renderNews();
+};
+
+function showMsg(text, type){
+  var m=$('newsMsg');
+  m.textContent=text;
+  m.className='msg '+type;
+  setTimeout(function(){m.className='msg';}, 2500);
+}
+
+function renderNews(){
+  var all=ls(NEWS_KEY,[]);
+  if(!Array.isArray(all)) all=[];
+  $('cNews').textContent=all.filter(function(x){return x.type==='news';}).length;
+  $('cAlert').textContent=all.filter(function(x){return x.type==='alert';}).length;
+  $('cComp').textContent=all.filter(function(x){return x.type==='complaint';}).length;
+  $('recCount').textContent=all.length;
+
+  var list=$('newsList');
+  if(!all.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>';
+    return;
+  }
+  list.innerHTML=all.slice(0,20).map(function(x){
+    var badge = x.type==='news'?'📰':(x.type==='alert'?'🚨':'⏰');
+    var time = x.fireTime?' <span class="badge">⏰ '+esc(x.fireTime)+'</span>':'';
+    return '<div class="item"><div class="info">'+badge+' '+esc(x.content)+time+'</div>'+
+      '<button class="del" onclick="delNews('+x.id+')">✕</button></div>';
+  }).join('');
+}
+
+window.delNews = function(id){
+  lss(NEWS_KEY, ls(NEWS_KEY,[]).filter(function(x){return x.id!==id;}));
+  renderNews();
+};
+
+/* ═══════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════ */
+render();
+renderNews();
+renderRules();
+sec4LeaveRender();
+
+setInterval(function(){
+  render();
+  renderNews();
+  sec4LeaveRender();
+}, 3000);
+
+window.addEventListener('storage', function(e){
+  if(e.key===DUTY_KEY || e.key===HIST_KEY || e.key===LEAVE_KEY) render();
+  if(e.key===LEAVE_KEY) sec4LeaveRender();
+  if(e.key===NEWS_KEY) renderNews();
+  if(e.key===RULES_KEY) renderRules();
+});
+</script>
 </body>
 </html>
