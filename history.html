@@ -7,16 +7,25 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
-.card{background:#fff;max-width:700px;margin:0 auto;border-radius:14px;padding:16px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
-h1{font-size:18px;color:#7c3aed;margin-bottom:12px;padding-bottom:10px;border-bottom:2px dashed #ddd6fe}
-.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
-.filters button{padding:9px 4px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.card{background:#fff;max-width:700px;margin:0 auto;border-radius:14px;padding:14px;border:1px solid #cbd5e1;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+.hd{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:8px;margin-bottom:12px}
+.hd h1{font-size:16px;color:#1e293b}
+.set-btn{padding:6px 12px;font-size:11px;font-weight:700;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;border-radius:30px;cursor:pointer;font-family:inherit}
+.settings{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:12px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px}
+.settings.open{display:grid}
+.tool{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;text-align:center;font-family:inherit}
+.tool.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+.tool.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
+.tool.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.filters button{padding:9px 4px;font-size:11px;font-weight:700;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:8px;cursor:pointer;font-family:inherit}
 .filters button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
-.list{border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px;max-height:500px;overflow-y:auto}
-.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-right:4px solid #7c3aed;font-size:12px}
+.list{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;border-right:4px solid #7c3aed;cursor:pointer;transition:all .2s}
 .item.news{border-right-color:#2563eb}
 .item.alert{border-right-color:#dc2626}
 .item.complaint{border-right-color:#ea580c}
+.item.selected{background:#ede9fe;border-color:#7c3aed}
 .item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
 .item .badge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
 .item .badge.news{background:#dbeafe;color:#1e40af}
@@ -24,24 +33,53 @@ h1{font-size:18px;color:#7c3aed;margin-bottom:12px;padding-bottom:10px;border-bo
 .item .badge.complaint{background:#ffedd5;color:#9a3412}
 .item .time-badge{background:#fef3c7;color:#92400e;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;border:1px solid #fcd34d}
 .item .date{font-size:10px;color:#64748b;font-weight:600}
-.item .content{color:#1e293b;font-weight:700;line-height:1.6;word-break:break-word}
+.item .content{color:#1e293b;font-weight:700;line-height:1.6;display:flex;align-items:center;gap:8px}
+.item .content .cb{width:16px;height:16px;accent-color:#7c3aed;cursor:pointer;flex-shrink:0;display:none}
+.item.sel-mode .content .cb{display:inline-block}
+.item .content .num{background:#7c3aed;color:#fff;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.item .content .txt{flex:1}
+.item .content .edit-inp{padding:4px 8px;border:1px solid #7c3aed;border-radius:6px;font-size:11px;font-weight:700;outline:none;flex:1;font-family:inherit;min-width:60px}
+.item .content .edit-time{padding:4px 6px;border:1px solid #7c3aed;border-radius:6px;font-size:11px;font-weight:700;outline:none;font-family:inherit;width:90px}
+.item .content .edit-save{background:#16a34a;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
+.item .content .edit-cancel{background:#e2e8f0;color:#475569;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
 .empty{text-align:center;color:#94a3b8;font-size:12px;padding:30px;font-weight:700}
 .empty .ic{font-size:40px;display:block;margin-bottom:8px;opacity:.5}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
-.stat .n{font-size:20px;font-weight:900;color:#7c3aed}
+.stat .n{font-size:18px;font-weight:900;color:#7c3aed}
 .stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:30px;font-size:12px;font-weight:700;z-index:9999;opacity:0;transition:.3s;pointer-events:none;font-family:inherit}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#16a34a}
+.toast.error{background:#dc2626}
+.toast.warning{background:#ea580c}
 </style>
 </head>
 <body>
 
 <div class="card">
-  <h1>📜 ہسٹری</h1>
+  <div class="hd">
+    <h1>📜 ہسٹری</h1>
+    <button class="set-btn" onclick="toggleSettings()">⚙️ سیٹنگز</button>
+  </div>
+
+  <div class="settings" id="settings">
+    <button class="tool" id="selModeBtn" onclick="toggleSelectMode()">☑️ سلیکٹ موڈ</button>
+    <button class="tool" onclick="selectAll(true)">✅ تمام سلیکٹ</button>
+    <button class="tool" onclick="selectAll(false)">⬜ سلیکشن ہٹائیں</button>
+    <button class="tool" onclick="editSelected()">✏️ ایڈٹ</button>
+    <button class="tool" onclick="moveOrder('up')">🔼 اوپر</button>
+    <button class="tool" onclick="moveOrder('down')">🔽 نیچے</button>
+    <button class="tool danger" onclick="deleteSelected()">🗑️ منتخب ڈیلیٹ</button>
+    <button class="tool danger" onclick="deleteAll(this)">❌ سب صاف</button>
+    <button class="tool close-btn" onclick="toggleSettings()">🚪 بند</button>
+  </div>
 
   <div class="filters">
-    <button class="on" id="fNews" onclick="setF('all')">📋 سب</button>
-    <button id="fA" onclick="setF('news')">📰 News</button>
-    <button id="fB" onclick="setF('alert')">🚨 Alert</button>
+    <button class="on" data-f="all" onclick="setFilter('all')">📋 سب</button>
+    <button data-f="news" onclick="setFilter('news')">📰 News</button>
+    <button data-f="alert" onclick="setFilter('alert')">🚨 Alert</button>
+    <button data-f="complaint" onclick="setFilter('complaint')">⏰ Complaint</button>
   </div>
 
   <div class="list" id="list">
@@ -49,78 +87,152 @@ h1{font-size:18px;color:#7c3aed;margin-bottom:12px;padding-bottom:10px;border-bo
   </div>
 
   <div class="stats">
+    <div class="stat"><div class="n" id="sAll">0</div><div class="l">📋 سب</div></div>
     <div class="stat"><div class="n" id="sNews">0</div><div class="l">📰 News</div></div>
     <div class="stat"><div class="n" id="sAlert">0</div><div class="l">🚨 Alert</div></div>
-    <div class="stat"><div class="n" id="sComp">0</div><div class="l">⏰ Time</div></div>
+    <div class="stat"><div class="n" id="sComp">0</div><div class="l">⏰ Comp</div></div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const KEY = 'sec10_news_alerts_data';
-const $ = id => document.getElementById(id);
-let filter = 'all';
+var KEY = 'sec10_news_alerts_data';
+var items = [], selected = {}, filter = 'all', selectMode = false, editingId = null, delPending = false;
+var $ = function(id){return document.getElementById(id);};
 
-function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { return []; } }
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s == null ? '' : s);
-  return d.innerHTML;
-}
-function fmt(ts) {
-  const d = new Date(ts);
-  return String(d.getDate()).padStart(2, '0') + '/' +
-         String(d.getMonth() + 1).padStart(2, '0') + '/' +
-         d.getFullYear() + ' — ' +
-         String(d.getHours()).padStart(2, '0') + ':' +
-         String(d.getMinutes()).padStart(2, '0');
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(d)?d:[];}catch(e){return [];}}
+function save(a){localStorage.setItem(KEY,JSON.stringify(a));}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function fmt(ts){var d=new Date(ts);return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' — '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function toast(msg,type){var t=$('toast');t.textContent=msg;t.className='toast show '+(type||'');clearTimeout(t._tid);t._tid=setTimeout(function(){t.className='toast';},2000);}
+
+window.toggleSettings = function(){$('settings').classList.toggle('open');};
+window.setFilter = function(f){filter=f;document.querySelectorAll('.filters button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f);});render();};
+
+function getFiltered(){
+  if(filter==='all') return items;
+  return items.filter(function(it){return it.type===filter;});
 }
 
-window.setF = function(f) {
-  filter = f;
-  $('fNews').classList.toggle('on', f === 'all');
-  $('fA').classList.toggle('on', f === 'news');
-  $('fB').classList.toggle('on', f === 'alert');
+function render(){
+  items = load();
+  $('sAll').textContent = items.length;
+  $('sNews').textContent = items.filter(function(x){return x.type==='news';}).length;
+  $('sAlert').textContent = items.filter(function(x){return x.type==='alert';}).length;
+  $('sComp').textContent = items.filter(function(x){return x.type==='complaint';}).length;
+
+  var list = getFiltered(), box = $('list');
+  if(!list.length){box.innerHTML='<div class="empty"><span class="ic">📋</span>اس فلٹر میں کوئی ریکارڈ نہیں</div>';return;}
+  box.innerHTML = '';
+
+  list.forEach(function(it, i){
+    var div = document.createElement('div');
+    div.className = 'item ' + it.type + (selected[it.id]?' selected':'') + (selectMode?' sel-mode':'');
+    var label = it.type==='news'?'📰 نیوز':(it.type==='alert'?'🚨 الرٹ':'⏰ کمپلینٹ');
+    var timeBadge = (it.type==='complaint' && it.fireTime) ? '<span class="time-badge">⏰ '+esc(it.fireTime)+'</span>' : '';
+
+    if(editingId === it.id){
+      var timeInput = it.type==='complaint' ? '<input type="time" class="edit-time" id="edTime_'+it.id+'" value="'+esc(it.fireTime||'09:00')+'">' : '';
+      div.innerHTML =
+        '<div class="row1"><span class="badge '+it.type+'">'+label+'</span><span class="date">'+fmt(it.timestamp)+'</span></div>' +
+        '<div class="content"><span class="num">'+(i+1)+'</span>'+timeInput+
+        '<input type="text" class="edit-inp" id="edTxt_'+it.id+'" value="'+esc(it.content)+'">' +
+        '<button class="edit-save" onclick="saveEdit('+it.id+')">✓</button>' +
+        '<button class="edit-cancel" onclick="cancelEdit()">✗</button></div>';
+    } else {
+      div.innerHTML =
+        '<div class="row1"><span class="badge '+it.type+'">'+label+'</span>'+timeBadge+'<span class="date">'+fmt(it.timestamp)+'</span></div>' +
+        '<div class="content"><input type="checkbox" class="cb" '+(selected[it.id]?'checked':'')+
+          ' onclick="event.stopPropagation();toggleSelect('+it.id+')">'+
+        '<span class="num">'+(i+1)+'</span><span class="txt">'+esc(it.content)+'</span></div>';
+      div.addEventListener('click', function(e){
+        if(!selectMode) return;
+        if(e.target.tagName === 'INPUT') return;
+        toggleSelect(it.id);
+      });
+    }
+    box.appendChild(div);
+  });
+}
+
+window.toggleSelectMode = function(){
+  selectMode = !selectMode;
+  var btn = $('selModeBtn');
+  btn.classList.toggle('active', selectMode);
+  btn.textContent = selectMode ? '✅ سلیکٹ موڈ آن' : '☑️ سلیکٹ موڈ';
+  if(!selectMode) selected = {};
   render();
 };
 
-function render() {
-  const all = load().sort((a, b) => b.timestamp - a.timestamp);
+window.toggleSelect = function(id){
+  if(selected[id]) delete selected[id];
+  else selected[id] = true;
+  render();
+};
 
-  $('sNews').textContent = all.filter(x => x.type === 'news').length;
-  $('sAlert').textContent = all.filter(x => x.type === 'alert').length;
-  $('sComp').textContent = all.filter(x => x.type === 'complaint').length;
+window.selectAll = function(st){
+  if(st && !selectMode){selectMode=true;$('selModeBtn').classList.add('active');$('selModeBtn').textContent='✅ سلیکٹ موڈ آن';}
+  selected = {};
+  if(st) getFiltered().forEach(function(it){selected[it.id]=true;});
+  render();
+};
 
-  let items = all;
-  if (filter === 'news') items = all.filter(x => x.type === 'news');
-  else if (filter === 'alert') items = all.filter(x => x.type === 'alert' || x.type === 'complaint');
+window.editSelected = function(){
+  var ids = Object.keys(selected).filter(function(k){return selected[k];});
+  if(ids.length !== 1){toast('⚠️ ایک ریکارڈ منتخب کریں','warning');return;}
+  editingId = parseInt(ids[0], 10);
+  render();
+};
 
-  const list = $('list');
-  if (!items.length) {
-    list.innerHTML = '<div class="empty"><span class="ic">📋</span>اس فلٹر میں کوئی ریکارڈ نہیں</div>';
+window.cancelEdit = function(){editingId=null;render();};
+
+window.saveEdit = function(id){
+  var txt = $('edTxt_'+id); if(!txt) return;
+  var newText = txt.value.trim();
+  if(!newText){toast('⚠️ متن خالی ہے','error');return;}
+  var arr = load();
+  var rec = arr.find(function(x){return x.id===id;}); if(!rec) return;
+  rec.content = newText;
+  if(rec.type === 'complaint'){var t=$('edTime_'+id);if(t&&t.value)rec.fireTime=t.value;}
+  save(arr); editingId = null; toast('✅ اپڈیٹ','success'); render();
+};
+
+window.moveOrder = function(dir){
+  var ids = Object.keys(selected).filter(function(k){return selected[k];});
+  if(ids.length !== 1){toast('⚠️ ایک منتخب کریں','warning');return;}
+  var id = parseInt(ids[0], 10);
+  var arr = load();
+  var i = arr.findIndex(function(x){return x.id===id;}); if(i===-1) return;
+  if(dir==='up' && i>0){var t=arr[i];arr[i]=arr[i-1];arr[i-1]=t;}
+  else if(dir==='down' && i<arr.length-1){var t2=arr[i];arr[i]=arr[i+1];arr[i+1]=t2;}
+  else return;
+  save(arr); render();
+};
+
+window.deleteSelected = function(){
+  var ids = Object.keys(selected).filter(function(k){return selected[k];});
+  if(!ids.length){toast('⚠️ کچھ منتخب نہیں','warning');return;}
+  if(!confirm(ids.length + ' ریکارڈ ڈیلیٹ کریں؟')) return;
+  save(load().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  selected = {}; toast('✅ ڈیلیٹ','success'); render();
+};
+
+window.deleteAll = function(btn){
+  if(!load().length){toast('⚠️ کوئی ریکارڈ نہیں','warning');return;}
+  if(!delPending){
+    delPending = true; btn.textContent = '⚠️ دوبارہ'; btn.style.background = '#dc2626'; btn.style.color = '#fff';
+    setTimeout(function(){delPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';}, 2500);
     return;
   }
-
-  list.innerHTML = items.map(it => {
-    const cls = it.type;
-    const label = it.type === 'news' ? '📰 نیوز' :
-                  it.type === 'alert' ? '🚨 الرٹ' : '⏰ ٹائم';
-    const timeBadge = (it.type === 'complaint' && it.fireTime)
-      ? '<span class="time-badge">⏰ ' + esc(it.fireTime) + '</span>' : '';
-    return '<div class="item ' + cls + '">' +
-      '<div class="row1">' +
-        '<span class="badge ' + cls + '">' + label + '</span>' +
-        timeBadge +
-        '<span class="date">' + fmt(it.timestamp) + '</span>' +
-      '</div>' +
-      '<div class="content">' + esc(it.content) + '</div>' +
-    '</div>';
-  }).join('');
-}
+  save([]); selected = {}; delPending = false;
+  btn.textContent = '❌ سب صاف'; btn.style.background = ''; btn.style.color = '';
+  toast('✅ سب صاف','success'); render();
+};
 
 render();
 setInterval(render, 2000);
-window.addEventListener('storage', e => { if (e.key === KEY) render(); });
+window.addEventListener('storage', function(e){if(e.key===KEY) render();});
 </script>
-
 </body>
 </html>
