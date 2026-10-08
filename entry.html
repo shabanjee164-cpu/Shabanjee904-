@@ -31,10 +31,6 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
 .msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
 .msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
 .msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
-.leave-table{width:100%;border-collapse:collapse;font-size:11px}
-.leave-table th{background:#fff7ed;color:#9a3412;font-weight:800;padding:6px 4px;border-bottom:2px solid #fdba74;font-size:10px}
-.leave-table td{padding:6px 4px;border-bottom:1px solid #fed7aa;font-weight:700;color:#1e293b;text-align:center}
-.leave-table tr:hover{background:#fff7ed}
 .rules-list{max-height:200px;overflow-y:auto;border:1px solid #bfdbfe;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
 .rule-item{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .rule-item .rule-txt{flex:1;min-width:0}
@@ -85,7 +81,7 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
     <button class="btn small red" onclick="stopAll()">❌ سب بند</button>
   </div>
 
-  <!-- ═══ LEAVE BOX ═══ -->
+  <!-- LEAVE BOX -->
   <label style="margin-top:16px;color:#9a3412;">🏖️ منظور شدہ چھٹیاں (<span id="sec4LeaveTotal">0</span>)</label>
   <button class="btn small" onclick="sec4LeaveToggleSettings()" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;margin-top:4px;">⚙️ سیٹنگ</button>
 
@@ -116,7 +112,7 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
     <span>📋 کل: <span id="sec4LeaveCntAll">0</span></span>
   </div>
 
-  <!-- ═══ RULES PANEL ═══ -->
+  <!-- RULES PANEL -->
   <label style="margin-top:16px;color:#1e40af;">⚙️ الرٹ کے قواعد</label>
   <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:8px;margin-top:6px;">
     <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
@@ -136,7 +132,6 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
       <input type="number" id="sec4B4ChuttiDays" value="1" min="1" style="width:70px;height:32px;font-size:11px;padding:0 6px;text-align:center;">
       <button class="btn small" onclick="sec4B4Add()" style="background:#1e40af;">➕ شامل</button>
     </div>
-
     <div class="rules-list" id="sec4B4List">
       <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>
     </div>
@@ -153,7 +148,7 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
   </div>
 </div>
 
-<!-- ═══ NEWS & ALERTS ═══ -->
+<!-- NEWS & ALERTS -->
 <div class="card news">
   <h1>📰 News & Alerts Manager</h1>
 
@@ -191,9 +186,6 @@ select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,2
 </div>
 
 <script>
-/* ═══════════════════════════════════════════
-   KEYS
-   ═══════════════════════════════════════════ */
 var DUTY_KEY = 'sec4_duty_manager_data_v4';
 var HIST_KEY = 'sec4_duty_history_data_v4';
 var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
@@ -215,9 +207,6 @@ function getDayName(dateStr){
   }catch(e){return '—';}
 }
 
-/* ═══════════════════════════════════════════
-   DUTY MANAGER
-   ═══════════════════════════════════════════ */
 function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
 function addHistory(rec, reason){
   if(!rec.dutyStart) return;
@@ -286,9 +275,6 @@ window.returnFromLeave = function(id){
   t.onLeave=false; lss(DUTY_KEY,m); render();
 };
 
-/* ═══════════════════════════════════════════
-   RENDER DUTY
-   ═══════════════════════════════════════════ */
 function render(){
   var m=getMembers();
   var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
@@ -339,7 +325,6 @@ function render(){
   }
 }
 
-/* Timer */
 setInterval(function(){
   var m=getMembers();
   var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
@@ -353,9 +338,7 @@ setInterval(function(){
   }
 }, 1000);
 
-/* ═══════════════════════════════════════════
-   LEAVE BOX
-   ═══════════════════════════════════════════ */
+/* LEAVE BOX */
 var leaveSelected = {};
 var leaveSelMode = false;
 var leaveEditingId = null;
@@ -508,9 +491,7 @@ window.sec4LeaveDeleteAll = function(btn){
   sec4LeaveRender();
 };
 
-/* ═══════════════════════════════════════════
-   RULES PANEL
-   ═══════════════════════════════════════════ */
+/* RULES PANEL */
 window.sec4B4Add = function(){
   var type=$('sec4B4Type').value;
   var value=parseInt($('sec4B4Value').value,10);
@@ -561,9 +542,7 @@ function renderRules(){
   }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   NEWS & ALERTS
-   ═══════════════════════════════════════════ */
+/* NEWS */
 window.onTypeChange = function(){
   $('timeWrap').style.display = $('nType').value==='complaint'?'block':'none';
 };
@@ -619,9 +598,6 @@ window.delNews = function(id){
   renderNews();
 };
 
-/* ═══════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════ */
 render();
 renderNews();
 renderRules();
