@@ -2,94 +2,312 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مکمل ڈیش بورڈ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ڈیش بورڈ</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{font-family:system-ui,sans-serif;direction:rtl;background:#eef2f6;display:flex;flex-direction:column}
-.app-header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);flex-shrink:0;z-index:50}
-.app-header .hamburger{background:rgba(255,255,255,.2);border:none;color:#fff;width:40px;height:40px;border-radius:10px;font-size:20px;cursor:pointer}
-.app-header .app-title{font-size:17px;font-weight:800}
-.app-header .coming-btn{background:rgba(251,191,36,.95);border:none;color:#78350f;height:40px;padding:0 14px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
-.app-main{flex:1;position:relative;overflow:hidden}
-.app-main iframe{width:100%;height:100%;border:none;display:block;background:#eef2f6}
-.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -2px 12px rgba(0,0,0,.06);flex-shrink:0;z-index:40;padding-bottom:env(safe-area-inset-bottom)}
-.bottom-nav button{background:transparent;border:none;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#94a3b8;font-family:inherit;position:relative}
-.bottom-nav button .nav-icon{font-size:20px;line-height:1}
-.bottom-nav button .nav-label{font-size:10px;font-weight:700}
-.bottom-nav button.active{color:#2563eb}
-.bottom-nav button.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:3px;background:#2563eb;border-radius:0 0 4px 4px}
-.side-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);opacity:0;visibility:hidden;transition:.28s;z-index:100}
-.side-overlay.open{opacity:1;visibility:visible}
-.side-menu{position:fixed;top:0;right:0;height:100%;width:290px;max-width:85vw;background:#fff;z-index:110;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:-6px 0 24px rgba(0,0,0,.18)}
-.side-menu.open{transform:translateX(0)}
-.side-header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:18px 16px;display:flex;justify-content:space-between;align-items:center}
-.side-header .side-title{font-size:16px;font-weight:800}
-.side-header .close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:34px;height:34px;border-radius:8px;font-size:16px;cursor:pointer}
-.side-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px 20px;text-align:center}
-.side-body .ic{font-size:70px;animation:fl 3s ease-in-out infinite}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.side-body .ttl{font-size:22px;font-weight:900;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.side-body .sub{font-size:12px;color:#94a3b8;font-weight:600}
-.side-footer{padding:12px 18px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;text-align:center;background:#f8fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:10px}
+.wrap{max-width:700px;margin:0 auto}
+.news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:11px 14px;border-radius:10px;font-size:13px;font-weight:700;overflow:hidden;margin-bottom:10px;min-height:44px;display:flex;align-items:center}
+.news-text{display:inline-block;white-space:nowrap;animation:ticker 60s linear infinite;padding-right:100%;font-weight:800}
+.news-text.speed-slow{animation-duration:90s}
+.news-text.speed-fast{animation-duration:30s}
+@keyframes ticker{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.alert-bar{display:none;background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:800;justify-content:space-between;align-items:center;gap:10px;transition:all .3s;margin-bottom:10px}
+.alert-bar.show{display:flex}
+.alert-bar.blink{animation:bl .8s infinite alternate}
+@keyframes bl{0%{background:#fef2f2;color:#dc2626}100%{background:#dc2626;color:#fff}}
+.alert-bar .txt{flex:1;line-height:1.5}
+.alert-bar .skip{background:#dc2626;color:#fff;border:none;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit;white-space:nowrap}
+.alert-bar.blink .skip{background:#fff;color:#dc2626}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:10px}
+.card h2{font-size:14px;color:#1e293b;margin-bottom:10px;padding-bottom:8px;border-bottom:2px dashed #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.card h2 .mini-timer{font-size:11px;font-weight:800;color:#6d28d9;background:#ede9fe;padding:3px 10px;border-radius:20px}
+.duty-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.duty-box{background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:10px}
+.duty-box .lbl{font-size:10px;font-weight:800;color:#6d28d9;margin-bottom:4px}
+.duty-box .nm{font-size:15px;font-weight:900;color:#4c1d95;word-break:break-word}
+.leave-submit-box{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:10px;margin-top:12px}
+.leave-submit-box label{font-size:11px;font-weight:800;color:#92400e;display:block;margin-bottom:6px}
+.leave-submit-box select,.leave-submit-box input{width:100%;padding:9px 10px;border:1px solid #fdba74;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff;outline:none;margin-bottom:6px}
+.leave-submit-box button{width:100%;padding:10px;background:#ea580c;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
+.leave-list{background:#fff;border:1px solid #fdba74;border-radius:6px;padding:6px;max-height:180px;overflow-y:auto;min-height:44px;margin-top:8px}
+.leave-item{background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;padding:7px 10px;margin-bottom:4px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:6px;color:#9a3412}
+.empty-note{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:600}
 </style>
 </head>
 <body>
 
-<header class="app-header">
-  <button class="hamburger" onclick="openSideMenu()">☰</button>
-  <div class="app-title" id="headerTitle">📊 ڈیش بورڈ</div>
-  <button class="coming-btn" onclick="alert('✨ Coming Soon')">✨ Coming Soon</button>
-</header>
-
-<main class="app-main">
-  <iframe id="contentFrame"></iframe>
-</main>
-
-<div class="side-overlay" id="sideOverlay" onclick="closeSideMenu()"></div>
-<aside class="side-menu" id="sideMenu">
-  <div class="side-header">
-    <div class="side-title">📋 مینو</div>
-    <button class="close-btn" onclick="closeSideMenu()">✕</button>
+<div class="wrap">
+  <div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ ہو رہا ہے...</div></div>
+  <div class="alert-bar" id="alertBar">
+    <span class="txt" id="alertTxt">—</span>
+    <button class="skip" onclick="skipAlert()">اسکیپ ❌</button>
   </div>
-  <div class="side-body">
-    <div class="ic">🚧</div>
-    <div class="ttl">Coming Soon</div>
-    <div class="sub">یہ سیکشن جلد دستیاب ہو گا</div>
-  </div>
-  <div class="side-footer">ورژن 1.0</div>
-</aside>
 
-<nav class="bottom-nav">
-  <button class="active" data-n="dashboard" onclick="go('dashboard','dashboard.html','📊 ڈیش بورڈ')">
-    <span class="nav-icon">📊</span><span class="nav-label">ڈیش بورڈ</span>
-  </button>
-  <button data-n="manager" onclick="go('manager','manager.html','👔 مینیجر')">
-    <span class="nav-icon">👔</span><span class="nav-label">مینیجر</span>
-  </button>
-  <button data-n="dataentry" onclick="go('dataentry','entry.html','📝 ڈیٹا انٹری')">
-    <span class="nav-icon">📝</span><span class="nav-label">ڈیٹا انٹری</span>
-  </button>
-  <button data-n="history" onclick="go('history','history.html','📜 ہسٹری')">
-    <span class="nav-icon">📜</span><span class="nav-label">ہسٹری</span>
-  </button>
-</nav>
+  <div class="card">
+    <h2>
+      <span>👮 آج کی ڈیوٹی ممبران</span>
+      <span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span>
+    </h2>
+    <div class="duty-grid">
+      <div class="duty-box"><div class="lbl">🟢 سینئر ممبر</div><div class="nm" id="seniorNm">—</div></div>
+      <div class="duty-box"><div class="lbl">🔵 جونیئر ممبر</div><div class="nm" id="juniorNm">—</div></div>
+    </div>
+    <div class="leave-submit-box">
+      <label>🏖️ چھٹی سبمٹ کریں</label>
+      <select id="leaveMemberSel"><option value="">ممبر منتخب کریں...</option></select>
+      <input type="text" id="leaveReason" placeholder="وجہ لکھیں...">
+      <button onclick="submitLeaveFromDash()">✅ چھٹی سبمٹ کریں</button>
+      <div class="leave-list" id="todayLeavesList"><div class="empty-note">آج کوئی چھٹی نہیں</div></div>
+    </div>
+  </div>
+</div>
 
 <script>
-var $ = function(id){return document.getElementById(id);};
-function openSideMenu(){$('sideMenu').classList.add('open');$('sideOverlay').classList.add('open');}
-function closeSideMenu(){$('sideMenu').classList.remove('open');$('sideOverlay').classList.remove('open');}
-function go(id, file, title){
-  $('headerTitle').textContent = title;
-  document.querySelectorAll('.bottom-nav button').forEach(function(b){
-    b.classList.toggle('active', b.dataset.n === id);
-  });
-  closeSideMenu();
-  $('contentFrame').src = file + '?t=' + Date.now();
+var DUTY_KEY='sec4_duty_manager_data_v4';
+var LEAVE_KEY='sec4_duty_leaves_data_v4';
+var HIST_KEY='sec4_duty_history_data_v4';
+var NEWS_KEY='sec10_news_alerts_data';
+var IDX_KEY='sec10_alert_index';
+var LAST_NEWS_KEY='sec10_last_news_ids';
+var FIRED_KEY='sec10_complaint_fired';
+var SETTINGS_KEY='sec10_app_settings';
+
+function $(id){return document.getElementById(id);}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function pad(n){return String(n).padStart(2,'0');}
+function getDayName(dt){var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];return days[dt.getDay()]||'';}
+function getSettings(){var s=ls(SETTINGS_KEY,{});return{vol:(s.vol!=null?s.vol:100),vib:s.vib!==false,voice:s.voice!==false,newsOn:s.news!==false,alertOn:s.alert!==false,speed:s.speed||'normal',anim:s.anim||'blink',alertGap:s.alertGap||10};}
+
+var bellLoop=null, vibrateLoop=null, voiceToggle=0;
+
+function playBell(){
+  try{
+    var cfg=getSettings();
+    var ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended') ctx.resume();
+    [0,0.35,0.7].forEach(function(delay){
+      var o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=1000;
+      var t=ctx.currentTime+delay;
+      var vol=(cfg.vol/100)*1.0;
+      g.gain.setValueAtTime(0.001,t);
+      g.gain.exponentialRampToValueAtTime(vol,t+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+      o.start(t);o.stop(t+0.5);
+    });
+  }catch(e){}
 }
-document.addEventListener('keydown', function(e){if(e.key === 'Escape') closeSideMenu();});
-window.addEventListener('load', function(){ go('dashboard','dashboard.html','📊 ڈیش بورڈ'); });
+
+function speak(text){
+  var cfg=getSettings();
+  if(!cfg.voice) return;
+  if(!('speechSynthesis' in window)) return;
+  try{
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang='ur-PK';u.rate=0.9;
+    u.pitch=(voiceToggle%2===0)?1.3:0.8;
+    u.volume=1.0;
+    window.speechSynthesis.speak(u);
+    voiceToggle++;
+  }catch(e){}
+}
+
+function startVibrate(){
+  var cfg=getSettings();
+  if(!cfg.vib) return;
+  if(!navigator.vibrate) return;
+  try{navigator.vibrate([400,200,400,200,400]);}catch(e){}
+  if(vibrateLoop) clearInterval(vibrateLoop);
+  vibrateLoop=setInterval(function(){if(navigator.vibrate)try{navigator.vibrate([400,200,400]);}catch(e){}},2500);
+}
+
+function stopAll(){
+  if(bellLoop){clearInterval(bellLoop);bellLoop=null;}
+  if(vibrateLoop){clearInterval(vibrateLoop);vibrateLoop=null;}
+  if(navigator.vibrate) try{navigator.vibrate(0);}catch(e){}
+  if(window.speechSynthesis) try{window.speechSynthesis.cancel();}catch(e){}
+}
+
+function updateNews(){
+  var cfg=getSettings();
+  var all=ls(NEWS_KEY,[]); if(!Array.isArray(all)) all=[];
+  var news=all.filter(function(x){return x.type==='news' && x.enabled===true;});
+  var el=$('newsText'); if(!el) return;
+  if(!cfg.newsOn){el.textContent='📰 News Patty بند ہے';el.style.animation='none';return;}
+  if(!news.length){el.textContent='📰 کوئی نیوز موجود نہیں';el.style.animation='none';return;}
+  el.textContent=news.map(function(n){return '📰 '+n.content;}).join('   •   ')+'   •   ';
+  el.classList.remove('speed-slow','speed-fast');
+  if(cfg.speed==='slow') el.classList.add('speed-slow');
+  else if(cfg.speed==='fast') el.classList.add('speed-fast');
+  else el.style.animation='ticker 60s linear infinite';
+}
+
+function checkNewNews(){
+  var all=ls(NEWS_KEY,[]); if(!Array.isArray(all)) all=[];
+  var news=all.filter(function(x){return x.type==='news';});
+  var ids=news.map(function(n){return n.id;}).join(',');
+  var last=localStorage.getItem(LAST_NEWS_KEY)||'';
+  if(last && ids!==last && news.length){playBell();speak(news[0].content);}
+  localStorage.setItem(LAST_NEWS_KEY,ids);
+}
+
+function showAlert(){
+  var cfg=getSettings();
+  var bar=$('alertBar');
+  if(!bar) return;
+  if(!cfg.alertOn){bar.classList.remove('show');return;}
+  var all=ls(NEWS_KEY,[]); if(!Array.isArray(all)) all=[];
+  var alerts=all.filter(function(x){return x.type==='alert' && x.enabled===true;})
+                .sort(function(a,b){return b.timestamp-a.timestamp;});
+  if(!alerts.length){bar.classList.remove('show');return;}
+  var idx=parseInt(localStorage.getItem(IDX_KEY)||'0',10);
+  if(idx>=alerts.length) idx=0;
+  var a=alerts[idx];
+  bar.className='alert-bar show blink';
+  $('alertTxt').innerHTML='🚨 '+(idx+1)+'/'+alerts.length+': '+esc(a.content);
+  stopAll();
+  playBell();bellLoop=setInterval(playBell,1200);
+  startVibrate();speak(a.content);
+}
+
+window.skipAlert=function(){
+  stopAll();
+  var bar=$('alertBar');bar.className='alert-bar';
+  var all=ls(NEWS_KEY,[]); if(!Array.isArray(all)) all=[];
+  var alerts=all.filter(function(x){return x.type==='alert';});
+  var idx=parseInt(localStorage.getItem(IDX_KEY)||'0',10);
+  idx++;if(idx>=alerts.length) idx=0;
+  localStorage.setItem(IDX_KEY,String(idx));
+};
+
+function checkComplaints(){
+  var all=ls(NEWS_KEY,[]); if(!Array.isArray(all)) all=[];
+  var comps=all.filter(function(x){return x.type==='complaint' && x.fireTime && x.enabled===true;});
+  if(!comps.length) return;
+  var now=new Date();
+  var nowStr=pad(now.getHours())+':'+pad(now.getMinutes());
+  var today=now.toDateString();
+  var fired=ls(FIRED_KEY,{});if(typeof fired!=='object'||fired===null) fired={};
+  var cfg=getSettings();
+  var gapMs=(cfg.alertGap||10)*60*1000;
+  comps.forEach(function(c){
+    if(c.fireTime!==nowStr) return;
+    var k=c.id+'_'+today;
+    if(Date.now()-(fired[k]||0)<gapMs) return;
+    var bar=$('alertBar');
+    if(!bar) return;
+    stopAll();
+    bar.className='alert-bar show blink';
+    $('alertTxt').innerHTML='⏰ '+esc(c.fireTime)+' — '+esc(c.content);
+    playBell();bellLoop=setInterval(playBell,1200);
+    startVibrate();speak(c.content);
+    fired[k]=Date.now();
+  });
+  lss(FIRED_KEY,fired);
+}
+
+function updateDuty(){
+  var m=ls(DUTY_KEY,[]); if(!Array.isArray(m)) m=[];
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  if($('seniorNm')) $('seniorNm').textContent=s?s.name:'—';
+  if($('juniorNm')) $('juniorNm').textContent=j?j.name:'—';
+  var active=s||j;
+  if(active && active.dutyStart){
+    var el=Math.floor((Date.now()-active.dutyStart)/1000);
+    if($('dutyMiniTimer')) $('dutyMiniTimer').textContent='⏱️ '+pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
+  } else {
+    if($('dutyMiniTimer')) $('dutyMiniTimer').textContent='⏱️ 00:00:00';
+  }
+}
+
+function populateLeaveDropdown(){
+  var sel=$('leaveMemberSel'); if(!sel) return;
+  var cur=sel.value;
+  var m=ls(DUTY_KEY,[]); if(!Array.isArray(m)) m=[];
+  sel.innerHTML='<option value="">ممبر منتخب کریں...</option>';
+  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
+    sel.appendChild(new Option(x.name+' ('+(x.rank==='Senior'?'سینئر':'جونیئر')+')',x.id));
+  });
+  if(cur) sel.value=cur;
+}
+
+window.submitLeaveFromDash=function(){
+  var id=$('leaveMemberSel').value;
+  var reason=$('leaveReason').value.trim();
+  if(!id){alert('ممبر منتخب کریں');return;}
+  if(!reason){alert('وجہ لکھیں');return;}
+  var m=ls(DUTY_KEY,[]); if(!Array.isArray(m)) m=[];
+  var t=m.find(function(x){return String(x.id)===String(id);});
+  if(!t){alert('ممبر نہیں ملا');return;}
+  if(t.onLeave){alert('پہلے ہی چھٹی پر ہے');return;}
+  t.onLeave=true;t.leaveCount=(t.leaveCount||0)+1;
+  if(t.onDuty){
+    if(t.dutyStart){
+      var h=ls(HIST_KEY,[]); if(!Array.isArray(h)) h=[];
+      var s=new Date(t.dutyStart),e=new Date();
+      h.push({name:t.name,rank:t.rank,start:pad(s.getHours())+':'+pad(s.getMinutes()),end:pad(e.getHours())+':'+pad(e.getMinutes()),reason:'leave'});
+      if(h.length>100) h=h.slice(-100);
+      lss(HIST_KEY,h);
+    }
+    t.onDuty=false;t.dutyStart=null;
+  }
+  var l=ls(LEAVE_KEY,[]); if(!Array.isArray(l)) l=[];
+  var d=new Date();
+  l.push({id:Date.now(),name:t.name,rank:t.rank,date:pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes()),day:getDayName(d),reason:reason,status:'leave',ts:d.getTime()});
+  lss(LEAVE_KEY,l);lss(DUTY_KEY,m);
+
+  var next=m.filter(function(x){return x.rank==='Junior' && !x.onLeave && !x.onDuty;});
+  if(!next.length) next=m.filter(function(x){return x.rank==='Senior' && !x.onLeave && !x.onDuty;});
+  if(next.length && t.rank==='Junior'){
+    next.sort(function(a,b){return (a.dutyCount||0)-(b.dutyCount||0);});
+    var n=next[0];n.onDuty=true;n.dutyStart=Date.now();n.dutyCount=(n.dutyCount||0)+1;
+    lss(DUTY_KEY,m);
+  }
+
+  $('leaveMemberSel').value='';$('leaveReason').value='';
+  updateDuty();populateLeaveDropdown();renderTodayLeaves();
+};
+
+function renderTodayLeaves(){
+  var box=$('todayLeavesList'); if(!box) return;
+  var l=ls(LEAVE_KEY,[]); if(!Array.isArray(l)) l=[];
+  var d=new Date();
+  var todayPrefix=pad(d.getDate())+'/'+pad(d.getMonth()+1);
+  var todayL=l.filter(function(x){var s=String(x.date||'');return s.indexOf(todayPrefix)===0;});
+  if(!todayL.length){box.innerHTML='<div class="empty-note">آج کوئی چھٹی نہیں</div>';return;}
+  box.innerHTML=todayL.map(function(x){
+    return '<div class="leave-item"><span>🏖️ '+esc(x.name)+'</span>'+(x.reason?'<span style="color:#dc2626;font-size:10px;background:#fff;padding:1px 6px;border-radius:10px;border:1px solid #fca5a5;">'+esc(x.reason)+'</span>':'')+'</div>';
+  }).join('');
+}
+
+function boot(){
+  updateNews();checkNewNews();updateDuty();populateLeaveDropdown();renderTodayLeaves();
+  setTimeout(showAlert,1200);
+  window.addEventListener('storage',function(e){
+    if(e.key===NEWS_KEY){updateNews();checkNewNews();}
+    if(e.key===DUTY_KEY||e.key===LEAVE_KEY){updateDuty();populateLeaveDropdown();renderTodayLeaves();}
+  });
+  setInterval(function(){updateNews();checkNewNews();},5000);
+  setInterval(updateDuty,1000);
+  setInterval(populateLeaveDropdown,5000);
+  setInterval(renderTodayLeaves,5000);
+  setInterval(checkComplaints,20000);
+  checkComplaints();
+}
+
+document.addEventListener('click',function unlock(){
+  try{var c=new (window.AudioContext||window.webkitAudioContext)();if(c.state==='suspended')c.resume();}catch(e){}
+  document.removeEventListener('click',unlock);
+},{once:true});
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 </script>
 </body>
 </html>
