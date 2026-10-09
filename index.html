@@ -2,149 +2,746 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>مکمل ڈیش بورڈ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ڈیٹا انٹری</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{font-family:system-ui,sans-serif;direction:rtl;background:#eef2f6;display:flex;flex-direction:column}
-
-/* ═══ TOP HEADER ═══ */
-.app-header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);flex-shrink:0;z-index:50}
-.app-header .hamburger{background:rgba(255,255,255,.2);border:none;color:#fff;width:40px;height:40px;border-radius:10px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.app-header .hamburger:active{background:rgba(255,255,255,.35)}
-.app-header .app-title{font-size:17px;font-weight:800}
-.app-header .coming-btn{background:rgba(251,191,36,.95);border:none;color:#78350f;height:40px;padding:0 14px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px}
-.app-header .coming-btn:active{transform:scale(.95)}
-
-/* ═══ MAIN CONTENT ═══ */
-.app-main{flex:1;position:relative;overflow:hidden;background:#eef2f6}
-.app-main iframe{width:100%;height:100%;border:none;display:block;background:#eef2f6}
-
-/* ═══ BOTTOM NAV ═══ */
-.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #e2e8f0;box-shadow:0 -2px 12px rgba(0,0,0,.06);flex-shrink:0;z-index:40;padding-bottom:env(safe-area-inset-bottom)}
-.bottom-nav button{background:transparent;border:none;padding:9px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#94a3b8;font-family:inherit;transition:.2s;position:relative}
-.bottom-nav button .nav-icon{font-size:20px;line-height:1}
-.bottom-nav button .nav-label{font-size:10px;font-weight:700}
-.bottom-nav button.active{color:#2563eb}
-.bottom-nav button.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:3px;background:#2563eb;border-radius:0 0 4px 4px}
-.bottom-nav button:active{background:#f1f5f9}
-
-/* ═══ SIDE MENU ═══ */
-.side-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);opacity:0;visibility:hidden;transition:.28s;z-index:100}
-.side-overlay.open{opacity:1;visibility:visible}
-.side-menu{position:fixed;top:0;right:0;height:100%;width:290px;max-width:85vw;background:#fff;z-index:110;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-6px 0 24px rgba(0,0,0,.18)}
-.side-menu.open{transform:translateX(0)}
-.side-header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:18px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.side-header .side-title{font-size:16px;font-weight:800}
-.side-header .close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:34px;height:34px;border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.side-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px 20px;text-align:center}
-.side-body .ic{font-size:70px;animation:fl 3s ease-in-out infinite}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.side-body .ttl{font-size:22px;font-weight:900;background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.side-body .sub{font-size:12px;color:#94a3b8;font-weight:600;max-width:220px;line-height:1.8}
-.side-footer{padding:12px 18px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8;text-align:center;background:#f8fafc;flex-shrink:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card.news{border-right-color:#ea580c}
+h1{font-size:16px;color:#7c3aed;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe}
+.card.news h1{color:#ea580c;border-color:#fed7aa}
+label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
+select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none;background:#fff}
+select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+.btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn.orange{background:#ea580c}
+.btn.green{background:#16a34a}
+.btn.red{background:#dc2626}
+.btn.small{width:auto;padding:8px 14px;font-size:12px;margin-top:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.duty-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-radius:10px;padding:10px;margin-top:10px}
+.duty-box .line{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;font-weight:800;color:#4c1d95}
+.duty-box .timer{text-align:center;margin-top:8px;font-size:14px;font-weight:900;color:#4c1d95}
+.list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.item .info{flex:1;min-width:0}
+.item .badge{background:#f1f5f9;color:#475569;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:800}
+.item .del{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;display:none}
+.item .del.show{display:inline-block}
+.item .del.green{background:#16a34a}
+.msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
+.msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+.msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
+.rules-list{max-height:200px;overflow-y:auto;border:1px solid #bfdbfe;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
+.rule-item{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.rule-item .rule-txt{flex:1;min-width:0}
+.rule-item .rule-txt b{color:#1e40af;display:block}
+.rule-item .rule-txt small{color:#64748b;font-size:9px}
+.rule-item .acts{display:flex;gap:3px}
+.rule-item .acts button{border:none;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:800;padding:0}
+.rule-item .edit{background:#0891b2;color:#fff}
+.rule-item .del2{background:#ef4444;color:#fff}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;text-align:center}
+.stat .n{font-size:16px;font-weight:900;color:#7c3aed}
+.card.news .stat .n{color:#ea580c}
+.stat .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
+.leave-table{width:100%;border-collapse:collapse;font-size:11px}
+.leave-table th{background:#fff7ed;color:#9a3412;font-weight:800;padding:6px 4px;border-bottom:2px solid #fdba74;font-size:10px}
+.leave-table td{padding:6px 4px;border-bottom:1px solid #fed7aa;font-weight:700;color:#1e293b;text-align:center;font-size:10px}
+.leave-table tr:hover{background:#fff7ed}
+.news-row{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700}
+.news-row .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0}
+.news-row .info{flex:1;min-width:0}
+.news-row .txt{color:#1e293b;word-break:break-word}
+.news-row .meta{font-size:9px;color:#64748b;font-weight:700;margin-top:3px}
+.news-row .del3{background:#ef4444;color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;font-size:11px;flex-shrink:0;display:none}
+.news-row .del3.show{display:inline-block}
+.news-actions{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:6px;margin-top:8px;display:none;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
+.news-actions.open{display:grid}
+.news-actions button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
+.news-actions button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+.news-actions button.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
+.news-actions button.active{background:#ea580c;color:#fff;border-color:#ea580c}
+.news-settings-btn{width:100%;padding:9px;background:#fff7ed;color:#ea580c;border:1px solid #fdba74;border-radius:8px;cursor:pointer;font-weight:800;font-size:12px;margin-top:10px;font-family:inherit}
 </style>
 </head>
 <body>
 
-<!-- ═══ TOP HEADER ═══ -->
-<header class="app-header">
-  <button class="hamburger" onclick="openSideMenu()">☰</button>
-  <div class="app-title" id="headerTitle">📊 ڈیش بورڈ</div>
-  <button class="coming-btn" onclick="showComingSoon()">✨ Coming Soon</button>
-</header>
+<!-- ═══════ DUTY MANAGER ═══════ -->
+<div class="card">
+  <h1>👮 Member & Duty Control System</h1>
 
-<!-- ═══ MAIN CONTENT ═══ -->
-<main class="app-main">
-  <iframe id="contentFrame"></iframe>
-</main>
-
-<!-- ═══ SIDE MENU ═══ -->
-<div class="side-overlay" id="sideOverlay" onclick="closeSideMenu()"></div>
-<aside class="side-menu" id="sideMenu">
-  <div class="side-header">
-    <div class="side-title">📋 مینو</div>
-    <button class="close-btn" onclick="closeSideMenu()">✕</button>
+  <div class="duty-box">
+    <div class="line"><span>🟢 سینئر:</span><span id="curSenior">—</span></div>
+    <div class="line"><span>🔵 جونیئر:</span><span id="curJunior">—</span></div>
+    <div class="timer">⏱️ <span id="dutyTimer">00:00:00</span></div>
   </div>
-  <div class="side-body">
-    <div class="ic">🚧</div>
-    <div class="ttl">Coming Soon</div>
-    <div class="sub">یہ سیکشن جلد دستیاب ہو گا</div>
-  </div>
-  <div class="side-footer">ورژن 1.0 — مکمل ڈیش بورڈ</div>
-</aside>
 
-<!-- ═══ BOTTOM NAV ═══ -->
-<nav class="bottom-nav">
-  <button class="active" data-n="dashboard" onclick="go('dashboard','dashboard.html','📊 ڈیش بورڈ')">
-    <span class="nav-icon">📊</span>
-    <span class="nav-label">ڈیش بورڈ</span>
-  </button>
-  <button data-n="manager" onclick="go('manager','manager.html','👔 مینیجر')">
-    <span class="nav-icon">👔</span>
-    <span class="nav-label">مینیجر</span>
-  </button>
-  <button data-n="dataentry" onclick="go('dataentry','entry.html','📝 ڈیٹا انٹری')">
-    <span class="nav-icon">📝</span>
-    <span class="nav-label">ڈیٹا انٹری</span>
-  </button>
-  <button data-n="history" onclick="go('history','history.html','📜 ہسٹری')">
-    <span class="nav-icon">📜</span>
-    <span class="nav-label">ہسٹری</span>
-  </button>
-</nav>
+  <label style="margin-top:14px;">👤 مستقل ممبرز رجسٹریشن</label>
+  <input type="text" id="mName" placeholder="ممبر کا نام...">
+  <div class="row" style="margin-top:6px;">
+    <select id="mRank">
+      <option value="Junior">🔵 جونیئر</option>
+      <option value="Senior">🟢 سینئر</option>
+    </select>
+    <button class="btn small green" onclick="addMember()">➕ شامل</button>
+  </div>
+
+  <label style="margin-top:14px;">⚡ مینوئل ڈیوٹی تفویض</label>
+  <div class="row">
+    <select id="dutySenior"><option value="">🟢 سینئر منتخب...</option></select>
+    <select id="dutyJunior"><option value="">🔵 جونیئر منتخب...</option></select>
+  </div>
+  <button class="btn" onclick="saveDuty()">✅ ڈیوٹی سیو کریں</button>
+
+  <div class="row" style="margin-top:8px;">
+    <button class="btn small red" onclick="stopJunior()">⏹️ جونیئر بند</button>
+    <button class="btn small red" onclick="stopAll()">❌ سب بند</button>
+  </div>
+
+  <!-- LEAVE BOX -->
+  <label style="margin-top:16px;color:#9a3412;">🏖️ منظور شدہ چھٹیاں (<span id="sec4LeaveTotal">0</span>)</label>
+  <button class="btn small" onclick="sec4LeaveToggleSettings()" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;margin-top:4px;">⚙️ سیٹنگ</button>
+
+  <div id="sec4LeaveSettings" class="news-actions">
+    <button id="sec4LeaveSelBtn" onclick="sec4LeaveToggleSelectMode()">☑️ سلیکٹ موڈ</button>
+    <button onclick="sec4LeaveSelectAll(true)">✅ تمام</button>
+    <button onclick="sec4LeaveSelectAll(false)">⬜ ہٹائیں</button>
+    <button onclick="sec4LeaveEditSelected()">✏️ ایڈٹ</button>
+    <button class="danger" onclick="sec4LeaveDeleteSelected()">🗑️ ڈیلیٹ</button>
+    <button class="danger" onclick="sec4LeaveDeleteAll(this)">❌ سب صاف</button>
+    <button class="close-btn" onclick="sec4LeaveToggleSettings()">🚪 بند</button>
+  </div>
+
+  <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:8px;margin-top:8px;">
+    <label style="margin:0 0 4px 0;font-size:10px;color:#92400e;">ممبر منتخب کریں:</label>
+    <select id="sec4LeaveMemberFilter" onchange="sec4LeaveRender()" style="height:34px;font-size:12px;">
+      <option value="">تمام ممبران</option>
+    </select>
+  </div>
+
+  <div id="sec4LeaveTable" style="max-height:280px;overflow-y:auto;border:1px solid #fdba74;border-radius:8px;padding:4px;background:#fff7ed;min-height:60px;margin-top:6px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی چھٹی ریکارڈ نہیں</div>
+  </div>
+
+  <div id="sec4LeaveFooter" style="margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:11px;font-weight:800;color:#9a3412;">
+    <span>🏖️ چھٹیاں: <span id="sec4LeaveCntLeave">0</span></span>
+    <span>✅ کام: <span id="sec4LeaveCntWork">0</span></span>
+    <span>📋 کل: <span id="sec4LeaveCntAll">0</span></span>
+  </div>
+
+  <!-- RULES PANEL -->
+  <label style="margin-top:16px;color:#1e40af;">⚙️ الرٹ کے قواعد</label>
+  <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:8px;margin-top:6px;">
+    <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+      <select id="sec4B4Type" style="flex:1;min-width:90px;height:34px;font-size:11px;padding:0 6px;">
+        <option value="leave">🏖️ زیادہ چھٹیاں</option>
+        <option value="work">💪 زیادہ دن کام</option>
+      </select>
+      <input type="number" id="sec4B4Value" placeholder="تعداد" min="1" style="width:70px;height:34px;font-size:11px;padding:0 6px;text-align:center;">
+      <select id="sec4B4Rank" style="width:90px;height:34px;font-size:11px;padding:0 6px;">
+        <option value="both">دونوں</option>
+        <option value="senior">سینئر</option>
+        <option value="junior">جونیئر</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:800;color:#1e40af;margin:0;">چھٹی دن:</label>
+      <input type="number" id="sec4B4ChuttiDays" value="1" min="1" style="width:70px;height:32px;font-size:11px;padding:0 6px;text-align:center;">
+      <button class="btn small" onclick="sec4B4Add()" style="background:#1e40af;">💾 سیو کریں</button>
+    </div>
+    <div class="rules-list" id="sec4B4List">
+      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>
+    </div>
+  </div>
+
+  <label style="margin-top:14px;">👥 ایکٹو ممبرز (<span id="memCount">0</span>)</label>
+  <div class="list" id="memList">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>
+  </div>
+
+  <label style="margin-top:14px;">📜 مکمل ڈیوٹی ہسٹری</label>
+  <div class="list" id="dutyHist" style="max-height:260px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>
+  </div>
+</div>
+
+<!-- ═══════ NEWS & ALERTS ═══════ -->
+<div class="card news">
+  <h1>📰 News & Alerts Manager</h1>
+
+  <label>قسم منتخب کریں</label>
+  <select id="nType" onchange="onTypeChange()">
+    <option value="news">📰 News Add</option>
+    <option value="alert">🚨 Alert Patty</option>
+    <option value="complaint">⏰ Time Alert (مقررہ وقت)</option>
+  </select>
+
+  <label>متن</label>
+  <input type="text" id="nContent" placeholder="نیوز یا الرٹ لکھیں...">
+
+  <div id="timeWrap" style="display:none;">
+    <label>وقت</label>
+    <input type="time" id="nFireTime" value="21:00">
+    <p style="font-size:10px;color:#ea580c;background:#ffedd5;padding:6px 8px;border-radius:6px;margin-top:6px;font-weight:700;">
+      ⏰ یہ الرٹ اس وقت پر چلے گا — اور ہر 10 منٹ بعد دوبارہ
+    </p>
+  </div>
+
+  <button class="btn orange" onclick="saveNewsAlert()">💾 محفوظ کریں</button>
+  <div class="msg" id="newsMsg"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="cNews">0</div><div class="l">📰 News</div></div>
+    <div class="stat"><div class="n" id="cAlert">0</div><div class="l">🚨 Alert</div></div>
+    <div class="stat"><div class="n" id="cComp">0</div><div class="l">⏰ Time</div></div>
+  </div>
+
+  <label style="margin-top:14px;">📋 ریکارڈز (<span id="recCount">0</span>)</label>
+  <div class="list" id="newsList" style="max-height:320px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>
+  </div>
+
+  <button class="news-settings-btn" onclick="toggleNewsSettings()">⚙️ سیٹنگز کھولیں</button>
+  <div class="news-actions" id="newsSettings">
+    <button id="nSelBtn" onclick="toggleNewsSelMode()">☑️ سلیکٹ موڈ</button>
+    <button onclick="newsSelectAll(true)">✅ تمام</button>
+    <button onclick="newsSelectAll(false)">⬜ ہٹائیں</button>
+    <button onclick="newsEditSel()">✏️ ایڈٹ</button>
+    <button class="danger" onclick="newsDeleteSel()">🗑️ ڈیلیٹ</button>
+    <button class="danger" onclick="newsDeleteAll(this)">❌ سب صاف</button>
+    <button class="close-btn" onclick="toggleNewsSettings()">🚪 بند</button>
+  </div>
+</div>
 
 <script>
 /* ═══════════════════════════════════════════
-   INDEX — Shell
+   KEYS
    ═══════════════════════════════════════════ */
-var $ = function(id){return document.getElementById(id);};
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var HIST_KEY = 'sec4_duty_history_data_v4';
+var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
+var RULES_KEY = 'sec4_duty_alert_rules';
+var NEWS_KEY = 'sec10_news_alerts_data';
 
-function openSideMenu(){
-  $('sideMenu').classList.add('open');
-  $('sideOverlay').classList.add('open');
-}
-function closeSideMenu(){
-  $('sideMenu').classList.remove('open');
-  $('sideOverlay').classList.remove('open');
-}
-function showComingSoon(){
-  alert('✨ Coming Soon');
-}
-
-function go(id, file, title){
-  $('headerTitle').textContent = title;
-  document.querySelectorAll('.bottom-nav button').forEach(function(b){
-    b.classList.toggle('active', b.dataset.n === id);
-  });
-  closeSideMenu();
-  $('contentFrame').src = file + '?t=' + Date.now();
+function $(id){return document.getElementById(id);}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function pad(n){return String(n).padStart(2,'0');}
+function getDayName(dateStr){
+  try{
+    var parts=String(dateStr).split(' ')[0].split('/');
+    if(parts.length!==3) return '—';
+    var d=new Date(parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
+    var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
+    return days[d.getDay()]||'—';
+  }catch(e){return '—';}
 }
 
-/* Keyboard ESC */
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeSideMenu();
-});
+/* ═══════════════════════════════════════════
+   DUTY MANAGER
+   ═══════════════════════════════════════════ */
+function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
+function addHistory(rec, reason){
+  if(!rec.dutyStart) return;
+  var h=ls(HIST_KEY,[]); if(!Array.isArray(h)) h=[];
+  var s=new Date(rec.dutyStart), e=new Date();
+  h.push({name:rec.name, rank:rec.rank,
+    start:pad(s.getHours())+':'+pad(s.getMinutes()),
+    end:pad(e.getHours())+':'+pad(e.getMinutes()),
+    reason:reason});
+  if(h.length>100) h=h.slice(-100);
+  lss(HIST_KEY,h);
+}
 
-/* Swipe from right edge */
-var touchStartX = 0, touchStartY = 0;
-document.addEventListener('touchstart', function(e){
-  touchStartX = e.changedTouches[0].screenX;
-  touchStartY = e.changedTouches[0].screenY;
-}, {passive:true});
-document.addEventListener('touchend', function(e){
-  var dx = e.changedTouches[0].screenX - touchStartX;
-  var dy = e.changedTouches[0].screenY - touchStartY;
-  if(Math.abs(dx) > 60 && Math.abs(dy) < 50){
-    if(dx < 0 && $('sideMenu').classList.contains('open')) closeSideMenu();
-    else if(dx > 0 && !$('sideMenu').classList.contains('open') && touchStartX < 40) openSideMenu();
+window.addMember = function(){
+  var name=$('mName').value.trim(), rank=$('mRank').value;
+  if(!name){alert('نام لکھیں');return;}
+  var m=getMembers();
+  m.push({id:Date.now(),name:name,rank:rank,dutyCount:0,leaveCount:0,onDuty:false,dutyStart:null,onLeave:false});
+  lss(DUTY_KEY,m); $('mName').value=''; render();
+  alert('✅ ممبر شامل');
+};
+
+window.saveDuty = function(){
+  var sid=$('dutySenior').value, jid=$('dutyJunior').value;
+  if(!sid && !jid){alert('کوئی ممبر منتخب کریں');return;}
+  var m=getMembers();
+  if(sid){
+    var s=m.find(function(x){return String(x.id)===String(sid);});
+    if(s){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Senior' && String(x.id)!==String(sid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!s.onDuty){s.onDuty=true;s.dutyStart=Date.now();s.dutyCount=(s.dutyCount||0)+1;}
+    }
   }
-}, {passive:true});
+  if(jid){
+    var j=m.find(function(x){return String(x.id)===String(jid);});
+    if(j){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Junior' && String(x.id)!==String(jid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!j.onDuty){j.onDuty=true;j.dutyStart=Date.now();j.dutyCount=(j.dutyCount||0)+1;}
+    }
+  }
+  lss(DUTY_KEY,m); render();
+};
 
-/* Load dashboard on start */
-window.addEventListener('load', function(){
-  go('dashboard','dashboard.html','📊 ڈیش بورڈ');
+window.stopJunior = function(){
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty && x.rank==='Junior'){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
+
+window.stopAll = function(){
+  if(!confirm('سب ڈیوٹی بند کریں؟')) return;
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
+
+window.delMember = function(id){
+  if(!confirm('ممبر ڈیلیٹ کریں؟')) return;
+  lss(DUTY_KEY, getMembers().filter(function(x){return x.id!==id;}));
+  render();
+};
+
+window.returnFromLeave = function(id){
+  var m=getMembers(), t=m.find(function(x){return x.id===id;});
+  if(!t) return;
+  t.onLeave=false; lss(DUTY_KEY,m); render();
+};
+
+window.sec4ToggleMemberEdit = function(){
+  window._memEditMode = !window._memEditMode;
+  render();
+};
+
+function render(){
+  var m=getMembers();
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  $('curSenior').textContent = s?s.name:'—';
+  $('curJunior').textContent = j?j.name:'—';
+
+  var sSel=$('dutySenior'), jSel=$('dutyJunior');
+  var sV=sSel.value, jV=jSel.value;
+  sSel.innerHTML='<option value="">🟢 سینئر منتخب...</option>';
+  jSel.innerHTML='<option value="">🔵 جونیئر منتخب...</option>';
+  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
+    var lbl=x.name+(x.onDuty?' • ڈیوٹی پر':'');
+    if(x.rank==='Senior') sSel.appendChild(new Option(lbl,x.id));
+    else jSel.appendChild(new Option(lbl,x.id));
+  });
+  if(sV) sSel.value=sV; else if(s) sSel.value=s.id;
+  if(jV) jSel.value=jV; else if(j) jSel.value=j.id;
+
+  var ml=$('memList');
+  $('memCount').textContent=m.length;
+  var editMode = window._memEditMode || false;
+  if(!m.length){
+    ml.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>';
+  } else {
+    ml.innerHTML=m.map(function(x){
+      var status = '';
+      if(x.onLeave) status = '🏖️ چھٹی پر ہے';
+      else if(x.onDuty) status = '🟢 کام پر ہے';
+      else status = '⚪ دستیاب ہے';
+      var bg = x.onLeave ? 'background:#fef2f2;' : '';
+      var btn = x.onLeave
+        ? '<button class="del green show" onclick="returnFromLeave('+x.id+')" title="واپس لائیں">✓</button>'
+        : '<button class="del '+(editMode?'show':'')+'" onclick="delMember('+x.id+')">✕</button>';
+      return '<div class="item" style="'+bg+'"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢 سینئر':'🔵 جونیئر')+'</span></div>'+
+        '<div style="font-size:10px;color:#475569;margin-top:3px;">'+status+' • D:'+(x.dutyCount||0)+' • L:'+(x.leaveCount||0)+'</div>'+
+        '</div>'+btn+'</div>';
+    }).join('');
+  }
+
+  var h=ls(HIST_KEY,[]);
+  if(!h.length){
+    $('dutyHist').innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>';
+  } else {
+    $('dutyHist').innerHTML=h.slice().reverse().slice(0,30).map(function(x){
+      return '<div class="item"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢':'🔵')+'</span></div>'+
+        '<div style="font-size:9px;color:#64748b;margin-top:2px;">'+esc(x.start)+' → '+esc(x.end)+' ('+esc(x.reason)+')</div>'+
+        '</div></div>';
+    }).join('');
+  }
+}
+
+setInterval(function(){
+  var m=getMembers();
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  var active = s||j;
+  if(active && active.dutyStart){
+    var el=Math.floor((Date.now()-active.dutyStart)/1000);
+    $('dutyTimer').textContent = pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
+  } else {
+    $('dutyTimer').textContent = '00:00:00';
+  }
+}, 1000);
+
+/* ═══════════════════════════════════════════
+   LEAVE BOX
+   ═══════════════════════════════════════════ */
+var leaveSelected = {};
+var leaveSelMode = false;
+var leaveEditingId = null;
+var leaveDelPending = false;
+
+function ensureLeaveIds(){
+  var arr=ls(LEAVE_KEY,[]); if(!Array.isArray(arr)) return [];
+  var changed=false;
+  arr.forEach(function(r,i){
+    if(!r.id){r.id=Date.now()+i;changed=true;}
+    if(!r.status){r.status='leave';changed=true;}
+    if(!r.reason){r.reason='—';changed=true;}
+    if(!r.ts){r.ts=Date.now()-(arr.length-i)*60000;changed=true;}
+  });
+  if(changed) lss(LEAVE_KEY,arr);
+  return arr;
+}
+
+window.sec4LeaveRender = function(){
+  var arr=ensureLeaveIds();
+  var filterSel=$('sec4LeaveMemberFilter');
+  if(filterSel){
+    var curVal=filterSel.value;
+    filterSel.innerHTML='<option value="">تمام ممبران</option>';
+    var names={}; arr.forEach(function(r){names[r.name]=true;});
+    Object.keys(names).forEach(function(n){filterSel.appendChild(new Option(n,n));});
+    if(curVal) filterSel.value=curVal;
+  }
+  var filterName = filterSel?filterSel.value:'';
+  var list = arr.slice().reverse();
+  if(filterName) list = list.filter(function(r){return r.name===filterName;});
+
+  var allLeave = arr.filter(function(r){return r.status!=='work';}).length;
+  var allWork = arr.filter(function(r){return r.status==='work';}).length;
+  if($('sec4LeaveTotal')) $('sec4LeaveTotal').textContent = arr.length;
+  if($('sec4LeaveCntLeave')) $('sec4LeaveCntLeave').textContent = allLeave;
+  if($('sec4LeaveCntWork')) $('sec4LeaveCntWork').textContent = allWork;
+  if($('sec4LeaveCntAll')) $('sec4LeaveCntAll').textContent = arr.length;
+
+  var box=$('sec4LeaveTable');
+  if(!box) return;
+  if(!list.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی ریکارڈ نہیں</div>';
+    return;
+  }
+  var html = '<table class="leave-table"><thead><tr><th>نام</th><th>تاریخ</th><th>دن</th><th>حالت</th></tr></thead><tbody>';
+  list.forEach(function(r){
+    var isSelected=!!leaveSelected[r.id];
+    var dayName=getDayName(r.date);
+    var isLeave = r.status!=='work';
+    var statusBadge = isLeave
+      ? '<span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">🏖️ چھٹی</span>'
+      : '<span style="background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">✅ کام</span>';
+    var rowStyle = isSelected ? 'background:#fef3c7;' : '';
+    var cb = leaveSelMode ? '<input type="checkbox" '+(isSelected?'checked':'')+' onclick="event.stopPropagation();sec4LeaveToggleSelect('+r.id+')" style="width:14px;height:14px;accent-color:#f59e0b;cursor:pointer;vertical-align:middle;"> ' : '';
+    html += '<tr style="'+rowStyle+'" '+(leaveSelMode?'onclick="sec4LeaveToggleSelect('+r.id+')"':'')+'>';
+    html += '<td>'+cb+esc(r.name)+'</td>';
+    html += '<td>'+esc(r.date)+'</td>';
+    html += '<td style="color:#0891b2;font-weight:800;">'+dayName+'</td>';
+    html += '<td>'+statusBadge+'</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  box.innerHTML = html;
+};
+
+window.sec4LeaveToggleSettings = function(){
+  var p=$('sec4LeaveSettings');
+  if(p) p.classList.toggle('open');
+};
+
+window.sec4LeaveToggleSelect = function(id){
+  if(leaveSelected[id]) delete leaveSelected[id];
+  else leaveSelected[id]=true;
+  sec4LeaveRender();
+};
+
+window.sec4LeaveToggleSelectMode = function(){
+  leaveSelMode=!leaveSelMode;
+  var btn=$('sec4LeaveSelBtn');
+  if(btn){btn.textContent = leaveSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';btn.classList.toggle('active',leaveSelMode);}
+  if(!leaveSelMode) leaveSelected={};
+  sec4LeaveRender();
+};
+
+window.sec4LeaveSelectAll = function(st){
+  if(st && !leaveSelMode) sec4LeaveToggleSelectMode();
+  leaveSelected={};
+  if(st){
+    var arr=ensureLeaveIds();
+    var filterName=$('sec4LeaveMemberFilter')?$('sec4LeaveMemberFilter').value:'';
+    arr.forEach(function(r){if(!filterName||r.name===filterName)leaveSelected[r.id]=true;});
+  }
+  sec4LeaveRender();
+};
+
+window.sec4LeaveEditSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(ids.length!==1){alert('⚠️ ایک ریکارڈ منتخب کریں');return;}
+  var id = parseInt(ids[0],10);
+  var arr = ls(LEAVE_KEY,[]);
+  var rec = arr.find(function(x){return String(x.id)===String(id);});
+  if(!rec) return;
+  var newStatus = rec.status==='work' ? 'leave' : 'work';
+  rec.status = newStatus;
+  lss(LEAVE_KEY,arr);
+  sec4LeaveRender();
+  alert('✅ حالت تبدیل: ' + (newStatus==='work'?'کام':'چھٹی'));
+};
+
+window.sec4LeaveDeleteSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(!ids.length){alert('⚠️ کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
+  lss(LEAVE_KEY, ls(LEAVE_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  leaveSelected={}; sec4LeaveRender();
+};
+
+window.sec4LeaveDeleteAll = function(btn){
+  var arr=ls(LEAVE_KEY,[]);
+  if(!arr.length) return;
+  if(!leaveDelPending){
+    leaveDelPending=true;
+    btn.textContent='⚠️ دوبارہ'; btn.style.background='#dc2626'; btn.style.color='#fff';
+    setTimeout(function(){leaveDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';}, 2500);
+    return;
+  }
+  lss(LEAVE_KEY,[]); leaveSelected={}; leaveDelPending=false;
+  btn.textContent='❌ سب صاف'; btn.style.background=''; btn.style.color='';
+  sec4LeaveRender();
+};
+
+/* ═══════════════════════════════════════════
+   RULES PANEL
+   ═══════════════════════════════════════════ */
+window.sec4B4Add = function(){
+  var type=$('sec4B4Type').value;
+  var value=parseInt($('sec4B4Value').value,10);
+  var rank=$('sec4B4Rank').value;
+  var cd=parseInt($('sec4B4ChuttiDays').value,10)||1;
+  if(!value||value<1){alert('تعداد لکھیں');return;}
+  var rules=ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  rules.push({id:Date.now(),type:type,value:value,rank:rank,chuttiDays:cd});
+  lss(RULES_KEY,rules);
+  $('sec4B4Value').value='';
+  renderRules();
+};
+
+window.sec4B4Delete = function(id){
+  if(!confirm('یہ قاعدہ ڈیلیٹ کریں؟')) return;
+  lss(RULES_KEY, ls(RULES_KEY,[]).filter(function(r){return r.id!==id;}));
+  renderRules();
+};
+
+window.sec4B4Edit = function(id){
+  var rules=ls(RULES_KEY,[]);
+  var rule=rules.find(function(r){return r.id===id;});
+  if(!rule) return;
+  var nv=prompt('نیا تعداد:',rule.value);
+  if(nv===null) return;
+  nv=parseInt(nv,10);
+  if(!nv||nv<1) return;
+  rule.value=nv; lss(RULES_KEY,rules); renderRules();
+};
+
+function renderRules(){
+  var list=$('sec4B4List');
+  if(!list) return;
+  var rules=ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  if(!rules.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>';
+    return;
+  }
+  list.innerHTML=rules.map(function(r){
+    var tl=r.type==='leave'?'🏖️ زیادہ چھٹیاں':'💪 زیادہ دن کام';
+    var rl=r.rank==='both'?'دونوں':(r.rank==='senior'?'سینئر':'جونیئر');
+    var ds=r.type==='leave' ? r.value+'+ چھٹیاں → الرٹ' : r.value+'+ دن کام → '+r.chuttiDays+' دن چھٹی دو';
+    return '<div class="rule-item"><div class="rule-txt">'+
+      '<b>'+tl+'</b><small>'+ds+' — '+rl+'</small></div>'+
+      '<div class="acts"><button class="edit" onclick="sec4B4Edit('+r.id+')">✏️</button>'+
+      '<button class="del2" onclick="sec4B4Delete('+r.id+')">🗑️</button></div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   NEWS & ALERTS
+   ═══════════════════════════════════════════ */
+window.onTypeChange = function(){
+  $('timeWrap').style.display = $('nType').value==='complaint'?'block':'none';
+};
+
+window.saveNewsAlert = function(){
+  var type=$('nType').value;
+  var content=$('nContent').value.trim();
+  if(!content){showMsg('⚠️ متن لکھیں','err');return;}
+  var fireTime=null;
+  if(type==='complaint'){
+    fireTime=$('nFireTime').value;
+    if(!fireTime){showMsg('⚠️ وقت منتخب کریں','err');return;}
+  }
+  var items=ls(NEWS_KEY,[]);
+  if(!Array.isArray(items)) items=[];
+  items.unshift({id:Date.now(),type:type,content:content,fireTime:fireTime,timestamp:Date.now(),enabled:true});
+  lss(NEWS_KEY,items);
+  $('nContent').value='';
+  showMsg('✅ محفوظ ہو گیا — ڈیش بورڈ پر دیکھیں','ok');
+  renderNews();
+};
+
+function showMsg(text, type){
+  var m=$('newsMsg');
+  m.textContent=text;
+  m.className='msg '+type;
+  setTimeout(function(){m.className='msg';}, 2500);
+}
+
+function fmtDT(ts){
+  var d=new Date(ts);
+  return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+}
+
+var newsSelMode = false;
+var newsSelected = {};
+var newsDelPending = false;
+var newsEditId = null;
+
+window.toggleNewsSettings = function(){
+  var p=$('newsSettings');
+  if(p) p.classList.toggle('open');
+};
+
+window.toggleNewsSelMode = function(){
+  newsSelMode = !newsSelMode;
+  var btn=$('nSelBtn');
+  if(btn){btn.textContent = newsSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';btn.classList.toggle('active',newsSelMode);}
+  if(!newsSelMode) newsSelected = {};
+  renderNews();
+};
+
+window.newsSelectAll = function(st){
+  if(st && !newsSelMode) toggleNewsSelMode();
+  newsSelected = {};
+  if(st){
+    var items = ls(NEWS_KEY,[]);
+    items.forEach(function(x){newsSelected[x.id]=true;});
+  }
+  renderNews();
+};
+
+window.newsEditSel = function(){
+  var ids = Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
+  if(ids.length !== 1){alert('⚠️ ایک ریکارڈ منتخب کریں');return;}
+  var id = parseInt(ids[0],10);
+  var items = ls(NEWS_KEY,[]);
+  var rec = items.find(function(x){return x.id===id;});
+  if(!rec) return;
+  var nv = prompt('نیا متن:', rec.content);
+  if(nv === null) return;
+  nv = nv.trim();
+  if(!nv) return;
+  rec.content = nv;
+  lss(NEWS_KEY,items);
+  newsSelected = {};
+  newsSelMode = false;
+  var btn = $('nSelBtn'); if(btn){btn.classList.remove('active');btn.textContent='☑️ سلیکٹ موڈ';}
+  renderNews();
+};
+
+window.newsDeleteSel = function(){
+  var ids = Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
+  if(!ids.length){alert('⚠️ کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
+  lss(NEWS_KEY, ls(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  newsSelected = {};
+  renderNews();
+};
+
+window.newsDeleteAll = function(btn){
+  if(!ls(NEWS_KEY,[]).length) return;
+  if(!newsDelPending){
+    newsDelPending=true;
+    btn.textContent='⚠️ دوبارہ'; btn.style.background='#dc2626'; btn.style.color='#fff';
+    setTimeout(function(){newsDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
+    return;
+  }
+  lss(NEWS_KEY,[]);
+  newsSelected = {}; newsDelPending = false;
+  btn.textContent='❌ سب صاف'; btn.style.background=''; btn.style.color='';
+  renderNews();
+};
+
+window.toggleNewsEnable = function(id){
+  var items = ls(NEWS_KEY,[]);
+  var rec = items.find(function(x){return x.id===id;});
+  if(!rec) return;
+  rec.enabled = !rec.enabled;
+  lss(NEWS_KEY,items);
+  renderNews();
+};
+
+window.delNews = function(id){
+  lss(NEWS_KEY, ls(NEWS_KEY,[]).filter(function(x){return x.id!==id;}));
+  renderNews();
+};
+
+function renderNews(){
+  var all=ls(NEWS_KEY,[]);
+  if(!Array.isArray(all)) all=[];
+  $('cNews').textContent=all.filter(function(x){return x.type==='news';}).length;
+  $('cAlert').textContent=all.filter(function(x){return x.type==='alert';}).length;
+  $('cComp').textContent=all.filter(function(x){return x.type==='complaint';}).length;
+  $('recCount').textContent=all.length;
+
+  var list=$('newsList');
+  if(!all.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>';
+    return;
+  }
+  list.innerHTML = all.slice(0,30).map(function(x){
+    var badge = x.type==='news'?'📰':(x.type==='alert'?'🚨':'⏰');
+    var time = x.fireTime ? ' ⏰ '+esc(x.fireTime) : '';
+    var enabled = x.enabled !== false;
+    var cb = '<input type="checkbox" class="cb" '+(enabled?'checked':'')+' onchange="toggleNewsEnable('+x.id+')" title="چالو / بند">';
+    var delBtn = '<button class="del3 '+(newsSelMode?'show':'')+'" onclick="delNews('+x.id+')">✕</button>';
+    return '<div class="news-row">'+
+      cb+
+      '<div class="info">'+
+        '<div class="txt">'+badge+' '+esc(x.content)+time+'</div>'+
+        '<div class="meta">'+fmtDT(x.timestamp)+'</div>'+
+      '</div>'+
+      delBtn+
+    '</div>';
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════ */
+render();
+renderNews();
+renderRules();
+sec4LeaveRender();
+
+setInterval(function(){
+  render();
+  renderNews();
+  sec4LeaveRender();
+}, 3000);
+
+window.addEventListener('storage', function(e){
+  if(e.key===DUTY_KEY || e.key===HIST_KEY || e.key===LEAVE_KEY) render();
+  if(e.key===LEAVE_KEY) sec4LeaveRender();
+  if(e.key===NEWS_KEY) renderNews();
+  if(e.key===RULES_KEY) renderRules();
 });
 </script>
 </body>
