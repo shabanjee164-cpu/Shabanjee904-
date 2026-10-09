@@ -3,437 +3,877 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ڈیش بورڈ</title>
+<title>ڈیٹا انٹری</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:10px}
-.wrap{max-width:700px;margin:0 auto}
+body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card.news{border-right-color:#ea580c}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe;gap:6px}
+.card.news .card-hd{border-color:#fed7aa}
+h1{font-size:16px;color:#7c3aed}
+.card.news h1{color:#ea580c}
+.ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
+select,input,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none;background:#fff}
+select:focus,input:focus,textarea:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+textarea{resize:vertical;min-height:60px}
+.btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn.orange{background:#ea580c}
+.btn.green{background:#16a34a}
+.btn.red{background:#dc2626}
+.btn.small{width:auto;padding:8px 14px;font-size:12px;margin-top:0}
+.btn.small.icon-only{padding:8px 12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.duty-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-radius:10px;padding:10px;margin-top:10px}
+.duty-box .line{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;font-weight:800;color:#4c1d95}
+.duty-box .timer{text-align:center;margin-top:8px;font-size:14px;font-weight:900;color:#4c1d95}
 
-/* NEWS BAR */
-.news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:11px 14px;border-radius:10px;font-size:13px;font-weight:700;overflow:hidden;margin-bottom:10px;min-height:44px;display:flex;align-items:center}
-.news-text{display:inline-block;white-space:nowrap;animation:ticker 60s linear infinite;padding-right:100%}
-@keyframes ticker{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.item .info{flex:1;min-width:0}
+.item .badge{background:#f1f5f9;color:#475569;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:800}
+.item .del{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0}
+.item .del.green{background:#16a34a}
 
-/* ALERT BAR */
-.alert-bar{display:none;background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:800;justify-content:space-between;align-items:center;gap:10px;transition:all .3s;margin-bottom:10px}
-.alert-bar.show{display:flex}
-.alert-bar.blink{animation:bl .8s infinite alternate}
-@keyframes bl{0%{background:#fef2f2;color:#dc2626}100%{background:#dc2626;color:#fff}}
-.alert-bar .txt{flex:1;line-height:1.5}
-.alert-bar .skip{background:#dc2626;color:#fff;border:none;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit;white-space:nowrap}
-.alert-bar.blink .skip{background:#fff;color:#dc2626}
+.msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
+.msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+.msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
 
-/* CARD */
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:10px}
-.card h2{font-size:14px;color:#1e293b;margin-bottom:10px;padding-bottom:8px;border-bottom:2px dashed #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.card h2 .mini-timer{font-size:11px;font-weight:800;color:#6d28d9;background:#ede9fe;padding:3px 10px;border-radius:20px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;text-align:center}
+.stat .n{font-size:16px;font-weight:900;color:#7c3aed}
+.card.news .stat .n{color:#ea580c}
+.stat .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
 
-/* DUTY */
-.duty-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.duty-box{background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:10px}
-.duty-box .lbl{font-size:10px;font-weight:800;color:#6d28d9;margin-bottom:4px}
-.duty-box .nm{font-size:15px;font-weight:900;color:#4c1d95;word-break:break-word}
+/* LEAVE SETTINGS */
+.settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:10px}
+.settings-panel.open{display:block}
+.settings-panel .sec-drop{width:100%;padding:8px;margin-bottom:8px;font-size:12px;font-weight:800;background:#fff7ed;border:1px solid #fdba74;color:#9a3412}
+.settings-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
+.settings-actions button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
+.settings-actions button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
+.settings-actions button.active{background:#ea580c;color:#fff;border-color:#ea580c}
 
-/* LEAVE SUBMIT */
-.leave-submit-box{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:10px;margin-top:12px}
-.leave-submit-box label{font-size:11px;font-weight:800;color:#92400e;display:block;margin-bottom:6px}
-.leave-submit-box select,.leave-submit-box input{width:100%;padding:9px 10px;border:1px solid #fdba74;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff;outline:none;margin-bottom:6px}
-.leave-submit-box button{width:100%;padding:10px;background:#ea580c;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
-.leave-submit-box button:active{opacity:.85}
+/* LEAVE TABLE */
+.leave-table{width:100%;border-collapse:collapse;font-size:11px}
+.leave-table th{background:#fff7ed;color:#9a3412;font-weight:800;padding:6px 4px;border-bottom:2px solid #fdba74;font-size:10px}
+.leave-table td{padding:6px 4px;border-bottom:1px solid #fed7aa;font-weight:700;color:#1e293b;text-align:center;font-size:10px}
+.leave-table tr:hover{background:#fff7ed}
 
-/* LEAVE LIST */
-.leave-title{font-size:11px;font-weight:800;color:#92400e;margin-top:12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
-.leave-title .cnt{background:#ea580c;color:#fff;font-size:10px;padding:2px 8px;border-radius:20px}
-.leave-list{background:#fff;border:1px solid #fdba74;border-radius:6px;padding:6px;max-height:180px;overflow-y:auto;min-height:44px}
-.leave-item{background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;padding:7px 10px;margin-bottom:4px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;gap:6px;color:#9a3412}
-.leave-item .name{flex:1;min-width:0;word-break:break-word}
-.leave-item .reason{color:#dc2626;font-size:10px;background:#fff;padding:1px 6px;border-radius:10px;border:1px solid #fca5a5}
-.empty-note{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:600}
+/* RULES PANEL */
+.rules-panel{background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:10px;margin-top:8px}
+.rules-panel .title{font-size:12px;font-weight:800;color:#1e40af;margin-bottom:8px}
+.rules-input-row{display:flex;gap:6px;margin-bottom:8px}
+.rules-input-row input{flex:1;padding:9px 10px;font-size:12px}
+.rules-input-row button{padding:0 16px;background:#1e40af;color:#fff;border:none;border-radius:6px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.rules-list{max-height:200px;overflow-y:auto;background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:6px;min-height:40px}
+.rule-item{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.rule-item.fired{background:#f0fdf4;border-color:#86efac;color:#15803d;text-decoration:line-through;opacity:.7}
+.rule-item .rule-txt{flex:1;min-width:0}
+.rule-item .acts{display:flex;gap:3px}
+.rule-item .acts button{border:none;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:800;padding:0}
+.rule-item .edit{background:#0891b2;color:#fff}
+.rule-item .del2{background:#ef4444;color:#fff}
+
+/* NEWS ROW */
+.news-row{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700}
+.news-row .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;display:none}
+.news-row.settings-mode .cb{display:inline-block}
+.news-row .info{flex:1;min-width:0}
+.news-row .txt{color:#1e293b;word-break:break-word}
+.news-row .meta{font-size:9px;color:#64748b;font-weight:700;margin-top:3px}
+.news-row .del3{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;font-size:11px;flex-shrink:0;display:none}
+.news-row.settings-mode .del3{display:inline-block}
+.news-row .close-rec{background:#64748b;color:#fff;border:none;width:22px;height:22px;border-radius:6px;cursor:pointer;font-weight:800;padding:0;font-size:11px;flex-shrink:0}
+
+/* RINGTONE / ANIMATION SETTINGS */
+.settings-group{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px;margin-bottom:8px}
+.settings-group .ttl{font-size:11px;font-weight:800;color:#1e293b;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.settings-group .rows{display:grid;gap:6px}
+.settings-group .row-2{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;font-size:11px;font-weight:700;color:#334155}
+.toggle{width:42px;height:22px;background:#cbd5e1;border-radius:22px;position:relative;cursor:pointer;transition:.3s;flex-shrink:0}
+.toggle.on{background:#16a34a}
+.toggle .dot{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;transition:.3s}
+.toggle.on .dot{right:calc(100% - 20px)}
+.ring-pick{padding:6px 8px;font-size:11px;font-family:inherit;border:1px solid #cbd5e1;border-radius:6px;background:#fff}
+.anim-pick{padding:6px 8px;font-size:11px;font-family:inherit;border:1px solid #cbd5e1;border-radius:6px;background:#fff}
+.speed-pick{padding:6px 8px;font-size:11px;font-family:inherit;border:1px solid #cbd5e1;border-radius:6px;background:#fff}
+input[type=range]{width:100%;accent-color:#ea580c}
+.upload-btn{display:block;width:100%;padding:8px;background:#fff7ed;color:#ea580c;border:1px dashed #fdba74;border-radius:6px;cursor:pointer;font-weight:800;font-size:11px;text-align:center;font-family:inherit}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- NEWS BAR -->
-  <div class="news-bar">
-    <div class="news-text" id="newsText">📰 لوڈ ہو رہا ہے...</div>
+<!-- ═══════════ DUTY MANAGER ═══════════ -->
+<div class="card">
+  <div class="card-hd">
+    <h1>👮 Member & Duty Control System</h1>
   </div>
 
-  <!-- ALERT BAR -->
-  <div class="alert-bar" id="alertBar">
-    <span class="txt" id="alertTxt">—</span>
-    <button class="skip" onclick="skipAlert()">اسکیپ ❌</button>
+  <div class="duty-box">
+    <div class="line"><span>🟢 سینئر:</span><span id="curSenior">—</span></div>
+    <div class="line"><span>🔵 جونیئر:</span><span id="curJunior">—</span></div>
+    <div class="timer">⏱️ <span id="dutyTimer">00:00:00</span></div>
   </div>
 
-  <!-- DUTY + CHHUTTI -->
-  <div class="card">
-    <h2>
-      <span>👮 آج کی ڈیوٹی ممبران</span>
-      <span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span>
-    </h2>
+  <label style="margin-top:14px;">👤 مستقل ممبرز رجسٹریشن</label>
+  <input type="text" id="mName" placeholder="ممبر کا نام...">
+  <div class="row" style="margin-top:6px;">
+    <select id="mRank">
+      <option value="Junior">🔵 جونیئر</option>
+      <option value="Senior">🟢 سینئر</option>
+    </select>
+    <button class="btn small green" onclick="addMember()">➕ شامل</button>
+  </div>
 
-    <div class="duty-grid">
-      <div class="duty-box">
-        <div class="lbl">🟢 سینئر ممبر</div>
-        <div class="nm" id="seniorNm">—</div>
-      </div>
-      <div class="duty-box">
-        <div class="lbl">🔵 جونیئر ممبر</div>
-        <div class="nm" id="juniorNm">—</div>
-      </div>
-    </div>
+  <label style="margin-top:14px;">⚡ مینوئل ڈیوٹی تفویض</label>
+  <div class="row">
+    <select id="dutySenior"><option value="">🟢 سینئر...</option></select>
+    <select id="dutyJunior"><option value="">🔵 جونیئر...</option></select>
+  </div>
+  <button class="btn" onclick="saveDuty()">✅ ڈیوٹی سیو کریں</button>
+  <div class="row" style="margin-top:8px;">
+    <button class="btn small red" onclick="stopJunior()">⏹️ جونیئر بند</button>
+    <button class="btn small red" onclick="stopAll()">❌ سب بند</button>
+  </div>
 
-    <div class="leave-submit-box">
-      <label>🏖️ چھٹی سبمٹ کریں</label>
-      <select id="leaveMemberSel">
-        <option value="">ممبر منتخب کریں...</option>
-      </select>
-      <input type="text" id="leaveReason" placeholder="وجہ لکھیں... (بیمار، گھر گیا...)">
-      <button onclick="submitLeaveFromDash()">✅ چھٹی سبمٹ کریں</button>
-    </div>
+  <!-- LEAVE BOX -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;border-bottom:2px dashed #ddd6fe;padding-bottom:6px;">
+    <h1 style="font-size:14px;">🏖️ منظور شدہ چھٹیاں (<span id="sec4LeaveTotal">0</span>)</h1>
+    <button class="ic-btn" onclick="sec4LeaveToggleSettings()">⚙️</button>
+  </div>
 
-    <div class="leave-title">
-      <span>📋 آج کی چھٹیاں</span>
-      <span class="cnt" id="leaveCount">0</span>
+  <div class="settings-panel" id="sec4LeaveSettings">
+    <select class="sec-drop" id="leaveSecDropdown" onchange="sec4LeaveSecChange()">
+      <option value="">-- Section select karein --</option>
+      <option value="leave">🏖️ Leave Box</option>
+      <option value="member">👤 Member Box</option>
+      <option value="choti">📋 Choti Record</option>
+      <option value="active">👥 Active Member</option>
+      <option value="alertrec">🚨 Alert Record</option>
+    </select>
+    <div class="settings-actions">
+      <button id="sec4LeaveSelBtn" onclick="sec4LeaveToggleSelectMode()">☑️ سلیکٹ موڈ</button>
+      <button onclick="sec4LeaveSelectAll(true)">✅ تمام</button>
+      <button onclick="sec4LeaveSelectAll(false)">⬜ ہٹائیں</button>
+      <button onclick="sec4LeaveEditSelected()">✏️ ایڈٹ</button>
+      <button class="danger" onclick="sec4LeaveDeleteSelected()">🗑️ ڈیلیٹ</button>
+      <button class="danger" onclick="sec4LeaveDeleteAll(this)">❌ سب صاف</button>
+      <button onclick="sec4LeaveToggleSettings()">🚪 بند</button>
     </div>
-    <div class="leave-list" id="todayLeavesList">
-      <div class="empty-note">آج کوئی چھٹی نہیں</div>
+  </div>
+
+  <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:8px;margin-top:8px;">
+    <label style="margin:0 0 4px 0;font-size:10px;color:#92400e;">ممبر منتخب کریں:</label>
+    <select id="sec4LeaveMemberFilter" onchange="sec4LeaveRender()" style="height:34px;font-size:12px;">
+      <option value="">تمام ممبران</option>
+    </select>
+  </div>
+
+  <div id="sec4LeaveTable" style="max-height:280px;overflow-y:auto;border:1px solid #fdba74;border-radius:8px;padding:4px;background:#fff7ed;min-height:60px;margin-top:6px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی چھٹی ریکارڈ نہیں</div>
+  </div>
+
+  <div id="sec4LeaveFooter" style="margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:11px;font-weight:800;color:#9a3412;">
+    <span>🏖️ چھٹیاں: <span id="sec4LeaveCntLeave">0</span></span>
+    <span>✅ کام: <span id="sec4LeaveCntWork">0</span></span>
+    <span>📋 کل: <span id="sec4LeaveCntAll">0</span></span>
+  </div>
+
+  <!-- RULES PANEL -->
+  <div class="rules-panel">
+    <div class="title">⚙️ Alert chalny ke Rules</div>
+    <div class="rules-input-row">
+      <input type="text" id="sec4B4Input" placeholder="Alert text likhein... (jaise: Hazri nahi lagi)">
+      <button onclick="sec4B4Add()">💾 سیو</button>
     </div>
+    <div class="rules-list" id="sec4B4List">
+      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>
+    </div>
+  </div>
+
+  <label style="margin-top:14px;">👥 ایکٹو ممبرز (<span id="memCount">0</span>)</label>
+  <div class="list" id="memList">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>
+  </div>
+
+  <label style="margin-top:14px;">📜 مکمل ڈیوٹی ہسٹری</label>
+  <div class="list" id="dutyHist" style="max-height:260px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>
+  </div>
+</div>
+
+<!-- ═══════════ NEWS & ALERTS ═══════════ -->
+<div class="card news">
+  <div class="card-hd">
+    <h1>📰 News & Alerts Manager</h1>
+    <button class="ic-btn" onclick="toggleNewsSettings()">⚙️</button>
+  </div>
+
+  <label>قسم منتخب کریں</label>
+  <select id="nType" onchange="onTypeChange()">
+    <option value="news">📰 News Add</option>
+    <option value="alert">🚨 Alert Patty</option>
+    <option value="complaint">⏰ Time Alert</option>
+  </select>
+
+  <label>متن</label>
+  <input type="text" id="nContent" placeholder="نیوز یا الرٹ لکھیں...">
+
+  <div id="timeWrap" style="display:none;">
+    <label>وقت</label>
+    <input type="time" id="nFireTime" value="21:00">
+  </div>
+
+  <button class="btn orange" onclick="saveNewsAlert()">💾 محفوظ کریں</button>
+  <div class="msg" id="newsMsg"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="cNews">0</div><div class="l">📰 News</div></div>
+    <div class="stat"><div class="n" id="cAlert">0</div><div class="l">🚨 Alert</div></div>
+    <div class="stat"><div class="n" id="cComp">0</div><div class="l">⏰ Time</div></div>
+  </div>
+
+  <label style="margin-top:14px;">📋 ریکارڈز (<span id="recCount">0</span>)</label>
+  <div class="list" id="newsList" style="max-height:320px;">
+    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>
+  </div>
+</div>
+
+<!-- ═══════════ SETTINGS FULL PANEL ═══════════ -->
+<div class="card news" id="fullSettingsPanel" style="display:none;">
+  <div class="card-hd">
+    <h1>⚙️ مکمل سیٹنگز</h1>
+    <button class="ic-btn" onclick="toggleNewsSettings()">✕</button>
+  </div>
+
+  <!-- 1. Ringtone -->
+  <div class="settings-group">
+    <div class="ttl">🔔 1. Ringtone (15 Options)</div>
+    <select class="ring-pick" id="ringPick" onchange="saveRingSetting()">
+      <option value="1">🔔 گھر کی گھنٹی</option>
+      <option value="2">📞 فون کی گھنٹی</option>
+      <option value="3">🚨 الارم</option>
+      <option value="4">📢 اسکول بیل</option>
+      <option value="5">⏰ گھڑی کی گھنٹی</option>
+      <option value="6">🔕 ہلکی گھنٹی</option>
+      <option value="7">🎵 دھن</option>
+      <option value="8">🔔 مندر کی گھنٹی</option>
+      <option value="9">⚡ ایمرجنسی</option>
+      <option value="10">🎺 بگل</option>
+      <option value="11">🔔 ڈبل بیل</option>
+      <option value="12">🎶 ٹیون</option>
+      <option value="13">📳 سائرن</option>
+      <option value="14">🔔 کلاسک بیل</option>
+      <option value="15">🎼 میوزک</option>
+    </select>
+  </div>
+
+  <!-- 2. Upload Ringtone -->
+  <div class="settings-group">
+    <div class="ttl">📤 2. اپنی Ringtone Upload کریں</div>
+    <label class="upload-btn" for="ringUpload">📁 فائل منتخب کریں</label>
+    <input type="file" id="ringUpload" accept="audio/*" style="display:none;" onchange="uploadRing(event)">
+    <div id="uploadedRingName" style="font-size:10px;color:#16a34a;font-weight:700;margin-top:4px;"></div>
+  </div>
+
+  <!-- 3. Ringtone Volume -->
+  <div class="settings-group">
+    <div class="ttl">🔊 3. Ringtone Volume</div>
+    <input type="range" id="ringVol" min="0" max="100" value="100" oninput="saveVol()">
+    <div style="font-size:10px;color:#64748b;font-weight:700;text-align:center;" id="volVal">100%</div>
+  </div>
+
+  <!-- 4. Vibrate On/Off -->
+  <div class="settings-group">
+    <div class="ttl">📳 4. Vibrate</div>
+    <div class="row-2">
+      <span>Vibrate ON / OFF</span>
+      <div class="toggle on" id="vibToggle" onclick="toggleVib()"><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- 5. Voice On/Off -->
+  <div class="settings-group">
+    <div class="ttl">🗣️ 5. Voice (Awaz)</div>
+    <div class="row-2">
+      <span>Voice ON / OFF</span>
+      <div class="toggle on" id="voiceToggle" onclick="toggleVoice()"><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- 6. News Patty On/Off -->
+  <div class="settings-group">
+    <div class="ttl">📰 6. News Patty</div>
+    <div class="row-2">
+      <span>News Patty ON / OFF</span>
+      <div class="toggle on" id="newsToggle" onclick="toggleNewsPatty()"><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- 7. Alert On/Off -->
+  <div class="settings-group">
+    <div class="ttl">🚨 7. Alert</div>
+    <div class="row-2">
+      <span>Alert ON / OFF</span>
+      <div class="toggle on" id="alertToggle" onclick="toggleAlertPatty()"><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- 8. News Patty Speed -->
+  <div class="settings-group">
+    <div class="ttl">⚡ 8. News Patty Speed</div>
+    <select class="speed-pick" id="speedPick" onchange="saveSpeed()">
+      <option value="slow">🐢 Slow</option>
+      <option value="normal" selected>▶️ Normal</option>
+      <option value="fast">⚡ Fast</option>
+    </select>
+  </div>
+
+  <!-- 9. Alert Animation -->
+  <div class="settings-group">
+    <div class="ttl">🎬 9. Alert Animation (5 Types)</div>
+    <select class="anim-pick" id="animPick" onchange="saveAnim()">
+      <option value="blink">✨ Blink</option>
+      <option value="peep">🔔 Peep</option>
+      <option value="colour">🎨 Colour Change</option>
+      <option value="slide">➡️ Slide</option>
+      <option value="pulse">💓 Pulse</option>
+    </select>
+  </div>
+
+  <!-- 10. Alert Time Fix -->
+  <div class="settings-group">
+    <div class="ttl">⏰ 10. Alert Time Fix</div>
+    <input type="time" id="alertTimeFix" onchange="saveTimeFix()">
   </div>
 
 </div>
 
 <script>
-/* ═══════════════════════════════════════════
-   KEYS
-   ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════ */
 var DUTY_KEY = 'sec4_duty_manager_data_v4';
-var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
 var HIST_KEY = 'sec4_duty_history_data_v4';
+var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
+var RULES_KEY = 'sec4_duty_alert_rules';
 var NEWS_KEY = 'sec10_news_alerts_data';
-var IDX_KEY = 'sec10_alert_index';
-var NEWS_IDX_KEY = 'sec10_news_index';
-var LAST_NEWS_KEY = 'sec10_last_news_ids';
-var FIRED_KEY = 'sec10_complaint_fired';
+var SETTINGS_KEY = 'sec10_app_settings';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
-function getDayName(dt){var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];return days[dt.getDay()]||'';}
-
-var bellLoop=null, vibrateLoop=null, voiceToggle=0, newsTimer=null;
-
-/* ═══════════════════════════════════════════
-   BELL — Poori Awaaz
-   ═══════════════════════════════════════════ */
-function playBell(){
+function getDayName(dateStr){
   try{
-    var ctx=new (window.AudioContext||window.webkitAudioContext)();
-    if(ctx.state==='suspended') ctx.resume();
-    [0,0.35,0.7].forEach(function(delay){
-      var o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.type='sine';o.frequency.value=1000;
-      var t=ctx.currentTime+delay;
-      g.gain.setValueAtTime(0.001,t);
-      g.gain.exponentialRampToValueAtTime(1.0,t+0.03);
-      g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
-      o.start(t);o.stop(t+0.5);
-    });
-  }catch(e){}
+    var parts=String(dateStr).split(' ')[0].split('/');
+    if(parts.length!==3) return '—';
+    var d=new Date(parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
+    var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
+    return days[d.getDay()]||'—';
+  }catch(e){return '—';}
 }
 
-/* ═══════════════════════════════════════════
-   VOICE — Male / Female Alternate
-   ═══════════════════════════════════════════ */
-function speak(text){
-  if(!('speechSynthesis' in window)) return;
-  try{
-    window.speechSynthesis.cancel();
-    var u=new SpeechSynthesisUtterance(text);
-    u.lang='ur-PK';u.rate=0.9;
-    u.pitch=(voiceToggle%2===0)?1.3:0.8;
-    u.volume=1.0;
-    window.speechSynthesis.speak(u);
-    voiceToggle++;
-  }catch(e){}
+/* ═══ DUTY ═══ */
+function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
+function addHistory(rec, reason){
+  if(!rec.dutyStart) return;
+  var h=ls(HIST_KEY,[]); if(!Array.isArray(h)) h=[];
+  var s=new Date(rec.dutyStart), e=new Date();
+  h.push({name:rec.name, rank:rec.rank,
+    start:pad(s.getHours())+':'+pad(s.getMinutes()),
+    end:pad(e.getHours())+':'+pad(e.getMinutes()),
+    reason:reason});
+  if(h.length>100) h=h.slice(-100);
+  lss(HIST_KEY,h);
 }
 
-/* ═══════════════════════════════════════════
-   VIBRATE
-   ═══════════════════════════════════════════ */
-function startVibrate(){
-  if(!navigator.vibrate) return;
-  try{navigator.vibrate([400,200,400,200,400]);}catch(e){}
-  if(vibrateLoop) clearInterval(vibrateLoop);
-  vibrateLoop=setInterval(function(){
-    if(navigator.vibrate) try{navigator.vibrate([400,200,400]);}catch(e){}
-  },2500);
-}
-
-function stopAll(){
-  if(bellLoop){clearInterval(bellLoop);bellLoop=null;}
-  if(vibrateLoop){clearInterval(vibrateLoop);vibrateLoop=null;}
-  if(navigator.vibrate) try{navigator.vibrate(0);}catch(e){}
-  if(window.speechSynthesis) try{window.speechSynthesis.cancel();}catch(e){}
-}
-
-/* ═══════════════════════════════════════════
-   NEWS BAR — Continuous Scrolling
-   ═══════════════════════════════════════════ */
-function updateNews(){
-  var all=ls(NEWS_KEY,[]);
-  if(!Array.isArray(all)) all=[];
-  var news=all.filter(function(x){return x.type==='news' && x.enabled!==false;});
-  var el=$('newsText');
-  if(!el) return;
-  if(!news.length){
-    el.textContent='📰 کوئی نیوز موجود نہیں — ڈیٹا انٹری سے ایڈ کریں';
-    return;
-  }
-  el.textContent = news.map(function(n){return '📰 '+n.content;}).join('   •   ') + '   •   ';
-}
-
-function checkNewNews(){
-  var all=ls(NEWS_KEY,[]);
-  if(!Array.isArray(all)) all=[];
-  var news=all.filter(function(x){return x.type==='news';});
-  var ids=news.map(function(n){return n.id;}).join(',');
-  var last=localStorage.getItem(LAST_NEWS_KEY)||'';
-  if(last && ids!==last && news.length){
-    playBell();
-    speak(news[0].content);
-  }
-  localStorage.setItem(LAST_NEWS_KEY,ids);
-}
-
-/* ═══════════════════════════════════════════
-   ALERT BAR — Ek dafa ek alert
-   ═══════════════════════════════════════════ */
-function showAlert(){
-  var all=ls(NEWS_KEY,[]);
-  if(!Array.isArray(all)) all=[];
-  var alerts=all.filter(function(x){return x.type==='alert' && x.enabled!==false;})
-                .sort(function(a,b){return b.timestamp-a.timestamp;});
-  var bar=$('alertBar'),txt=$('alertTxt');
-  if(!bar) return;
-  if(!alerts.length){bar.classList.remove('show');return;}
-  var idx=parseInt(localStorage.getItem(IDX_KEY)||'0',10);
-  if(idx>=alerts.length) idx=0;
-  var a=alerts[idx];
-  bar.classList.add('show','blink');
-  txt.innerHTML='🚨 '+(idx+1)+'/'+alerts.length+': '+esc(a.content);
-  stopAll();
-  playBell();
-  bellLoop=setInterval(playBell,1200);
-  startVibrate();
-  speak(a.content);
-}
-
-window.skipAlert=function(){
-  stopAll();
-  var bar=$('alertBar');
-  bar.classList.remove('show','blink');
-  var all=ls(NEWS_KEY,[]);
-  if(!Array.isArray(all)) all=[];
-  var alerts=all.filter(function(x){return x.type==='alert';});
-  var idx=parseInt(localStorage.getItem(IDX_KEY)||'0',10);
-  idx++; if(idx>=alerts.length) idx=0;
-  localStorage.setItem(IDX_KEY,String(idx));
+window.addMember = function(){
+  var name=$('mName').value.trim(), rank=$('mRank').value;
+  if(!name){alert('نام لکھیں');return;}
+  var m=getMembers();
+  m.push({id:Date.now(),name:name,rank:rank,dutyCount:0,leaveCount:0,onDuty:false,dutyStart:null,onLeave:false});
+  lss(DUTY_KEY,m); $('mName').value=''; render();
+  alert('✅ ممبر شامل');
 };
 
-/* ═══════════════════════════════════════════
-   COMPLAINTS (Time-Fixed)
-   ═══════════════════════════════════════════ */
-function checkComplaints(){
-  var all=ls(NEWS_KEY,[]);
-  if(!Array.isArray(all)) all=[];
-  var comps=all.filter(function(x){return x.type==='complaint' && x.fireTime && x.enabled!==false;});
-  if(!comps.length) return;
-  var now=new Date();
-  var nowStr=pad(now.getHours())+':'+pad(now.getMinutes());
-  var today=now.toDateString();
-  var fired=ls(FIRED_KEY,{});
-  if(typeof fired!=='object'||fired===null) fired={};
-  comps.forEach(function(c){
-    if(c.fireTime!==nowStr) return;
-    var k=c.id+'_'+today;
-    var last=fired[k]||0;
-    if(Date.now()-last<10*60*1000) return;
-    var bar=$('alertBar'),txt=$('alertTxt');
-    if(!bar||!txt) return;
-    stopAll();
-    bar.classList.add('show','blink');
-    txt.innerHTML='⏰ '+esc(c.fireTime)+' — '+esc(c.content);
-    playBell();
-    bellLoop=setInterval(playBell,1200);
-    startVibrate();
-    speak(c.content);
-    fired[k]=Date.now();
-  });
-  lss(FIRED_KEY,fired);
-}
+window.saveDuty = function(){
+  var sid=$('dutySenior').value, jid=$('dutyJunior').value;
+  if(!sid && !jid){alert('کوئی ممبر منتخب کریں');return;}
+  var m=getMembers();
+  if(sid){
+    var s=m.find(function(x){return String(x.id)===String(sid);});
+    if(s){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Senior' && String(x.id)!==String(sid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!s.onDuty){s.onDuty=true;s.dutyStart=Date.now();s.dutyCount=(s.dutyCount||0)+1;}
+    }
+  }
+  if(jid){
+    var j=m.find(function(x){return String(x.id)===String(jid);});
+    if(j){
+      m.forEach(function(x){if(x.onDuty && x.rank==='Junior' && String(x.id)!==String(jid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+      if(!j.onDuty){j.onDuty=true;j.dutyStart=Date.now();j.dutyCount=(j.dutyCount||0)+1;}
+    }
+  }
+  lss(DUTY_KEY,m); render();
+};
 
-/* ═══════════════════════════════════════════
-   DUTY — Live
-   ═══════════════════════════════════════════ */
-function updateDuty(){
-  var m=ls(DUTY_KEY,[]);
-  if(!Array.isArray(m)) m=[];
+window.stopJunior = function(){
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty && x.rank==='Junior'){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
+
+window.stopAll = function(){
+  if(!confirm('سب ڈیوٹی بند کریں؟')) return;
+  var m=getMembers();
+  m.forEach(function(x){if(x.onDuty){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
+  lss(DUTY_KEY,m); render();
+};
+
+window.delMember = function(id){
+  if(!confirm('ممبر ڈیلیٹ کریں؟')) return;
+  lss(DUTY_KEY, getMembers().filter(function(x){return x.id!==id;}));
+  render();
+};
+
+window.returnFromLeave = function(id){
+  var m=getMembers(), t=m.find(function(x){return x.id===id;});
+  if(!t) return;
+  t.onLeave=false; lss(DUTY_KEY,m); render();
+};
+
+function render(){
+  var m=getMembers();
   var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
   var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
-  if($('seniorNm')) $('seniorNm').textContent=s?s.name:'—';
-  if($('juniorNm')) $('juniorNm').textContent=j?j.name:'—';
-  var active=s||j;
+  $('curSenior').textContent = s?s.name:'—';
+  $('curJunior').textContent = j?j.name:'—';
+
+  var sSel=$('dutySenior'), jSel=$('dutyJunior');
+  var sV=sSel.value, jV=jSel.value;
+  sSel.innerHTML='<option value="">🟢 سینئر...</option>';
+  jSel.innerHTML='<option value="">🔵 جونیئر...</option>';
+  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
+    var lbl=x.name+(x.onDuty?' • ڈیوٹی پر':'');
+    if(x.rank==='Senior') sSel.appendChild(new Option(lbl,x.id));
+    else jSel.appendChild(new Option(lbl,x.id));
+  });
+  if(sV) sSel.value=sV; else if(s) sSel.value=s.id;
+  if(jV) jSel.value=jV; else if(j) jSel.value=j.id;
+
+  var ml=$('memList');
+  $('memCount').textContent=m.length;
+  if(!m.length){
+    ml.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>';
+  } else {
+    ml.innerHTML=m.map(function(x){
+      var status = '';
+      if(x.onLeave) status = '🏖️ چھٹی پر ہے';
+      else if(x.onDuty) status = '🟢 کام پر ہے';
+      else status = '⚪ دستیاب ہے';
+      var bg = x.onLeave ? 'background:#fef2f2;' : '';
+      var btn = x.onLeave
+        ? '<button class="del green" onclick="returnFromLeave('+x.id+')" title="واپس">✓</button>'
+        : '';
+      return '<div class="item" style="'+bg+'"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢 سینئر':'🔵 جونیئر')+'</span></div>'+
+        '<div style="font-size:10px;color:#475569;margin-top:3px;">'+status+'</div>'+
+        '<div style="font-size:10px;color:#9a3412;margin-top:2px;">🏖️ چھٹیاں: '+(x.leaveCount||0)+' • 🟢 ڈیوٹیاں: '+(x.dutyCount||0)+'</div>'+
+        '</div>'+btn+'</div>';
+    }).join('');
+  }
+
+  var h=ls(HIST_KEY,[]);
+  if(!h.length){
+    $('dutyHist').innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>';
+  } else {
+    $('dutyHist').innerHTML=h.slice().reverse().slice(0,30).map(function(x){
+      return '<div class="item"><div class="info">'+
+        '<div>'+esc(x.name)+' <span class="badge">'+(x.rank==='Senior'?'🟢':'🔵')+'</span></div>'+
+        '<div style="font-size:9px;color:#64748b;margin-top:2px;">'+esc(x.start)+' → '+esc(x.end)+' ('+esc(x.reason)+')</div>'+
+        '</div></div>';
+    }).join('');
+  }
+}
+
+setInterval(function(){
+  var m=getMembers();
+  var s=m.find(function(x){return x.onDuty && x.rank==='Senior';});
+  var j=m.find(function(x){return x.onDuty && x.rank==='Junior';});
+  var active = s||j;
   if(active && active.dutyStart){
     var el=Math.floor((Date.now()-active.dutyStart)/1000);
-    var ts=pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
-    if($('dutyMiniTimer')) $('dutyMiniTimer').textContent='⏱️ '+ts;
+    $('dutyTimer').textContent = pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
   } else {
-    if($('dutyMiniTimer')) $('dutyMiniTimer').textContent='⏱️ 00:00:00';
+    $('dutyTimer').textContent = '00:00:00';
   }
+}, 1000);
+
+/* ═══ LEAVE BOX ═══ */
+var leaveSelected = {};
+var leaveSelMode = false;
+var leaveDelPending = false;
+
+function ensureLeaveIds(){
+  var arr=ls(LEAVE_KEY,[]); if(!Array.isArray(arr)) return [];
+  var changed=false;
+  arr.forEach(function(r,i){
+    if(!r.id){r.id=Date.now()+i;changed=true;}
+    if(!r.status){r.status='leave';changed=true;}
+    if(!r.reason){r.reason='—';changed=true;}
+  });
+  if(changed) lss(LEAVE_KEY,arr);
+  return arr;
 }
 
-/* ═══════════════════════════════════════════
-   CHHUTTI SUBMIT
-   ═══════════════════════════════════════════ */
-function populateLeaveDropdown(){
-  var sel=$('leaveMemberSel');
-  if(!sel) return;
-  var cur=sel.value;
-  var m=ls(DUTY_KEY,[]);
-  if(!Array.isArray(m)) m=[];
-  sel.innerHTML='<option value="">ممبر منتخب کریں...</option>';
-  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
-    var lbl=x.name+' ('+(x.rank==='Senior'?'سینئر':'جونیئر')+')';
-    sel.appendChild(new Option(lbl,x.id));
-  });
-  if(cur) sel.value=cur;
-}
-
-window.submitLeaveFromDash=function(){
-  var id=$('leaveMemberSel').value;
-  var reason=$('leaveReason').value.trim();
-  if(!id){alert('⚠️ ممبر منتخب کریں');return;}
-  if(!reason){alert('⚠️ وجہ لکھیں');return;}
-
-  var m=ls(DUTY_KEY,[]);
-  if(!Array.isArray(m)) m=[];
-  var t=m.find(function(x){return String(x.id)===String(id);});
-  if(!t){alert('⚠️ ممبر نہیں ملا');return;}
-  if(t.onLeave){alert('⚠️ یہ ممبر پہلے ہی چھٹی پر ہے');return;}
-
-  t.onLeave=true;
-  t.leaveCount=(t.leaveCount||0)+1;
-
-  if(t.onDuty){
-    if(t.dutyStart){
-      var h=ls(HIST_KEY,[]);
-      if(!Array.isArray(h)) h=[];
-      var s=new Date(t.dutyStart),e=new Date();
-      h.push({name:t.name,rank:t.rank,
-        start:pad(s.getHours())+':'+pad(s.getMinutes()),
-        end:pad(e.getHours())+':'+pad(e.getMinutes()),
-        reason:'leave'});
-      if(h.length>100) h=h.slice(-100);
-      lss(HIST_KEY,h);
-    }
-    t.onDuty=false; t.dutyStart=null;
+window.sec4LeaveRender = function(){
+  var arr=ensureLeaveIds();
+  var filterSel=$('sec4LeaveMemberFilter');
+  if(filterSel){
+    var curVal=filterSel.value;
+    filterSel.innerHTML='<option value="">تمام ممبران</option>';
+    var names={}; arr.forEach(function(r){names[r.name]=true;});
+    Object.keys(names).forEach(function(n){filterSel.appendChild(new Option(n,n));});
+    if(curVal) filterSel.value=curVal;
   }
+  var filterName = filterSel?filterSel.value:'';
+  var list = arr.slice().reverse();
+  if(filterName) list = list.filter(function(r){return r.name===filterName;});
 
-  var l=ls(LEAVE_KEY,[]);
-  if(!Array.isArray(l)) l=[];
-  var d=new Date();
-  l.push({
-    id:Date.now(),
-    name:t.name, rank:t.rank,
-    date:pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes()),
-    day:getDayName(d),
-    reason:reason,
-    status:'leave',
-    ts:d.getTime()
-  });
-  lss(LEAVE_KEY,l);
-  lss(DUTY_KEY,m);
+  var allLeave = arr.filter(function(r){return r.status!=='work';}).length;
+  var allWork = arr.filter(function(r){return r.status==='work';}).length;
+  if($('sec4LeaveTotal')) $('sec4LeaveTotal').textContent = arr.length;
+  if($('sec4LeaveCntLeave')) $('sec4LeaveCntLeave').textContent = allLeave;
+  if($('sec4LeaveCntWork')) $('sec4LeaveCntWork').textContent = allWork;
+  if($('sec4LeaveCntAll')) $('sec4LeaveCntAll').textContent = arr.length;
 
-  var next=m.filter(function(x){return x.rank==='Junior' && !x.onLeave && !x.onDuty;});
-  if(!next.length) next=m.filter(function(x){return x.rank==='Senior' && !x.onLeave && !x.onDuty;});
-  if(next.length && t.rank==='Junior'){
-    next.sort(function(a,b){return (a.dutyCount||0)-(b.dutyCount||0);});
-    var n=next[0];
-    n.onDuty=true;n.dutyStart=Date.now();n.dutyCount=(n.dutyCount||0)+1;
-    lss(DUTY_KEY,m);
-  }
-
-  $('leaveMemberSel').value='';
-  $('leaveReason').value='';
-  updateDuty();
-  populateLeaveDropdown();
-  renderTodayLeaves();
-  alert('✅ '+t.name+' چھٹی پر چلا گیا');
-};
-
-function renderTodayLeaves(){
-  var box=$('todayLeavesList');
+  var box=$('sec4LeaveTable');
   if(!box) return;
-  var l=ls(LEAVE_KEY,[]);
-  if(!Array.isArray(l)) l=[];
-  var d=new Date();
-  var todayPrefix=pad(d.getDate())+'/'+pad(d.getMonth()+1);
-  var todayL=l.filter(function(x){
-    var s=String(x.date||'');
-    return s.indexOf(todayPrefix)===0;
-  });
-  if($('leaveCount')) $('leaveCount').textContent=todayL.length;
-  if(!todayL.length){
-    box.innerHTML='<div class="empty-note">آج کوئی چھٹی نہیں</div>';
+  if(!list.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی ریکارڈ نہیں</div>';
     return;
   }
-  box.innerHTML=todayL.map(function(x){
-    return '<div class="leave-item">'+
-      '<span class="name">🏖️ '+esc(x.name)+' <small style="color:#92400e;">('+esc(x.rank==='Senior'?'سینئر':'جونیئر')+')</small></span>'+
-      (x.reason?'<span class="reason">'+esc(x.reason)+'</span>':'')+
+  var html = '<table class="leave-table"><thead><tr><th>نام</th><th>تاریخ</th><th>دن</th><th>حالت</th></tr></thead><tbody>';
+  list.forEach(function(r){
+    var isSelected=!!leaveSelected[r.id];
+    var dayName=getDayName(r.date);
+    var isLeave = r.status!=='work';
+    var statusBadge = isLeave
+      ? '<span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">🏖️ چھٹی</span>'
+      : '<span style="background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">✅ کام</span>';
+    var rowStyle = isSelected ? 'background:#fef3c7;' : '';
+    html += '<tr style="'+rowStyle+'" '+(leaveSelMode?'onclick="sec4LeaveToggleSelect('+r.id+')"':'')+'>';
+    html += '<td>'+esc(r.name)+'</td>';
+    html += '<td>'+esc(r.date)+'</td>';
+    html += '<td style="color:#0891b2;">'+dayName+'</td>';
+    html += '<td>'+statusBadge+'</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  box.innerHTML = html;
+};
+
+window.sec4LeaveToggleSettings = function(){
+  var p=$('sec4LeaveSettings');
+  if(p) p.classList.toggle('open');
+};
+
+window.sec4LeaveSecChange = function(){
+  var sec=$('leaveSecDropdown').value;
+  if(sec) alert('✅ Section select: ' + sec + '\nSettings us section ke liye khul gayi');
+};
+
+window.sec4LeaveToggleSelect = function(id){
+  if(leaveSelected[id]) delete leaveSelected[id];
+  else leaveSelected[id]=true;
+  sec4LeaveRender();
+};
+
+window.sec4LeaveToggleSelectMode = function(){
+  leaveSelMode=!leaveSelMode;
+  var btn=$('sec4LeaveSelBtn');
+  if(btn){btn.textContent = leaveSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';btn.classList.toggle('active',leaveSelMode);}
+  if(!leaveSelMode) leaveSelected={};
+  sec4LeaveRender();
+};
+
+window.sec4LeaveSelectAll = function(st){
+  if(st && !leaveSelMode) sec4LeaveToggleSelectMode();
+  leaveSelected={};
+  if(st){ ensureLeaveIds().forEach(function(r){leaveSelected[r.id]=true;}); }
+  sec4LeaveRender();
+};
+
+window.sec4LeaveEditSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(ids.length!==1){alert('⚠️ ایک ریکارڈ منتخب کریں');return;}
+  var id = parseInt(ids[0],10);
+  var arr = ls(LEAVE_KEY,[]);
+  var rec = arr.find(function(x){return String(x.id)===String(id);});
+  if(!rec) return;
+  rec.status = rec.status==='work' ? 'leave' : 'work';
+  lss(LEAVE_KEY,arr);
+  sec4LeaveRender();
+};
+
+window.sec4LeaveDeleteSelected = function(){
+  var ids=Object.keys(leaveSelected).filter(function(k){return leaveSelected[k];});
+  if(!ids.length){alert('⚠️ کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
+  lss(LEAVE_KEY, ls(LEAVE_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  leaveSelected={}; sec4LeaveRender();
+};
+
+window.sec4LeaveDeleteAll = function(btn){
+  var arr=ls(LEAVE_KEY,[]);
+  if(!arr.length) return;
+  if(!leaveDelPending){
+    leaveDelPending=true;
+    btn.textContent='⚠️ دوبارہ'; btn.style.background='#dc2626'; btn.style.color='#fff';
+    setTimeout(function(){leaveDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';}, 2500);
+    return;
+  }
+  lss(LEAVE_KEY,[]); leaveSelected={}; leaveDelPending=false;
+  btn.textContent='❌ سب صاف'; btn.style.background=''; btn.style.color='';
+  sec4LeaveRender();
+};
+
+/* ═══ RULES PANEL ═══ */
+window.sec4B4Add = function(){
+  var txt = $('sec4B4Input').value.trim();
+  if(!txt){alert('⚠️ Alert text likhein');return;}
+  var rules = ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  rules.unshift({id:Date.now(), text:txt, fired:false});
+  lss(RULES_KEY,rules);
+  $('sec4B4Input').value='';
+  renderRules();
+  alert('✅ Alert add ho gaya');
+};
+
+window.sec4B4Delete = function(id){
+  if(!confirm('یہ alert ڈیلیٹ کریں؟')) return;
+  lss(RULES_KEY, ls(RULES_KEY,[]).filter(function(r){return r.id!==id;}));
+  renderRules();
+};
+
+window.sec4B4Edit = function(id){
+  var rules=ls(RULES_KEY,[]);
+  var rule=rules.find(function(r){return r.id===id;});
+  if(!rule) return;
+  var nv = prompt('نیا text:', rule.text);
+  if(nv===null) return;
+  nv = nv.trim();
+  if(!nv) return;
+  rule.text = nv;
+  rule.fired = false;
+  lss(RULES_KEY,rules);
+  renderRules();
+};
+
+function renderRules(){
+  var list=$('sec4B4List');
+  if(!list) return;
+  var rules=ls(RULES_KEY,[]); if(!Array.isArray(rules)) rules=[];
+  if(!rules.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>';
+    return;
+  }
+  list.innerHTML=rules.map(function(r){
+    return '<div class="rule-item'+(r.fired?' fired':'')+'">'+
+      '<div class="rule-txt">🚨 '+esc(r.text)+(r.fired?' (چل گیا)':'')+'</div>'+
+      '<div class="acts"><button class="edit" onclick="sec4B4Edit('+r.id+')">✏️</button>'+
+      '<button class="del2" onclick="sec4B4Delete('+r.id+')">🗑️</button></div>'+
     '</div>';
   }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════ */
-function boot(){
-  updateNews();
-  checkNewNews();
-  updateDuty();
-  populateLeaveDropdown();
-  renderTodayLeaves();
+/* ═══ NEWS ═══ */
+window.onTypeChange = function(){
+  $('timeWrap').style.display = $('nType').value==='complaint'?'block':'none';
+};
 
-  setTimeout(function(){showAlert();},1200);
+window.saveNewsAlert = function(){
+  var type=$('nType').value;
+  var content=$('nContent').value.trim();
+  if(!content){showMsg('⚠️ متن لکھیں','err');return;}
+  var fireTime=null;
+  if(type==='complaint'){
+    fireTime=$('nFireTime').value;
+    if(!fireTime){showMsg('⚠️ وقت منتخب کریں','err');return;}
+  }
+  var items=ls(NEWS_KEY,[]);
+  if(!Array.isArray(items)) items=[];
+  items.unshift({id:Date.now(),type:type,content:content,fireTime:fireTime,timestamp:Date.now(),enabled:false});
+  lss(NEWS_KEY,items);
+  $('nContent').value='';
+  showMsg('✅ محفوظ ہو گیا','ok');
+  renderNews();
+};
 
-  window.addEventListener('storage',function(e){
-    if(e.key===NEWS_KEY){updateNews();checkNewNews();}
-    if(e.key===DUTY_KEY||e.key===LEAVE_KEY){
-      updateDuty();populateLeaveDropdown();renderTodayLeaves();
-    }
-  });
-
-  setInterval(function(){updateNews();checkNewNews();},5000);
-  setInterval(updateDuty,1000);
-  setInterval(populateLeaveDropdown,5000);
-  setInterval(renderTodayLeaves,5000);
-  setInterval(checkComplaints,20000);
-  checkComplaints();
+function showMsg(text, type){
+  var m=$('newsMsg');
+  m.textContent=text;
+  m.className='msg '+type;
+  setTimeout(function(){m.className='msg';}, 2500);
 }
 
-document.addEventListener('click',function unlock(){
-  try{var c=new (window.AudioContext||window.webkitAudioContext)();if(c.state==='suspended')c.resume();}catch(e){}
-  document.removeEventListener('click',unlock);
-},{once:true});
+function fmtDT(ts){
+  var d=new Date(ts);
+  return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+}
 
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
-else boot();
+var newsSettingsOpen = false;
+var newsSelMode = false;
+var newsSelected = {};
+var newsDelPending = false;
+
+window.toggleNewsSettings = function(){
+  newsSettingsOpen = !newsSettingsOpen;
+  $('fullSettingsPanel').style.display = newsSettingsOpen ? 'block' : 'none';
+  loadRingSettings();
+  renderNews();
+};
+
+window.toggleNewsSelMode = function(){
+  newsSelMode = !newsSelMode;
+  var btn=$('nSelBtn');
+  if(btn){btn.textContent = newsSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';btn.classList.toggle('active',newsSelMode);}
+  if(!newsSelMode) newsSelected = {};
+  renderNews();
+};
+
+window.newsSelectAll = function(st){
+  if(st && !newsSelMode) toggleNewsSelMode();
+  newsSelected = {};
+  if(st){
+    ls(NEWS_KEY,[]).forEach(function(x){newsSelected[x.id]=true;});
+  }
+  renderNews();
+};
+
+window.newsDeleteSel = function(){
+  var ids=Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
+  if(!ids.length){alert('⚠️ کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
+  lss(NEWS_KEY, ls(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  newsSelected = {};
+  renderNews();
+};
+
+window.newsDeleteAll = function(btn){
+  if(!ls(NEWS_KEY,[]).length) return;
+  if(!newsDelPending){
+    newsDelPending=true;
+    btn.textContent='⚠️ دوبارہ'; btn.style.background='#dc2626'; btn.style.color='#fff';
+    setTimeout(function(){newsDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
+    return;
+  }
+  lss(NEWS_KEY,[]);
+  newsSelected = {}; newsDelPending = false;
+  btn.textContent='❌ سب صاف'; btn.style.background=''; btn.style.color='';
+  renderNews();
+};
+
+window.delNews = function(id){
+  lss(NEWS_KEY, ls(NEWS_KEY,[]).filter(function(x){return x.id!==id;}));
+  renderNews();
+};
+
+function renderNews(){
+  var all=ls(NEWS_KEY,[]);
+  if(!Array.isArray(all)) all=[];
+  $('cNews').textContent=all.filter(function(x){return x.type==='news';}).length;
+  $('cAlert').textContent=all.filter(function(x){return x.type==='alert';}).length;
+  $('cComp').textContent=all.filter(function(x){return x.type==='complaint';}).length;
+  $('recCount').textContent=all.length;
+
+  var list=$('newsList');
+  if(!all.length){
+    list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>';
+    return;
+  }
+  list.innerHTML = all.slice(0,30).map(function(x){
+    var badge = x.type==='news'?'📰':(x.type==='alert'?'🚨':'⏰');
+    var time = x.fireTime ? ' ⏰ '+esc(x.fireTime) : '';
+    var enabled = x.enabled === true;
+    var cb = '<input type="checkbox" class="cb" '+(enabled?'checked':'')+' onchange="toggleNewsEnable('+x.id+')">';
+    var delBtn = '<button class="del3" onclick="delNews('+x.id+')">✕</button>';
+    var closeBtn = '<button class="close-rec" onclick="delNews('+x.id+')">✕</button>';
+    return '<div class="news-row'+(newsSettingsOpen?' settings-mode':'')+'">'+
+      cb+
+      '<div class="info">'+
+        '<div class="txt">'+badge+' '+esc(x.content)+time+'</div>'+
+        '<div class="meta">'+fmtDT(x.timestamp)+'</div>'+
+      '</div>'+
+      (newsSettingsOpen ? delBtn : '')+
+    '</div>';
+  }).join('');
+}
+
+window.toggleNewsEnable = function(id){
+  var items = ls(NEWS_KEY,[]);
+  var rec = items.find(function(x){return x.id===id;});
+  if(!rec) return;
+  rec.enabled = !rec.enabled;
+  lss(NEWS_KEY,items);
+  renderNews();
+};
+
+/* ═══ RING SETTINGS ═══ */
+function loadRingSettings(){
+  var s = ls(SETTINGS_KEY, {ring:'1', vol:100, vib:true, voice:true, news:true, alert:true, speed:'normal', anim:'blink', timeFix:''});
+  if($('ringPick')) $('ringPick').value = s.ring || '1';
+  if($('ringVol')) { $('ringVol').value = s.vol || 100; $('volVal').textContent = (s.vol||100)+'%'; }
+  if($('vibToggle')) $('vibToggle').classList.toggle('on', s.vib !== false);
+  if($('voiceToggle')) $('voiceToggle').classList.toggle('on', s.voice !== false);
+  if($('newsToggle')) $('newsToggle').classList.toggle('on', s.news !== false);
+  if($('alertToggle')) $('alertToggle').classList.toggle('on', s.alert !== false);
+  if($('speedPick')) $('speedPick').value = s.speed || 'normal';
+  if($('animPick')) $('animPick').value = s.anim || 'blink';
+  if($('alertTimeFix')) $('alertTimeFix').value = s.timeFix || '';
+}
+
+function saveSetting(key, val){
+  var s = ls(SETTINGS_KEY, {});
+  s[key] = val;
+  lss(SETTINGS_KEY, s);
+}
+
+window.saveRingSetting = function(){ saveSetting('ring', $('ringPick').value); };
+window.saveVol = function(){ var v = $('ringVol').value; $('volVal').textContent = v+'%'; saveSetting('vol', parseInt(v,10)); };
+window.saveSpeed = function(){ saveSetting('speed', $('speedPick').value); };
+window.saveAnim = function(){ saveSetting('anim', $('animPick').value); };
+window.saveTimeFix = function(){ saveSetting('timeFix', $('alertTimeFix').value); };
+window.toggleVib = function(){ $('vibToggle').classList.toggle('on'); saveSetting('vib', $('vibToggle').classList.contains('on')); };
+window.toggleVoice = function(){ $('voiceToggle').classList.toggle('on'); saveSetting('voice', $('voiceToggle').classList.contains('on')); };
+window.toggleNewsPatty = function(){ $('newsToggle').classList.toggle('on'); saveSetting('news', $('newsToggle').classList.contains('on')); };
+window.toggleAlertPatty = function(){ $('alertToggle').classList.toggle('on'); saveSetting('alert', $('alertToggle').classList.contains('on')); };
+
+window.uploadRing = function(e){
+  var f = e.target.files[0]; if(!f) return;
+  $('uploadedRingName').textContent = '✅ اپلوڈ: ' + f.name;
+  alert('✅ Ringtone اپلوڈ ہو گئی: ' + f.name);
+};
+
+/* ═══ INIT ═══ */
+render();
+renderNews();
+renderRules();
+sec4LeaveRender();
+
+setInterval(function(){
+  render();
+  sec4LeaveRender();
+}, 3000);
+
+window.addEventListener('storage', function(e){
+  if(e.key===DUTY_KEY || e.key===HIST_KEY || e.key===LEAVE_KEY) render();
+  if(e.key===LEAVE_KEY) sec4LeaveRender();
+  if(e.key===NEWS_KEY) renderNews();
+  if(e.key===RULES_KEY) renderRules();
+});
 </script>
 </body>
 </html>
