@@ -7,783 +7,363 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
-.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #2563eb;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card.task{border-right-color:#16a34a}
 .card.news{border-right-color:#ea580c}
-.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe;gap:6px}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #dbeafe;gap:6px}
+.card.task .card-hd{border-color:#bbf7d0}
 .card.news .card-hd{border-color:#fed7aa}
-h1{font-size:16px;color:#7c3aed}
+h1{font-size:16px;color:#2563eb}
+.card.task h1{color:#16a34a}
 .card.news h1{color:#ea580c}
 .ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:inherit}
 label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
 select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none;background:#fff}
-select:focus,input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
-.btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
-.btn.orange{background:#ea580c}
+select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.btn{width:100%;padding:11px;background:#2563eb;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
 .btn.green{background:#16a34a}
+.btn.orange{background:#ea580c}
 .btn.red{background:#dc2626}
 .btn.small{width:auto;padding:8px 14px;font-size:12px;margin-top:0}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.duty-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border-radius:10px;padding:10px;margin-top:10px}
-.duty-box .line{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;font-weight:800;color:#4c1d95}
-.duty-box .timer{text-align:center;margin-top:8px;font-size:14px;font-weight:900;color:#4c1d95}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
-.item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;margin-bottom:5px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;position:relative}
-.item .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;display:none}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;margin-bottom:5px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}
+.item .cb{width:16px;height:16px;accent-color:#16a34a;cursor:pointer;flex-shrink:0;display:none}
 .item.sel-on .cb{display:inline-block}
 .item .info{flex:1;min-width:0}
 .item .name{color:#1e293b;font-weight:800;font-size:13px}
-.item .badge{background:#f1f5f9;color:#475569;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;display:inline-block;margin-left:4px}
-.item .status{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;display:inline-block;margin-top:4px}
-.item .status.working{background:#dcfce7;color:#15803d}
-.item .status.leave{background:#fef3c7;color:#92400e}
-.item .status.available{background:#f1f5f9;color:#475569}
-.item .counts{font-size:10px;color:#64748b;margin-top:4px}
-.item .counts span{margin-left:8px}
+.item .badge{background:#dcfce7;color:#15803d;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;display:inline-block;margin-left:4px}
+.item .badge.occasional{background:#fef3c7;color:#92400e}
+.item .points{background:#fef9c3;color:#854d0e;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:800}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
+.stat .n{font-size:18px;font-weight:900;color:#16a34a}
+.stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:2px}
 .msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
 .msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
 .msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;text-align:center}
-.stat .n{font-size:16px;font-weight:900;color:#7c3aed}
-.card.news .stat .n{color:#ea580c}
-.stat .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
 
-/* Settings dropdown */
+/* Settings panel */
 .settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:10px;margin-bottom:12px}
 .settings-panel.open{display:block}
-.settings-panel .ttl{font-size:12px;font-weight:800;color:#1e293b;margin-bottom:8px}
-.settings-panel select{width:100%;padding:9px;margin-bottom:8px;font-size:12px;font-weight:800;background:#fff;border:1px solid #cbd5e1}
 .settings-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
 .settings-actions button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
 .settings-actions button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-actions button.active{background:#ea580c;color:#fff;border-color:#ea580c}
+.settings-actions button.active{background:#16a34a;color:#fff;border-color:#16a34a}
+.settings-actions button.lock-btn{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.settings-actions button.lock-btn.on{background:#dc2626;color:#fff;border-color:#dc2626}
 
-.leave-table{width:100%;border-collapse:collapse;font-size:11px}
-.leave-table th{background:#fff7ed;color:#9a3412;font-weight:800;padding:6px 4px;border-bottom:2px solid #fdba74;font-size:10px}
-.leave-table td{padding:6px 4px;border-bottom:1px solid #fed7aa;font-weight:700;color:#1e293b;text-align:center;font-size:10px}
-.leave-table tr:hover{background:#fff7ed}
-
-/* Rules */
-.rules-panel{background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:10px;margin-top:8px}
-.rules-panel .title{font-size:12px;font-weight:800;color:#1e40af;margin-bottom:8px}
-.rules-input-row{display:flex;gap:6px;margin-bottom:8px}
-.rules-input-row input{flex:1;padding:9px 10px;font-size:12px}
-.rules-input-row button{padding:0 16px;background:#1e40af;color:#fff;border:none;border-radius:6px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
-.rules-list{max-height:200px;overflow-y:auto;background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:6px;min-height:40px}
-.rule-item{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
-.rule-item.fired{background:#f0fdf4;border-color:#86efac;color:#15803d;opacity:.7}
-.rule-item .acts{display:none;gap:3px}
-.rule-item.edit-mode .acts{display:flex}
-.rule-item .acts button{border:none;width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:800;padding:0}
-.rule-item .edit{background:#0891b2;color:#fff}
-.rule-item .del2{background:#ef4444;color:#fff}
-
-/* News row */
-.news-row{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:9px 10px;margin-bottom:5px;font-size:11px;font-weight:700}
-.news-row.fired{background:#f0fdf4;border-color:#86efac}
-.news-row .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;display:none}
-.news-row.edit-mode .cb{display:inline-block}
-.news-row .info{flex:1;min-width:0}
-.news-row .txt{color:#1e293b;word-break:break-word}
-.news-row .meta{font-size:9px;color:#64748b;font-weight:700;margin-top:3px}
-.news-row .del3{background:#ef4444;color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;font-size:11px;display:none}
-.news-row.edit-mode .del3{display:inline-block}
-
-.feat-group{margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed #cbd5e1}
-.feat-group:last-child{border-bottom:none}
-.feat-group .lbl{font-size:11px;font-weight:800;color:#1e293b;margin-bottom:6px}
-.feat-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;font-size:11px;font-weight:700;color:#334155;margin-bottom:6px}
-.toggle{width:42px;height:22px;background:#cbd5e1;border-radius:22px;position:relative;cursor:pointer;transition:.3s;flex-shrink:0}
-.toggle.on{background:#16a34a}
-.toggle .dot{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;transition:.3s}
-.toggle.on .dot{right:calc(100% - 20px)}
-input[type=range]{width:100%;accent-color:#ea580c}
+/* Lock screen */
+.lock-screen{display:none;background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;padding:20px;text-align:center;margin-bottom:12px}
+.lock-screen.show{display:block}
+.lock-screen h3{color:#dc2626;font-size:14px;margin-bottom:12px}
+.lock-screen input{max-width:200px;margin:0 auto 8px;display:block;text-align:center;font-size:18px;letter-spacing:4px}
+.lock-screen button{padding:9px 20px;margin:0 4px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
+.lock-screen .unlock{background:#16a34a;color:#fff}
+.lock-screen .forgot{background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1}
+.hidden-dot{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:transparent;border:none;cursor:pointer;font-size:8px;opacity:.15;color:#64748b;font-family:inherit}
+.hidden-dot:hover{opacity:.6}
 </style>
 </head>
 <body>
 
-<!-- DUTY MANAGER -->
-<div class="card" id="dutyCard">
+<!-- ═══ TASK MANAGER CARD ═══ -->
+<div class="card task" style="position:relative;">
+  <button class="hidden-dot" onclick="toggleTaskSettings()" title="">·</button>
   <div class="card-hd">
-    <h1>👮 Member & Duty Control System</h1>
-    <button class="ic-btn" onclick="toggleDutySettings()">⚙️</button>
+    <h1>📋 Task And Point Manager</h1>
   </div>
 
-  <div class="settings-panel" id="dutySettings">
-    <div class="ttl">Section select karein:</div>
-    <select id="dutySecDropdown">
-      <option value="leave">🏖️ Leave Box</option>
-      <option value="member">👤 Member Box</option>
-      <option value="choti">📋 Choti Record</option>
-      <option value="active">👥 Active Member</option>
-      <option value="rules">⚙️ Rules Panel</option>
-      <option value="history">📜 Duty History</option>
-    </select>
+  <!-- Lock Screen -->
+  <div class="lock-screen" id="taskLockScreen">
+    <h3>🔒 سیکشن لاک ہے</h3>
+    <input type="password" id="taskLockPass" placeholder="••••" maxlength="8">
+    <div>
+      <button class="unlock" onclick="unlockTask()">🔓 کھولیں</button>
+      <button class="forgot" onclick="forgotTaskPass()">❓ بھول گیا</button>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="taskSettings">
     <div class="settings-actions">
-      <button id="dutySelBtn" onclick="dutyToggleSelMode()">☑️ سلیکٹ موڈ</button>
-      <button onclick="dutySelectAll(true)">✅ تمام</button>
-      <button onclick="dutySelectAll(false)">⬜ ہٹائیں</button>
-      <button onclick="dutyEditSel()">✏️ ایڈٹ</button>
-      <button class="danger" onclick="dutyDeleteSel()">🗑️ ڈیلیٹ</button>
-      <button class="danger" onclick="dutyDeleteAll(this)">❌ سب صاف</button>
-      <button onclick="toggleDutySettings()">🚪 بند</button>
+      <button id="taskSelBtn" onclick="taskToggleSelMode()">☑️ سلیکٹ موڈ</button>
+      <button onclick="taskSelectAll(true)">✅ تمام</button>
+      <button onclick="taskSelectAll(false)">⬜ ہٹائیں</button>
+      <button onclick="taskEditSel()">✏️ ایڈٹ</button>
+      <button onclick="taskMoveUp()">🔼 اوپر</button>
+      <button onclick="taskMoveDown()">🔽 نیچے</button>
+      <button class="danger" onclick="taskDeleteSel()">🗑️ ڈیلیٹ</button>
+      <button class="danger" onclick="taskDeleteAll(this)">❌ سب صاف</button>
+      <button class="lock-btn" id="taskLockBtn" onclick="taskToggleLock()">🔒 سیکشن لاک</button>
+      <button onclick="toggleTaskSettings()">🚪 بند</button>
     </div>
   </div>
 
-  <div class="duty-box">
-    <div class="line"><span>🟢 سینئر:</span><span id="curSenior">—</span></div>
-    <div class="line"><span>🔵 جونیئر:</span><span id="curJunior">—</span></div>
-    <div class="timer">⏱️ <span id="dutyTimer">00:00:00</span></div>
-  </div>
+  <!-- Content -->
+  <div id="taskContent">
+    <label>کام کا نام</label>
+    <input type="text" id="taskName" placeholder="کام کا نام درج کریں...">
 
-  <label style="margin-top:14px;">👤 مستقل ممبرز رجسٹریشن</label>
-  <input type="text" id="mName" placeholder="ممبر کا نام...">
-  <div class="row" style="margin-top:6px;">
-    <select id="mRank">
-      <option value="Junior">🔵 جونیئر</option>
-      <option value="Senior">🟢 سینئر</option>
-    </select>
-    <button class="btn small green" onclick="addMember()">➕ شامل</button>
-  </div>
-
-  <label style="margin-top:14px;">⚡ مینوئل ڈیوٹی تفویض</label>
-  <div class="row">
-    <select id="dutySenior"><option value="">🟢 سینئر...</option></select>
-    <select id="dutyJunior"><option value="">🔵 جونیئر...</option></select>
-  </div>
-  <button class="btn" onclick="saveDuty()">✅ ڈیوٹی سیو کریں</button>
-  <div class="row" style="margin-top:8px;">
-    <button class="btn small red" onclick="stopJunior()">⏹️ جونیئر بند</button>
-    <button class="btn small red" onclick="stopAll()">❌ سب بند</button>
-  </div>
-
-  <!-- LEAVE BOX -->
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;border-bottom:2px dashed #ddd6fe;padding-bottom:6px;">
-    <h1 style="font-size:14px;">🏖️ منظور شدہ چھٹیاں (<span id="sec4LeaveTotal">0</span>)</h1>
-    <button class="ic-btn" onclick="toggleDutySettings()">⚙️</button>
-  </div>
-
-  <div style="background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:8px;margin-top:8px;">
-    <label style="margin:0 0 4px 0;font-size:10px;color:#92400e;">ممبر منتخب کریں:</label>
-    <select id="sec4LeaveMemberFilter" onchange="sec4LeaveRender()" style="height:34px;font-size:12px;">
-      <option value="">تمام ممبران</option>
-    </select>
-  </div>
-
-  <div id="sec4LeaveTable" style="max-height:280px;overflow-y:auto;border:1px solid #fdba74;border-radius:8px;padding:4px;background:#fff7ed;min-height:60px;margin-top:6px;">
-    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی چھٹی ریکارڈ نہیں</div>
-  </div>
-
-  <div id="sec4LeaveFooter" style="margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;border-radius:8px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:11px;font-weight:800;color:#9a3412;">
-    <span>🏖️ چھٹیاں: <span id="sec4LeaveCntLeave">0</span></span>
-    <span>✅ کام: <span id="sec4LeaveCntWork">0</span></span>
-    <span>📋 کل: <span id="sec4LeaveCntAll">0</span></span>
-  </div>
-
-  <!-- RULES -->
-  <div class="rules-panel">
-    <div class="title">⚙️ Alert chalny ke Rules</div>
-    <div class="rules-input-row">
-      <input type="text" id="sec4B4Input" placeholder="Alert text likhein...">
-      <button onclick="sec4B4Add()">💾 سیو</button>
+    <div class="row3" style="margin-top:8px;">
+      <div>
+        <label style="margin-top:0;">قسم</label>
+        <select id="taskType">
+          <option value="Daily">📅 روزانہ</option>
+          <option value="Occasional">⭐ کبھی کبھی</option>
+        </select>
+      </div>
+      <div>
+        <label style="margin-top:0;">پوائنٹس</label>
+        <input type="number" id="taskPoints" placeholder="5" min="1" value="5">
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn green" style="margin-top:0;" onclick="taskAdd()">➕ شامل</button>
+      </div>
     </div>
-    <div class="rules-list" id="sec4B4List">
-      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>
+
+    <div class="msg" id="taskMsg"></div>
+
+    <label style="margin-top:14px;">📋 ٹاسک لسٹ (<span id="taskCount">0</span>)</label>
+    <div class="list" id="taskList">
+      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div>
     </div>
-  </div>
 
-  <label style="margin-top:14px;">👥 ایکٹو ممبرز (<span id="memCount">0</span>)</label>
-  <div class="list" id="memList">
-    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>
-  </div>
-
-  <label style="margin-top:14px;">📜 مکمل ڈیوٹی ہسٹری</label>
-  <div class="list" id="dutyHist" style="max-height:260px;">
-    <div id="dutyHistInner">
-      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="taskTotalCount">0</div><div class="l">📋 کل ٹاسک</div></div>
+      <div class="stat"><div class="n" id="taskTotalPoints">0</div><div class="l">🏆 کل پوائنٹس</div></div>
     </div>
-  </div>
-</div>
-
-<!-- NEWS & ALERTS -->
-<div class="card news">
-  <div class="card-hd">
-    <h1>📰 News & Alerts Manager</h1>
-    <button class="ic-btn" onclick="toggleNewsSettings()">⚙️</button>
-  </div>
-
-  <div class="settings-panel" id="newsSettings">
-    <div class="ttl">Section select karein:</div>
-    <select id="newsSecDropdown">
-      <option value="newslist">📰 News / Alert Records</option>
-      <option value="full">🔔 Full Settings</option>
-    </select>
-    <div class="settings-actions">
-      <button id="newsSelBtn" onclick="newsToggleSelMode()">☑️ سلیکٹ موڈ</button>
-      <button onclick="newsSelectAll(true)">✅ تمام</button>
-      <button onclick="newsSelectAll(false)">⬜ ہٹائیں</button>
-      <button onclick="newsEditSel()">✏️ ایڈٹ</button>
-      <button class="danger" onclick="newsDeleteSel()">🗑️ ڈیلیٹ</button>
-      <button class="danger" onclick="newsDeleteAll(this)">❌ سب صاف</button>
-      <button onclick="toggleNewsSettings()">🚪 بند</button>
-    </div>
-  </div>
-
-  <label>قسم منتخب کریں</label>
-  <select id="nType" onchange="onTypeChange()">
-    <option value="news">📰 News Add</option>
-    <option value="alert">🚨 Alert Patty</option>
-    <option value="complaint">⏰ Time Alert</option>
-  </select>
-
-  <label>متن</label>
-  <input type="text" id="nContent" placeholder="نیوز یا الرٹ لکھیں...">
-
-  <div id="timeWrap" style="display:none;">
-    <label>وقت</label>
-    <input type="time" id="nFireTime" value="21:00">
-  </div>
-
-  <button class="btn orange" onclick="saveNewsAlert()">💾 محفوظ کریں</button>
-  <div class="msg" id="newsMsg"></div>
-
-  <div class="stats">
-    <div class="stat"><div class="n" id="cNews">0</div><div class="l">📰 News</div></div>
-    <div class="stat"><div class="n" id="cAlert">0</div><div class="l">🚨 Alert</div></div>
-    <div class="stat"><div class="n" id="cComp">0</div><div class="l">⏰ Time</div></div>
-  </div>
-
-  <label style="margin-top:14px;">📋 ریکارڈز (<span id="recCount">0</span>)</label>
-  <div class="list" id="newsList" style="max-height:320px;">
-    <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>
-  </div>
-</div>
-
-<!-- FULL SETTINGS -->
-<div class="card news" id="fullSettingsPanel" style="display:none;">
-  <div class="card-hd">
-    <h1>⚙️ مکمل سیٹنگز</h1>
-    <button class="ic-btn" onclick="toggleNewsSettings()">✕</button>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">🔔 Ringtone (15 Options)</div>
-    <select id="ringPick" onchange="saveSetting('ring',this.value)">
-      <option value="1">🔔 گھر کی گھنٹی</option>
-      <option value="2">📞 فون کی گھنٹی</option>
-      <option value="3">🚨 الارم</option>
-      <option value="4">📢 اسکول بیل</option>
-      <option value="5">⏰ گھڑی کی گھنٹی</option>
-      <option value="6">🔕 ہلکی گھنٹی</option>
-      <option value="7">🎵 دھن</option>
-      <option value="8">🔔 مندر کی گھنٹی</option>
-      <option value="9">⚡ ایمرجنسی</option>
-      <option value="10">🎺 بگل</option>
-      <option value="11">🔔 ڈبل بیل</option>
-      <option value="12">🎶 ٹیون</option>
-      <option value="13">📳 سائرن</option>
-      <option value="14">🔔 کلاسک بیل</option>
-      <option value="15">🎼 میوزک</option>
-    </select>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">📤 Ringtone Upload</div>
-    <label for="ringUpload" style="display:block;padding:8px;background:#fff7ed;color:#ea580c;border:1px dashed #fdba74;border-radius:6px;cursor:pointer;font-weight:800;font-size:11px;text-align:center;">📁 فائل منتخب کریں</label>
-    <input type="file" id="ringUpload" accept="audio/*" style="display:none;" onchange="uploadRing(event)">
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">🔊 Volume (<span id="volVal">100</span>%)</div>
-    <input type="range" id="ringVol" min="0" max="100" value="100" oninput="saveSetting('vol',parseInt(this.value,10));document.getElementById('volVal').textContent=this.value;">
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">📳 Vibrate</div>
-    <div class="feat-row"><span>ON / OFF</span><div class="toggle on" id="vibToggle" onclick="toggleSetting('vib',this)"><div class="dot"></div></div></div>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">🗣️ Voice</div>
-    <div class="feat-row"><span>ON / OFF</span><div class="toggle on" id="voiceToggle" onclick="toggleSetting('voice',this)"><div class="dot"></div></div></div>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">📰 News Patty</div>
-    <div class="feat-row"><span>ON / OFF</span><div class="toggle on" id="newsToggle" onclick="toggleSetting('news',this)"><div class="dot"></div></div></div>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">🚨 Alert</div>
-    <div class="feat-row"><span>ON / OFF</span><div class="toggle on" id="alertToggle" onclick="toggleSetting('alert',this)"><div class="dot"></div></div></div>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">⚡ News Patty Speed</div>
-    <select id="speedPick" onchange="saveSetting('speed',this.value)">
-      <option value="slow">🐢 Slow</option>
-      <option value="normal" selected>▶️ Normal</option>
-      <option value="fast">⚡ Fast</option>
-    </select>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">🎬 Alert Animation</div>
-    <select id="animPick" onchange="saveSetting('anim',this.value)">
-      <option value="blink">✨ Blink</option>
-      <option value="peep">🔔 Peep</option>
-      <option value="colour">🎨 Colour</option>
-      <option value="slide">➡️ Slide</option>
-      <option value="pulse">💓 Pulse</option>
-    </select>
-  </div>
-
-  <div class="feat-group">
-    <div class="lbl">⏰ Alert Gap (منٹ)</div>
-    <input type="number" id="alertGap" min="1" max="120" value="10" onchange="saveSetting('alertGap',parseInt(this.value,10))">
   </div>
 </div>
 
 <script>
-var DUTY_KEY='sec4_duty_manager_data_v4';
-var HIST_KEY='sec4_duty_history_data_v4';
-var LEAVE_KEY='sec4_duty_leaves_data_v4';
-var RULES_KEY='sec4_duty_alert_rules';
-var NEWS_KEY='sec10_news_alerts_data';
-var SETTINGS_KEY='sec10_app_settings';
+/* ═══════════════════════════════════════
+   KEYS
+   ═══════════════════════════════════════ */
+var TASK_KEY = 'sec3_task_and_point_manager_data';
+var LOCK_KEY = 'sec_task_lock';
+var PASS_KEY = 'sec_task_password';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
-function getDayName(dateStr){
-  try{
-    var parts=String(dateStr).split(' ')[0].split('/');
-    if(parts.length!==3) return '—';
-    var d=new Date(parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
-    var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
-    return days[d.getDay()]||'—';
-  }catch(e){return '—';}
+
+var taskSelMode=false, taskSelected={}, taskDelPending=false;
+
+function getTasks(){
+  var t=ls(TASK_KEY,[]);
+  if(!Array.isArray(t)) t=[];
+  return t;
 }
+function saveTasks(t){lss(TASK_KEY,t);}
 
-/* DUTY */
-var dutySelMode=false, dutySelected={}, dutyDelPending=false;
-
-function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
-function addHistory(rec,reason){
-  if(!rec.dutyStart) return;
-  var h=ls(HIST_KEY,[]); if(!Array.isArray(h)) h=[];
-  var s=new Date(rec.dutyStart),e=new Date();
-  h.push({name:rec.name,rank:rec.rank,start:pad(s.getHours())+':'+pad(s.getMinutes()),end:pad(e.getHours())+':'+pad(e.getMinutes()),reason:reason});
-  if(h.length>100) h=h.slice(-100);
-  lss(HIST_KEY,h);
-}
-
-window.toggleDutySettings=function(){var p=$('dutySettings');if(p)p.classList.toggle('open');};
-
-window.dutyToggleSelMode=function(){
-  dutySelMode=!dutySelMode;
-  var b=$('dutySelBtn');
-  if(b){b.textContent=dutySelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',dutySelMode);}
-  if(!dutySelMode) dutySelected={};
-  render();sec4LeaveRender();
-};
-window.dutySelectAll=function(st){
-  if(st && !dutySelMode) dutyToggleSelMode();
-  dutySelected={};
-  if(st){
-    getMembers().forEach(function(x){dutySelected[x.id]=true;});
-    ensureLeaveIds().forEach(function(r){dutySelected[r.id]=true;});
-  }
-  render();sec4LeaveRender();
-};
-window.dutyEditSel=function(){
-  var ids=Object.keys(dutySelected).filter(function(k){return dutySelected[k];});
-  if(ids.length!==1){alert('ایک ریکارڈ منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var m=getMembers().find(function(x){return x.id===id;});
-  if(m){
-    var nv=prompt('نیا نام:',m.name);
-    if(nv===null) return;
-    nv=nv.trim(); if(!nv) return;
-    var list=getMembers();
-    list.find(function(x){return x.id===id;}).name=nv;
-    lss(DUTY_KEY,list); render(); return;
-  }
-  var l=ls(LEAVE_KEY,[]);
-  var lr=l.find(function(x){return String(x.id)===String(id);});
-  if(lr){
-    lr.status=lr.status==='work'?'leave':'work';
-    lss(LEAVE_KEY,l); sec4LeaveRender();
-  }
-};
-window.dutyDeleteSel=function(){
-  var ids=Object.keys(dutySelected).filter(function(k){return dutySelected[k];});
-  if(!ids.length){alert('کچھ منتخب کریں');return;}
-  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
-  lss(DUTY_KEY,getMembers().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  lss(LEAVE_KEY,ls(LEAVE_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  dutySelected={};render();sec4LeaveRender();
-};
-window.dutyDeleteAll=function(btn){
-  if(!dutyDelPending){
-    dutyDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){dutyDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
-    return;
-  }
-  lss(DUTY_KEY,[]);lss(LEAVE_KEY,[]);lss(HIST_KEY,[]);
-  dutySelected={};dutyDelPending=false;
-  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
-  render();sec4LeaveRender();
+/* ═══ ADD ═══ */
+window.taskAdd = function(){
+  var name=$('taskName').value.trim();
+  var type=$('taskType').value;
+  var pts=parseInt($('taskPoints').value,10)||5;
+  if(!name){showTaskMsg('⚠️ نام لکھیں','err');$('taskName').focus();return;}
+  var t=getTasks();
+  t.unshift({id:Date.now(),title:name,type:type,points:pts,selected:false});
+  saveTasks(t);
+  $('taskName').value='';
+  $('taskPoints').value='5';
+  showTaskMsg('✅ ٹاسک شامل ہو گیا','ok');
+  renderTasks();
 };
 
-window.addMember=function(){
-  var name=$('mName').value.trim(),rank=$('mRank').value;
-  if(!name){alert('نام لکھیں');return;}
-  var m=getMembers();
-  m.push({id:Date.now(),name:name,rank:rank,dutyCount:0,leaveCount:0,onDuty:false,dutyStart:null,onLeave:false});
-  lss(DUTY_KEY,m);$('mName').value='';render();
-};
-window.saveDuty=function(){
-  var sid=$('dutySenior').value,jid=$('dutyJunior').value;
-  if(!sid && !jid){alert('ممبر منتخب کریں');return;}
-  var m=getMembers();
-  if(sid){
-    var s=m.find(function(x){return String(x.id)===String(sid);});
-    if(s){
-      m.forEach(function(x){if(x.onDuty&&x.rank==='Senior'&&String(x.id)!==String(sid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
-      if(!s.onDuty){s.onDuty=true;s.dutyStart=Date.now();s.dutyCount=(s.dutyCount||0)+1;}
-    }
-  }
-  if(jid){
-    var j=m.find(function(x){return String(x.id)===String(jid);});
-    if(j){
-      m.forEach(function(x){if(x.onDuty&&x.rank==='Junior'&&String(x.id)!==String(jid)){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
-      if(!j.onDuty){j.onDuty=true;j.dutyStart=Date.now();j.dutyCount=(j.dutyCount||0)+1;}
-    }
-  }
-  lss(DUTY_KEY,m);render();
-};
-window.stopJunior=function(){
-  var m=getMembers();
-  m.forEach(function(x){if(x.onDuty&&x.rank==='Junior'){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
-  lss(DUTY_KEY,m);render();
-};
-window.stopAll=function(){
-  if(!confirm('سب ڈیوٹی بند کریں؟')) return;
-  var m=getMembers();
-  m.forEach(function(x){if(x.onDuty){addHistory(x,'manual');x.onDuty=false;x.dutyStart=null;}});
-  lss(DUTY_KEY,m);render();
-};
-window.returnFromLeave=function(id){
-  var m=getMembers(),t=m.find(function(x){return x.id===id;});
-  if(!t) return;
-  t.onLeave=false;lss(DUTY_KEY,m);render();
-};
-
-function render(){
-  var m=getMembers();
-  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior';});
-  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior';});
-  $('curSenior').textContent=s?s.name:'—';
-  $('curJunior').textContent=j?j.name:'—';
-
-  var sSel=$('dutySenior'),jSel=$('dutyJunior');
-  var sV=sSel.value,jV=jSel.value;
-  sSel.innerHTML='<option value="">🟢 سینئر...</option>';
-  jSel.innerHTML='<option value="">🔵 جونیئر...</option>';
-  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
-    var lbl=x.name+(x.onDuty?' • ڈیوٹی پر':'');
-    if(x.rank==='Senior') sSel.appendChild(new Option(lbl,x.id));
-    else jSel.appendChild(new Option(lbl,x.id));
-  });
-  if(sV) sSel.value=sV; else if(s) sSel.value=s.id;
-  if(jV) jSel.value=jV; else if(j) jSel.value=j.id;
-
-  var ml=$('memList');
-  $('memCount').textContent=m.length;
-  if(!m.length){
-    ml.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ممبر نہیں</div>';
-  } else {
-    ml.innerHTML=m.map(function(x){
-      var st='',cls='available',ic='⚪';
-      if(x.onLeave){st='چھٹی پر ہے';cls='leave';ic='🏖️';}
-      else if(x.onDuty){st='کام پر ہے';cls='working';ic='🟢';}
-      else{st='دستیاب ہے';cls='available';ic='⚪';}
-      var bg=x.onLeave?'background:#fffbeb;':(x.onDuty?'background:#f0fdf4;':'');
-      var isSel=!!dutySelected[x.id];
-      var cb='<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="toggleDutySelected('+x.id+')">';
-      var btn=x.onLeave?'<button class="btn small green" style="padding:4px 10px;font-size:10px;margin-top:6px;" onclick="returnFromLeave('+x.id+')">✓ واپس</button>':'';
-      return '<div class="item'+(dutySelMode?' sel-on':'')+'" style="'+bg+(isSel?'border-color:#ea580c;background:#fef3c7;':'')+'">'+
-        cb+
-        '<div class="info"><div><span class="name">'+esc(x.name)+'</span><span class="badge">'+(x.rank==='Senior'?'🟢 سینئر':'🔵 جونیئر')+'</span></div>'+
-        '<div><span class="status '+cls+'">'+ic+' '+st+'</span></div>'+
-        '<div class="counts"><span>🏖️ چھٹیاں: '+(x.leaveCount||0)+'</span><span>🟢 ڈیوٹیاں: '+(x.dutyCount||0)+'</span></div>'+btn+'</div></div>';
-    }).join('');
-  }
-
-  var h=ls(HIST_KEY,[]);
-  var hInner=$('dutyHistInner');
-  if(!hInner) return;
-  if(!h.length){
-    hInner.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ڈیوٹی نہیں</div>';
-  } else {
-    hInner.innerHTML=h.slice().reverse().slice(0,30).map(function(x){
-      return '<div class="item"><div class="info"><div><span class="name">'+esc(x.name)+'</span><span class="badge">'+(x.rank==='Senior'?'🟢':'🔵')+'</span></div><div style="font-size:10px;color:#64748b;">'+esc(x.start)+' → '+esc(x.end)+' ('+esc(x.reason)+')</div></div></div>';
-    }).join('');
-  }
-}
-window.toggleDutySelected=function(id){
-  if(dutySelected[id]) delete dutySelected[id];
-  else dutySelected[id]=true;
-  render();
-};
-
-setInterval(function(){
-  var m=getMembers();
-  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior';});
-  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior';});
-  var active=s||j;
-  if(active && active.dutyStart){
-    var el=Math.floor((Date.now()-active.dutyStart)/1000);
-    $('dutyTimer').textContent=pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
-  } else {
-    $('dutyTimer').textContent='00:00:00';
-  }
-},1000);
-
-/* LEAVE */
-var leaveSelected={},leaveSelMode=false,leaveDelPending=false;
-
-function ensureLeaveIds(){
-  var arr=ls(LEAVE_KEY,[]); if(!Array.isArray(arr)) return [];
-  var changed=false;
-  arr.forEach(function(r,i){
-    if(!r.id){r.id=Date.now()+i;changed=true;}
-    if(!r.status){r.status='leave';changed=true;}
-    if(!r.reason){r.reason='—';changed=true;}
-  });
-  if(changed) lss(LEAVE_KEY,arr);
-  return arr;
-}
-
-window.sec4LeaveRender=function(){
-  var arr=ensureLeaveIds();
-  var filterSel=$('sec4LeaveMemberFilter');
-  if(filterSel){
-    var curVal=filterSel.value;
-    filterSel.innerHTML='<option value="">تمام ممبران</option>';
-    var names={};arr.forEach(function(r){names[r.name]=true;});
-    Object.keys(names).forEach(function(n){filterSel.appendChild(new Option(n,n));});
-    if(curVal) filterSel.value=curVal;
-  }
-  var filterName=filterSel?filterSel.value:'';
-  var list=arr.slice().reverse();
-  if(filterName) list=list.filter(function(r){return r.name===filterName;});
-
-  var allLeave=arr.filter(function(r){return r.status!=='work';}).length;
-  var allWork=arr.filter(function(r){return r.status==='work';}).length;
-  if($('sec4LeaveTotal')) $('sec4LeaveTotal').textContent=arr.length;
-  if($('sec4LeaveCntLeave')) $('sec4LeaveCntLeave').textContent=allLeave;
-  if($('sec4LeaveCntWork')) $('sec4LeaveCntWork').textContent=allWork;
-  if($('sec4LeaveCntAll')) $('sec4LeaveCntAll').textContent=arr.length;
-
-  var box=$('sec4LeaveTable'); if(!box) return;
-  if(!list.length){box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:20px;">کوئی ریکارڈ نہیں</div>';return;}
-  var html='<table class="leave-table"><thead><tr><th></th><th>نام</th><th>تاریخ</th><th>دن</th><th>حالت</th></tr></thead><tbody>';
-  list.forEach(function(r){
-    var isSel=!!(dutySelected[r.id]||leaveSelected[r.id]);
-    var dayName=getDayName(r.date);
-    var isLeave=r.status!=='work';
-    var badge=isLeave?'<span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">🏖️ چھٹی</span>':'<span style="background:#dcfce7;color:#15803d;padding:2px 6px;border-radius:8px;font-size:9px;font-weight:800;">✅ کام</span>';
-    var cb=dutySelMode?'<input type="checkbox" '+(isSel?'checked':'')+' onchange="toggleDutySelected('+r.id+')" style="width:14px;height:14px;accent-color:#ea580c;cursor:pointer;">':'';
-    html+='<tr style="'+(isSel?'background:#fef3c7;':'')+'"><td>'+cb+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.date)+'</td><td style="color:#0891b2;">'+dayName+'</td><td>'+badge+'</td></tr>';
-  });
-  html+='</tbody></table>';
-  box.innerHTML=html;
-};
-
-/* RULES */
-window.sec4B4Add=function(){
-  var txt=$('sec4B4Input').value.trim();
-  if(!txt){alert('Alert text likhein');return;}
-  var rules=ls(RULES_KEY,[]);if(!Array.isArray(rules)) rules=[];
-  rules.unshift({id:Date.now(),text:txt,fired:false});
-  lss(RULES_KEY,rules);
-  $('sec4B4Input').value='';renderRules();
-};
-window.sec4B4Delete=function(id){
-  if(!confirm('ڈیلیٹ کریں؟')) return;
-  lss(RULES_KEY,ls(RULES_KEY,[]).filter(function(r){return r.id!==id;}));
-  renderRules();
-};
-window.sec4B4Edit=function(id){
-  var rules=ls(RULES_KEY,[]);
-  var rule=rules.find(function(r){return r.id===id;});if(!rule) return;
-  var nv=prompt('نیا text:',rule.text);if(nv===null) return;
-  nv=nv.trim();if(!nv) return;
-  rule.text=nv;rule.fired=false;
-  lss(RULES_KEY,rules);renderRules();
-};
-
-function renderRules(){
-  var list=$('sec4B4List');if(!list) return;
-  var rules=ls(RULES_KEY,[]);if(!Array.isArray(rules)) rules=[];
-  if(!rules.length){list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی قاعدہ نہیں</div>';return;}
-  var editOn=dutySelMode;
-  list.innerHTML=rules.map(function(r){
-    return '<div class="rule-item'+(r.fired?' fired':'')+(editOn?' edit-mode':'')+'">'+
-      '<div style="flex:1;min-width:0;">🚨 '+esc(r.text)+(r.fired?' ✓':'')+'</div>'+
-      '<div class="acts"><button class="edit" onclick="sec4B4Edit('+r.id+')">✏️</button><button class="del2" onclick="sec4B4Delete('+r.id+')">🗑️</button></div>'+
-    '</div>';
-  }).join('');
-}
-
-/* NEWS */
-var newsSelMode=false,newsSelected={},newsDelPending=false,newsSettingsOpen=false;
-
-window.onTypeChange=function(){$('timeWrap').style.display=$('nType').value==='complaint'?'block':'none';};
-window.saveNewsAlert=function(){
-  var type=$('nType').value;
-  var content=$('nContent').value.trim();
-  if(!content){showMsg('متن لکھیں','err');return;}
-  var fireTime=null;
-  if(type==='complaint'){fireTime=$('nFireTime').value;if(!fireTime){showMsg('وقت منتخب کریں','err');return;}}
-  var items=ls(NEWS_KEY,[]);if(!Array.isArray(items)) items=[];
-  items.unshift({id:Date.now(),type:type,content:content,fireTime:fireTime,timestamp:Date.now(),enabled:false,fired:false});
-  lss(NEWS_KEY,items);
-  $('nContent').value='';
-  showMsg('✅ محفوظ ہو گیا','ok');
-  renderNews();
-};
-function showMsg(text,type){
-  var m=$('newsMsg');m.textContent=text;m.className='msg '+type;
+function showTaskMsg(msg,type){
+  var m=$('taskMsg');
+  m.textContent=msg;
+  m.className='msg '+type;
   setTimeout(function(){m.className='msg';},2500);
 }
-function fmtDT(ts){var d=new Date(ts);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());}
 
-window.toggleNewsSettings=function(){
-  newsSettingsOpen=!newsSettingsOpen;
-  $('newsSettings').classList.toggle('open',newsSettingsOpen);
-  var sec=$('newsSecDropdown').value;
-  $('fullSettingsPanel').style.display=(newsSettingsOpen && sec==='full')?'block':'none';
-  loadSettingsUI();
-};
-window.newsToggleSelMode=function(){
-  newsSelMode=!newsSelMode;
-  var b=$('newsSelBtn');
-  if(b){b.textContent=newsSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',newsSelMode);}
-  if(!newsSelMode) newsSelected={};
-  renderNews();
-};
-window.newsSelectAll=function(st){
-  if(st && !newsSelMode) newsToggleSelMode();
-  newsSelected={};
-  if(st) ls(NEWS_KEY,[]).forEach(function(x){newsSelected[x.id]=true;});
-  renderNews();
-};
-window.newsEditSel=function(){
-  var ids=Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
-  if(ids.length!==1){alert('ایک منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var items=ls(NEWS_KEY,[]);
-  var rec=items.find(function(x){return x.id===id;});if(!rec) return;
-  var nv=prompt('نیا متن:',rec.content);if(nv===null) return;
-  nv=nv.trim();if(!nv) return;
-  rec.content=nv;
-  lss(NEWS_KEY,items);
-  newsSelected={};newsSelMode=false;
-  $('newsSelBtn').textContent='☑️ سلیکٹ موڈ';
-  $('newsSelBtn').classList.remove('active');
-  renderNews();
-};
-window.newsDeleteSel=function(){
-  var ids=Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
-  if(!ids.length){alert('کچھ منتخب کریں');return;}
-  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
-  lss(NEWS_KEY,ls(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  newsSelected={};renderNews();
-};
-window.newsDeleteAll=function(btn){
-  if(!ls(NEWS_KEY,[]).length) return;
-  if(!newsDelPending){
-    newsDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){newsDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
+/* ═══ RENDER ═══ */
+function renderTasks(){
+  var t=getTasks();
+  $('taskCount').textContent=t.length;
+  $('taskTotalCount').textContent=t.length;
+  var totalPts=0;
+  t.forEach(function(x){totalPts+=(parseInt(x.points,10)||0);});
+  $('taskTotalPoints').textContent=totalPts;
+
+  var box=$('taskList');
+  if(!t.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div>';
     return;
   }
-  lss(NEWS_KEY,[]);newsSelected={};newsDelPending=false;
-  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
-  renderNews();
-};
-window.toggleNewsEnable=function(id){
-  var items=ls(NEWS_KEY,[]);
-  var rec=items.find(function(x){return x.id===id;});if(!rec) return;
-  rec.enabled=!rec.enabled;
-  lss(NEWS_KEY,items);
-  renderNews();
-};
-
-function renderNews(){
-  var all=ls(NEWS_KEY,[]);if(!Array.isArray(all)) all=[];
-  $('cNews').textContent=all.filter(function(x){return x.type==='news';}).length;
-  $('cAlert').textContent=all.filter(function(x){return x.type==='alert';}).length;
-  $('cComp').textContent=all.filter(function(x){return x.type==='complaint';}).length;
-  $('recCount').textContent=all.length;
-
-  var list=$('newsList');if(!list) return;
-  if(!all.length){list.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>';return;}
-  var editMode=newsSelMode;
-  list.innerHTML=all.slice(0,30).map(function(x){
-    var badge=x.type==='news'?'📰':(x.type==='alert'?'🚨':'⏰');
-    var time=x.fireTime?' ⏰ '+esc(x.fireTime):'';
-    var enabled=x.enabled===true;
-    var isSel=!!newsSelected[x.id];
-    var cb='<input type="checkbox" class="cb" '+(enabled?'checked':'')+' onchange="toggleNewsEnable('+x.id+')">';
-    var delBtn='<button class="del3" onclick="event.stopPropagation();quickDeleteNews('+x.id+')">✕</button>';
-    return '<div class="news-row'+(x.fired?' fired':'')+(editMode?' edit-mode':'')+'" style="'+(isSel?'background:#fef3c7;':'')+'">'+
+  box.innerHTML=t.map(function(x){
+    var isSel=!!taskSelected[x.id];
+    var tb = x.type==='Daily' ? '<span class="badge">📅 روزانہ</span>' : '<span class="badge occasional">⭐ کبھی کبھی</span>';
+    var cb = '<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="taskToggleSel('+x.id+')">';
+    return '<div class="item'+(taskSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+
       cb+
-      '<div class="info"><div class="txt">'+badge+' '+esc(x.content)+time+'</div><div class="meta">'+fmtDT(x.timestamp)+'</div></div>'+
-      delBtn+
+      '<div class="info">'+
+        '<div><span class="name">'+esc(x.title)+'</span>'+tb+' <span class="points">🏆 '+x.points+'</span></div>'+
+      '</div>'+
     '</div>';
   }).join('');
 }
-window.quickDeleteNews=function(id){
-  if(!confirm('ڈیلیٹ کریں؟')) return;
-  lss(NEWS_KEY,ls(NEWS_KEY,[]).filter(function(x){return x.id!==id;}));
-  renderNews();
+
+/* ═══ SELECT ═══ */
+window.taskToggleSel = function(id){
+  if(taskSelected[id]) delete taskSelected[id];
+  else taskSelected[id]=true;
+  renderTasks();
+};
+window.taskToggleSelMode = function(){
+  taskSelMode=!taskSelMode;
+  var b=$('taskSelBtn');
+  if(b){b.textContent=taskSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',taskSelMode);}
+  if(!taskSelMode) taskSelected={};
+  renderTasks();
+};
+window.taskSelectAll = function(st){
+  if(st && !taskSelMode) taskToggleSelMode();
+  taskSelected={};
+  if(st) getTasks().forEach(function(x){taskSelected[x.id]=true;});
+  renderTasks();
 };
 
-/* SETTINGS */
-window.saveSetting=function(k,v){var s=ls(SETTINGS_KEY,{});s[k]=v;lss(SETTINGS_KEY,s);};
-window.toggleSetting=function(k,el){
-  el.classList.toggle('on');
-  var s=ls(SETTINGS_KEY,{});
-  s[k]=el.classList.contains('on');
-  lss(SETTINGS_KEY,s);
+/* ═══ EDIT ═══ */
+window.taskEditSel = function(){
+  var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
+  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
+  var id=parseInt(ids[0],10);
+  var t=getTasks();
+  var rec=t.find(function(x){return x.id===id;});
+  if(!rec) return;
+  var nv=prompt('نیا نام:',rec.title);
+  if(nv===null) return;
+  nv=nv.trim(); if(!nv) return;
+  rec.title=nv;
+  var nv2=prompt('نئے پوائنٹس:',rec.points);
+  if(nv2!==null){
+    var p=parseInt(nv2,10);
+    if(p>0) rec.points=p;
+  }
+  saveTasks(t);
+  taskSelected={};
+  renderTasks();
 };
-function loadSettingsUI(){
-  var s=ls(SETTINGS_KEY,{});
-  if($('ringPick')&&s.ring) $('ringPick').value=s.ring;
-  if($('ringVol')&&s.vol!=null){$('ringVol').value=s.vol;if($('volVal'))$('volVal').textContent=s.vol;}
-  if($('vibToggle')) $('vibToggle').classList.toggle('on',s.vib!==false);
-  if($('voiceToggle')) $('voiceToggle').classList.toggle('on',s.voice!==false);
-  if($('newsToggle')) $('newsToggle').classList.toggle('on',s.news!==false);
-  if($('alertToggle')) $('alertToggle').classList.toggle('on',s.alert!==false);
-  if($('speedPick')&&s.speed) $('speedPick').value=s.speed;
-  if($('animPick')&&s.anim) $('animPick').value=s.anim;
-  if($('alertGap')&&s.alertGap) $('alertGap').value=s.alertGap;
+
+/* ═══ MOVE ═══ */
+window.taskMoveUp = function(){
+  var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
+  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
+  var id=parseInt(ids[0],10);
+  var t=getTasks();
+  var i=t.findIndex(function(x){return x.id===id;});
+  if(i>0){var tmp=t[i];t[i]=t[i-1];t[i-1]=tmp;saveTasks(t);renderTasks();}
+};
+window.taskMoveDown = function(){
+  var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
+  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
+  var id=parseInt(ids[0],10);
+  var t=getTasks();
+  var i=t.findIndex(function(x){return x.id===id;});
+  if(i>=0 && i<t.length-1){var tmp=t[i];t[i]=t[i+1];t[i+1]=tmp;saveTasks(t);renderTasks();}
+};
+
+/* ═══ DELETE ═══ */
+window.taskDeleteSel = function(){
+  var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
+  if(!ids.length){alert('کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ٹاسک ڈیلیٹ کریں؟')) return;
+  var t=getTasks().filter(function(x){return ids.indexOf(String(x.id))===-1;});
+  saveTasks(t);
+  taskSelected={};
+  renderTasks();
+};
+window.taskDeleteAll = function(btn){
+  if(!taskDelPending){
+    taskDelPending=true;
+    btn.textContent='⚠️ دوبارہ';
+    btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){taskDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
+    return;
+  }
+  saveTasks([]);
+  taskSelected={};
+  taskDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
+  renderTasks();
+};
+
+/* ═══ SETTINGS TOGGLE ═══ */
+window.toggleTaskSettings = function(){
+  $('taskSettings').classList.toggle('open');
+};
+
+/* ═══ LOCK SYSTEM ═══ */
+function isLocked(){
+  var s=ls(LOCK_KEY,{});
+  return s.locked===true;
 }
-window.uploadRing=function(e){var f=e.target.files[0];if(!f) return;alert('✅ اپلوڈ: '+f.name);};
+function setLock(locked){
+  var s=ls(LOCK_KEY,{});
+  s.locked=locked;
+  lss(LOCK_KEY,s);
+}
+function getPass(){
+  return ls(PASS_KEY,'1234') || '1234';
+}
+function applyLockUI(){
+  if(isLocked()){
+    $('taskLockScreen').classList.add('show');
+    $('taskContent').style.display='none';
+    $('taskLockBtn').textContent='🔓 سیکشن انلاک';
+    $('taskLockBtn').classList.add('on');
+  } else {
+    $('taskLockScreen').classList.remove('show');
+    $('taskContent').style.display='block';
+    $('taskLockBtn').textContent='🔒 سیکشن لاک';
+    $('taskLockBtn').classList.remove('on');
+  }
+}
+window.taskToggleLock = function(){
+  if(isLocked()){
+    setLock(false);
+    applyLockUI();
+    return;
+  }
+  var np=prompt('نیا پاس ورڈ (default 1234):','1234');
+  if(np===null) return;
+  np=np.trim();
+  if(np.length<4){alert('کم از کم 4 ہندسے');return;}
+  lss(PASS_KEY,np);
+  setLock(true);
+  applyLockUI();
+  alert('🔒 سیکشن لاک ہو گیا\nپاس ورڈ: '+np);
+};
+window.unlockTask = function(){
+  var p=$('taskLockPass').value;
+  if(p===getPass()){
+    setLock(false);
+    applyLockUI();
+    $('taskLockPass').value='';
+  } else {
+    alert('❌ غلط پاس ورڈ');
+  }
+};
+window.forgotTaskPass = function(){
+  if(!confirm('پاس ورڈ ری سیٹ ہو جائے گا (1234)۔ جاری رکھیں؟')) return;
+  lss(PASS_KEY,'1234');
+  setLock(false);
+  applyLockUI();
+  alert('✅ پاس ورڈ 1234 پر ری سیٹ');
+};
 
-/* INIT */
-render();renderNews();renderRules();sec4LeaveRender();
-setInterval(function(){render();sec4LeaveRender();},3000);
+/* ═══ INIT ═══ */
+renderTasks();
+applyLockUI();
+setInterval(renderTasks,3000);
 window.addEventListener('storage',function(e){
-  if(e.key===DUTY_KEY||e.key===HIST_KEY||e.key===LEAVE_KEY) render();
-  if(e.key===LEAVE_KEY) sec4LeaveRender();
-  if(e.key===NEWS_KEY) renderNews();
-  if(e.key===RULES_KEY) renderRules();
+  if(e.key===TASK_KEY) renderTasks();
 });
 </script>
 </body>
