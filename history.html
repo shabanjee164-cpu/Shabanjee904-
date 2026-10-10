@@ -8,52 +8,53 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
 .card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border:1px solid #cbd5e1;border-right:5px solid #16a34a;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+.card.skip{border-right-color:#dc2626}
 .card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #bbf7d0;gap:6px}
+.card.skip .card-hd{border-color:#fecaca}
 .card-hd h1{font-size:16px;color:#16a34a}
+.card.skip .card-hd h1{color:#dc2626}
 .ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;opacity:.7}
 .ic-btn:hover{opacity:1}
-
-/* Filter Dropdown */
-.filter-row{display:flex;gap:8px;margin-bottom:12px;align-items:center}
-.filter-icon{background:#f0fdf4;border:1px solid #86efac;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px}
-.filter-menu{display:none;position:absolute;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:100;min-width:160px;overflow:hidden}
+.filter-row{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap;position:relative}
+.filter-icon{background:#f0fdf4;border:1px solid #86efac;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit}
+.card.skip .filter-icon{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+.filter-menu{display:none;position:absolute;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:100;min-width:160px;overflow:hidden;top:100%;right:0;margin-top:4px}
 .filter-menu.open{display:block}
 .filter-menu button{width:100%;text-align:right;padding:10px 14px;font-size:12px;font-weight:700;background:#fff;border:none;cursor:pointer;font-family:inherit;color:#334155}
 .filter-menu button:hover{background:#f0fdf4}
 .filter-menu button.on{background:#16a34a;color:#fff}
-
-/* Copy/Share */
-.copy-share{display:flex;gap:6px;margin-left:auto}
-.copy-share button{background:#f0fdf4;border:1px solid #86efac;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit}
-.copy-share button:active{background:#dcfce7}
-
-/* Member filter */
+.copy-share{display:flex;gap:6px;margin-right:auto}
+.copy-share button{background:#f0fdf4;border:1px solid #86efac;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit}
+.card.skip .copy-share button{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
 .member-filter{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:8px;margin-bottom:10px}
 .member-filter select{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff}
-
-/* List */
-.list{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px}
-.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;display:flex;gap:8px;align-items:flex-start}
+.list{max-height:450px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:6px;font-size:12px;display:flex;gap:8px;align-items:flex-start;border-right:4px solid #16a34a}
+.item.done{background:#f0fdf4}
+.item.notdone,.item.skip-item{border-right-color:#dc2626;background:#fef2f2}
 .item .cb{width:16px;height:16px;accent-color:#16a34a;cursor:pointer;flex-shrink:0;display:none;margin-top:2px}
 .item.sel-on .cb{display:inline-block}
 .item .info{flex:1;min-width:0}
-.item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px}
-.item .member{font-weight:800;color:#1e293b}
-.item .task{color:#334155;font-weight:700;margin-top:2px}
-.item .st{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
+.item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.item .member{font-weight:800;color:#1e293b;font-size:13px}
+.item .badge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
+.item .badge.daily{background:#dbeafe;color:#1e40af}
+.item .badge.occasional{background:#fef3c7;color:#92400e}
+.item .st{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:800}
 .item .st.done{background:#dcfce7;color:#15803d}
 .item .st.notdone{background:#fee2e2;color:#991b1b}
 .item .st.skip{background:#f1f5f9;color:#475569}
-.item .meta{font-size:10px;color:#64748b;font-weight:600}
-.item .pts{font-size:10px;padding:2px 8px;border-radius:20px;background:#fef9c3;color:#854d0e;font-weight:800}
-
+.item .detail{display:grid;gap:4px;font-size:11px;color:#334155;font-weight:700}
+.item .detail .ln{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px dashed #e2e8f0}
+.item .detail .ln:last-child{border-bottom:none}
+.item .detail .ln .k{color:#64748b}
+.item .detail .ln .v{color:#1e293b;font-weight:800}
+.item .points-big{background:#fef9c3;color:#854d0e;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:900;text-align:center;margin-top:6px;border:1px solid #fde047}
 .empty{text-align:center;color:#94a3b8;font-size:12px;padding:30px;font-weight:700}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
-.stat .n{font-size:18px;font-weight:900;color:#16a34a}
-.stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
-
-/* Settings */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 4px;text-align:center}
+.stat .n{font-size:16px;font-weight:900;color:#16a34a}
+.stat .l{font-size:9px;color:#64748b;font-weight:700;margin-top:3px}
 .settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:12px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
 .settings-panel.open{display:grid}
 .settings-panel button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
@@ -63,61 +64,97 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 </head>
 <body>
 
+<!-- TASK HISTORY -->
 <div class="card">
   <div class="card-hd">
     <h1>📋 Task History</h1>
-    <button class="ic-btn" onclick="toggleSettings()">⚙️</button>
+    <button class="ic-btn" onclick="toggleTaskHistSettings()">⚙️</button>
   </div>
 
-  <div class="settings-panel" id="settings">
-    <button id="selBtn" onclick="toggleSelMode()">☑️ سلیکٹ موڈ</button>
-    <button onclick="selectAll(true)">✅ تمام</button>
-    <button onclick="selectAll(false)">⬜ ہٹائیں</button>
-    <button onclick="editSel()">✏️ ایڈٹ</button>
-    <button class="danger" onclick="deleteSel()">🗑️ ڈیلیٹ</button>
-    <button class="danger" onclick="deleteAll(this)">❌ سب صاف</button>
-    <button onclick="toggleSettings()">🚪 بند</button>
+  <div class="settings-panel" id="taskHistSettings">
+    <button id="taskHistSelBtn" onclick="taskHistToggleSel()">☑️ سلیکٹ موڈ</button>
+    <button onclick="taskHistSelectAll(true)">✅ تمام</button>
+    <button onclick="taskHistSelectAll(false)">⬜ ہٹائیں</button>
+    <button onclick="taskHistEditSel()">✏️ ایڈٹ</button>
+    <button class="danger" onclick="taskHistDeleteSel()">🗑️ ڈیلیٹ</button>
+    <button class="danger" onclick="taskHistDeleteAll(this)">❌ سب صاف</button>
+    <button onclick="toggleTaskHistSettings()">🚪 بند</button>
   </div>
 
   <div class="filter-row">
-    <button class="filter-icon" onclick="toggleFilterMenu(event)">
-      🔍 <span id="filterLabel">سب</span>
-    </button>
-    <div class="filter-menu" id="filterMenu">
-      <button data-f="all" class="on" onclick="setFilter('all')">📋 سب</button>
-      <button data-f="today" onclick="setFilter('today')">📅 آج</button>
-      <button data-f="done" onclick="setFilter('done')">✅ ہو گیا</button>
-      <button data-f="notdone" onclick="setFilter('notdone')">❌ نہیں ہوا</button>
-      <button data-f="skip" onclick="setFilter('skip')">⚪ چھوڑا</button>
+    <button class="filter-icon" onclick="toggleTaskFilter(event)">🔍 <span id="taskFilterLabel">سب</span></button>
+    <div class="filter-menu" id="taskFilterMenu">
+      <button data-f="all" class="on" onclick="setTaskFilter('all')">📋 سب</button>
+      <button data-f="today" onclick="setTaskFilter('today')">📅 آج</button>
+      <button data-f="done" onclick="setTaskFilter('done')">✅ ہو گیا</button>
+      <button data-f="notdone" onclick="setTaskFilter('notdone')">❌ نہیں ہوا</button>
+      <button data-f="skip" onclick="setTaskFilter('skip')">⚪ چھوڑا</button>
     </div>
-
     <div class="copy-share">
-      <button onclick="copyAll()" title="کاپی">📋</button>
-      <button onclick="shareWA()" title="واٹس ایپ">📱</button>
+      <button onclick="copyTaskAll()">📋</button>
+      <button onclick="shareTaskWA()">📱</button>
     </div>
   </div>
 
   <div class="member-filter">
-    <select id="memberFilter" onchange="render()">
-      <option value="">تمام ممبران</option>
-    </select>
+    <select id="taskMemberFilter" onchange="renderTaskHist()"><option value="">تمام ممبران</option></select>
   </div>
 
-  <div class="list" id="list">
-    <div class="empty">کوئی ریکارڈ نہیں</div>
-  </div>
+  <div class="list" id="taskHistList"><div class="empty">کوئی ریکارڈ نہیں</div></div>
 
   <div class="stats">
-    <div class="stat"><div class="n" id="sTotal">0</div><div class="l">📋 کل</div></div>
-    <div class="stat"><div class="n" id="sDone">0</div><div class="l">✅ ہو گیا</div></div>
-    <div class="stat"><div class="n" id="sPoints">0</div><div class="l">🏆 پوائنٹس</div></div>
+    <div class="stat"><div class="n" id="thTotal">0</div><div class="l">📋 کل</div></div>
+    <div class="stat"><div class="n" id="thDone">0</div><div class="l">✅ ہو گیا</div></div>
+    <div class="stat"><div class="n" id="thNotDone">0</div><div class="l">❌ نہیں ہوا</div></div>
+    <div class="stat"><div class="n" id="thPoints">0</div><div class="l">🏆 پوائنٹس</div></div>
+  </div>
+</div>
+
+<!-- SKIP HISTORY -->
+<div class="card skip">
+  <div class="card-hd">
+    <h1>⛔ Skip History</h1>
+    <button class="ic-btn" onclick="toggleSkipHistSettings()">⚙️</button>
+  </div>
+
+  <div class="settings-panel" id="skipHistSettings">
+    <button id="skipHistSelBtn" onclick="skipHistToggleSel()">☑️ سلیکٹ موڈ</button>
+    <button onclick="skipHistSelectAll(true)">✅ تمام</button>
+    <button onclick="skipHistSelectAll(false)">⬜ ہٹائیں</button>
+    <button onclick="skipHistEditSel()">✏️ ایڈٹ</button>
+    <button class="danger" onclick="skipHistDeleteSel()">🗑️ ڈیلیٹ</button>
+    <button class="danger" onclick="skipHistDeleteAll(this)">❌ سب صاف</button>
+    <button onclick="toggleSkipHistSettings()">🚪 بند</button>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-icon" onclick="toggleSkipFilter(event)">🔍 <span id="skipFilterLabel">سب</span></button>
+    <div class="filter-menu" id="skipFilterMenu">
+      <button data-f="all" class="on" onclick="setSkipFilter('all')">📋 سب</button>
+      <button data-f="today" onclick="setSkipFilter('today')">📅 آج</button>
+      <button data-f="pending" onclick="setSkipFilter('pending')">⏳ وجہ نہیں</button>
+      <button data-f="done" onclick="setSkipFilter('done')">✅ وجہ دی</button>
+    </div>
+    <div class="copy-share">
+      <button onclick="copySkipAll()">📋</button>
+      <button onclick="shareSkipWA()">📱</button>
+    </div>
+  </div>
+
+  <div class="list" id="skipHistList"><div class="empty">کوئی ریکارڈ نہیں</div></div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="shTotal" style="color:#dc2626;">0</div><div class="l">📋 کل</div></div>
+    <div class="stat"><div class="n" id="shPending" style="color:#ea580c;">0</div><div class="l">⏳ وجہ نہیں</div></div>
+    <div class="stat"><div class="n" id="shDone" style="color:#16a34a;">0</div><div class="l">✅ وجہ دی</div></div>
+    <div class="stat"><div class="n" id="shSenior" style="color:#7c3aed;">0</div><div class="l">🟢 سینئر</div></div>
   </div>
 </div>
 
 <script>
-/* ═══ KEYS ═══ */
-var REC_KEY = 'sec12_task_records';
-var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var REC_KEY='sec12_task_records';
+var SKIP_KEY='sec4_duty_skipped_data';
+var DUTY_KEY='sec4_duty_manager_data_v4';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -125,198 +162,291 @@ function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
 
-var filter='all', selMode=false, selected={}, delPending=false, settingsOpen=false;
+/* ═══ TASK HISTORY ═══ */
+var taskFilter='all', taskHistSelMode=false, taskHistSelected={}, taskDelPending=false, taskHistOpen=false;
 
-function getRecords(){
-  var r=ls(REC_KEY,[]);
-  if(!Array.isArray(r)) r=[];
-  return r;
-}
+function getRecords(){var r=ls(REC_KEY,[]);return Array.isArray(r)?r:[];}
 function saveRecords(r){lss(REC_KEY,r);}
 
-/* ═══ SETTINGS ═══ */
-window.toggleSettings = function(){
-  settingsOpen=!settingsOpen;
-  $('settings').classList.toggle('open',settingsOpen);
-};
-window.toggleSelMode = function(){
-  selMode=!selMode;
-  var b=$('selBtn');
-  if(b){b.textContent=selMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',selMode);}
-  if(!selMode) selected={};
-  render();
-};
-window.selectAll = function(st){
-  if(st && !selMode) toggleSelMode();
-  selected={};
-  if(st) getFiltered().forEach(function(x){selected[x.id]=true;});
-  render();
-};
-window.editSel = function(){
-  var ids=Object.keys(selected).filter(function(k){return selected[k];});
-  if(ids.length!==1){alert('ایک ریکارڈ منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var r=getRecords();
-  var rec=r.find(function(x){return x.id===id;});
-  if(!rec) return;
-  var nv=prompt('نیا ٹاسک نام:',rec.task);
-  if(nv===null) return;
-  nv=nv.trim(); if(!nv) return;
-  rec.task=nv;
-  saveRecords(r);
-  selected={};
-  render();
-};
-window.deleteSel = function(){
-  var ids=Object.keys(selected).filter(function(k){return selected[k];});
-  if(!ids.length){alert('کچھ منتخب کریں');return;}
-  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
-  saveRecords(getRecords().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  selected={};
-  render();
-};
-window.deleteAll = function(btn){
-  if(!delPending){
-    delPending=true;
-    btn.textContent='⚠️ دوبارہ';
-    btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){delPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
-    return;
-  }
-  saveRecords([]);
-  selected={};
-  delPending=false;
-  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
-  render();
-};
+window.toggleTaskHistSettings=function(){taskHistOpen=!taskHistOpen;$('taskHistSettings').classList.toggle('open',taskHistOpen);};
+window.toggleTaskFilter=function(e){e.stopPropagation();$('taskFilterMenu').classList.toggle('open');};
+document.addEventListener('click',function(){var m=$('taskFilterMenu');if(m)m.classList.remove('open');var s=$('skipFilterMenu');if(s)s.classList.remove('open');});
 
-/* ═══ FILTER ═══ */
-window.toggleFilterMenu = function(e){
-  e.stopPropagation();
-  $('filterMenu').classList.toggle('open');
-};
-document.addEventListener('click',function(){
-  $('filterMenu').classList.remove('open');
-});
-window.setFilter = function(f){
-  filter=f;
-  document.querySelectorAll('#filterMenu button').forEach(function(b){
-    b.classList.toggle('on',b.dataset.f===f);
-  });
+window.setTaskFilter=function(f){
+  taskFilter=f;
+  document.querySelectorAll('#taskFilterMenu button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f);});
   var labels={all:'سب',today:'آج',done:'ہو گیا',notdone:'نہیں ہوا',skip:'چھوڑا'};
-  $('filterLabel').textContent=labels[f]||'سب';
-  $('filterMenu').classList.remove('open');
-  render();
+  $('taskFilterLabel').textContent=labels[f]||'سب';
+  $('taskFilterMenu').classList.remove('open');
+  renderTaskHist();
 };
 
-function getFiltered(){
-  var recs=getRecords();
-  var mf=$('memberFilter');
+function getTaskFiltered(){
+  var r=getRecords();
+  var mf=$('taskMemberFilter');
   var mname=mf?mf.value:'';
-  if(mname) recs=recs.filter(function(r){return r.member===mname;});
-
-  if(filter==='today'){
+  if(mname) r=r.filter(function(x){return x.member===mname;});
+  if(taskFilter==='today'){
     var d=new Date();
     var today=pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
-    recs=recs.filter(function(r){return r.dateStr===today;});
-  } else if(filter==='done'){
-    recs=recs.filter(function(r){return r.status==='done';});
-  } else if(filter==='notdone'){
-    recs=recs.filter(function(r){return r.status==='notdone';});
-  } else if(filter==='skip'){
-    recs=recs.filter(function(r){return r.status==='skip';});
-  }
-  return recs;
+    r=r.filter(function(x){return x.dateStr===today;});
+  } else if(taskFilter==='done') r=r.filter(function(x){return x.status==='done';});
+  else if(taskFilter==='notdone') r=r.filter(function(x){return x.status==='notdone';});
+  else if(taskFilter==='skip') r=r.filter(function(x){return x.status==='skip';});
+  return r;
 }
 
-/* ═══ RENDER ═══ */
-function render(){
+function renderTaskHist(){
   var all=getRecords();
-  var list=getFiltered();
+  var list=getTaskFiltered();
 
-  $('sTotal').textContent=list.length;
-  $('sDone').textContent=list.filter(function(r){return r.status==='done';}).length;
-  var pts=0;
-  list.forEach(function(r){pts+=(r.points||0);});
-  $('sPoints').textContent=pts;
+  $('thTotal').textContent=list.length;
+  $('thDone').textContent=list.filter(function(r){return r.status==='done';}).length;
+  $('thNotDone').textContent=list.filter(function(r){return r.status==='notdone';}).length;
+  var pts=0;list.forEach(function(r){pts+=(r.points||0);});
+  $('thPoints').textContent=pts;
 
-  // populate member filter
-  var mf=$('memberFilter');
+  var mf=$('taskMemberFilter');
   if(mf){
     var cur=mf.value;
     mf.innerHTML='<option value="">تمام ممبران</option>';
-    var names={};
-    all.forEach(function(r){names[r.member]=true;});
+    var names={};all.forEach(function(r){names[r.member]=true;});
     Object.keys(names).forEach(function(n){mf.appendChild(new Option(n,n));});
     if(cur) mf.value=cur;
   }
 
-  var box=$('list');
-  if(!list.length){
-    box.innerHTML='<div class="empty">اس فلٹر میں کوئی ریکارڈ نہیں</div>';
-    return;
-  }
+  var box=$('taskHistList');
+  if(!list.length){box.innerHTML='<div class="empty">کوئی ریکارڈ نہیں</div>';return;}
+
+  var memberTotals={};
+  list.forEach(function(r){
+    if(!memberTotals[r.member]) memberTotals[r.member]={points:0,count:0};
+    memberTotals[r.member].points+=(r.points||0);
+    memberTotals[r.member].count++;
+  });
+
   box.innerHTML=list.map(function(r){
-    var isSel=!!selected[r.id];
-    var stLbl = r.status==='done'?'✅ ہو گیا':(r.status==='notdone'?'❌ نہیں ہوا':'⚪ چھوڑا');
-    var stCls = r.status==='done'?'done':(r.status==='notdone'?'notdone':'skip');
-    var cb=selMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="toggleOne('+r.id+')">':'';
-    var ptsBadge = r.points>0 ? '<span class="pts">🏆 '+r.points+'</span>' : '';
-    return '<div class="item'+(selMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+
+    var isSel=!!taskHistSelected[r.id];
+    var stLbl=r.status==='done'?'✅ ہو گیا':(r.status==='notdone'?'❌ نہیں ہوا':'⚪ چھوڑا');
+    var stCls=r.status==='done'?'done':(r.status==='notdone'?'notdone':'skip');
+    var typeLbl=r.type==='Daily'?'📅 روزانہ':'⭐ کبھی کبھی';
+    var typeCls=r.type==='Daily'?'daily':'occasional';
+    var cb=taskHistSelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="taskHistToggleOne('+r.id+')">':'';
+    return '<div class="item '+stCls+(taskHistSelMode?' sel-on':'')+'" style="'+(isSel?'background:#fef3c7;':'')+'">'+
       cb+
       '<div class="info">'+
-        '<div class="row1"><span class="member">👤 '+esc(r.member)+'</span><span class="st '+stCls+'">'+stLbl+'</span>'+ptsBadge+'</div>'+
-        '<div class="task">📌 '+esc(r.task)+'</div>'+
-        '<div class="meta" style="margin-top:3px;">'+esc(r.dateStr)+' — '+esc(r.timeStr)+'</div>'+
+        '<div class="row1"><span class="member">👤 '+esc(r.member)+'</span><span class="badge '+typeCls+'">'+typeLbl+'</span><span class="st '+stCls+'">'+stLbl+'</span></div>'+
+        '<div class="detail">'+
+          '<div class="ln"><span class="k">📌 کام:</span><span class="v">'+esc(r.task)+'</span></div>'+
+          '<div class="ln"><span class="k">🏆 پوائنٹ:</span><span class="v">'+(r.points||0)+'</span></div>'+
+          '<div class="ln"><span class="k">📊 حالت:</span><span class="v">'+stLbl+'</span></div>'+
+          '<div class="ln"><span class="k">📅 تاریخ:</span><span class="v">'+esc(r.dateStr)+' — '+esc(r.timeStr)+'</span></div>'+
+        '</div>'+
+        '<div class="points-big">🏆 '+(memberTotals[r.member]?memberTotals[r.member].points:0)+' پوائنٹس ('+esc(r.member)+')</div>'+
       '</div>'+
     '</div>';
   }).join('');
 }
-window.toggleOne = function(id){
-  if(selected[id]) delete selected[id];
-  else selected[id]=true;
-  render();
+window.taskHistToggleOne=function(id){if(taskHistSelected[id]) delete taskHistSelected[id];else taskHistSelected[id]=true;renderTaskHist();};
+window.taskHistToggleSel=function(){
+  taskHistSelMode=!taskHistSelMode;
+  var b=$('taskHistSelBtn');if(b){b.textContent=taskHistSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',taskHistSelMode);}
+  if(!taskHistSelMode) taskHistSelected={};
+  renderTaskHist();
 };
-
-/* ═══ COPY / SHARE ═══ */
-function getShareText(){
-  var list=getFiltered();
+window.taskHistSelectAll=function(st){
+  if(st&&!taskHistSelMode) taskHistToggleSel();
+  taskHistSelected={};
+  if(st) getTaskFiltered().forEach(function(x){taskHistSelected[x.id]=true;});
+  renderTaskHist();
+};
+window.taskHistEditSel=function(){
+  var ids=Object.keys(taskHistSelected).filter(function(k){return taskHistSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),r=getRecords();
+  var rec=r.find(function(x){return x.id===id;});if(!rec) return;
+  var nv=prompt('نیا کام:',rec.task);if(nv===null) return;
+  rec.task=nv.trim();
+  saveRecords(r);taskHistSelected={};renderTaskHist();
+};
+window.taskHistDeleteSel=function(){
+  var ids=Object.keys(taskHistSelected).filter(function(k){return taskHistSelected[k];});
+  if(!ids.length){alert('کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ڈیلیٹ کریں؟')) return;
+  saveRecords(getRecords().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  taskHistSelected={};renderTaskHist();
+};
+window.taskHistDeleteAll=function(btn){
+  if(!taskDelPending){taskDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){taskDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);return;}
+  saveRecords([]);taskHistSelected={};taskDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderTaskHist();
+};
+window.copyTaskAll=function(){
+  var list=getTaskFiltered();
   var lines=['📋 Task History','━━━━━━━━━━━━━━━━━━'];
-  list.slice(0,30).forEach(function(r){
-    var stLbl = r.status==='done'?'✅':(r.status==='notdone'?'❌':'⚪');
-    lines.push(stLbl+' '+r.member+' — '+r.task+(r.points>0?' ('+r.points+')':''));
-    lines.push(r.dateStr+' '+r.timeStr);
+  list.slice(0,50).forEach(function(r){
+    var st=r.status==='done'?'✅':(r.status==='notdone'?'❌':'⚪');
+    lines.push(st+' '+r.member+' — '+r.task);
+    lines.push('   پوائنٹ: '+(r.points||0)+' | '+(r.type==='Daily'?'روزانہ':'کبھی کبھی'));
+    lines.push('   '+r.dateStr+' '+r.timeStr);
   });
   lines.push('━━━━━━━━━━━━━━━━━━');
-  lines.push('کل: '+list.length+' ریکارڈ');
-  return lines.join('\n');
-}
-window.copyAll = function(){
-  var txt=getShareText();
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(txt).then(function(){
-      alert('✅ کاپی ہو گیا');
-    });
-  } else {
-    var ta=document.createElement('textarea');
-    ta.value=txt;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    alert('✅ کاپی ہو گیا');
-  }
+  var pts=0;list.forEach(function(r){pts+=(r.points||0);});
+  lines.push('کل: '+list.length+' | پوائنٹس: '+pts);
+  copyText(lines.join('\n'));
 };
-window.shareWA = function(){
-  var txt=getShareText();
-  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+window.shareTaskWA=function(){
+  var list=getTaskFiltered();
+  var lines=['📋 Task History','━━━━━━━━━━━━━━━━━━'];
+  list.slice(0,50).forEach(function(r){
+    var st=r.status==='done'?'✅':(r.status==='notdone'?'❌':'⚪');
+    lines.push(st+' '+r.member+' — '+r.task+' ('+(r.points||0)+')');
+  });
+  lines.push('━━━━━━━━━━━━━━━━━━');
+  window.open('https://wa.me/?text='+encodeURIComponent(lines.join('\n')),'_blank');
 };
 
+/* ═══ SKIP HISTORY ═══ */
+var skipFilter='all', skipHistSelMode=false, skipHistSelected={}, skipHistDelPending=false, skipHistOpen=false;
+
+function getSkipList(){var s=ls(SKIP_KEY,[]);return Array.isArray(s)?s:[];}
+function saveSkipList(s){lss(SKIP_KEY,s);}
+function getMembersList(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
+function getMemberRank(name){
+  var m=getMembersList().find(function(x){return x.name===name;});
+  return m?m.rank:'Junior';
+}
+
+window.toggleSkipHistSettings=function(){skipHistOpen=!skipHistOpen;$('skipHistSettings').classList.toggle('open',skipHistOpen);};
+window.toggleSkipFilter=function(e){e.stopPropagation();$('skipFilterMenu').classList.toggle('open');};
+window.setSkipFilter=function(f){
+  skipFilter=f;
+  document.querySelectorAll('#skipFilterMenu button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f);});
+  var labels={all:'سب',today:'آج',pending:'وجہ نہیں',done:'وجہ دی'};
+  $('skipFilterLabel').textContent=labels[f]||'سب';
+  $('skipFilterMenu').classList.remove('open');
+  renderSkipHist();
+};
+function getSkipFiltered(){
+  var s=getSkipList();
+  if(skipFilter==='today'){
+    var d=new Date();
+    var todayPrefix=pad(d.getDate())+'/'+pad(d.getMonth()+1);
+    s=s.filter(function(x){var t=new Date(x.timestamp);return (pad(t.getDate())+'/'+pad(t.getMonth()+1))===todayPrefix;});
+  } else if(skipFilter==='pending') s=s.filter(function(x){return !x.hasReason;});
+  else if(skipFilter==='done') s=s.filter(function(x){return x.hasReason;});
+  return s;
+}
+function renderSkipHist(){
+  var all=getSkipList();
+  var list=getSkipFiltered();
+  $('shTotal').textContent=list.length;
+  $('shPending').textContent=list.filter(function(x){return !x.hasReason;}).length;
+  $('shDone').textContent=list.filter(function(x){return x.hasReason;}).length;
+  $('shSenior').textContent=list.filter(function(x){return getMemberRank(x.member)==='Senior';}).length;
+
+  var box=$('skipHistList');
+  if(!list.length){box.innerHTML='<div class="empty">کوئی ریکارڈ نہیں</div>';return;}
+  box.innerHTML=list.map(function(x){
+    var isSel=!!skipHistSelected[x.id];
+    var rank=getMemberRank(x.member);
+    var d=new Date(x.timestamp);
+    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    var stLbl=x.hasReason?'✅ وجہ دی':'⏳ وجہ نہیں';
+    var stCls=x.hasReason?'done':'notdone';
+    var cb=skipHistSelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="skipHistToggleOne('+x.id+')">':'';
+    return '<div class="item skip-item '+stCls+(skipHistSelMode?' sel-on':'')+'" style="'+(isSel?'background:#fef3c7;':'')+'">'+
+      cb+
+      '<div class="info">'+
+        '<div class="row1"><span class="member">👤 '+esc(x.member)+'</span><span class="badge '+(rank==='Senior'?'daily':'occasional')+'">'+(rank==='Senior'?'🟢 سینئر':'🔵 جونیئر')+'</span><span class="st '+stCls+'">'+stLbl+'</span></div>'+
+        '<div class="detail">'+
+          '<div class="ln"><span class="k">📌 کام:</span><span class="v">'+esc(x.task)+'</span></div>'+
+          '<div class="ln"><span class="k">📝 وجہ:</span><span class="v">'+(x.reason?esc(x.reason):'—')+'</span></div>'+
+          '<div class="ln"><span class="k">📅 تاریخ:</span><span class="v">'+dateStr+'</span></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+window.skipHistToggleOne=function(id){if(skipHistSelected[id]) delete skipHistSelected[id];else skipHistSelected[id]=true;renderSkipHist();};
+window.skipHistToggleSel=function(){
+  skipHistSelMode=!skipHistSelMode;
+  var b=$('skipHistSelBtn');if(b){b.textContent=skipHistSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',skipHistSelMode);}
+  if(!skipHistSelMode) skipHistSelected={};
+  renderSkipHist();
+};
+window.skipHistSelectAll=function(st){
+  if(st&&!skipHistSelMode) skipHistToggleSel();
+  skipHistSelected={};
+  if(st) getSkipFiltered().forEach(function(x){skipHistSelected[x.id]=true;});
+  renderSkipHist();
+};
+window.skipHistEditSel=function(){
+  var ids=Object.keys(skipHistSelected).filter(function(k){return skipHistSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),s=getSkipList();
+  var r=s.find(function(x){return x.id===id;});if(!r) return;
+  var nv=prompt('نئی وجہ:',r.reason||'');if(nv===null) return;
+  r.reason=nv.trim();r.hasReason=!!nv.trim();
+  saveSkipList(s);skipHistSelected={};renderSkipHist();
+};
+window.skipHistDeleteSel=function(){
+  var ids=Object.keys(skipHistSelected).filter(function(k){return skipHistSelected[k];});
+  if(!ids.length){alert('کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ڈیلیٹ کریں؟')) return;
+  saveSkipList(getSkipList().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  skipHistSelected={};renderSkipHist();
+};
+window.skipHistDeleteAll=function(btn){
+  if(!skipHistDelPending){skipHistDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){skipHistDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);return;}
+  saveSkipList([]);skipHistSelected={};skipHistDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderSkipHist();
+};
+window.copySkipAll=function(){
+  var list=getSkipFiltered();
+  var lines=['⛔ Skip History','━━━━━━━━━━━━━━━━━━'];
+  list.slice(0,50).forEach(function(x){
+    var st=x.hasReason?'✅':'⏳';
+    lines.push(st+' '+x.member+' — '+x.task);
+    if(x.reason) lines.push('   وجہ: '+x.reason);
+    var d=new Date(x.timestamp);
+    lines.push('   '+pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes()));
+  });
+  lines.push('━━━━━━━━━━━━━━━━━━');
+  lines.push('کل: '+list.length);
+  copyText(lines.join('\n'));
+};
+window.shareSkipWA=function(){
+  var list=getSkipFiltered();
+  var lines=['⛔ Skip History','━━━━━━━━━━━━━━━━━━'];
+  list.slice(0,50).forEach(function(x){
+    var st=x.hasReason?'✅':'⏳';
+    lines.push(st+' '+x.member+' — '+x.task);
+    if(x.reason) lines.push('   وجہ: '+x.reason);
+  });
+  lines.push('━━━━━━━━━━━━━━━━━━');
+  window.open('https://wa.me/?text='+encodeURIComponent(lines.join('\n')),'_blank');
+};
+
+function copyText(txt){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(function(){alert('✅ کاپی ہو گیا');});
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=txt;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    alert('✅ کاپی ہو گیا');
+  }
+}
+
 /* ═══ INIT ═══ */
-render();
-setInterval(render,2500);
+renderTaskHist();renderSkipHist();
+setInterval(function(){renderTaskHist();renderSkipHist();},2500);
 window.addEventListener('storage',function(e){
-  if(e.key===REC_KEY) render();
+  if(e.key===REC_KEY) renderTaskHist();
+  if(e.key===SKIP_KEY) renderSkipHist();
 });
 </script>
 </body>
