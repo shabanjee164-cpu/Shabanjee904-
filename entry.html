@@ -7,20 +7,23 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
-.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #2563eb;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08);position:relative}
 .card.task{border-right-color:#16a34a}
 .card.news{border-right-color:#ea580c}
-.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #dbeafe;gap:6px}
+.card.skip{border-right-color:#dc2626}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe;gap:6px}
 .card.task .card-hd{border-color:#bbf7d0}
 .card.news .card-hd{border-color:#fed7aa}
-h1{font-size:16px;color:#2563eb}
+.card.skip .card-hd{border-color:#fecaca}
+h1{font-size:16px;color:#7c3aed}
 .card.task h1{color:#16a34a}
 .card.news h1{color:#ea580c}
-.ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.card.skip h1{color:#dc2626}
+.hidden-dot{position:absolute;top:12px;left:12px;width:20px;height:20px;border-radius:50%;background:transparent;border:none;cursor:pointer;font-size:8px;opacity:.15;color:#64748b;font-family:inherit}
+.hidden-dot:hover{opacity:.6}
 label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
 select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none;background:#fff}
-select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.btn{width:100%;padding:11px;background:#2563eb;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
 .btn.green{background:#16a34a}
 .btn.orange{background:#ea580c}
 .btn.red{background:#dc2626}
@@ -29,13 +32,15 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
 .item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;margin-bottom:5px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}
-.item .cb{width:16px;height:16px;accent-color:#16a34a;cursor:pointer;flex-shrink:0;display:none}
+.item .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;display:none}
 .item.sel-on .cb{display:inline-block}
 .item .info{flex:1;min-width:0}
 .item .name{color:#1e293b;font-weight:800;font-size:13px}
 .item .badge{background:#dcfce7;color:#15803d;font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;display:inline-block;margin-left:4px}
 .item .badge.occasional{background:#fef3c7;color:#92400e}
+.item .badge.rank{background:#ede9fe;color:#6d28d9}
 .item .points{background:#fef9c3;color:#854d0e;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:800}
+.item .del{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;flex-shrink:0}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
 .stat .n{font-size:18px;font-weight:900;color:#16a34a}
@@ -43,8 +48,6 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
 .msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
 .msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
 .msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
-
-/* Settings panel */
 .settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:10px;margin-bottom:12px}
 .settings-panel.open{display:block}
 .settings-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
@@ -53,8 +56,6 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
 .settings-actions button.active{background:#16a34a;color:#fff;border-color:#16a34a}
 .settings-actions button.lock-btn{background:#fef3c7;color:#92400e;border-color:#fcd34d}
 .settings-actions button.lock-btn.on{background:#dc2626;color:#fff;border-color:#dc2626}
-
-/* Lock screen */
 .lock-screen{display:none;background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;padding:20px;text-align:center;margin-bottom:12px}
 .lock-screen.show{display:block}
 .lock-screen h3{color:#dc2626;font-size:14px;margin-bottom:12px}
@@ -62,20 +63,15 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
 .lock-screen button{padding:9px 20px;margin:0 4px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
 .lock-screen .unlock{background:#16a34a;color:#fff}
 .lock-screen .forgot{background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1}
-.hidden-dot{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:transparent;border:none;cursor:pointer;font-size:8px;opacity:.15;color:#64748b;font-family:inherit}
-.hidden-dot:hover{opacity:.6}
 </style>
 </head>
 <body>
 
-<!-- ═══ TASK MANAGER CARD ═══ -->
-<div class="card task" style="position:relative;">
-  <button class="hidden-dot" onclick="toggleTaskSettings()" title="">·</button>
-  <div class="card-hd">
-    <h1>📋 Task And Point Manager</h1>
-  </div>
+<!-- ═══ TASK MANAGER ═══ -->
+<div class="card task">
+  <button class="hidden-dot" onclick="toggleTaskSettings()">·</button>
+  <div class="card-hd"><h1>📋 Task And Point Manager</h1></div>
 
-  <!-- Lock Screen -->
   <div class="lock-screen" id="taskLockScreen">
     <h3>🔒 سیکشن لاک ہے</h3>
     <input type="password" id="taskLockPass" placeholder="••••" maxlength="8">
@@ -85,7 +81,6 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
     </div>
   </div>
 
-  <!-- Settings Panel -->
   <div class="settings-panel" id="taskSettings">
     <div class="settings-actions">
       <button id="taskSelBtn" onclick="taskToggleSelMode()">☑️ سلیکٹ موڈ</button>
@@ -101,11 +96,9 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
     </div>
   </div>
 
-  <!-- Content -->
   <div id="taskContent">
     <label>کام کا نام</label>
     <input type="text" id="taskName" placeholder="کام کا نام درج کریں...">
-
     <div class="row3" style="margin-top:8px;">
       <div>
         <label style="margin-top:0;">قسم</label>
@@ -116,20 +109,15 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
       </div>
       <div>
         <label style="margin-top:0;">پوائنٹس</label>
-        <input type="number" id="taskPoints" placeholder="5" min="1" value="5">
+        <input type="number" id="taskPoints" value="5" min="1">
       </div>
       <div style="display:flex;align-items:flex-end;">
         <button class="btn green" style="margin-top:0;" onclick="taskAdd()">➕ شامل</button>
       </div>
     </div>
-
     <div class="msg" id="taskMsg"></div>
-
     <label style="margin-top:14px;">📋 ٹاسک لسٹ (<span id="taskCount">0</span>)</label>
-    <div class="list" id="taskList">
-      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div>
-    </div>
-
+    <div class="list" id="taskList"><div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div></div>
     <div class="stats">
       <div class="stat"><div class="n" id="taskTotalCount">0</div><div class="l">📋 کل ٹاسک</div></div>
       <div class="stat"><div class="n" id="taskTotalPoints">0</div><div class="l">🏆 کل پوائنٹس</div></div>
@@ -137,13 +125,51 @@ select:focus,input:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,23
   </div>
 </div>
 
+<!-- ═══ SKIP SECTION ═══ -->
+<div class="card skip">
+  <button class="hidden-dot" onclick="toggleSkipSettings()">·</button>
+  <div class="card-hd"><h1>⛔ Skip Section</h1></div>
+
+  <div class="lock-screen" id="skipLockScreen">
+    <h3>🔒 سیکشن لاک ہے</h3>
+    <input type="password" id="skipLockPass" placeholder="••••" maxlength="8">
+    <div>
+      <button class="unlock" onclick="unlockSkip()">🔓 کھولیں</button>
+      <button class="forgot" onclick="forgotSkipPass()">❓ بھول گیا</button>
+    </div>
+  </div>
+
+  <div class="settings-panel" id="skipSettings">
+    <div class="settings-actions">
+      <button id="skipSelBtn" onclick="skipToggleSelMode()">☑️ سلیکٹ موڈ</button>
+      <button onclick="skipSelectAll(true)">✅ تمام</button>
+      <button onclick="skipSelectAll(false)">⬜ ہٹائیں</button>
+      <button onclick="skipEditSel()">✏️ ایڈٹ</button>
+      <button onclick="skipMoveUp()">🔼 اوپر</button>
+      <button onclick="skipMoveDown()">🔽 نیچے</button>
+      <button class="danger" onclick="skipDeleteSel()">🗑️ ڈیلیٹ</button>
+      <button class="danger" onclick="skipDeleteAll(this)">❌ سب صاف</button>
+      <button class="lock-btn" id="skipLockBtn" onclick="skipToggleLock()">🔒 سیکشن لاک</button>
+      <button onclick="toggleSkipSettings()">🚪 بند</button>
+    </div>
+  </div>
+
+  <div id="skipContent">
+    <label>Skip Records (<span id="skipCount">0</span>)</label>
+    <div class="list" id="skipList" style="max-height:300px;"><div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی ریکارڈ نہیں</div></div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="skipTotal" style="color:#dc2626;">0</div><div class="l">📋 کل</div></div>
+      <div class="stat"><div class="n" id="skipPending" style="color:#ea580c;">0</div><div class="l">⏳ وجہ نہیں</div></div>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ═══════════════════════════════════════
-   KEYS
-   ═══════════════════════════════════════ */
-var TASK_KEY = 'sec3_task_and_point_manager_data';
-var LOCK_KEY = 'sec_task_lock';
-var PASS_KEY = 'sec_task_password';
+/* ═══ KEYS ═══ */
+var TASK_KEY='sec3_task_and_point_manager_data';
+var SKIP_KEY='sec4_duty_skipped_data';
+var TASK_LOCK='sec_task_lock', TASK_PASS='sec_task_password';
+var SKIP_LOCK='sec_skip_lock', SKIP_PASS='sec_skip_password';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -151,219 +177,237 @@ function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
 
+/* ═══ TASK ═══ */
 var taskSelMode=false, taskSelected={}, taskDelPending=false;
 
-function getTasks(){
-  var t=ls(TASK_KEY,[]);
-  if(!Array.isArray(t)) t=[];
-  return t;
-}
+function getTasks(){var t=ls(TASK_KEY,[]);return Array.isArray(t)?t:[];}
 function saveTasks(t){lss(TASK_KEY,t);}
 
-/* ═══ ADD ═══ */
-window.taskAdd = function(){
+window.toggleTaskSettings=function(){$('taskSettings').classList.toggle('open');};
+
+window.taskAdd=function(){
   var name=$('taskName').value.trim();
   var type=$('taskType').value;
   var pts=parseInt($('taskPoints').value,10)||5;
-  if(!name){showTaskMsg('⚠️ نام لکھیں','err');$('taskName').focus();return;}
+  if(!name){showTaskMsg('نام لکھیں','err');return;}
   var t=getTasks();
   t.unshift({id:Date.now(),title:name,type:type,points:pts,selected:false});
   saveTasks(t);
-  $('taskName').value='';
-  $('taskPoints').value='5';
-  showTaskMsg('✅ ٹاسک شامل ہو گیا','ok');
+  $('taskName').value='';$('taskPoints').value='5';
+  showTaskMsg('✅ ٹاسک شامل','ok');
   renderTasks();
 };
-
 function showTaskMsg(msg,type){
-  var m=$('taskMsg');
-  m.textContent=msg;
-  m.className='msg '+type;
+  var m=$('taskMsg');m.textContent=msg;m.className='msg '+type;
   setTimeout(function(){m.className='msg';},2500);
 }
 
-/* ═══ RENDER ═══ */
 function renderTasks(){
   var t=getTasks();
   $('taskCount').textContent=t.length;
   $('taskTotalCount').textContent=t.length;
-  var totalPts=0;
-  t.forEach(function(x){totalPts+=(parseInt(x.points,10)||0);});
-  $('taskTotalPoints').textContent=totalPts;
-
+  var pts=0;t.forEach(function(x){pts+=(x.points||0);});
+  $('taskTotalPoints').textContent=pts;
   var box=$('taskList');
-  if(!t.length){
-    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div>';
-    return;
-  }
+  if(!t.length){box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div>';return;}
   box.innerHTML=t.map(function(x){
     var isSel=!!taskSelected[x.id];
-    var tb = x.type==='Daily' ? '<span class="badge">📅 روزانہ</span>' : '<span class="badge occasional">⭐ کبھی کبھی</span>';
-    var cb = '<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="taskToggleSel('+x.id+')">';
+    var tb=x.type==='Daily'?'<span class="badge">📅 روزانہ</span>':'<span class="badge occasional">⭐ کبھی کبھی</span>';
+    var cb='<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="taskToggleSel('+x.id+')">';
     return '<div class="item'+(taskSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+
-      cb+
-      '<div class="info">'+
-        '<div><span class="name">'+esc(x.title)+'</span>'+tb+' <span class="points">🏆 '+x.points+'</span></div>'+
-      '</div>'+
-    '</div>';
+      cb+'<div class="info"><div><span class="name">'+esc(x.title)+'</span>'+tb+' <span class="points">🏆 '+x.points+'</span></div></div></div>';
   }).join('');
 }
-
-/* ═══ SELECT ═══ */
-window.taskToggleSel = function(id){
-  if(taskSelected[id]) delete taskSelected[id];
-  else taskSelected[id]=true;
-  renderTasks();
-};
-window.taskToggleSelMode = function(){
+window.taskToggleSel=function(id){if(taskSelected[id]) delete taskSelected[id];else taskSelected[id]=true;renderTasks();};
+window.taskToggleSelMode=function(){
   taskSelMode=!taskSelMode;
-  var b=$('taskSelBtn');
-  if(b){b.textContent=taskSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',taskSelMode);}
+  var b=$('taskSelBtn');if(b){b.textContent=taskSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',taskSelMode);}
   if(!taskSelMode) taskSelected={};
   renderTasks();
 };
-window.taskSelectAll = function(st){
-  if(st && !taskSelMode) taskToggleSelMode();
+window.taskSelectAll=function(st){
+  if(st&&!taskSelMode) taskToggleSelMode();
   taskSelected={};
   if(st) getTasks().forEach(function(x){taskSelected[x.id]=true;});
   renderTasks();
 };
-
-/* ═══ EDIT ═══ */
-window.taskEditSel = function(){
+window.taskEditSel=function(){
   var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
-  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
   var id=parseInt(ids[0],10);
   var t=getTasks();
-  var rec=t.find(function(x){return x.id===id;});
-  if(!rec) return;
-  var nv=prompt('نیا نام:',rec.title);
-  if(nv===null) return;
-  nv=nv.trim(); if(!nv) return;
-  rec.title=nv;
-  var nv2=prompt('نئے پوائنٹس:',rec.points);
-  if(nv2!==null){
-    var p=parseInt(nv2,10);
-    if(p>0) rec.points=p;
-  }
-  saveTasks(t);
-  taskSelected={};
-  renderTasks();
+  var r=t.find(function(x){return x.id===id;});if(!r) return;
+  var nv=prompt('نیا نام:',r.title);if(nv===null) return;
+  nv=nv.trim();if(!nv) return;
+  r.title=nv;
+  var np=prompt('نئے پوائنٹس:',r.points);
+  if(np!==null){var p=parseInt(np,10);if(p>0) r.points=p;}
+  saveTasks(t);taskSelected={};renderTasks();
 };
-
-/* ═══ MOVE ═══ */
-window.taskMoveUp = function(){
+window.taskMoveUp=function(){
   var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
-  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var t=getTasks();
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),t=getTasks();
   var i=t.findIndex(function(x){return x.id===id;});
   if(i>0){var tmp=t[i];t[i]=t[i-1];t[i-1]=tmp;saveTasks(t);renderTasks();}
 };
-window.taskMoveDown = function(){
+window.taskMoveDown=function(){
   var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
-  if(ids.length!==1){alert('ایک ٹاسک منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var t=getTasks();
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),t=getTasks();
   var i=t.findIndex(function(x){return x.id===id;});
-  if(i>=0 && i<t.length-1){var tmp=t[i];t[i]=t[i+1];t[i+1]=tmp;saveTasks(t);renderTasks();}
+  if(i>=0&&i<t.length-1){var tmp=t[i];t[i]=t[i+1];t[i+1]=tmp;saveTasks(t);renderTasks();}
 };
-
-/* ═══ DELETE ═══ */
-window.taskDeleteSel = function(){
+window.taskDeleteSel=function(){
   var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
   if(!ids.length){alert('کچھ منتخب کریں');return;}
-  if(!confirm(ids.length+' ٹاسک ڈیلیٹ کریں؟')) return;
-  var t=getTasks().filter(function(x){return ids.indexOf(String(x.id))===-1;});
-  saveTasks(t);
-  taskSelected={};
-  renderTasks();
+  if(!confirm(ids.length+' ڈیلیٹ کریں؟')) return;
+  saveTasks(getTasks().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  taskSelected={};renderTasks();
 };
-window.taskDeleteAll = function(btn){
-  if(!taskDelPending){
-    taskDelPending=true;
-    btn.textContent='⚠️ دوبارہ';
-    btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){taskDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
-    return;
-  }
-  saveTasks([]);
-  taskSelected={};
-  taskDelPending=false;
-  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
-  renderTasks();
+window.taskDeleteAll=function(btn){
+  if(!taskDelPending){taskDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){taskDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);return;}
+  saveTasks([]);taskSelected={};taskDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderTasks();
 };
+window.toggleTaskSettings=function(){$('taskSettings').classList.toggle('open');};
 
-/* ═══ SETTINGS TOGGLE ═══ */
-window.toggleTaskSettings = function(){
-  $('taskSettings').classList.toggle('open');
+/* Task Lock */
+function isTaskLocked(){var s=ls(TASK_LOCK,{});return s.locked===true;}
+function setTaskLock(l){var s=ls(TASK_LOCK,{});s.locked=l;lss(TASK_LOCK,s);}
+function getTaskPass(){return ls(TASK_PASS,'1234')||'1234';}
+function applyTaskLock(){
+  if(isTaskLocked()){$('taskLockScreen').classList.add('show');$('taskContent').style.display='none';
+    $('taskLockBtn').textContent='🔓 انلاک';$('taskLockBtn').classList.add('on');}
+  else{$('taskLockScreen').classList.remove('show');$('taskContent').style.display='block';
+    $('taskLockBtn').textContent='🔒 سیکشن لاک';$('taskLockBtn').classList.remove('on');}
+}
+window.taskToggleLock=function(){
+  if(isTaskLocked()){setTaskLock(false);applyTaskLock();return;}
+  var np=prompt('نیا پاس ورڈ (default 1234):','1234');if(np===null) return;
+  np=np.trim();if(np.length<4){alert('کم از کم 4');return;}
+  lss(TASK_PASS,np);setTaskLock(true);applyTaskLock();alert('🔒 لاک ہو گیا');
 };
-
-/* ═══ LOCK SYSTEM ═══ */
-function isLocked(){
-  var s=ls(LOCK_KEY,{});
-  return s.locked===true;
-}
-function setLock(locked){
-  var s=ls(LOCK_KEY,{});
-  s.locked=locked;
-  lss(LOCK_KEY,s);
-}
-function getPass(){
-  return ls(PASS_KEY,'1234') || '1234';
-}
-function applyLockUI(){
-  if(isLocked()){
-    $('taskLockScreen').classList.add('show');
-    $('taskContent').style.display='none';
-    $('taskLockBtn').textContent='🔓 سیکشن انلاک';
-    $('taskLockBtn').classList.add('on');
-  } else {
-    $('taskLockScreen').classList.remove('show');
-    $('taskContent').style.display='block';
-    $('taskLockBtn').textContent='🔒 سیکشن لاک';
-    $('taskLockBtn').classList.remove('on');
-  }
-}
-window.taskToggleLock = function(){
-  if(isLocked()){
-    setLock(false);
-    applyLockUI();
-    return;
-  }
-  var np=prompt('نیا پاس ورڈ (default 1234):','1234');
-  if(np===null) return;
-  np=np.trim();
-  if(np.length<4){alert('کم از کم 4 ہندسے');return;}
-  lss(PASS_KEY,np);
-  setLock(true);
-  applyLockUI();
-  alert('🔒 سیکشن لاک ہو گیا\nپاس ورڈ: '+np);
-};
-window.unlockTask = function(){
+window.unlockTask=function(){
   var p=$('taskLockPass').value;
-  if(p===getPass()){
-    setLock(false);
-    applyLockUI();
-    $('taskLockPass').value='';
-  } else {
-    alert('❌ غلط پاس ورڈ');
-  }
+  if(p===getTaskPass()){setTaskLock(false);applyTaskLock();$('taskLockPass').value='';}
+  else alert('❌ غلط پاس ورڈ');
 };
-window.forgotTaskPass = function(){
-  if(!confirm('پاس ورڈ ری سیٹ ہو جائے گا (1234)۔ جاری رکھیں؟')) return;
-  lss(PASS_KEY,'1234');
-  setLock(false);
-  applyLockUI();
-  alert('✅ پاس ورڈ 1234 پر ری سیٹ');
+window.forgotTaskPass=function(){
+  if(!confirm('پاس ورڈ 1234 پر ری سیٹ؟')) return;
+  lss(TASK_PASS,'1234');setTaskLock(false);applyTaskLock();
 };
+
+/* ═══ SKIP ═══ */
+var skipSelMode=false, skipSelected={}, skipDelPending=false;
+
+function getSkippedList(){var s=ls(SKIP_KEY,[]);return Array.isArray(s)?s:[];}
+function saveSkippedList(s){lss(SKIP_KEY,s);}
+
+window.toggleSkipSettings=function(){$('skipSettings').classList.toggle('open');};
+window.skipToggleSelMode=function(){
+  skipSelMode=!skipSelMode;
+  var b=$('skipSelBtn');if(b){b.textContent=skipSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',skipSelMode);}
+  if(!skipSelMode) skipSelected={};
+  renderSkipList();
+};
+window.skipSelectAll=function(st){
+  if(st&&!skipSelMode) skipToggleSelMode();
+  skipSelected={};
+  if(st) getSkippedList().forEach(function(x){skipSelected[x.id]=true;});
+  renderSkipList();
+};
+window.skipEditSel=function(){
+  var ids=Object.keys(skipSelected).filter(function(k){return skipSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),s=getSkippedList();
+  var r=s.find(function(x){return x.id===id;});if(!r) return;
+  var nv=prompt('نئی وجہ:',r.reason||'');if(nv===null) return;
+  r.reason=nv.trim();r.hasReason=!!nv.trim();
+  saveSkippedList(s);skipSelected={};renderSkipList();
+};
+window.skipMoveUp=function(){
+  var ids=Object.keys(skipSelected).filter(function(k){return skipSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),s=getSkippedList();
+  var i=s.findIndex(function(x){return x.id===id;});
+  if(i>0){var t=s[i];s[i]=s[i-1];s[i-1]=t;saveSkippedList(s);renderSkipList();}
+};
+window.skipMoveDown=function(){
+  var ids=Object.keys(skipSelected).filter(function(k){return skipSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),s=getSkippedList();
+  var i=s.findIndex(function(x){return x.id===id;});
+  if(i>=0&&i<s.length-1){var t=s[i];s[i]=s[i+1];s[i+1]=t;saveSkippedList(s);renderSkipList();}
+};
+window.skipDeleteSel=function(){
+  var ids=Object.keys(skipSelected).filter(function(k){return skipSelected[k];});
+  if(!ids.length){alert('کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ڈیلیٹ کریں؟')) return;
+  saveSkippedList(getSkippedList().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  skipSelected={};renderSkipList();
+};
+window.skipDeleteAll=function(btn){
+  if(!skipDelPending){skipDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){skipDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);return;}
+  saveSkippedList([]);skipSelected={};skipDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderSkipList();
+};
+
+/* Skip Lock */
+function isSkipLocked(){var s=ls(SKIP_LOCK,{});return s.locked===true;}
+function setSkipLock(l){var s=ls(SKIP_LOCK,{});s.locked=l;lss(SKIP_LOCK,s);}
+function getSkipPass(){return ls(SKIP_PASS,'1234')||'1234';}
+function applySkipLock(){
+  if(isSkipLocked()){$('skipLockScreen').classList.add('show');$('skipContent').style.display='none';
+    $('skipLockBtn').textContent='🔓 انلاک';$('skipLockBtn').classList.add('on');}
+  else{$('skipLockScreen').classList.remove('show');$('skipContent').style.display='block';
+    $('skipLockBtn').textContent='🔒 سیکشن لاک';$('skipLockBtn').classList.remove('on');}
+}
+window.skipToggleLock=function(){
+  if(isSkipLocked()){setSkipLock(false);applySkipLock();return;}
+  var np=prompt('نیا پاس ورڈ (default 1234):','1234');if(np===null) return;
+  np=np.trim();if(np.length<4){alert('کم از کم 4');return;}
+  lss(SKIP_PASS,np);setSkipLock(true);applySkipLock();alert('🔒 لاک ہو گیا');
+};
+window.unlockSkip=function(){
+  var p=$('skipLockPass').value;
+  if(p===getSkipPass()){setSkipLock(false);applySkipLock();$('skipLockPass').value='';}
+  else alert('❌ غلط پاس ورڈ');
+};
+window.forgotSkipPass=function(){
+  if(!confirm('پاس ورڈ 1234 پر ری سیٹ؟')) return;
+  lss(SKIP_PASS,'1234');setSkipLock(false);applySkipLock();
+};
+
+function renderSkipList(){
+  var s=getSkippedList();
+  $('skipCount').textContent=s.length;
+  $('skipTotal').textContent=s.length;
+  $('skipPending').textContent=s.filter(function(x){return !x.hasReason;}).length;
+  var box=$('skipList');
+  if(!s.length){box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی ریکارڈ نہیں</div>';return;}
+  box.innerHTML=s.map(function(x){
+    var isSel=!!skipSelected[x.id];
+    var d=new Date(x.timestamp);
+    var ds=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    var st=x.hasReason?'✅':'⏳';
+    var cb=skipSelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="skipToggleOne('+x.id+')">':'';
+    return '<div class="item'+(skipSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#dc2626;background:#fef2f2;':'')+'">'+
+      cb+'<div class="info"><div><span class="name">'+esc(x.member)+'</span> <span class="badge rank">'+esc(x.task)+'</span></div>'+
+      '<div style="font-size:10px;color:'+(x.hasReason?'#16a34a':'#ea580c')+';margin-top:3px;font-weight:800;">'+st+' '+(x.hasReason?esc(x.reason):'وجہ نہیں دی')+'</div>'+
+      '<div style="font-size:9px;color:#94a3b8;margin-top:2px;">'+ds+'</div></div></div>';
+  }).join('');
+}
+window.skipToggleOne=function(id){if(skipSelected[id]) delete skipSelected[id];else skipSelected[id]=true;renderSkipList();};
 
 /* ═══ INIT ═══ */
-renderTasks();
-applyLockUI();
-setInterval(renderTasks,3000);
+renderTasks();renderSkipList();applyTaskLock();applySkipLock();
+setInterval(function(){renderTasks();renderSkipList();},3000);
 window.addEventListener('storage',function(e){
   if(e.key===TASK_KEY) renderTasks();
+  if(e.key===SKIP_KEY) renderSkipList();
 });
 </script>
 </body>
