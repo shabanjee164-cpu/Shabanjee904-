@@ -7,337 +7,316 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
-.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border:1px solid #cbd5e1;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.06)}
-.card.hd-blue{border-right-color:#2563eb}
-.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #e2e8f0;gap:6px}
-.card-hd h1{font-size:16px;color:#1e293b}
-.ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;opacity:.6}
+.card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border:1px solid #cbd5e1;border-right:5px solid #16a34a;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #bbf7d0;gap:6px}
+.card-hd h1{font-size:16px;color:#16a34a}
+.ic-btn{background:#f1f5f9;border:1px solid #cbd5e1;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;opacity:.7}
 .ic-btn:hover{opacity:1}
-.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-.filters button{padding:9px 4px;font-size:11px;font-weight:700;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:8px;cursor:pointer;font-family:inherit}
-.filters button.on{background:#7c3aed;color:#fff;border-color:#7c3aed}
+
+/* Filter Dropdown */
+.filter-row{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+.filter-icon{background:#f0fdf4;border:1px solid #86efac;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px}
+.filter-menu{display:none;position:absolute;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:100;min-width:160px;overflow:hidden}
+.filter-menu.open{display:block}
+.filter-menu button{width:100%;text-align:right;padding:10px 14px;font-size:12px;font-weight:700;background:#fff;border:none;cursor:pointer;font-family:inherit;color:#334155}
+.filter-menu button:hover{background:#f0fdf4}
+.filter-menu button.on{background:#16a34a;color:#fff}
+
+/* Copy/Share */
+.copy-share{display:flex;gap:6px;margin-left:auto}
+.copy-share button{background:#f0fdf4;border:1px solid #86efac;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:800;color:#15803d;cursor:pointer;font-family:inherit}
+.copy-share button:active{background:#dcfce7}
+
+/* Member filter */
+.member-filter{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:8px;margin-bottom:10px}
+.member-filter select{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff}
+
+/* List */
 .list{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:10px;padding:6px;background:#fafafa;min-height:80px}
-.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;border-right:4px solid #7c3aed;display:flex;gap:8px;align-items:flex-start}
-.item.news{border-right-color:#2563eb;background:#f0fdf4}
-.item.alert{border-right-color:#dc2626;background:#f0fdf4}
-.item.complaint{border-right-color:#ea580c;background:#f0fdf4}
-.item .cb{width:16px;height:16px;accent-color:#7c3aed;cursor:pointer;flex-shrink:0;display:none;margin-top:2px}
+.item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;display:flex;gap:8px;align-items:flex-start}
+.item .cb{width:16px;height:16px;accent-color:#16a34a;cursor:pointer;flex-shrink:0;display:none;margin-top:2px}
 .item.sel-on .cb{display:inline-block}
 .item .info{flex:1;min-width:0}
-.item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
-.item .badge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
-.item .badge.news{background:#dbeafe;color:#1e40af}
-.item .badge.alert{background:#fee2e2;color:#991b1b}
-.item .badge.complaint{background:#ffedd5;color:#9a3412}
-.item .date{font-size:10px;color:#64748b;font-weight:600}
-.item .content{color:#166534;font-weight:700;line-height:1.6}
+.item .row1{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.item .member{font-weight:800;color:#1e293b}
+.item .task{color:#334155;font-weight:700;margin-top:2px}
+.item .st{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800}
+.item .st.done{background:#dcfce7;color:#15803d}
+.item .st.notdone{background:#fee2e2;color:#991b1b}
+.item .st.skip{background:#f1f5f9;color:#475569}
+.item .meta{font-size:10px;color:#64748b;font-weight:600}
+.item .pts{font-size:10px;padding:2px 8px;border-radius:20px;background:#fef9c3;color:#854d0e;font-weight:800}
+
 .empty{text-align:center;color:#94a3b8;font-size:12px;padding:30px;font-weight:700}
-.empty .ic{font-size:40px;display:block;margin-bottom:8px;opacity:.5}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
 .stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
-.stat .n{font-size:18px;font-weight:900;color:#7c3aed}
+.stat .n{font-size:18px;font-weight:900;color:#16a34a}
 .stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:3px}
+
+/* Settings */
 .settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:12px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
 .settings-panel.open{display:grid}
 .settings-panel button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
 .settings-panel button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-panel button.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
-.settings-panel button.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
-.duty-filter{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:8px;margin-bottom:10px}
-.duty-filter select{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff}
-.duty-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;border-right:4px solid #7c3aed;display:flex;align-items:flex-start;gap:8px}
-.duty-item .cb{width:16px;height:16px;accent-color:#2563eb;cursor:pointer;flex-shrink:0;display:none;margin-top:2px}
-.duty-item.sel-on .cb{display:inline-block}
-.duty-item .info{flex:1;min-width:0}
-.duty-item .row1{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
-.duty-item .name{font-weight:800;color:#1e293b;font-size:13px}
-.duty-item .badge{font-size:9px;padding:2px 8px;border-radius:20px;font-weight:800;background:#ede9fe;color:#6d28d9}
-.duty-item .time{font-size:11px;color:#64748b;font-weight:700}
-.duty-item .reason{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;background:#f1f5f9;color:#475569;margin-left:4px}
-.duty-item .reason.auto{background:#dcfce7;color:#15803d}
-.duty-item .reason.manual{background:#fef3c7;color:#92400e}
-.duty-item .reason.leave{background:#fecaca;color:#991b1b}
+.settings-panel button.active{background:#16a34a;color:#fff;border-color:#16a34a}
 </style>
 </head>
 <body>
 
-<!-- NEWS & ALERTS HISTORY -->
 <div class="card">
   <div class="card-hd">
-    <h1>📰 News & Alerts History</h1>
-    <button class="ic-btn" onclick="toggleHistSettings()">⚙️</button>
+    <h1>📋 Task History</h1>
+    <button class="ic-btn" onclick="toggleSettings()">⚙️</button>
   </div>
 
-  <div class="settings-panel" id="histSettings">
-    <button id="histSelBtn" onclick="histToggleSel()">☑️ سلیکٹ موڈ</button>
-    <button onclick="histSelectAll(true)">✅ تمام</button>
-    <button onclick="histSelectAll(false)">⬜ ہٹائیں</button>
-    <button onclick="histEditSel()">✏️ ایڈٹ</button>
-    <button class="danger" onclick="histDeleteSel()">🗑️ ڈیلیٹ</button>
-    <button class="danger" onclick="histDeleteAll(this)">❌ سب صاف</button>
-    <button class="close-btn" onclick="toggleHistSettings()">🚪 بند</button>
+  <div class="settings-panel" id="settings">
+    <button id="selBtn" onclick="toggleSelMode()">☑️ سلیکٹ موڈ</button>
+    <button onclick="selectAll(true)">✅ تمام</button>
+    <button onclick="selectAll(false)">⬜ ہٹائیں</button>
+    <button onclick="editSel()">✏️ ایڈٹ</button>
+    <button class="danger" onclick="deleteSel()">🗑️ ڈیلیٹ</button>
+    <button class="danger" onclick="deleteAll(this)">❌ سب صاف</button>
+    <button onclick="toggleSettings()">🚪 بند</button>
   </div>
 
-  <div class="filters">
-    <button class="on" data-f="all" onclick="setFilter('all')">📋 سب</button>
-    <button data-f="news" onclick="setFilter('news')">📰 News</button>
-    <button data-f="alert" onclick="setFilter('alert')">🚨 Alert</button>
-    <button data-f="complaint" onclick="setFilter('complaint')">⏰ Complaint</button>
+  <div class="filter-row">
+    <button class="filter-icon" onclick="toggleFilterMenu(event)">
+      🔍 <span id="filterLabel">سب</span>
+    </button>
+    <div class="filter-menu" id="filterMenu">
+      <button data-f="all" class="on" onclick="setFilter('all')">📋 سب</button>
+      <button data-f="today" onclick="setFilter('today')">📅 آج</button>
+      <button data-f="done" onclick="setFilter('done')">✅ ہو گیا</button>
+      <button data-f="notdone" onclick="setFilter('notdone')">❌ نہیں ہوا</button>
+      <button data-f="skip" onclick="setFilter('skip')">⚪ چھوڑا</button>
+    </div>
+
+    <div class="copy-share">
+      <button onclick="copyAll()" title="کاپی">📋</button>
+      <button onclick="shareWA()" title="واٹس ایپ">📱</button>
+    </div>
   </div>
 
-  <div class="list" id="list">
-    <div class="empty"><span class="ic">📋</span>کوئی ریکارڈ نہیں</div>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><div class="n" id="sAll">0</div><div class="l">📋 سب</div></div>
-    <div class="stat"><div class="n" id="sNews">0</div><div class="l">📰 News</div></div>
-    <div class="stat"><div class="n" id="sAlert">0</div><div class="l">🚨 Alert</div></div>
-    <div class="stat"><div class="n" id="sComp">0</div><div class="l">⏰ Comp</div></div>
-  </div>
-</div>
-
-<!-- DUTY HISTORY -->
-<div class="card hd-blue">
-  <div class="card-hd">
-    <h1>👮 Duty History</h1>
-    <button class="ic-btn" onclick="toggleDutyHistSettings()">⚙️</button>
-  </div>
-
-  <div class="settings-panel" id="dutyHistSettings">
-    <button id="dutyHistSelBtn" onclick="dutyHistToggleSel()">☑️ سلیکٹ موڈ</button>
-    <button onclick="dutyHistSelectAll(true)">✅ تمام</button>
-    <button onclick="dutyHistSelectAll(false)">⬜ ہٹائیں</button>
-    <button onclick="dutyHistEditSel()">✏️ ایڈٹ</button>
-    <button class="danger" onclick="dutyHistDeleteSel()">🗑️ ڈیلیٹ</button>
-    <button class="danger" onclick="dutyHistDeleteAll(this)">❌ سب صاف</button>
-    <button class="close-btn" onclick="toggleDutyHistSettings()">🚪 بند</button>
-  </div>
-
-  <div class="duty-filter">
-    <select id="dutyMemberFilter" onchange="renderDutyHistory()">
+  <div class="member-filter">
+    <select id="memberFilter" onchange="render()">
       <option value="">تمام ممبران</option>
     </select>
   </div>
 
-  <div class="list" id="dutyList">
-    <div class="empty"><span class="ic">📋</span>کوئی ڈیوٹی نہیں</div>
+  <div class="list" id="list">
+    <div class="empty">کوئی ریکارڈ نہیں</div>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="n" id="dutyTotal">0</div><div class="l">📋 کل</div></div>
-    <div class="stat"><div class="n" id="dutyMembers">0</div><div class="l">👥 ممبر</div></div>
-    <div class="stat"><div class="n" id="dutyAuto">0</div><div class="l">آٹو</div></div>
-    <div class="stat"><div class="n" id="dutyManual">0</div><div class="l">مینوئل</div></div>
+    <div class="stat"><div class="n" id="sTotal">0</div><div class="l">📋 کل</div></div>
+    <div class="stat"><div class="n" id="sDone">0</div><div class="l">✅ ہو گیا</div></div>
+    <div class="stat"><div class="n" id="sPoints">0</div><div class="l">🏆 پوائنٹس</div></div>
   </div>
 </div>
 
 <script>
-var NEWS_KEY='sec10_news_alerts_data';
-var DUTY_HIST_KEY='sec4_duty_history_data_v4';
+/* ═══ KEYS ═══ */
+var REC_KEY = 'sec12_task_records';
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
-function fmt(ts){
-  if(!ts) return '';
-  var d=new Date(ts);
-  return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' — '+pad(d.getHours())+':'+pad(d.getMinutes());
-}
 function pad(n){return String(n).padStart(2,'0');}
 
-/* NEWS HISTORY */
-var filter='all',histSelMode=false,histSelected={},histDelPending=false,histSettingsOpen=false;
+var filter='all', selMode=false, selected={}, delPending=false, settingsOpen=false;
 
-window.toggleHistSettings=function(){histSettingsOpen=!histSettingsOpen;$('histSettings').classList.toggle('open',histSettingsOpen);};
-window.setFilter=function(f){filter=f;document.querySelectorAll('.filters button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f);});render();};
-window.histToggleSel=function(){
-  histSelMode=!histSelMode;
-  var b=$('histSelBtn');
-  if(b){b.textContent=histSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',histSelMode);}
-  if(!histSelMode) histSelected={};
+function getRecords(){
+  var r=ls(REC_KEY,[]);
+  if(!Array.isArray(r)) r=[];
+  return r;
+}
+function saveRecords(r){lss(REC_KEY,r);}
+
+/* ═══ SETTINGS ═══ */
+window.toggleSettings = function(){
+  settingsOpen=!settingsOpen;
+  $('settings').classList.toggle('open',settingsOpen);
+};
+window.toggleSelMode = function(){
+  selMode=!selMode;
+  var b=$('selBtn');
+  if(b){b.textContent=selMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',selMode);}
+  if(!selMode) selected={};
   render();
 };
-window.histSelectAll=function(st){
-  if(st && !histSelMode) histToggleSel();
-  histSelected={};
-  if(st) ls(NEWS_KEY,[]).forEach(function(x){histSelected[x.id]=true;});
+window.selectAll = function(st){
+  if(st && !selMode) toggleSelMode();
+  selected={};
+  if(st) getFiltered().forEach(function(x){selected[x.id]=true;});
   render();
 };
-window.histEditSel=function(){
-  var ids=Object.keys(histSelected).filter(function(k){return histSelected[k];});
-  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+window.editSel = function(){
+  var ids=Object.keys(selected).filter(function(k){return selected[k];});
+  if(ids.length!==1){alert('ایک ریکارڈ منتخب کریں');return;}
   var id=parseInt(ids[0],10);
-  var items=ls(NEWS_KEY,[]);
-  var rec=items.find(function(x){return x.id===id;});if(!rec) return;
-  var nv=prompt('نیا متن:',rec.content);if(nv===null) return;
-  nv=nv.trim();if(!nv) return;
-  rec.content=nv;
-  lss(NEWS_KEY,items);
-  histSelected={};histSelMode=false;
-  $('histSelBtn').textContent='☑️ سلیکٹ موڈ';
-  $('histSelBtn').classList.remove('active');
+  var r=getRecords();
+  var rec=r.find(function(x){return x.id===id;});
+  if(!rec) return;
+  var nv=prompt('نیا ٹاسک نام:',rec.task);
+  if(nv===null) return;
+  nv=nv.trim(); if(!nv) return;
+  rec.task=nv;
+  saveRecords(r);
+  selected={};
   render();
 };
-window.histDeleteSel=function(){
-  var ids=Object.keys(histSelected).filter(function(k){return histSelected[k];});
+window.deleteSel = function(){
+  var ids=Object.keys(selected).filter(function(k){return selected[k];});
   if(!ids.length){alert('کچھ منتخب کریں');return;}
   if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
-  lss(NEWS_KEY,ls(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  histSelected={};render();
+  saveRecords(getRecords().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  selected={};
+  render();
 };
-window.histDeleteAll=function(btn){
-  if(!ls(NEWS_KEY,[]).length) return;
-  if(!histDelPending){
-    histDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){histDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
+window.deleteAll = function(btn){
+  if(!delPending){
+    delPending=true;
+    btn.textContent='⚠️ دوبارہ';
+    btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){delPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
     return;
   }
-  lss(NEWS_KEY,[]);histSelected={};histDelPending=false;
+  saveRecords([]);
+  selected={};
+  delPending=false;
   btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
   render();
 };
-window.toggleHistSelected=function(id){
-  if(histSelected[id]) delete histSelected[id];
-  else histSelected[id]=true;
+
+/* ═══ FILTER ═══ */
+window.toggleFilterMenu = function(e){
+  e.stopPropagation();
+  $('filterMenu').classList.toggle('open');
+};
+document.addEventListener('click',function(){
+  $('filterMenu').classList.remove('open');
+});
+window.setFilter = function(f){
+  filter=f;
+  document.querySelectorAll('#filterMenu button').forEach(function(b){
+    b.classList.toggle('on',b.dataset.f===f);
+  });
+  var labels={all:'سب',today:'آج',done:'ہو گیا',notdone:'نہیں ہوا',skip:'چھوڑا'};
+  $('filterLabel').textContent=labels[f]||'سب';
+  $('filterMenu').classList.remove('open');
   render();
 };
 
-function render(){
-  var items=ls(NEWS_KEY,[]);if(!Array.isArray(items)) items=[];
-  $('sAll').textContent=items.length;
-  $('sNews').textContent=items.filter(function(x){return x.type==='news';}).length;
-  $('sAlert').textContent=items.filter(function(x){return x.type==='alert';}).length;
-  $('sComp').textContent=items.filter(function(x){return x.type==='complaint';}).length;
+function getFiltered(){
+  var recs=getRecords();
+  var mf=$('memberFilter');
+  var mname=mf?mf.value:'';
+  if(mname) recs=recs.filter(function(r){return r.member===mname;});
 
-  var list=items;
-  if(filter!=='all') list=items.filter(function(x){return x.type===filter;});
-
-  var box=$('list');
-  if(!list.length){box.innerHTML='<div class="empty"><span class="ic">📋</span>اس فلٹر میں کوئی ریکارڈ نہیں</div>';return;}
-  box.innerHTML=list.map(function(x){
-    var label=x.type==='news'?'📰 نیوز':(x.type==='alert'?'🚨 الرٹ':'⏰ کمپلینٹ');
-    var isSel=!!histSelected[x.id];
-    var tb=(x.type==='complaint'&&x.fireTime)?' <span class="badge complaint" style="background:#fef3c7;color:#92400e;">⏰ '+esc(x.fireTime)+'</span>':'';
-    var cb=histSelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="toggleHistSelected('+x.id+')">':'';
-    return '<div class="item '+x.type+(histSelMode?' sel-on':'')+'" style="'+(isSel?'background:#fef3c7;':'')+'">'+
-      cb+
-      '<div class="info">'+
-        '<div class="row1"><span class="badge '+x.type+'">'+label+'</span>'+tb+'<span class="date">'+fmt(x.timestamp)+'</span></div>'+
-        '<div class="content">'+esc(x.content)+'</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+  if(filter==='today'){
+    var d=new Date();
+    var today=pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+    recs=recs.filter(function(r){return r.dateStr===today;});
+  } else if(filter==='done'){
+    recs=recs.filter(function(r){return r.status==='done';});
+  } else if(filter==='notdone'){
+    recs=recs.filter(function(r){return r.status==='notdone';});
+  } else if(filter==='skip'){
+    recs=recs.filter(function(r){return r.status==='skip';});
+  }
+  return recs;
 }
 
-/* DUTY HISTORY */
-var dutySelected={},dutySelMode=false,dutyDelPending=false,dutySettingsOpen=false,dutyReversed=[];
+/* ═══ RENDER ═══ */
+function render(){
+  var all=getRecords();
+  var list=getFiltered();
 
-window.toggleDutyHistSettings=function(){dutySettingsOpen=!dutySettingsOpen;$('dutyHistSettings').classList.toggle('open',dutySettingsOpen);};
-window.dutyHistToggleSel=function(){
-  dutySelMode=!dutySelMode;
-  var b=$('dutyHistSelBtn');
-  if(b){b.textContent=dutySelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',dutySelMode);}
-  if(!dutySelMode) dutySelected={};
-  renderDutyHistory();
-};
-window.dutyHistSelectAll=function(st){
-  if(st && !dutySelMode) dutyHistToggleSel();
-  dutySelected={};
-  if(st) dutyReversed.forEach(function(x,i){dutySelected[i]=true;});
-  renderDutyHistory();
-};
-window.dutyHistEditSel=function(){
-  var ids=Object.keys(dutySelected).filter(function(k){return dutySelected[k];});
-  if(ids.length!==1){alert('ایک منتخب کریں');return;}
-  var i=parseInt(ids[0],10);
-  var rec=dutyReversed[i];if(!rec) return;
-  var nv=prompt('نیا نام:',rec.name);if(nv===null) return;
-  nv=nv.trim();if(!nv) return;
-  var all=ls(DUTY_HIST_KEY,[]);
-  var origIdx=all.length-1-i;
-  if(all[origIdx]) all[origIdx].name=nv;
-  lss(DUTY_HIST_KEY,all);
-  dutySelected={};dutySelMode=false;
-  $('dutyHistSelBtn').textContent='☑️ سلیکٹ موڈ';
-  $('dutyHistSelBtn').classList.remove('active');
-  renderDutyHistory();
-};
-window.dutyHistDeleteSel=function(){
-  var ids=Object.keys(dutySelected).filter(function(k){return dutySelected[k];});
-  if(!ids.length){alert('کچھ منتخب کریں');return;}
-  if(!confirm(ids.length+' ریکارڈ ڈیلیٹ کریں؟')) return;
-  var all=ls(DUTY_HIST_KEY,[]);
-  var toRemove=[];
-  ids.forEach(function(id){var i=parseInt(id,10);toRemove.push(all.length-1-i);});
-  lss(DUTY_HIST_KEY,all.filter(function(x,i){return toRemove.indexOf(i)===-1;}));
-  dutySelected={};renderDutyHistory();
-};
-window.dutyHistDeleteAll=function(btn){
-  if(!ls(DUTY_HIST_KEY,[]).length) return;
-  if(!dutyDelPending){
-    dutyDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
-    setTimeout(function(){dutyDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);
-    return;
-  }
-  lss(DUTY_HIST_KEY,[]);dutySelected={};dutyDelPending=false;
-  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';
-  renderDutyHistory();
-};
-window.toggleDutyHistSelected=function(i){
-  if(dutySelected[i]) delete dutySelected[i];
-  else dutySelected[i]=true;
-  renderDutyHistory();
-};
+  $('sTotal').textContent=list.length;
+  $('sDone').textContent=list.filter(function(r){return r.status==='done';}).length;
+  var pts=0;
+  list.forEach(function(r){pts+=(r.points||0);});
+  $('sPoints').textContent=pts;
 
-function renderDutyHistory(){
-  var all=ls(DUTY_HIST_KEY,[]);if(!Array.isArray(all)) all=[];
-  dutyReversed=all.slice().reverse().slice(0,50);
-
-  var total=all.length;
-  var uniq={};all.forEach(function(x){uniq[x.name]=true;});
-  $('dutyTotal').textContent=total;
-  $('dutyMembers').textContent=Object.keys(uniq).length;
-  $('dutyAuto').textContent=all.filter(function(x){return x.reason==='auto';}).length;
-  $('dutyManual').textContent=all.filter(function(x){return x.reason==='manual';}).length;
-
-  var mf=$('dutyMemberFilter');
+  // populate member filter
+  var mf=$('memberFilter');
   if(mf){
     var cur=mf.value;
     mf.innerHTML='<option value="">تمام ممبران</option>';
-    var names={};all.forEach(function(x){names[x.name]=true;});
+    var names={};
+    all.forEach(function(r){names[r.member]=true;});
     Object.keys(names).forEach(function(n){mf.appendChild(new Option(n,n));});
     if(cur) mf.value=cur;
   }
-  var fName=mf?mf.value:'';
 
-  var list=dutyReversed;
-  if(fName) list=list.filter(function(x){return x.name===fName;});
-
-  var box=$('dutyList');
-  if(!list.length){box.innerHTML='<div class="empty"><span class="ic">📋</span>کوئی ڈیوٹی نہیں</div>';return;}
-  box.innerHTML=list.map(function(x,i){
-    var isSel=!!dutySelected[i];
-    var rCls=x.reason==='auto'?'auto':(x.reason==='leave'?'leave':'manual');
-    var rTxt=x.reason==='auto'?'آٹو':(x.reason==='leave'?'چھٹی':'مینوئل');
-    var cb=dutySelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="toggleDutyHistSelected('+i+')">':'';
-    return '<div class="duty-item'+(dutySelMode?' sel-on':'')+'" style="'+(isSel?'background:#fef3c7;':'')+'">'+
+  var box=$('list');
+  if(!list.length){
+    box.innerHTML='<div class="empty">اس فلٹر میں کوئی ریکارڈ نہیں</div>';
+    return;
+  }
+  box.innerHTML=list.map(function(r){
+    var isSel=!!selected[r.id];
+    var stLbl = r.status==='done'?'✅ ہو گیا':(r.status==='notdone'?'❌ نہیں ہوا':'⚪ چھوڑا');
+    var stCls = r.status==='done'?'done':(r.status==='notdone'?'notdone':'skip');
+    var cb=selMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="toggleOne('+r.id+')">':'';
+    var ptsBadge = r.points>0 ? '<span class="pts">🏆 '+r.points+'</span>' : '';
+    return '<div class="item'+(selMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+
       cb+
       '<div class="info">'+
-        '<div class="row1"><span class="name">'+esc(x.name)+'</span><span class="badge">'+(x.rank==='Senior'?'🟢 سینئر':'🔵 جونیئر')+'</span></div>'+
-        '<div><span class="time">'+esc(x.start)+' → '+esc(x.end)+'</span> <span class="reason '+rCls+'">'+rTxt+'</span></div>'+
+        '<div class="row1"><span class="member">👤 '+esc(r.member)+'</span><span class="st '+stCls+'">'+stLbl+'</span>'+ptsBadge+'</div>'+
+        '<div class="task">📌 '+esc(r.task)+'</div>'+
+        '<div class="meta" style="margin-top:3px;">'+esc(r.dateStr)+' — '+esc(r.timeStr)+'</div>'+
       '</div>'+
     '</div>';
   }).join('');
 }
+window.toggleOne = function(id){
+  if(selected[id]) delete selected[id];
+  else selected[id]=true;
+  render();
+};
 
+/* ═══ COPY / SHARE ═══ */
+function getShareText(){
+  var list=getFiltered();
+  var lines=['📋 Task History','━━━━━━━━━━━━━━━━━━'];
+  list.slice(0,30).forEach(function(r){
+    var stLbl = r.status==='done'?'✅':(r.status==='notdone'?'❌':'⚪');
+    lines.push(stLbl+' '+r.member+' — '+r.task+(r.points>0?' ('+r.points+')':''));
+    lines.push(r.dateStr+' '+r.timeStr);
+  });
+  lines.push('━━━━━━━━━━━━━━━━━━');
+  lines.push('کل: '+list.length+' ریکارڈ');
+  return lines.join('\n');
+}
+window.copyAll = function(){
+  var txt=getShareText();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(function(){
+      alert('✅ کاپی ہو گیا');
+    });
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('✅ کاپی ہو گیا');
+  }
+};
+window.shareWA = function(){
+  var txt=getShareText();
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+};
+
+/* ═══ INIT ═══ */
 render();
-renderDutyHistory();
-setInterval(function(){render();renderDutyHistory();},2000);
+setInterval(render,2500);
 window.addEventListener('storage',function(e){
-  if(e.key===NEWS_KEY) render();
-  if(e.key===DUTY_HIST_KEY) renderDutyHistory();
+  if(e.key===REC_KEY) render();
 });
 </script>
 </body>
