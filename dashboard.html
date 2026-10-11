@@ -8,43 +8,32 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:10px}
 .wrap{max-width:700px;margin:0 auto}
-
-/* News Bar */
 .news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:11px 14px;border-radius:10px;font-size:13px;font-weight:700;overflow:hidden;margin-bottom:10px;min-height:44px;display:flex;align-items:center}
 .news-text{display:inline-block;white-space:nowrap;animation:ticker 60s linear infinite;padding-right:100%;font-weight:800}
 @keyframes ticker{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-/* Alert Bar */
-.alert-bar{display:none;background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:800;justify-content:space-between;align-items:center;gap:10px;transition:all .3s;margin-bottom:10px}
+.alert-bar{display:none;background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:800;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .alert-bar.show{display:flex}
 .alert-bar.blink{animation:bl .8s infinite alternate}
 @keyframes bl{0%{background:#fef2f2;color:#dc2626}100%{background:#dc2626;color:#fff}}
 .alert-bar .txt{flex:1;line-height:1.5}
-.alert-bar .skip{background:#dc2626;color:#fff;border:none;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit;white-space:nowrap}
+.alert-bar .skip{background:#dc2626;color:#fff;border:none;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;font-family:inherit}
 .alert-bar.blink .skip{background:#fff;color:#dc2626}
-
-/* Card */
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:10px}
 .card h2{font-size:14px;color:#1e293b;margin-bottom:10px;padding-bottom:8px;border-bottom:2px dashed #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .card h2 .mini-timer{font-size:11px;font-weight:800;color:#6d28d9;background:#ede9fe;padding:3px 10px;border-radius:20px}
 .card.task h2{color:#16a34a;border-color:#bbf7d0}
 .card.skip h2{color:#dc2626;border-color:#fecaca}
-
-/* Duty */
+.card.result h2{color:#f59e0b;border-color:#fde68a}
 .duty-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .duty-box{background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:10px}
 .duty-box .lbl{font-size:10px;font-weight:800;color:#6d28d9;margin-bottom:4px}
 .duty-box .nm{font-size:15px;font-weight:900;color:#4c1d95;word-break:break-word}
-
-/* Leave Submit */
 .leave-submit-box{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:10px;margin-top:12px}
 .leave-submit-box label{font-size:11px;font-weight:800;color:#92400e;display:block;margin-bottom:6px}
 .leave-submit-box select,.leave-submit-box input{width:100%;padding:9px 10px;border:1px solid #fdba74;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff;outline:none;margin-bottom:6px}
 .leave-submit-box button{width:100%;padding:10px;background:#ea580c;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
 .leave-list{background:#fff;border:1px solid #fdba74;border-radius:6px;padding:6px;max-height:150px;overflow-y:auto;min-height:40px;margin-top:8px}
 .leave-item{background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;padding:6px 9px;margin-bottom:4px;font-size:11px;font-weight:700;color:#9a3412;display:flex;justify-content:space-between;gap:6px}
-
-/* Task Tracker */
 .task-member-sel{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin-bottom:10px}
 .task-member-sel label{font-size:11px;font-weight:800;color:#15803d;display:block;margin-bottom:6px}
 .task-member-sel select{width:100%;padding:9px 10px;border:1px solid #86efac;border-radius:6px;font-size:13px;font-weight:700;font-family:inherit;background:#fff;outline:none}
@@ -57,22 +46,20 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 .task-btns .done{background:#16a34a}
 .task-btns .notdone{background:#dc2626}
 .task-btns .skip{background:#64748b}
-.task-score{background:#1e293b;color:#fff;border-radius:8px;padding:10px 14px;text-align:center;font-size:13px;font-weight:800}
-.task-score b{font-size:18px;color:#facc15}
 .task-history{max-height:180px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:10px}
 .task-history .row{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;margin-bottom:4px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .task-history .row .st{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800}
 .task-history .row .st.done{background:#dcfce7;color:#15803d}
 .task-history .row .st.notdone{background:#fee2e2;color:#991b1b}
 .task-history .row .st.skip{background:#f1f5f9;color:#475569}
-
-/* Skip Section */
+.task-score{background:#1e293b;color:#fff;border-radius:8px;padding:12px 14px;text-align:center;font-size:13px;font-weight:800;margin-top:12px}
+.task-score b{font-size:22px;color:#facc15}
 .skip-2col{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .skip-col{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px}
 .skip-col.junior{background:#dbeafe;border-color:#93c5fd}
 .skip-col .hd{font-size:11px;font-weight:800;color:#991b1b;margin-bottom:6px;text-align:center}
 .skip-col.junior .hd{color:#1e40af}
-.skip-list{max-height:200px;overflow-y:auto}
+.skip-list{max-height:220px;overflow-y:auto}
 .skip-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 9px;margin-bottom:4px;font-size:10px;font-weight:700}
 .skip-item.pending{border-right:3px solid #f59e0b;background:#fffbeb}
 .skip-item.done{border-right:3px solid #16a34a;background:#f0fdf4}
@@ -81,34 +68,33 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 .skip-item .reason{color:#15803d;background:#fff;padding:3px 6px;border-radius:4px;font-size:10px;border:1px solid #86efac;display:inline-block;margin-top:3px}
 .skip-item .warn{color:#d97706;font-size:9px;font-weight:800}
 .skip-item .date{color:#94a3b8;font-size:8px;margin-top:2px;display:block}
-
 .skip-form{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:10px}
 .skip-form .ttl{font-size:11px;font-weight:800;color:#92400e;margin-bottom:8px;text-align:center}
 .skip-form select,.skip-form input{width:100%;padding:8px;border:1px solid #fdba74;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff;margin-bottom:6px;outline:none}
 .skip-form button{width:100%;padding:10px;background:#ea580c;color:#fff;font-size:13px;font-weight:800;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
-
+.skip-footer{margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.skip-footer .fbox{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 4px;text-align:center}
+.skip-footer .fbox .n{font-size:16px;font-weight:900;color:#dc2626}
+.skip-footer .fbox .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
+.result-grid{display:grid;gap:8px}
+.result-row{background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:800}
+.result-row .rank-badge{background:#f59e0b;color:#fff;font-size:11px;font-weight:900;padding:3px 10px;border-radius:20px;min-width:30px;text-align:center}
+.result-row .name{flex:1;color:#1e293b}
+.result-row .pts{background:#facc15;color:#78350f;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:900}
 .empty-note{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:600}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-
-  <!-- NEWS BAR -->
   <div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ ہو رہا ہے...</div></div>
-
-  <!-- ALERT BAR -->
   <div class="alert-bar" id="alertBar">
     <span class="txt" id="alertTxt">—</span>
     <button class="skip" onclick="skipAlert()">اسکیپ ❌</button>
   </div>
 
-  <!-- DUTY CARD -->
   <div class="card">
-    <h2>
-      <span>👮 آج کی ڈیوٹی ممبران</span>
-      <span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span>
-    </h2>
+    <h2><span>👮 آج کی ڈیوٹی ممبران</span><span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span></h2>
     <div class="duty-grid">
       <div class="duty-box"><div class="lbl">🟢 سینئر ممبر</div><div class="nm" id="seniorNm">—</div></div>
       <div class="duty-box"><div class="lbl">🔵 جونیئر ممبر</div><div class="nm" id="juniorNm">—</div></div>
@@ -122,14 +108,11 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
     </div>
   </div>
 
-  <!-- TASK TRACKER -->
   <div class="card task">
     <h2><span>📋 ٹاسک ٹریکر</span></h2>
     <div class="task-member-sel">
       <label>ممبر منتخب کریں</label>
-      <select id="taskMemberSel" onchange="onTaskMemberChange()">
-        <option value="">-- ممبر منتخب کریں --</option>
-      </select>
+      <select id="taskMemberSel" onchange="onTaskMemberChange()"><option value="">-- ممبر منتخب کریں --</option></select>
     </div>
     <div class="task-current" id="taskCurrent">
       <div class="lbl">📌 موجودہ ٹاسک</div>
@@ -141,25 +124,16 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
       <button class="notdone" onclick="taskSubmit('notdone')">❌ نہیں ہوا</button>
       <button class="skip" onclick="taskSubmit('skip')">⚪ کرنا نہیں تھا</button>
     </div>
-    <div class="task-score">🏆 ٹوٹل پوائنٹس: <b id="totalPoints">0</b></div>
     <div style="font-size:11px;font-weight:800;color:#475569;margin-top:14px;margin-bottom:6px;">📜 حالیہ ٹاسک</div>
-    <div class="task-history" id="taskHistList">
-      <div class="empty-note">کوئی ریکارڈ نہیں</div>
-    </div>
+    <div class="task-history" id="taskHistList"><div class="empty-note">کوئی ریکارڈ نہیں</div></div>
+    <div class="task-score">🏆 ٹوٹل پوائنٹس: <b id="totalPoints">0</b></div>
   </div>
 
-  <!-- SKIP SECTION -->
   <div class="card skip">
     <h2><span>⛔ چھوڑے ہوئے کام</span></h2>
     <div class="skip-2col">
-      <div class="skip-col">
-        <div class="hd">🟢 سینئر</div>
-        <div class="skip-list" id="skipSeniorList"><div class="empty-note">کوئی نہیں</div></div>
-      </div>
-      <div class="skip-col junior">
-        <div class="hd">🔵 جونیئر</div>
-        <div class="skip-list" id="skipJuniorList"><div class="empty-note">کوئی نہیں</div></div>
-      </div>
+      <div class="skip-col"><div class="hd">🟢 سینئر</div><div class="skip-list" id="skipSeniorList"><div class="empty-note">کوئی نہیں</div></div></div>
+      <div class="skip-col junior"><div class="hd">🔵 جونیئر</div><div class="skip-list" id="skipJuniorList"><div class="empty-note">کوئی نہیں</div></div></div>
     </div>
     <div class="skip-form">
       <div class="ttl">📝 چھوڑے ہوئے کام کی وجہ دیں</div>
@@ -168,12 +142,21 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
       <input type="text" id="skipReasonInput" placeholder="وجہ لکھیں...">
       <button onclick="submitSkipReason()">✅ وجہ سبمٹ کریں</button>
     </div>
+    <div class="skip-footer">
+      <div class="fbox"><div class="n" id="sfMembers">0</div><div class="l">👥 ممبرز</div></div>
+      <div class="fbox"><div class="n" id="sfDone" style="color:#16a34a;">0</div><div class="l">✅ ہو گیا</div></div>
+      <div class="fbox"><div class="n" id="sfNotDone" style="color:#dc2626;">0</div><div class="l">❌ نہیں ہوا</div></div>
+      <div class="fbox"><div class="n" id="sfSkip" style="color:#ea580c;">0</div><div class="l">⛔ چھوڑے</div></div>
+    </div>
   </div>
 
+  <div class="card result" id="resultCard">
+    <h2><span>🏆 ممبران فائنل رزلٹ</span></h2>
+    <div class="result-grid" id="resultGrid"><div class="empty-note">ابھی کوئی نتیجہ نہیں</div></div>
+  </div>
 </div>
 
 <script>
-/* ═══ KEYS ═══ */
 var DUTY_KEY='sec4_duty_manager_data_v4';
 var LEAVE_KEY='sec4_duty_leaves_data_v4';
 var HIST_KEY='sec4_duty_history_data_v4';
@@ -182,7 +165,6 @@ var TASK_KEY='sec3_task_and_point_manager_data';
 var REC_KEY='sec12_task_records';
 var SKIP_KEY='sec4_duty_skipped_data';
 var IDX_KEY='sec10_alert_index';
-var NEWS_IDX_KEY='sec10_news_index';
 var LAST_NEWS_KEY='sec10_last_news_ids';
 var FIRED_KEY='sec10_complaint_fired';
 var SETTINGS_KEY='sec10_app_settings';
@@ -194,8 +176,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s==null?'':Str
 function pad(n){return String(n).padStart(2,'0');}
 function getDayName(dt){var days=['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];return days[dt.getDay()]||'';}
 
-/* ═══ BELL / VOICE / VIBRATE ═══ */
-var bellLoop=null, vibrateLoop=null, voiceToggle=0, newsTimer=null;
+var bellLoop=null, vibrateLoop=null, voiceToggle=0;
 
 function playBell(){
   try{
@@ -244,7 +225,6 @@ function stopAll(){
   if(window.speechSynthesis) try{window.speechSynthesis.cancel();}catch(e){}
 }
 
-/* ═══ NEWS ═══ */
 function updateNews(){
   var s=ls(SETTINGS_KEY,{});
   if(s.news===false){$('newsText').textContent='📰 News Patty بند ہے';$('newsText').style.animation='none';return;}
@@ -262,14 +242,11 @@ function checkNewNews(){
   if(last&&ids!==last&&news.length){playBell();speak(news[0].content);}
   localStorage.setItem(LAST_NEWS_KEY,ids);
 }
-
-/* ═══ ALERT ═══ */
 function showAlert(){
   var s=ls(SETTINGS_KEY,{});
   if(s.alert===false){$('alertBar').classList.remove('show');return;}
   var all=ls(NEWS_KEY,[]);if(!Array.isArray(all)) all=[];
-  var alerts=all.filter(function(x){return x.type==='alert'&&x.enabled===true;})
-                .sort(function(a,b){return b.timestamp-a.timestamp;});
+  var alerts=all.filter(function(x){return x.type==='alert'&&x.enabled===true;}).sort(function(a,b){return b.timestamp-a.timestamp;});
   var bar=$('alertBar');
   if(!alerts.length){bar.classList.remove('show');return;}
   var idx=parseInt(localStorage.getItem(IDX_KEY)||'0',10);
@@ -277,9 +254,7 @@ function showAlert(){
   var a=alerts[idx];
   bar.className='alert-bar show blink';
   $('alertTxt').innerHTML='🚨 '+(idx+1)+'/'+alerts.length+': '+esc(a.content);
-  stopAll();
-  playBell();bellLoop=setInterval(playBell,1200);
-  startVibrate();speak(a.content);
+  stopAll();playBell();bellLoop=setInterval(playBell,1200);startVibrate();speak(a.content);
 }
 window.skipAlert=function(){
   stopAll();
@@ -290,8 +265,6 @@ window.skipAlert=function(){
   idx++;if(idx>=alerts.length) idx=0;
   localStorage.setItem(IDX_KEY,String(idx));
 };
-
-/* ═══ COMPLAINTS ═══ */
 function checkComplaints(){
   var all=ls(NEWS_KEY,[]);if(!Array.isArray(all)) all=[];
   var comps=all.filter(function(x){return x.type==='complaint'&&x.fireTime&&x.enabled===true;});
@@ -310,14 +283,12 @@ function checkComplaints(){
     var bar=$('alertBar');
     bar.className='alert-bar show blink';
     $('alertTxt').innerHTML='⏰ '+esc(c.fireTime)+' — '+esc(c.content);
-    playBell();bellLoop=setInterval(playBell,1200);
-    startVibrate();speak(c.content);
+    playBell();bellLoop=setInterval(playBell,1200);startVibrate();speak(c.content);
     fired[k]=Date.now();
   });
   lss(FIRED_KEY,fired);
 }
 
-/* ═══ DUTY ═══ */
 function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
 function updateDuty(){
   var m=getMembers();
@@ -329,9 +300,7 @@ function updateDuty(){
   if(active&&active.dutyStart){
     var el=Math.floor((Date.now()-active.dutyStart)/1000);
     $('dutyMiniTimer').textContent='⏱️ '+pad(Math.floor(el/3600))+':'+pad(Math.floor((el%3600)/60))+':'+pad(el%60);
-  } else {
-    $('dutyMiniTimer').textContent='⏱️ 00:00:00';
-  }
+  } else $('dutyMiniTimer').textContent='⏱️ 00:00:00';
 }
 function populateLeaveDropdown(){
   var sel=$('leaveMemberSel');if(!sel) return;
@@ -389,7 +358,6 @@ function renderTodayLeaves(){
   }).join('');
 }
 
-/* ═══ TASK ═══ */
 var currentMember='', currentTaskIndex=0;
 function getTasks(){var t=ls(TASK_KEY,[]);return Array.isArray(t)?t:[];}
 function getRecords(){var r=ls(REC_KEY,[]);return Array.isArray(r)?r:[];}
@@ -433,12 +401,7 @@ window.taskSubmit=function(status){
   var recs=getRecords();
   var pts=(status==='done')?(parseInt(c.points,10)||0):0;
   var now=new Date();
-  recs.unshift({
-    id:Date.now(),member:currentMember,task:c.title,type:c.type,
-    points:pts,status:status,timestamp:now.getTime(),
-    dateStr:pad(now.getDate())+'/'+pad(now.getMonth()+1)+'/'+now.getFullYear(),
-    timeStr:pad(now.getHours())+':'+pad(now.getMinutes())
-  });
+  recs.unshift({id:Date.now(),member:currentMember,task:c.title,type:c.type,points:pts,status:status,timestamp:now.getTime(),dateStr:pad(now.getDate())+'/'+pad(now.getMonth()+1)+'/'+now.getFullYear(),timeStr:pad(now.getHours())+':'+pad(now.getMinutes())});
   if(recs.length>500) recs=recs.slice(0,500);
   saveRecords(recs);
   if(status==='notdone'){
@@ -447,7 +410,7 @@ window.taskSubmit=function(status){
     saveSkipped(sk);
   }
   currentTaskIndex++;
-  renderCurrentTask();renderTaskHistory();renderTotalPoints();renderSkip();
+  renderCurrentTask();renderTaskHistory();renderTotalPoints();renderSkip();renderResults();
 };
 function renderTaskHistory(){
   var box=$('taskHistList');if(!box) return;
@@ -467,15 +430,11 @@ function renderTotalPoints(){
   $('totalPoints').textContent=t;
 }
 
-/* ═══ SKIP ═══ */
 function renderSkip(){
   var s=getSkipped();
   var d=new Date();
   var todayPrefix=pad(d.getDate())+'/'+pad(d.getMonth()+1);
-  var today=s.filter(function(x){
-    var t=new Date(x.timestamp);
-    return (pad(t.getDate())+'/'+pad(t.getMonth()+1))===todayPrefix;
-  });
+  var today=s.filter(function(x){var t=new Date(x.timestamp);return (pad(t.getDate())+'/'+pad(t.getMonth()+1))===todayPrefix;});
   var seniorL=[],juniorL=[];
   var m=getMembers();
   today.forEach(function(item){
@@ -485,6 +444,7 @@ function renderSkip(){
   });
   renderSkipList('skipSeniorList',seniorL);
   renderSkipList('skipJuniorList',juniorL);
+  renderSkipFooter();
 }
 function renderSkipList(elId,list){
   var el=$(elId);if(!el) return;
@@ -493,10 +453,21 @@ function renderSkipList(elId,list){
     var d=new Date(x.timestamp);
     var ds=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
     if(x.hasReason){
-      return '<div class="skip-item done"><div class="nm">📌 '+esc(x.member)+'</div><div class="task">'+esc(x.task)+'</div><div class="reason">✅ '+esc(x.reason)+'</div><div class="date">'+ds+'</div></div>';
+      return '<div class="skip-item done"><div class="nm">📌 '+esc(x.member)+'</div><div class="reason">✅ '+esc(x.reason)+'</div><div class="date">'+ds+'</div></div>';
     }
     return '<div class="skip-item pending"><div class="nm">📌 '+esc(x.member)+'</div><div class="task">'+esc(x.task)+'</div><div class="warn">⚠️ وجہ نہیں دی</div><div class="date">'+ds+'</div></div>';
   }).join('');
+}
+function renderSkipFooter(){
+  var recs=getRecords();
+  var d=new Date();
+  var todayPrefix=pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+  var todayRecs=recs.filter(function(x){return x.dateStr===todayPrefix;});
+  var uniq={};todayRecs.forEach(function(x){uniq[x.member]=true;});
+  $('sfMembers').textContent=Object.keys(uniq).length;
+  $('sfDone').textContent=todayRecs.filter(function(x){return x.status==='done';}).length;
+  $('sfNotDone').textContent=todayRecs.filter(function(x){return x.status==='notdone';}).length;
+  $('sfSkip').textContent=todayRecs.filter(function(x){return x.status==='skip';}).length;
 }
 function populateSkipMembers(){
   var sel=$('skipMemberSel');if(!sel) return;
@@ -521,8 +492,7 @@ window.submitSkipReason=function(){
   if(!id){alert('کام منتخب کریں');return;}
   if(!reason){alert('وجہ لکھیں');return;}
   var s=getSkipped();
-  var r=s.find(function(x){return x.id===id;});
-  if(!r) return;
+  var r=s.find(function(x){return x.id===id;});if(!r) return;
   r.reason=reason;r.hasReason=true;
   saveSkipped(s);
   $('skipReasonInput').value='';$('skipMemberSel').value='';
@@ -530,33 +500,51 @@ window.submitSkipReason=function(){
   renderSkip();
 };
 
-/* ═══ BOOT ═══ */
+function renderResults(){
+  var card=$('resultCard');
+  var toggle=ls('sec_result_dash_toggle',{show:true});
+  if(toggle.show===false){card.style.display='none';return;}
+  card.style.display='block';
+
+  var recs=getRecords();
+  if(!recs.length){$('resultGrid').innerHTML='<div class="empty-note">ابھی کوئی نتیجہ نہیں</div>';return;}
+  var totals={};
+  recs.forEach(function(r){
+    if(!totals[r.member]) totals[r.member]=0;
+    totals[r.member]+=(r.points||0);
+  });
+  var sorted=Object.keys(totals).map(function(name){return {name:name, points:totals[name]};}).sort(function(a,b){return b.points-a.points;});
+  if(!sorted.length){$('resultGrid').innerHTML='<div class="empty-note">ابھی کوئی نتیجہ نہیں</div>';return;}
+  $('resultGrid').innerHTML=sorted.map(function(x,i){
+    var badge=i===0?'🥇':(i===1?'🥈':(i===2?'🥉':''));
+    return '<div class="result-row"><span class="rank-badge">'+(i+1)+'</span><span class="name">'+(badge?' '+badge+' ':'')+esc(x.name)+'</span><span class="pts">🏆 '+x.points+'</span></div>';
+  }).join('');
+}
+
 function boot(){
   updateNews();checkNewNews();updateDuty();populateLeaveDropdown();renderTodayLeaves();
   populateTaskMembers();renderCurrentTask();renderTaskHistory();renderTotalPoints();
-  renderSkip();populateSkipMembers();
+  renderSkip();populateSkipMembers();renderResults();
   setTimeout(showAlert,1200);
   window.addEventListener('storage',function(e){
     if(e.key===NEWS_KEY){updateNews();checkNewNews();}
     if(e.key===DUTY_KEY||e.key===LEAVE_KEY){updateDuty();populateLeaveDropdown();renderTodayLeaves();populateTaskMembers();renderSkip();populateSkipMembers();}
-    if(e.key===REC_KEY){renderTaskHistory();renderTotalPoints();}
+    if(e.key===REC_KEY){renderTaskHistory();renderTotalPoints();renderResults();renderSkipFooter();}
     if(e.key===SKIP_KEY){renderSkip();}
+    if(e.key==='sec_result_dash_toggle'){renderResults();}
   });
   setInterval(function(){updateNews();checkNewNews();},5000);
   setInterval(updateDuty,1000);
   setInterval(function(){populateLeaveDropdown();renderTodayLeaves();populateTaskMembers();populateSkipMembers();},5000);
-  setInterval(function(){renderCurrentTask();renderTaskHistory();renderTotalPoints();renderSkip();},3000);
+  setInterval(function(){renderCurrentTask();renderTaskHistory();renderTotalPoints();renderSkip();renderResults();},3000);
   setInterval(checkComplaints,20000);
   checkComplaints();
 }
-
 document.addEventListener('click',function unlock(){
   try{var c=new (window.AudioContext||window.webkitAudioContext)();if(c.state==='suspended')c.resume();}catch(e){}
   document.removeEventListener('click',unlock);
 },{once:true});
-
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot);
-else boot();
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 </script>
 </body>
 </html>
