@@ -9,30 +9,31 @@
 body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:12px}
 .card{background:#fff;max-width:700px;margin:0 auto 14px;border-radius:14px;padding:14px;border-right:5px solid #7c3aed;box-shadow:0 8px 18px rgba(0,0,0,.08);position:relative}
 .card.task{border-right-color:#16a34a}
-.card.news{border-right-color:#ea580c}
 .card.skip{border-right-color:#dc2626}
+.card.result{border-right-color:#f59e0b}
+.card.news{border-right-color:#ea580c}
 .card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #ddd6fe;gap:6px}
 .card.task .card-hd{border-color:#bbf7d0}
-.card.news .card-hd{border-color:#fed7aa}
 .card.skip .card-hd{border-color:#fecaca}
+.card.result .card-hd{border-color:#fde68a}
+.card.news .card-hd{border-color:#fed7aa}
 h1{font-size:16px;color:#7c3aed}
 .card.task h1{color:#16a34a}
-.card.news h1{color:#ea580c}
 .card.skip h1{color:#dc2626}
+.card.result h1{color:#f59e0b}
+.card.news h1{color:#ea580c}
 .hidden-dot{position:absolute;top:12px;left:12px;width:20px;height:20px;border-radius:50%;background:transparent;border:none;cursor:pointer;font-size:8px;opacity:.15;color:#64748b;font-family:inherit}
 .hidden-dot:hover{opacity:.6}
 label{display:block;font-size:11px;font-weight:800;color:#334155;margin-top:10px;margin-bottom:4px}
 select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;outline:none;background:#fff}
 .btn{width:100%;padding:11px;background:#7c3aed;color:#fff;font-size:14px;font-weight:800;border:none;border-radius:8px;cursor:pointer;margin-top:10px;font-family:inherit}
-.btn.green{background:#16a34a}
-.btn.orange{background:#ea580c}
-.btn.red{background:#dc2626}
+.btn.green{background:#16a34a}.btn.orange{background:#ea580c}.btn.red{background:#dc2626}.btn.amber{background:#f59e0b}
 .btn.small{width:auto;padding:8px 14px;font-size:12px;margin-top:0}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:8px}
 .item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;margin-bottom:5px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}
-.item .cb{width:16px;height:16px;accent-color:#ea580c;cursor:pointer;flex-shrink:0;display:none}
+.item .cb{width:16px;height:16px;accent-color:#7c3aed;cursor:pointer;flex-shrink:0;display:none}
 .item.sel-on .cb{display:inline-block}
 .item .info{flex:1;min-width:0}
 .item .name{color:#1e293b;font-weight:800;font-size:13px}
@@ -40,20 +41,18 @@ select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;
 .item .badge.occasional{background:#fef3c7;color:#92400e}
 .item .badge.rank{background:#ede9fe;color:#6d28d9}
 .item .points{background:#fef9c3;color:#854d0e;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:800}
-.item .del{background:#ef4444;color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-weight:800;padding:0;flex-shrink:0}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center}
 .stat .n{font-size:18px;font-weight:900;color:#16a34a}
 .stat .l{font-size:10px;color:#64748b;font-weight:700;margin-top:2px}
 .msg{display:none;padding:9px;border-radius:8px;font-size:11px;font-weight:800;margin-top:8px;text-align:center}
 .msg.ok{display:block;background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
-.msg.err{display:block;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5}
 .settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:10px;margin-bottom:12px}
 .settings-panel.open{display:block}
 .settings-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
 .settings-actions button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
 .settings-actions button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-actions button.active{background:#16a34a;color:#fff;border-color:#16a34a}
+.settings-actions button.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
 .settings-actions button.lock-btn{background:#fef3c7;color:#92400e;border-color:#fcd34d}
 .settings-actions button.lock-btn.on{background:#dc2626;color:#fff;border-color:#dc2626}
 .lock-screen{display:none;background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;padding:20px;text-align:center;margin-bottom:12px}
@@ -63,24 +62,28 @@ select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;
 .lock-screen button{padding:9px 20px;margin:0 4px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
 .lock-screen .unlock{background:#16a34a;color:#fff}
 .lock-screen .forgot{background:#f1f5f9;color:#64748b;border:1px solid #cbd5e1}
+.result-filter{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0}
+.result-filter button{padding:8px 2px;font-size:10px;font-weight:800;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:6px;cursor:pointer;font-family:inherit}
+.result-filter button.on{background:#f59e0b;color:#fff;border-color:#f59e0b}
+.toggle-row{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.toggle-row .lbl{font-size:11px;font-weight:800;color:#92400e}
+.toggle{width:42px;height:22px;background:#cbd5e1;border-radius:22px;position:relative;cursor:pointer;transition:.3s;flex-shrink:0}
+.toggle.on{background:#16a34a}
+.toggle .dot{width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:2px;right:2px;transition:.3s}
+.toggle.on .dot{right:calc(100% - 20px)}
+.result-row{background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:10px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;font-weight:800}
+.result-row .rank{background:#f59e0b;color:#fff;font-size:11px;padding:2px 10px;border-radius:20px;min-width:28px;text-align:center}
+.result-row .name{flex:1;color:#1e293b}
+.result-row .pts{background:#facc15;color:#78350f;padding:2px 10px;border-radius:20px;font-size:11px}
 </style>
 </head>
 <body>
 
-<!-- ═══ TASK MANAGER ═══ -->
+<!-- TASK MANAGER -->
 <div class="card task">
   <button class="hidden-dot" onclick="toggleTaskSettings()">·</button>
   <div class="card-hd"><h1>📋 Task And Point Manager</h1></div>
-
-  <div class="lock-screen" id="taskLockScreen">
-    <h3>🔒 سیکشن لاک ہے</h3>
-    <input type="password" id="taskLockPass" placeholder="••••" maxlength="8">
-    <div>
-      <button class="unlock" onclick="unlockTask()">🔓 کھولیں</button>
-      <button class="forgot" onclick="forgotTaskPass()">❓ بھول گیا</button>
-    </div>
-  </div>
-
+  <div class="lock-screen" id="taskLockScreen"><h3>🔒 سیکشن لاک ہے</h3><input type="password" id="taskLockPass" placeholder="••••" maxlength="8"><div><button class="unlock" onclick="unlockTask()">🔓 کھولیں</button><button class="forgot" onclick="forgotTaskPass()">❓ بھول گیا</button></div></div>
   <div class="settings-panel" id="taskSettings">
     <div class="settings-actions">
       <button id="taskSelBtn" onclick="taskToggleSelMode()">☑️ سلیکٹ موڈ</button>
@@ -95,50 +98,26 @@ select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;
       <button onclick="toggleTaskSettings()">🚪 بند</button>
     </div>
   </div>
-
   <div id="taskContent">
     <label>کام کا نام</label>
     <input type="text" id="taskName" placeholder="کام کا نام درج کریں...">
     <div class="row3" style="margin-top:8px;">
-      <div>
-        <label style="margin-top:0;">قسم</label>
-        <select id="taskType">
-          <option value="Daily">📅 روزانہ</option>
-          <option value="Occasional">⭐ کبھی کبھی</option>
-        </select>
-      </div>
-      <div>
-        <label style="margin-top:0;">پوائنٹس</label>
-        <input type="number" id="taskPoints" value="5" min="1">
-      </div>
-      <div style="display:flex;align-items:flex-end;">
-        <button class="btn green" style="margin-top:0;" onclick="taskAdd()">➕ شامل</button>
-      </div>
+      <div><label style="margin-top:0;">قسم</label><select id="taskType"><option value="Daily">📅 روزانہ</option><option value="Occasional">⭐ کبھی کبھی</option></select></div>
+      <div><label style="margin-top:0;">پوائنٹس</label><input type="number" id="taskPoints" value="5" min="1"></div>
+      <div style="display:flex;align-items:flex-end;"><button class="btn green" style="margin-top:0;" onclick="taskAdd()">➕ شامل</button></div>
     </div>
     <div class="msg" id="taskMsg"></div>
     <label style="margin-top:14px;">📋 ٹاسک لسٹ (<span id="taskCount">0</span>)</label>
     <div class="list" id="taskList"><div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کوئی ٹاسک نہیں</div></div>
-    <div class="stats">
-      <div class="stat"><div class="n" id="taskTotalCount">0</div><div class="l">📋 کل ٹاسک</div></div>
-      <div class="stat"><div class="n" id="taskTotalPoints">0</div><div class="l">🏆 کل پوائنٹس</div></div>
-    </div>
+    <div class="stats"><div class="stat"><div class="n" id="taskTotalCount">0</div><div class="l">📋 کل ٹاسک</div></div><div class="stat"><div class="n" id="taskTotalPoints">0</div><div class="l">🏆 کل پوائنٹس</div></div></div>
   </div>
 </div>
 
-<!-- ═══ SKIP SECTION ═══ -->
+<!-- SKIP SECTION -->
 <div class="card skip">
   <button class="hidden-dot" onclick="toggleSkipSettings()">·</button>
-  <div class="card-hd"><h1>⛔ Skip Section</h1></div>
-
-  <div class="lock-screen" id="skipLockScreen">
-    <h3>🔒 سیکشن لاک ہے</h3>
-    <input type="password" id="skipLockPass" placeholder="••••" maxlength="8">
-    <div>
-      <button class="unlock" onclick="unlockSkip()">🔓 کھولیں</button>
-      <button class="forgot" onclick="forgotSkipPass()">❓ بھول گیا</button>
-    </div>
-  </div>
-
+  <div class="card-hd"><h1>⛔ Chhody Hoye Kam (Skip)</h1></div>
+  <div class="lock-screen" id="skipLockScreen"><h3>🔒 سیکشن لاک ہے</h3><input type="password" id="skipLockPass" placeholder="••••" maxlength="8"><div><button class="unlock" onclick="unlockSkip()">🔓 کھولیں</button><button class="forgot" onclick="forgotSkipPass()">❓ بھول گیا</button></div></div>
   <div class="settings-panel" id="skipSettings">
     <div class="settings-actions">
       <button id="skipSelBtn" onclick="skipToggleSelMode()">☑️ سلیکٹ موڈ</button>
@@ -153,23 +132,90 @@ select,input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;
       <button onclick="toggleSkipSettings()">🚪 بند</button>
     </div>
   </div>
-
   <div id="skipContent">
     <label>Skip Records (<span id="skipCount">0</span>)</label>
     <div class="list" id="skipList" style="max-height:300px;"><div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی ریکارڈ نہیں</div></div>
-    <div class="stats">
-      <div class="stat"><div class="n" id="skipTotal" style="color:#dc2626;">0</div><div class="l">📋 کل</div></div>
-      <div class="stat"><div class="n" id="skipPending" style="color:#ea580c;">0</div><div class="l">⏳ وجہ نہیں</div></div>
+    <div class="stats"><div class="stat"><div class="n" id="skipTotal" style="color:#dc2626;">0</div><div class="l">📋 کل</div></div><div class="stat"><div class="n" id="skipPending" style="color:#ea580c;">0</div><div class="l">⏳ وجہ نہیں</div></div></div>
+  </div>
+</div>
+
+<!-- RESULT MANAGER -->
+<div class="card result">
+  <button class="hidden-dot" onclick="toggleResultSettings()">·</button>
+  <div class="card-hd"><h1>🏆 Result Manager</h1></div>
+  <div class="settings-panel" id="resultSettings">
+    <div class="settings-actions">
+      <button class="danger" onclick="resultDeleteAll(this)">❌ سب صاف</button>
+      <button onclick="toggleResultSettings()">🚪 بند</button>
+    </div>
+  </div>
+  <div id="resultContent">
+    <label>ممبر منتخب کریں (اختیاری)</label>
+    <select id="resMemberFilter" onchange="renderResultEntry()">
+      <option value="">تمام ممبران</option>
+    </select>
+    <label style="margin-top:12px;">Filter — Kitne dino ka?</label>
+    <div class="result-filter">
+      <button data-f="1" onclick="setResultFilter('1')">📅 Daily</button>
+      <button data-f="7" onclick="setResultFilter('7')">📆 Weekly</button>
+      <button data-f="30" class="on" onclick="setResultFilter('30')">🗓️ Monthly</button>
+      <button data-f="365" onclick="setResultFilter('365')">📅 Yearly</button>
+    </div>
+    <div class="toggle-row">
+      <span class="lbl">📊 Dashboard پر Result دکھائیں</span>
+      <div class="toggle on" id="resDashToggle" onclick="toggleResDash()"><div class="dot"></div></div>
+    </div>
+    <div class="list" id="resultList" style="margin-top:12px;max-height:300px;">
+      <div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی نتیجہ نہیں</div>
     </div>
   </div>
 </div>
 
+<!-- NEWS & ALERTS -->
+<div class="card news">
+  <button class="hidden-dot" onclick="toggleNewsSettings()">·</button>
+  <div class="card-hd"><h1>📰 News & Alerts Manager</h1></div>
+  <div class="lock-screen" id="newsLockScreen"><h3>🔒 سیکشن لاک ہے</h3><input type="password" id="newsLockPass" placeholder="••••" maxlength="8"><div><button class="unlock" onclick="unlockNews()">🔓 کھولیں</button><button class="forgot" onclick="forgotNewsPass()">❓ بھول گیا</button></div></div>
+  <div class="settings-panel" id="newsSettings">
+    <div class="settings-actions">
+      <button id="newsSelBtn" onclick="newsToggleSelMode()">☑️ سلیکٹ موڈ</button>
+      <button onclick="newsSelectAll(true)">✅ تمام</button>
+      <button onclick="newsSelectAll(false)">⬜ ہٹائیں</button>
+      <button onclick="newsEditSel()">✏️ ایڈٹ</button>
+      <button class="danger" onclick="newsDeleteSel()">🗑️ ڈیلیٹ</button>
+      <button class="danger" onclick="newsDeleteAll(this)">❌ سب صاف</button>
+      <button class="lock-btn" id="newsLockBtn" onclick="newsToggleLock()">🔒 سیکشن لاک</button>
+      <button onclick="toggleNewsSettings()">🚪 بند</button>
+    </div>
+  </div>
+  <div id="newsContent">
+    <label>قسم منتخب کریں</label>
+    <select id="nType" onchange="onTypeChange()"><option value="news">📰 News Add</option><option value="alert">🚨 Alert Patty</option><option value="complaint">⏰ Time Alert</option></select>
+    <label>متن</label>
+    <input type="text" id="nContent" placeholder="نیوز یا الرٹ لکھیں...">
+    <div id="timeWrap" style="display:none;"><label>وقت</label><input type="time" id="nFireTime" value="21:00"></div>
+    <button class="btn orange" onclick="saveNewsAlert()">💾 محفوظ کریں</button>
+    <div class="msg" id="newsMsg"></div>
+    <div class="stats" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="stat"><div class="n" id="cNews" style="color:#ea580c;">0</div><div class="l">📰 News</div></div>
+      <div class="stat"><div class="n" id="cAlert" style="color:#dc2626;">0</div><div class="l">🚨 Alert</div></div>
+      <div class="stat"><div class="n" id="cComp" style="color:#7c3aed;">0</div><div class="l">⏰ Time</div></div>
+    </div>
+    <label style="margin-top:14px;">📋 ریکارڈز (<span id="recCount">0</span>)</label>
+    <div class="list" id="newsList" style="max-height:300px;"><div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div></div>
+  </div>
+</div>
+
 <script>
-/* ═══ KEYS ═══ */
 var TASK_KEY='sec3_task_and_point_manager_data';
 var SKIP_KEY='sec4_duty_skipped_data';
+var REC_KEY='sec12_task_records';
+var NEWS_KEY='sec10_news_alerts_data';
+var DUTY_KEY='sec4_duty_manager_data_v4';
 var TASK_LOCK='sec_task_lock', TASK_PASS='sec_task_password';
 var SKIP_LOCK='sec_skip_lock', SKIP_PASS='sec_skip_password';
+var NEWS_LOCK='sec_news_lock', NEWS_PASS='sec_news_password';
+var RESULT_DASH_KEY='sec_result_dash_toggle';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -177,14 +223,11 @@ function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
 
-/* ═══ TASK ═══ */
+/* TASK */
 var taskSelMode=false, taskSelected={}, taskDelPending=false;
-
 function getTasks(){var t=ls(TASK_KEY,[]);return Array.isArray(t)?t:[];}
 function saveTasks(t){lss(TASK_KEY,t);}
-
 window.toggleTaskSettings=function(){$('taskSettings').classList.toggle('open');};
-
 window.taskAdd=function(){
   var name=$('taskName').value.trim();
   var type=$('taskType').value;
@@ -194,14 +237,12 @@ window.taskAdd=function(){
   t.unshift({id:Date.now(),title:name,type:type,points:pts,selected:false});
   saveTasks(t);
   $('taskName').value='';$('taskPoints').value='5';
-  showTaskMsg('✅ ٹاسک شامل','ok');
-  renderTasks();
+  showTaskMsg('✅ ٹاسک شامل','ok');renderTasks();
 };
 function showTaskMsg(msg,type){
   var m=$('taskMsg');m.textContent=msg;m.className='msg '+type;
   setTimeout(function(){m.className='msg';},2500);
 }
-
 function renderTasks(){
   var t=getTasks();
   $('taskCount').textContent=t.length;
@@ -214,8 +255,7 @@ function renderTasks(){
     var isSel=!!taskSelected[x.id];
     var tb=x.type==='Daily'?'<span class="badge">📅 روزانہ</span>':'<span class="badge occasional">⭐ کبھی کبھی</span>';
     var cb='<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="taskToggleSel('+x.id+')">';
-    return '<div class="item'+(taskSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+
-      cb+'<div class="info"><div><span class="name">'+esc(x.title)+'</span>'+tb+' <span class="points">🏆 '+x.points+'</span></div></div></div>';
+    return '<div class="item'+(taskSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#16a34a;background:#f0fdf4;':'')+'">'+cb+'<div class="info"><div><span class="name">'+esc(x.title)+'</span>'+tb+' <span class="points">🏆 '+x.points+'</span></div></div></div>';
   }).join('');
 }
 window.taskToggleSel=function(id){if(taskSelected[id]) delete taskSelected[id];else taskSelected[id]=true;renderTasks();};
@@ -234,8 +274,7 @@ window.taskSelectAll=function(st){
 window.taskEditSel=function(){
   var ids=Object.keys(taskSelected).filter(function(k){return taskSelected[k];});
   if(ids.length!==1){alert('ایک منتخب کریں');return;}
-  var id=parseInt(ids[0],10);
-  var t=getTasks();
+  var id=parseInt(ids[0],10),t=getTasks();
   var r=t.find(function(x){return x.id===id;});if(!r) return;
   var nv=prompt('نیا نام:',r.title);if(nv===null) return;
   nv=nv.trim();if(!nv) return;
@@ -271,17 +310,12 @@ window.taskDeleteAll=function(btn){
   saveTasks([]);taskSelected={};taskDelPending=false;
   btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderTasks();
 };
-window.toggleTaskSettings=function(){$('taskSettings').classList.toggle('open');};
-
-/* Task Lock */
 function isTaskLocked(){var s=ls(TASK_LOCK,{});return s.locked===true;}
 function setTaskLock(l){var s=ls(TASK_LOCK,{});s.locked=l;lss(TASK_LOCK,s);}
 function getTaskPass(){return ls(TASK_PASS,'1234')||'1234';}
 function applyTaskLock(){
-  if(isTaskLocked()){$('taskLockScreen').classList.add('show');$('taskContent').style.display='none';
-    $('taskLockBtn').textContent='🔓 انلاک';$('taskLockBtn').classList.add('on');}
-  else{$('taskLockScreen').classList.remove('show');$('taskContent').style.display='block';
-    $('taskLockBtn').textContent='🔒 سیکشن لاک';$('taskLockBtn').classList.remove('on');}
+  if(isTaskLocked()){$('taskLockScreen').classList.add('show');$('taskContent').style.display='none';$('taskLockBtn').textContent='🔓 انلاک';$('taskLockBtn').classList.add('on');}
+  else{$('taskLockScreen').classList.remove('show');$('taskContent').style.display='block';$('taskLockBtn').textContent='🔒 سیکشن لاک';$('taskLockBtn').classList.remove('on');}
 }
 window.taskToggleLock=function(){
   if(isTaskLocked()){setTaskLock(false);applyTaskLock();return;}
@@ -299,12 +333,10 @@ window.forgotTaskPass=function(){
   lss(TASK_PASS,'1234');setTaskLock(false);applyTaskLock();
 };
 
-/* ═══ SKIP ═══ */
+/* SKIP */
 var skipSelMode=false, skipSelected={}, skipDelPending=false;
-
 function getSkippedList(){var s=ls(SKIP_KEY,[]);return Array.isArray(s)?s:[];}
 function saveSkippedList(s){lss(SKIP_KEY,s);}
-
 window.toggleSkipSettings=function(){$('skipSettings').classList.toggle('open');};
 window.skipToggleSelMode=function(){
   skipSelMode=!skipSelMode;
@@ -354,16 +386,12 @@ window.skipDeleteAll=function(btn){
   saveSkippedList([]);skipSelected={};skipDelPending=false;
   btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderSkipList();
 };
-
-/* Skip Lock */
 function isSkipLocked(){var s=ls(SKIP_LOCK,{});return s.locked===true;}
 function setSkipLock(l){var s=ls(SKIP_LOCK,{});s.locked=l;lss(SKIP_LOCK,s);}
 function getSkipPass(){return ls(SKIP_PASS,'1234')||'1234';}
 function applySkipLock(){
-  if(isSkipLocked()){$('skipLockScreen').classList.add('show');$('skipContent').style.display='none';
-    $('skipLockBtn').textContent='🔓 انلاک';$('skipLockBtn').classList.add('on');}
-  else{$('skipLockScreen').classList.remove('show');$('skipContent').style.display='block';
-    $('skipLockBtn').textContent='🔒 سیکشن لاک';$('skipLockBtn').classList.remove('on');}
+  if(isSkipLocked()){$('skipLockScreen').classList.add('show');$('skipContent').style.display='none';$('skipLockBtn').textContent='🔓 انلاک';$('skipLockBtn').classList.add('on');}
+  else{$('skipLockScreen').classList.remove('show');$('skipContent').style.display='block';$('skipLockBtn').textContent='🔒 سیکشن لاک';$('skipLockBtn').classList.remove('on');}
 }
 window.skipToggleLock=function(){
   if(isSkipLocked()){setSkipLock(false);applySkipLock();return;}
@@ -380,7 +408,6 @@ window.forgotSkipPass=function(){
   if(!confirm('پاس ورڈ 1234 پر ری سیٹ؟')) return;
   lss(SKIP_PASS,'1234');setSkipLock(false);applySkipLock();
 };
-
 function renderSkipList(){
   var s=getSkippedList();
   $('skipCount').textContent=s.length;
@@ -394,21 +421,171 @@ function renderSkipList(){
     var ds=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
     var st=x.hasReason?'✅':'⏳';
     var cb=skipSelMode?'<input type="checkbox" class="cb" '+(isSel?'checked':'')+' onchange="skipToggleOne('+x.id+')">':'';
-    return '<div class="item'+(skipSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#dc2626;background:#fef2f2;':'')+'">'+
-      cb+'<div class="info"><div><span class="name">'+esc(x.member)+'</span> <span class="badge rank">'+esc(x.task)+'</span></div>'+
-      '<div style="font-size:10px;color:'+(x.hasReason?'#16a34a':'#ea580c')+';margin-top:3px;font-weight:800;">'+st+' '+(x.hasReason?esc(x.reason):'وجہ نہیں دی')+'</div>'+
-      '<div style="font-size:9px;color:#94a3b8;margin-top:2px;">'+ds+'</div></div></div>';
+    return '<div class="item'+(skipSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#dc2626;background:#fef2f2;':'')+'">'+cb+'<div class="info"><div><span class="name">'+esc(x.member)+'</span> <span class="badge rank">'+esc(x.task)+'</span></div><div style="font-size:10px;color:'+(x.hasReason?'#16a34a':'#ea580c')+';margin-top:3px;font-weight:800;">'+st+' '+(x.hasReason?esc(x.reason):'وجہ نہیں دی')+'</div><div style="font-size:9px;color:#94a3b8;margin-top:2px;">'+ds+'</div></div></div>';
   }).join('');
 }
 window.skipToggleOne=function(id){if(skipSelected[id]) delete skipSelected[id];else skipSelected[id]=true;renderSkipList();};
 
-/* ═══ INIT ═══ */
-renderTasks();renderSkipList();applyTaskLock();applySkipLock();
-setInterval(function(){renderTasks();renderSkipList();},3000);
-window.addEventListener('storage',function(e){
-  if(e.key===TASK_KEY) renderTasks();
-  if(e.key===SKIP_KEY) renderSkipList();
-});
+/* RESULT MANAGER */
+var resFilter='30';
+window.toggleResultSettings=function(){$('resultSettings').classList.toggle('open');};
+window.setResultFilter=function(f){
+  resFilter=f;
+  document.querySelectorAll('.result-filter button').forEach(function(b){b.classList.toggle('on',b.dataset.f===f);});
+  renderResultEntry();
+};
+window.toggleResDash=function(){
+  var t=$('resDashToggle');
+  t.classList.toggle('on');
+  var cur=ls(RESULT_DASH_KEY,{show:true});
+  cur.show=t.classList.contains('on');
+  lss(RESULT_DASH_KEY,cur);
+};
+window.resultDeleteAll=function(btn){
+  if(!confirm('Task records sab clear karein?')) return;
+  lss(REC_KEY,[]);renderResultEntry();
+};
+function renderResultEntry(){
+  var sel=$('resMemberFilter');
+  var recs=ls(REC_KEY,[]);
+  if(!Array.isArray(recs)) recs=[];
+  if(sel){
+    var cur=sel.value;
+    sel.innerHTML='<option value="">تمام ممبران</option>';
+    var names={};recs.forEach(function(x){names[x.member]=true;});
+    Object.keys(names).forEach(function(n){sel.appendChild(new Option(n,n));});
+    if(cur) sel.value=cur;
+  }
+  var mname=sel?sel.value:'';
+  var days=parseInt(resFilter,10)||30;
+  var cutoff=Date.now()-(days*24*60*60*1000);
+  var filtered=recs.filter(function(r){return r.timestamp>=cutoff;});
+  if(mname) filtered=filtered.filter(function(r){return r.member===mname;});
+
+  var totals={};
+  filtered.forEach(function(r){
+    if(!totals[r.member]) totals[r.member]=0;
+    totals[r.member]+=(r.points||0);
+  });
+  var sorted=Object.keys(totals).map(function(n){return {name:n,points:totals[n]};}).sort(function(a,b){return b.points-a.points;});
+
+  var box=$('resultList');
+  if(!sorted.length){box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">کوئی نتیجہ نہیں</div>';return;}
+  box.innerHTML=sorted.map(function(x,i){
+    return '<div class="result-row"><span class="rank">'+(i+1)+'</span><span class="name">'+esc(x.name)+'</span><span class="pts">🏆 '+x.points+'</span></div>';
+  }).join('');
+
+  var tg=ls(RESULT_DASH_KEY,{show:true});
+  $('resDashToggle').classList.toggle('on',tg.show!==false);
+}
+
+/* NEWS */
+var newsSelMode=false, newsSelected={}, newsDelPending=false;
+window.toggleNewsSettings=function(){$('newsSettings').classList.toggle('open');};
+window.onTypeChange=function(){$('timeWrap').style.display=$('nType').value==='complaint'?'block':'none';};
+window.saveNewsAlert=function(){
+  var type=$('nType').value;
+  var content=$('nContent').value.trim();
+  if(!content){showMsg('متن لکھیں','err');return;}
+  var fireTime=null;
+  if(type==='complaint'){fireTime=$('nFireTime').value;if(!fireTime){showMsg('وقت منتخب کریں','err');return;}}
+  var items=ls(NEWS_KEY,[]);if(!Array.isArray(items)) items=[];
+  items.unshift({id:Date.now(),type:type,content:content,fireTime:fireTime,timestamp:Date.now(),enabled:false,fired:false});
+  lss(NEWS_KEY,items);
+  $('nContent').value='';
+  showMsg('✅ محفوظ','ok');renderNews();
+};
+function showMsg(text,type){
+  var m=$('newsMsg');m.textContent=text;m.className='msg '+type;
+  setTimeout(function(){m.className='msg';},2500);
+}
+function fmtDT(ts){var d=new Date(ts);return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());}
+window.newsToggleSelMode=function(){
+  newsSelMode=!newsSelMode;
+  var b=$('newsSelBtn');if(b){b.textContent=newsSelMode?'✅ سلیکٹ آن':'☑️ سلیکٹ موڈ';b.classList.toggle('active',newsSelMode);}
+  if(!newsSelMode) newsSelected={};
+  renderNews();
+};
+window.newsSelectAll=function(st){
+  if(st&&!newsSelMode) newsToggleSelMode();
+  newsSelected={};
+  if(st) ls(NEWS_KEY,[]).forEach(function(x){newsSelected[x.id]=true;});
+  renderNews();
+};
+window.newsEditSel=function(){
+  var ids=Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
+  if(ids.length!==1){alert('ایک منتخب کریں');return;}
+  var id=parseInt(ids[0],10),items=ls(NEWS_KEY,[]);
+  var rec=items.find(function(x){return x.id===id;});if(!rec) return;
+  var nv=prompt('نیا متن:',rec.content);if(nv===null) return;
+  rec.content=nv.trim();lss(NEWS_KEY,items);newsSelected={};renderNews();
+};
+window.newsDeleteSel=function(){
+  var ids=Object.keys(newsSelected).filter(function(k){return newsSelected[k];});
+  if(!ids.length){alert('کچھ منتخب کریں');return;}
+  if(!confirm(ids.length+' ڈیلیٹ کریں؟')) return;
+  lss(NEWS_KEY,ls(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
+  newsSelected={};renderNews();
+};
+window.newsDeleteAll=function(btn){
+  if(!newsDelPending){newsDelPending=true;btn.textContent='⚠️ دوبارہ';btn.style.background='#dc2626';btn.style.color='#fff';
+    setTimeout(function(){newsDelPending=false;btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';},2500);return;}
+  lss(NEWS_KEY,[]);newsSelected={};newsDelPending=false;
+  btn.textContent='❌ سب صاف';btn.style.background='';btn.style.color='';renderNews();
+};
+window.newsToggleLock=function(){
+  if(ls(NEWS_LOCK,{}).locked){
+    lss(NEWS_LOCK,{locked:false});applyNewsLock();return;
+  }
+  var np=prompt('نیا پاس ورڈ (default 1234):','1234');if(np===null) return;
+  lss(NEWS_PASS,np.trim());lss(NEWS_LOCK,{locked:true});applyNewsLock();
+};
+window.unlockNews=function(){
+  if($('newsLockPass').value===(ls(NEWS_PASS,'1234')||'1234')){lss(NEWS_LOCK,{locked:false});applyNewsLock();}
+  else alert('غلط');
+};
+window.forgotNewsPass=function(){lss(NEWS_PASS,'1234');lss(NEWS_LOCK,{locked:false});applyNewsLock();};
+function applyNewsLock(){
+  if(ls(NEWS_LOCK,{}).locked){$('newsLockScreen').classList.add('show');$('newsContent').style.display='none';$('newsLockBtn').textContent='🔓 انلاک';$('newsLockBtn').classList.add('on');}
+  else{$('newsLockScreen').classList.remove('show');$('newsContent').style.display='block';$('newsLockBtn').textContent='🔒 سیکشن لاک';$('newsLockBtn').classList.remove('on');}
+}
+window.toggleNewsEnable=function(id){
+  var items=ls(NEWS_KEY,[]);
+  var r=items.find(function(x){return x.id===id;});if(!r) return;
+  r.enabled=!r.enabled;lss(NEWS_KEY,items);renderNews();
+};
+function renderNews(){
+  var all=ls(NEWS_KEY,[]);if(!Array.isArray(all)) all=[];
+  $('cNews').textContent=all.filter(function(x){return x.type==='news';}).length;
+  $('cAlert').textContent=all.filter(function(x){return x.type==='alert';}).length;
+  $('cComp').textContent=all.filter(function(x){return x.type==='complaint';}).length;
+  $('recCount').textContent=all.length;
+  var box=$('newsList');
+  if(!all.length){box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:11px;padding:14px;">ابھی کچھ نہیں</div>';return;}
+  box.innerHTML=all.slice(0,30).map(function(x){
+    var badge=x.type==='news'?'📰':(x.type==='alert'?'🚨':'⏰');
+    var time=x.fireTime?' ⏰ '+esc(x.fireTime):'';
+    var enabled=x.enabled===true;
+    var isSel=!!newsSelected[x.id];
+    var cb=newsSelMode?'<input type="checkbox" class="cb" '+(enabled?'checked':'')+' onchange="toggleNewsEnable('+x.id+')" style="display:inline-block;">':'';
+    return '<div class="item'+(newsSelMode?' sel-on':'')+'" style="'+(isSel?'border-color:#ea580c;background:#fff7ed;':'')+'">'+cb+'<div class="info"><div><span class="name">'+badge+' '+esc(x.content)+time+'</span></div><div style="font-size:9px;color:#94a3b8;">'+fmtDT(x.timestamp)+'</div></div></div>';
+  }).join('');
+}
+
+function boot(){
+  renderTasks();renderSkipList();renderResultEntry();renderNews();
+  applyTaskLock();applySkipLock();applyNewsLock();
+  var tg=ls(RESULT_DASH_KEY,{show:true});
+  $('resDashToggle').classList.toggle('on',tg.show!==false);
+  setInterval(function(){renderTasks();renderSkipList();renderResultEntry();renderNews();},3000);
+  window.addEventListener('storage',function(e){
+    if(e.key===TASK_KEY) renderTasks();
+    if(e.key===SKIP_KEY) renderSkipList();
+    if(e.key===REC_KEY) renderResultEntry();
+    if(e.key===NEWS_KEY) renderNews();
+  });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 </script>
 </body>
 </html>
