@@ -12,9 +12,6 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 
 /* News Bar */
 .news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:14px;border-radius:10px;font-size:14px;font-weight:800;margin-bottom:10px;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center}
-.news-text{line-height:1.5}
-
-/* Alert Bar */
 .alert-bar{display:none;background:#fef2f2;border:2px solid #fca5a5;color:#dc2626;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:800;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .alert-bar.show{display:flex}
 .alert-bar.blink{animation:bl .8s infinite alternate}
@@ -24,32 +21,39 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 .alert-bar.blink .skip{background:#fff;color:#dc2626}
 
 /* Card */
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:10px;position:relative}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:10px;position:relative;overflow:hidden}
 .card.hidden{display:none}
 .card h2{font-size:14px;color:#1e293b;margin-bottom:10px;padding-bottom:8px;border-bottom:2px dashed #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 .card h2 .mini-timer{font-size:11px;font-weight:800;color:#6d28d9;background:#ede9fe;padding:3px 10px;border-radius:20px}
+.card h2 .hd-right{display:flex;align-items:center;gap:6px}
 .card.duty h2{color:#7c3aed;border-color:#ddd6fe}
 .card.task h2{color:#16a34a;border-color:#bbf7d0}
 .card.skip h2{color:#dc2626;border-color:#fecaca}
 .card.result h2{color:#f59e0b;border-color:#fde68a}
 
-/* Hidden Dot */
-.hidden-dot{position:absolute;top:8px;left:8px;width:20px;height:20px;border-radius:50%;background:transparent;border:none;cursor:pointer;font-size:8px;opacity:.15;color:#64748b;font-family:inherit}
-.hidden-dot:hover{opacity:.6}
+/* ★ CHHUPA HUA DOT BUTTON — nazar na aaye */
+.dot-btn{background:transparent;border:none;width:16px;height:16px;border-radius:50%;cursor:pointer;font-size:2px;color:transparent;font-family:inherit;padding:0;opacity:0;transition:opacity .2s}
+.dot-btn:hover{opacity:.7;background:#f1f5f9}
 
-/* Settings Panel */
-.settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:10px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px}
+/* ★ CLOSE BUTTON — Arrow icon */
+.close-arrow{background:#f1f5f9;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:13px;color:#64748b;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;padding:0;transition:.2s}
+.close-arrow:hover{background:#e2e8f0;color:#dc2626;transform:rotate(180deg)}
+
+/* Settings Panel — 4 buttons only */
+.settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:8px;margin-bottom:10px;grid-template-columns:repeat(2,1fr);gap:6px}
 .settings-panel.open{display:grid}
-.settings-panel button{padding:7px 4px;font-size:10px;font-weight:700;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit}
-.settings-panel button.danger{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-panel button.close-btn{color:#d97706;border-color:#fcd34d;background:#fffbeb}
+.settings-panel button{padding:10px 6px;font-size:11px;font-weight:800;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.settings-panel button:hover{background:#f1f5f9}
+.settings-panel button.edit{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+.settings-panel button.delete{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
+.settings-panel button.close-sec{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.settings-panel button.clear{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
 
 /* Duty */
 .duty-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .duty-box{background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:12px}
 .duty-box .lbl{font-size:10px;font-weight:800;color:#6d28d9;margin-bottom:6px}
 .duty-box .nm{font-size:20px;font-weight:900;color:#4c1d95;word-break:break-word;line-height:1.2}
-
 .leave-submit-box{background:#fff7ed;border:1px solid #fdba74;border-radius:8px;padding:10px;margin-top:12px}
 .leave-submit-box label{font-size:11px;font-weight:800;color:#92400e;display:block;margin-bottom:6px}
 .leave-submit-box select,.leave-submit-box input{width:100%;padding:9px 10px;border:1px solid #fdba74;border-radius:6px;font-size:12px;font-weight:700;font-family:inherit;background:#fff;outline:none;margin-bottom:6px}
@@ -101,62 +105,84 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
 .skip-footer .fbox .n{font-size:16px;font-weight:900;color:#dc2626}
 .skip-footer .fbox .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
 
-/* Result */
-.result-list{display:grid;gap:8px}
-.result-item{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px}
-.result-item.rank-1{background:linear-gradient(135deg,#fef3c7,#fde68a);border-color:#f59e0b}
-.result-item.rank-2{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-color:#94a3b8}
-.result-item.rank-3{background:linear-gradient(135deg,#fed7aa,#fdba74);border-color:#ea580c}
-.result-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.result-rank{font-size:18px;font-weight:900;background:#f59e0b;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.result-name{font-size:15px;font-weight:900;color:#1e293b;flex:1}
-.result-points{font-size:14px;font-weight:900;color:#f59e0b;background:#fff;padding:3px 12px;border-radius:20px}
-.result-grade{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px}
-.grade-excellent{background:#dcfce7;color:#15803d;border:1px solid #86efac}
-.grade-good{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
-.grade-poor{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-.result-msg{font-size:12px;font-weight:800;padding:8px 10px;border-radius:6px;margin-top:6px}
-.result-msg.excellent{background:#dcfce7;color:#15803d}
-.result-msg.good{background:#dbeafe;color:#1e40af}
-.result-msg.poor{background:#fee2e2;color:#991b1b}
-.result-footer{margin-top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+/* Result — Stylish */
+.result-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.result-card{background:linear-gradient(135deg,#ffffff,#f8fafc);border:2px solid #e2e8f0;border-radius:14px;padding:14px;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.06);transition:.2s}
+.result-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+.result-card.gold{border-color:#f59e0b;background:linear-gradient(135deg,#fffbeb,#fef3c7)}
+.result-card.silver{border-color:#94a3b8;background:linear-gradient(135deg,#f8fafc,#e2e8f0)}
+.result-card.bronze{border-color:#ea580c;background:linear-gradient(135deg,#fff7ed,#fed7aa)}
+.result-card.poor-card{border-color:#fca5a5;background:linear-gradient(135deg,#fef2f2,#fee2e2)}
+.result-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.result-rank-badge{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.result-rank-badge.gold{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.result-rank-badge.silver{background:linear-gradient(135deg,#94a3b8,#64748b)}
+.result-rank-badge.bronze{background:linear-gradient(135deg,#ea580c,#c2410c)}
+.result-rank-badge.normal{background:linear-gradient(135deg,#6366f1,#4f46e5)}
+.result-rank-badge.poor{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.result-name-wrap{flex:1;min-width:0}
+.result-name{font-size:16px;font-weight:900;color:#0f172a;letter-spacing:.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.result-subtitle{font-size:10px;font-weight:700;color:#64748b;margin-top:3px}
+
+.result-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.result-cell{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 4px;text-align:center}
+.result-cell .cell-lbl{font-size:9px;font-weight:800;color:#64748b;margin-bottom:3px}
+.result-cell .cell-val{font-size:14px;font-weight:900;color:#0f172a}
+.result-cell.points .cell-val{color:#f59e0b}
+.result-cell.work .cell-val{color:#16a34a;font-size:11px}
+.result-cell.grade .cell-val{font-size:10px}
+
+.grade-pill{display:inline-block;padding:4px 10px;border-radius:20px;font-size:9px;font-weight:900}
+.grade-excellent{background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:#15803d;border:1px solid #86efac}
+.grade-good{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;border:1px solid #93c5fd}
+.grade-poor{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;border:1px solid #fca5a5}
+
+.result-msg{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:12px;font-weight:800;line-height:1.5;text-align:center;border:1px dashed}
+.result-msg.excellent{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.result-msg.good{background:#eff6ff;color:#1e40af;border-color:#93c5fd}
+.result-msg.poor{background:#fef2f2;color:#991b1b;border-color:#fca5a5;font-weight:900}
+
+.result-footer{margin-top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .result-footer .fitem{text-align:center}
-.result-footer .fitem .n{font-size:18px;font-weight:900;color:#16a34a}
-.result-footer .fitem .l{font-size:10px;color:#64748b;font-weight:700;margin-top:2px}
+.result-footer .fitem .n{font-size:18px;font-weight:900}
+.result-footer .fitem .l{font-size:9px;color:#64748b;font-weight:700;margin-top:2px}
 .empty-note{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:600}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-
-  <!-- APP NAME -->
   <div class="app-name">⚡ Smart Management & Life Tracker</div>
 
-  <!-- NEWS BAR -->
   <div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ ہو رہا ہے...</div></div>
 
-  <!-- ALERT BAR -->
   <div class="alert-bar" id="alertBar">
     <span class="txt" id="alertTxt">—</span>
     <button class="skip" onclick="skipAlert()">اسکیپ ❌</button>
   </div>
 
-  <!-- DUTY CARD -->
+  <!-- DUTY CARD — 3 chhute dots + close arrow -->
   <div class="card duty" id="dutyCard">
-    <button class="hidden-dot" onclick="toggleDutySettings()">·</button>
-    <h2><span>👮 آج کی ڈیوٹی ممبران</span><span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span></h2>
-
+    <h2>
+      <span>👮 آج کی ڈیوٹی ممبران</span>
+      <span class="hd-right">
+        <span class="mini-timer" id="dutyMiniTimer">⏱️ 00:00:00</span>
+        <button class="dot-btn" onclick="toggleDutySettings()" title="">·</button>
+        <button class="dot-btn" onclick="alert('ایڈٹ موڈ')" title="">·</button>
+        <button class="dot-btn" onclick="alert('ڈیلیٹ موڈ')" title="">·</button>
+        <button class="close-arrow" onclick="hideCard('dutyCard')" title="بند کریں">🔽</button>
+      </span>
+    </h2>
     <div class="settings-panel" id="dutySettings">
-      <button class="close-btn" onclick="hideCard('dutyCard')">🚪 کارڈ بند</button>
-      <button onclick="toggleDutySettings()">✖️ بند کریں</button>
+      <button class="edit" onclick="alert('منتخب ایڈٹ')">✏️ ایڈٹ</button>
+      <button class="delete" onclick="alert('منتخب ڈیلیٹ')">🗑️ ڈیلیٹ</button>
+      <button class="close-sec" onclick="toggleDutySettings()">🚪 سیکشن بند</button>
+      <button class="clear" onclick="alert('سب صاف')">❌ صاف</button>
     </div>
-
     <div class="duty-grid">
       <div class="duty-box"><div class="lbl">🟢 سینئر ممبر</div><div class="nm" id="seniorNm">—</div></div>
       <div class="duty-box"><div class="lbl">🔵 جونیئر ممبر</div><div class="nm" id="juniorNm">—</div></div>
     </div>
-
     <div class="leave-submit-box">
       <label>🏖️ چھٹی سبمٹ کریں</label>
       <select id="leaveMemberSel"><option value="">ممبر منتخب کریں...</option></select>
@@ -165,16 +191,23 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
     </div>
   </div>
 
-  <!-- TASK TRACKER -->
+  <!-- TASK CARD -->
   <div class="card task" id="taskCard">
-    <button class="hidden-dot" onclick="toggleTaskSettings()">·</button>
-    <h2><span>📋 ٹاسک ٹریکر</span></h2>
-
+    <h2>
+      <span>📋 ٹاسک ٹریکر</span>
+      <span class="hd-right">
+        <button class="dot-btn" onclick="toggleTaskSettings()" title="">·</button>
+        <button class="dot-btn" onclick="alert('ایڈٹ موڈ')" title="">·</button>
+        <button class="dot-btn" onclick="alert('ڈیلیٹ موڈ')" title="">·</button>
+        <button class="close-arrow" onclick="hideCard('taskCard')" title="بند کریں">🔽</button>
+      </span>
+    </h2>
     <div class="settings-panel" id="taskSettings">
-      <button class="close-btn" onclick="hideCard('taskCard')">🚪 کارڈ بند</button>
-      <button onclick="toggleTaskSettings()">✖️ بند کریں</button>
+      <button class="edit" onclick="alert('ایڈٹ')">✏️ ایڈٹ</button>
+      <button class="delete" onclick="alert('ڈیلیٹ')">🗑️ ڈیلیٹ</button>
+      <button class="close-sec" onclick="toggleTaskSettings()">🚪 سیکشن بند</button>
+      <button class="clear" onclick="alert('سب صاف')">❌ صاف</button>
     </div>
-
     <div class="task-member-sel">
       <label>ممبر منتخب کریں</label>
       <select id="taskMemberSel" onchange="onTaskMemberChange()"><option value="">-- ممبر منتخب کریں --</option></select>
@@ -194,21 +227,18 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
     <div class="task-score">🏆 ٹوٹل پوائنٹس: <b id="totalPoints">0</b></div>
   </div>
 
-  <!-- SKIP SECTION -->
+  <!-- SKIP CARD — Sirf close arrow -->
   <div class="card skip" id="skipCard">
-    <button class="hidden-dot" onclick="toggleSkipSettings()">·</button>
-    <h2><span>⛔ چھوڑے ہوئے کام</span></h2>
-
-    <div class="settings-panel" id="skipSettings">
-      <button class="close-btn" onclick="hideCard('skipCard')">🚪 کارڈ بند</button>
-      <button onclick="toggleSkipSettings()">✖️ بند کریں</button>
-    </div>
-
+    <h2>
+      <span>⛔ چھوڑے ہوئے کام</span>
+      <span class="hd-right">
+        <button class="close-arrow" onclick="hideCard('skipCard')" title="بند کریں">🔽</button>
+      </span>
+    </h2>
     <div class="skip-2col">
       <div class="skip-col"><div class="hd">🟢 سینئر</div><div class="skip-list" id="skipSeniorList"><div class="empty-note">کوئی نہیں</div></div></div>
       <div class="skip-col junior"><div class="hd">🔵 جونیئر</div><div class="skip-list" id="skipJuniorList"><div class="empty-note">کوئی نہیں</div></div></div>
     </div>
-
     <div class="skip-form">
       <div class="ttl">📝 چھوڑے ہوئے کام کی وجہ دیں</div>
       <select id="skipMemberSel" onchange="updateSkipTasks()"><option value="">ممبر منتخب کریں...</option></select>
@@ -216,7 +246,6 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
       <input type="text" id="skipReasonInput" placeholder="وجہ لکھیں...">
       <button onclick="submitSkipReason()">✅ وجہ سبمٹ کریں</button>
     </div>
-
     <div class="skip-footer">
       <div class="fbox"><div class="n" id="sfMembers">0</div><div class="l">👥 ممبرز</div></div>
       <div class="fbox"><div class="n" id="sfDone" style="color:#16a34a;">0</div><div class="l">✅ ہو گیا</div></div>
@@ -225,30 +254,36 @@ body{background:#eef2f6;font-family:system-ui,sans-serif;direction:rtl;padding:1
     </div>
   </div>
 
-  <!-- RESULT SECTION -->
+  <!-- RESULT CARD — 3 chhute dots + close arrow -->
   <div class="card result" id="resultCard">
-    <button class="hidden-dot" onclick="toggleResultSettings()">·</button>
-    <h2><span>🏆 ممبران فائنل رزلٹ</span><span class="mini-timer" id="resultFilterInfo">📅 Monthly</span></h2>
-
+    <h2>
+      <span>🏆 ممبران فائنل رزلٹ</span>
+      <span class="hd-right">
+        <span class="mini-timer" id="resultFilterInfo">📅 Monthly</span>
+        <button class="dot-btn" onclick="toggleResultSettings()" title="">·</button>
+        <button class="dot-btn" onclick="alert('ایڈٹ موڈ')" title="">·</button>
+        <button class="dot-btn" onclick="alert('ڈیلیٹ موڈ')" title="">·</button>
+        <button class="close-arrow" onclick="hideCard('resultCard')" title="بند کریں">🔽</button>
+      </span>
+    </h2>
     <div class="settings-panel" id="resultSettings">
-      <button class="close-btn" onclick="hideCard('resultCard')">🚪 کارڈ بند</button>
-      <button onclick="toggleResultSettings()">✖️ بند کریں</button>
+      <button class="edit" onclick="alert('ایڈٹ')">✏️ ایڈٹ</button>
+      <button class="delete" onclick="alert('ڈیلیٹ')">🗑️ ڈیلیٹ</button>
+      <button class="close-sec" onclick="toggleResultSettings()">🚪 سیکشن بند</button>
+      <button class="clear" onclick="alert('سب صاف')">❌ صاف</button>
     </div>
-
-    <div class="result-list" id="resultList"><div class="empty-note">ابھی کوئی نتیجہ نہیں</div></div>
-
+    <div class="result-grid" id="resultList"><div class="empty-note">ابھی کوئی نتیجہ نہیں</div></div>
     <div class="result-footer">
-      <div class="fitem"><div class="n" id="rExcellent">0</div><div class="l">⭐ Excellent</div></div>
+      <div class="fitem"><div class="n" id="rExcellent" style="color:#16a34a;">0</div><div class="l">⭐ Excellent</div></div>
       <div class="fitem"><div class="n" id="rGood" style="color:#2563eb;">0</div><div class="l">✅ Good</div></div>
       <div class="fitem"><div class="n" id="rPoor" style="color:#dc2626;">0</div><div class="l">⚠️ Poor</div></div>
-      <div class="fitem"><div class="n" id="rTotal" style="color:#f59e0b;">0</div><div class="l">👥 کل ممبر</div></div>
+      <div class="fitem"><div class="n" id="rTotal" style="color:#f59e0b;">0</div><div class="l">👥 کل</div></div>
     </div>
   </div>
 
 </div>
 
 <script>
-/* ═══ KEYS ═══ */
 var DUTY_KEY='sec4_duty_manager_data_v4';
 var LEAVE_KEY='sec4_duty_leaves_data_v4';
 var HIST_KEY='sec4_duty_history_data_v4';
@@ -257,12 +292,10 @@ var TASK_KEY='sec3_task_and_point_manager_data';
 var REC_KEY='sec12_task_records';
 var SKIP_KEY='sec4_duty_skipped_data';
 var IDX_KEY='sec10_alert_index';
-var NEWS_IDX_KEY='sec10_news_index';
 var LAST_NEWS_KEY='sec10_last_news_ids';
 var FIRED_KEY='sec10_complaint_fired';
 var SETTINGS_KEY='sec10_app_settings';
 var RESULT_DASH_KEY='sec_result_dash_toggle';
-var RESULT_FILTER_KEY='sec_result_filter';
 
 function $(id){return document.getElementById(id);}
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
@@ -273,7 +306,6 @@ function getDayName(dt){var days=['اتوار','پیر','منگل','بدھ','ج�
 
 var bellLoop=null, vibrateLoop=null, voiceToggle=0, newsCycleTimer=null, currentNewsIdx=0;
 
-/* ═══ BELL/VOICE/VIBRATE ═══ */
 function playBell(){
   try{
     var s=ls(SETTINGS_KEY,{});
@@ -321,7 +353,6 @@ function stopAll(){
   if(window.speechSynthesis) try{window.speechSynthesis.cancel();}catch(e){}
 }
 
-/* ═══ NEWS BAR — Ek dafa ek news (30 sec) ═══ */
 function updateNews(){
   var s=ls(SETTINGS_KEY,{});
   if(s.news===false){$('newsText').textContent='📰 News Patty بند ہے';return;}
@@ -346,8 +377,6 @@ function checkNewNews(){
   if(last&&ids!==last&&news.length){playBell();speak(news[0].content);}
   localStorage.setItem(LAST_NEWS_KEY,ids);
 }
-
-/* ═══ ALERT BAR — Ek dafa ek alert ═══ */
 function showAlert(){
   var s=ls(SETTINGS_KEY,{});
   if(s.alert===false){$('alertBar').classList.remove('show');return;}
@@ -395,7 +424,6 @@ function checkComplaints(){
   lss(FIRED_KEY,fired);
 }
 
-/* ═══ DUTY ═══ */
 function getMembers(){var m=ls(DUTY_KEY,[]);return Array.isArray(m)?m:[];}
 function updateDuty(){
   var m=getMembers();
@@ -454,7 +482,6 @@ window.submitLeave=function(){
   updateDuty();populateLeaveDropdown();
 };
 
-/* ═══ TASK ═══ */
 var currentMember='', currentTaskIndex=0;
 function getTasks(){var t=ls(TASK_KEY,[]);return Array.isArray(t)?t:[];}
 function getRecords(){var r=ls(REC_KEY,[]);return Array.isArray(r)?r:[];}
@@ -527,7 +554,6 @@ function renderTotalPoints(){
   $('totalPoints').textContent=t;
 }
 
-/* ═══ SKIP ═══ */
 function renderSkip(){
   var s=getSkipped();
   var d=new Date();
@@ -597,77 +623,71 @@ window.submitSkipReason=function(){
   renderSkip();
 };
 
-/* ═══ RESULT ═══ */
-function getResultDays(){
-  var s=ls(SETTINGS_KEY,{});
-  return s.resultDays||30;
-}
-function getGradeInfo(points, maxPoints){
-  if(maxPoints===0) return {label:'—', cls:'', msg:'', msgCls:''};
-  var pct = (points/maxPoints)*100;
-  if(pct>=75) return {label:'⭐ Excellent', cls:'grade-excellent', msg:'🎁 انعام: بہت اچھا کام! شاباش', msgCls:'excellent'};
-  if(pct>=40) return {label:'✅ Good', cls:'grade-good', msg:'👍 اچھا کام، جاری رکھیں', msgCls:'good'};
-  return {label:'⚠️ Poor', cls:'grade-poor', msg:'❌ مزید محنت کریں', msgCls:'poor'};
+function getResultDays(){var s=ls(SETTINGS_KEY,{});return s.resultDays||30;}
+function getGradeInfo(points,maxPoints){
+  if(maxPoints===0) return {label:'—',cls:'',msg:'',emoji:''};
+  var pct=(points/maxPoints)*100;
+  if(pct>=75) return {label:'⭐ Excellent',cls:'grade-excellent',msg:'🎁 شاباش! آپ کی مزدوری ٹریٹ ہوئی',emoji:'🎉'};
+  if(pct>=40) return {label:'✅ Good',cls:'grade-good',msg:'💪 مزید محنت کریں، آپ کر سکتے ہیں',emoji:'👍'};
+  return {label:'⚠️ Poor',cls:'grade-poor',msg:'❌ آپ کو کام بہت برا — سزا ملے گی',emoji:'😠'};
 }
 function renderResult(){
   var card=$('resultCard');
   var toggle=ls(RESULT_DASH_KEY,{show:true});
   if(toggle.show===false){card.classList.add('hidden');return;}
   card.classList.remove('hidden');
-
   var days=getResultDays();
   var filterLabel = days===1?'📅 Daily':(days===7?'📆 Weekly':(days===30?'🗓️ Monthly':'📅 Yearly'));
   $('resultFilterInfo').textContent=filterLabel;
-
   var recs=getRecords();
   var cutoff=Date.now()-(days*24*60*60*1000);
   var filtered=recs.filter(function(r){return r.timestamp>=cutoff;});
-
-  if(!filtered.length){$('resultList').innerHTML='<div class="empty-note">ابھی کوئی نتیجہ نہیں</div>';
-    $('rExcellent').textContent=0;$('rGood').textContent=0;$('rPoor').textContent=0;$('rTotal').textContent=0;return;}
-
-  var totals={};
+  if(!filtered.length){
+    $('resultList').innerHTML='<div class="empty-note">ابھی کوئی نتیجہ نہیں</div>';
+    $('rExcellent').textContent=0;$('rGood').textContent=0;$('rPoor').textContent=0;$('rTotal').textContent=0;return;
+  }
+  var totals={},works={};
   filtered.forEach(function(r){
     if(!totals[r.member]) totals[r.member]=0;
     totals[r.member]+=(r.points||0);
+    if(!works[r.member]) works[r.member]={done:0,notdone:0,skip:0};
+    if(r.status==='done') works[r.member].done++;
+    else if(r.status==='notdone') works[r.member].notdone++;
+    else works[r.member].skip++;
   });
-  var sorted=Object.keys(totals).map(function(name){return {name:name, points:totals[name]};}).sort(function(a,b){return b.points-a.points;});
-
-  var maxPoints = sorted.length?sorted[0].points:0;
-  var exc=0, good=0, poor=0;
-
+  var sorted=Object.keys(totals).map(function(name){return {name:name,points:totals[name],w:works[name]};}).sort(function(a,b){return b.points-a.points;});
+  var maxPoints=sorted.length?sorted[0].points:0;
+  var exc=0,good=0,poor=0;
   $('resultList').innerHTML=sorted.map(function(x,i){
     var g=getGradeInfo(x.points,maxPoints);
-    if(g.msgCls==='excellent') exc++;
-    else if(g.msgCls==='good') good++;
-    else poor++;
-    var badge = i===0?'🥇':(i===1?'🥈':(i===2?'🥉':''));
-    var rc = i===0?'rank-1':(i===1?'rank-2':(i===2?'rank-3':''));
-    return '<div class="result-item '+rc+'">'+
+    if(g.cls==='grade-excellent') exc++;else if(g.cls==='grade-good') good++;else poor++;
+    var rankCls='normal',rankIcon=(i+1),cardCls='';
+    if(i===0){rankCls='gold';rankIcon='🥇';cardCls='gold';}
+    else if(i===1){rankCls='silver';rankIcon='🥈';cardCls='silver';}
+    else if(i===2){rankCls='bronze';rankIcon='🥉';cardCls='bronze';}
+    else if(g.cls==='grade-poor'){rankCls='poor';cardCls='poor-card';}
+    var totalWorks=x.w.done+x.w.notdone+x.w.skip;
+    return '<div class="result-card '+cardCls+'">'+
       '<div class="result-top">'+
-        '<div class="result-rank">'+(i+1)+'</div>'+
-        '<div class="result-name">'+(badge?' '+badge+' ':'')+esc(x.name)+'</div>'+
-        '<div class="result-points">🏆 '+x.points+'</div>'+
+        '<div class="result-rank-badge '+rankCls+'">'+rankIcon+'</div>'+
+        '<div class="result-name-wrap"><div class="result-name">'+esc(x.name)+'</div><div class="result-subtitle">🏆 Rank #'+(i+1)+'</div></div>'+
       '</div>'+
-      '<div class="result-grade '+g.cls+'">'+g.label+'</div>'+
-      '<div class="result-msg '+g.msgCls+'">'+g.msg+'</div>'+
+      '<div class="result-grid-3">'+
+        '<div class="result-cell points"><div class="cell-lbl">🏆 پوائنٹس</div><div class="cell-val">'+x.points+'</div></div>'+
+        '<div class="result-cell work"><div class="cell-lbl">✅ کام</div><div class="cell-val">'+x.w.done+'/'+totalWorks+'</div></div>'+
+        '<div class="result-cell grade"><div class="cell-lbl">📊 گریڈ</div><div class="cell-val"><span class="grade-pill '+g.cls+'">'+g.label+'</span></div></div>'+
+      '</div>'+
+      '<div class="result-msg '+g.cls.replace('grade-','')+'">'+g.msg+' <span>'+g.emoji+'</span></div>'+
     '</div>';
   }).join('');
-
-  $('rExcellent').textContent=exc;
-  $('rGood').textContent=good;
-  $('rPoor').textContent=poor;
-  $('rTotal').textContent=sorted.length;
+  $('rExcellent').textContent=exc;$('rGood').textContent=good;$('rPoor').textContent=poor;$('rTotal').textContent=sorted.length;
 }
 
-/* ═══ SETTINGS TOGGLES ═══ */
 window.toggleDutySettings=function(){$('dutySettings').classList.toggle('open');};
 window.toggleTaskSettings=function(){$('taskSettings').classList.toggle('open');};
-window.toggleSkipSettings=function(){$('skipSettings').classList.toggle('open');};
 window.toggleResultSettings=function(){$('resultSettings').classList.toggle('open');};
 window.hideCard=function(id){$(id).classList.add('hidden');};
 
-/* ═══ BOOT ═══ */
 function boot(){
   updateNews();checkNewNews();updateDuty();populateLeaveDropdown();
   populateTaskMembers();renderCurrentTask();renderTaskHistory();renderTotalPoints();
@@ -678,7 +698,6 @@ function boot(){
     if(e.key===DUTY_KEY||e.key===LEAVE_KEY){updateDuty();populateLeaveDropdown();populateTaskMembers();renderSkip();populateSkipMembers();}
     if(e.key===REC_KEY){renderTaskHistory();renderTotalPoints();renderSkipFooter();renderResult();}
     if(e.key===SKIP_KEY){renderSkip();}
-    if(e.key===SETTINGS_KEY){updateNews();renderResult();}
     if(e.key===RESULT_DASH_KEY){renderResult();}
   });
   setInterval(function(){updateNews();checkNewNews();},5000);
