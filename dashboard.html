@@ -512,3 +512,175 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 </body>
 </html>
+<!-- 5. ALAMAT (Symptoms) -->
+<div class="card" id="alamatCard" style="border-right:5px solid var(--purple);">
+    <div class="section-heading">
+        <span class="title" style="color:var(--purple);">🩺 صحت اور علامات کا ٹریکر</span>
+        <span style="display:flex;gap:6px;align-items:center;">
+            <button class="gear-btn" onclick="toggleSettings('alamatSettings')">⚙️</button>
+            <button class="gear-btn" onclick="hideCard('alamatCard')" style="font-size:12px;">🔽</button>
+        </span>
+    </div>
+    <div class="settings-panel" id="alamatSettings">
+        <div class="title">⚙️ علامات سیٹنگ</div>
+        <div class="settings-actions">
+            <button class="danger" onclick="clearAlamat()">🧹 کلئیر</button>
+            <button onclick="toggleSettings('alamatSettings')">✖️ کلوز</button>
+        </div>
+    </div>
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">ممبر سلیکٹ کریں:</label>
+    <select id="alamatMemberSel" class="select-input" style="margin-bottom:12px;" onchange="renderAlamat()"></select>
+
+    <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:2px solid #ddd6fe;border-radius:10px;padding:14px;text-align:center;margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:4px;">علامت <span id="alamatStageNum">1</span> / 5</div>
+        <div id="alamatStageName" style="font-size:18px;font-weight:900;color:#5b21b6;">—</div>
+    </div>
+
+    <div id="alamatButtons" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;margin-bottom:12px;"></div>
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">تفصیل:</label>
+    <textarea id="alamatDetails" class="select-input" rows="2" placeholder="یہاں تفصیل لکھیں..." style="font-weight:400;margin-bottom:8px;"></textarea>
+
+    <button class="btn btn-purple btn-full" onclick="saveAlamat()">💾 محفوظ کریں</button>
+    <div id="alamatMsg" class="status-msg"></div>
+
+    <div class="history-box mt-14">
+        <div class="history-header"><span>📜 علامات ہسٹری</span></div>
+        <div id="alamatHistoryList"></div>
+    </div>
+</div>
+
+<!-- 6. DIET -->
+<div class="card" id="dietCard" style="border-right:5px solid var(--golden);">
+    <div class="section-heading">
+        <span class="title" style="color:var(--golden);">🍽️ ڈائٹ روٹین</span>
+        <span style="display:flex;gap:6px;align-items:center;">
+            <button class="gear-btn" onclick="toggleSettings('dietSettings')">⚙️</button>
+            <button class="gear-btn" onclick="hideCard('dietCard')" style="font-size:12px;">🔽</button>
+        </span>
+    </div>
+    <div class="settings-panel" id="dietSettings">
+        <div class="title">⚙️ ڈائٹ سیٹنگ</div>
+        <div class="settings-actions">
+            <button class="danger" onclick="clearDiet()">🧹 کلئیر</button>
+            <button onclick="toggleSettings('dietSettings')">✖️ کلوز</button>
+        </div>
+    </div>
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">ممبر:</label>
+    <select id="dietMemberSel" class="select-input" style="margin-bottom:10px;" onchange="renderDiet()"></select>
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">⏰ کھانے کا وقت:</label>
+    <select id="dietWaqt" class="select-input" style="margin-bottom:10px;">
+        <option value="صبح کا ناشتہ">1. صبح کا ناشتہ</option>
+        <option value="دوپہر کا کھانا">2. دوپہر کا کھانا</option>
+        <option value="شام کی چائے">3. شام کی چائے</option>
+        <option value="رات کا کھانا">4. رات کا کھانا</option>
+    </select>
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">🍞 Daily:</label>
+    <input type="text" id="dietDaily" class="select-input" placeholder="روٹی (Half), سالن (Full)..." style="margin-bottom:8px;">
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">🍽️ Sometimes:</label>
+    <input type="text" id="dietSometimes" class="select-input" placeholder="دودھ (Half)..." style="margin-bottom:8px;">
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">🍟 Junk:</label>
+    <input type="text" id="dietJunk" class="select-input" placeholder="کوئی نہیں..." style="margin-bottom:8px;">
+
+    <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">تفصیل:</label>
+    <textarea id="dietDetails" class="select-input" rows="2" style="font-weight:400;margin-bottom:8px;"></textarea>
+
+    <button class="btn btn-golden btn-full" onclick="saveDiet()">💾 محفوظ کریں</button>
+    <div id="dietMsg" class="status-msg"></div>
+
+    <div class="history-box mt-14">
+        <div class="history-header"><span>📜 ڈائٹ ریکارڈ</span></div>
+        <div id="dietHistoryList"></div>
+    </div>
+</div>
+
+<!-- 7. RASHAN -->
+<div class="card" id="rashanCard" style="border-right:5px solid #16a34a;">
+    <div class="section-heading">
+        <span class="title" style="color:#16a34a;">🛒 راشن منیجر</span>
+        <span style="display:flex;gap:6px;align-items:center;">
+            <button class="gear-btn" onclick="toggleSettings('rashanSettings')">⚙️</button>
+            <button class="gear-btn" onclick="hideCard('rashanCard')" style="font-size:12px;">🔽</button>
+        </span>
+    </div>
+    <div class="settings-panel" id="rashanSettings">
+        <div class="title">⚙️ راشن سیٹنگ</div>
+        <div class="settings-actions">
+            <button onclick="rashanSelectAll()">✅ تمام</button>
+            <button onclick="rashanUnselectAll()">⬜ ہٹائیں</button>
+            <button class="danger" onclick="clearRashan()">🧹 کلئیر</button>
+            <button onclick="toggleSettings('rashanSettings')">✖️ کلوز</button>
+        </div>
+    </div>
+
+    <div class="history-header"><span>🏠 گھر کا سامان — منتخب کریں</span><span class="tag tag-warning" id="rashanSelectedCount">0</span></div>
+    <div id="rashanItemsScroll" style="max-height:200px;overflow-y:auto;border:2px solid #fcd34d;border-radius:8px;padding:6px;background:#fffbeb;margin-bottom:10px;"></div>
+
+    <div class="history-header"><span>📝 سلیکٹڈ</span><span class="tag tag-success" id="rashanLiveCount">0</span></div>
+    <div id="rashanLiveBox" style="max-height:120px;overflow-y:auto;border:2px solid #16a34a;border-radius:8px;padding:6px;background:#f0fdf4;margin-bottom:10px;">
+        <div style="text-align:center;color:#86efac;font-size:11px;padding:10px;">✨ کوئی آٹم سلیکٹ نہیں کیا</div>
+    </div>
+
+    <div id="rashanBillForm" style="display:none;background:#fffdf4;border:2px solid #fde68a;border-radius:10px;padding:10px;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:800;color:var(--golden);margin-bottom:8px;text-align:center;">💰 بل بنائیں</div>
+        <div id="rashanBillRows"></div>
+    </div>
+
+    <button class="btn btn-success btn-full" onclick="saveRashanBill()">💾 بل محفوظ کریں</button>
+    <div id="rashanMsg" class="status-msg"></div>
+
+    <div class="history-box mt-14">
+        <div class="history-header"><span>📋 راشن ہسٹری</span><span class="tag tag-info" id="rashanHistoryCount">0</span></div>
+        <div id="rashanHistoryBox"><div class="empty-note">📋 کوئی ریکارڈ موجود نہیں</div></div>
+    </div>
+</div>
+
+<!-- 8. GREEN BUS -->
+<div class="card" id="busCard" style="border-right:5px solid #16a34a;">
+    <div class="section-heading">
+        <span class="title" style="color:#16a34a;">🚌 گرین بس شیڈول</span>
+        <span style="display:flex;gap:6px;align-items:center;">
+            <span class="tag tag-success">🔴 LIVE</span>
+            <button class="gear-btn" onclick="hideCard('busCard')" style="font-size:12px;">🔽</button>
+        </span>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:10px;padding:12px;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <div style="font-size:10px;opacity:.8;">🕒 موجودہ وقت</div>
+            <div id="busClock" style="font-size:22px;font-weight:900;">--:--:-- --</div>
+        </div>
+        <div style="font-size:34px;">⏰</div>
+    </div>
+
+    <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">1️⃣ روٹ منتخب کریں</label>
+    <select id="busRouteSelect" class="select-input" onchange="busOnRouteChange()" style="margin-bottom:10px;"></select>
+
+    <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">2️⃣ دن منتخب کریں</label>
+    <select id="busDaySelect" class="select-input" onchange="busOnDayChange()" style="margin-bottom:10px;"></select>
+
+    <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">3️⃣ اسٹاپ منتخب کریں</label>
+    <select id="busStopSelect" class="select-input"></select>
+
+    <button class="btn btn-success btn-full mt-14" onclick="busTrackNow()">🔍 ابھی ٹریک کریں</button>
+
+    <div id="busEmpty" style="background:#f1f5f9;border:2px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;color:#64748b;font-weight:700;font-size:11px;margin-top:12px;">👆 اوپر سے 1,2,3 منتخب کریں اور ٹریک کریں دبائیں</div>
+
+    <div id="busLargeBox" style="display:none;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:14px;padding:16px;color:#fff;margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2);"><span style="font-size:12px;">🕐 ٹائم رینج</span><span id="busRange" style="font-weight:900;">--</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2);"><span style="font-size:12px;">🚌 آنے والی بس</span><span id="busNo" style="font-weight:900;">--</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2);"><span style="font-size:12px;">⏰ اتنے بجے</span><span id="busArrival" style="font-weight:900;">--</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12px;">📊 ایسٹیمیٹ</span><span id="busEstimate" style="font-weight:900;">--</span></div>
+        <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:14px;text-align:center;margin-top:10px;">
+            <div style="font-size:11px;opacity:.9;">⏳ اتنے ٹائم میں بس آ رہی ہے</div>
+            <div id="busCountdown" style="font-size:32px;font-weight:900;letter-spacing:2px;">00:00:00</div>
+            <div id="busCountdownSub" style="font-size:11px;font-weight:700;margin-top:4px;background:#fff;color:#15803d;padding:4px 10px;border-radius:20px;display:inline-block;">--</div>
+        </div>
+    </div>
+</div>
