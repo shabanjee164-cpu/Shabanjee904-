@@ -3,862 +3,395 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Admin Control Panel</title>
+<title>⚡ Smart Management & Life Tracker</title>
 <style>
 :root{
---primary:#1e293b;--accent:#2563eb;--danger:#dc2626;--golden:#d97706;
---success:#16a34a;--purple:#7c3aed;--teal:#0d9488;--cyan:#0891b2;
+--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--golden:#d97706;
+--success:#10b981;--purple:#8b5cf6;--teal:#0d9488;--cyan:#0891b2;
 --bg:#f1f5f9;--card:#fff;--text:#334155;--border:#e2e8f0;
 --safe-top:env(safe-area-inset-top,0px);
 --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#f8fafc;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;padding:10px;color:var(--text);min-height:100vh}
-.container{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+html,body{height:100%;overflow:hidden}
+body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:var(--text)}
+.app-shell{max-width:480px;margin:0 auto;height:100vh;height:-webkit-fill-available;display:flex;flex-direction:column;background:#f8fafc;position:relative;overflow:hidden}
 
-/* HEADER */
-.admin-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:4px solid var(--accent)}
-.admin-header .brand{display:flex;align-items:center;gap:10px}
-.admin-header .brand-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#dc2626,#b91c1c);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px rgba(220,38,38,.3)}
-.admin-header .brand-title{font-size:16px;font-weight:900}
-.admin-header .brand-sub{font-size:11px;opacity:.75;margin-top:2px}
-.admin-header .back-btn{padding:8px 14px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit}
-.admin-header .back-btn:hover{background:rgba(255,255,255,.25)}
+/* HEADER — FIXED TOP */
+.app-header{padding:calc(var(--safe-top) + 12px) 16px 14px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid var(--teal);flex-shrink:0;position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(13,148,136,.3)}
+.brand-title{font-size:15px;font-weight:900;letter-spacing:-.3px}
+.brand-sub{font-size:10px;font-weight:600;opacity:.75;margin-top:2px}
+.menu-btn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.2s;flex-shrink:0}
+.menu-btn:hover{background:rgba(255,255,255,.15)}
+.menu-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+.menu-btn.active span:nth-child(1){transform:rotate(45deg) translateY(6px)}
+.menu-btn.active span:nth-child(2){opacity:0}
+.menu-btn.active span:nth-child(3){transform:rotate(-45deg) translateY(-6px)}
 
-/* TABS */
-.admin-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:6px;margin-bottom:4px}
-.admin-tab-btn{padding:10px 4px;font-size:10px;font-weight:700;color:#64748b;background:transparent;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.admin-tab-btn .tab-icon{font-size:18px}
-.admin-tab-btn:hover{background:#f1f5f9;color:#334155}
-.admin-tab-btn.active{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;box-shadow:0 2px 8px rgba(220,38,38,.3)}
+/* MAIN — SCROLLABLE */
+.main-content{flex:1;padding:20px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
 
-/* CARDS */
-.admin-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
-.admin-card .card-title{font-size:13px;font-weight:800;color:#1e293b;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:8px}
-.admin-card .card-title .badge{background:#dc2626;color:#fff;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:800;margin-right:auto}
+/* HERO CARD */
+.hero-card{width:100%;background:linear-gradient(135deg,#fff,#f8fafc);border:1px solid #fff;border-radius:20px;padding:28px 18px;box-shadow:0 12px 32px -8px rgba(15,23,42,.08);text-align:center;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);animation:shimmer 3.5s infinite}
+@keyframes shimmer{100%{left:200%}}
+.hero-title{font-size:19px;font-weight:900;line-height:1.3;letter-spacing:-.5px;margin-bottom:10px;background:linear-gradient(135deg,#0f172a 0%,#0d9488 40%,#0891b2 70%,#2563eb 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.hero-sub span{color:var(--teal)}
 
-/* STATS */
-.admin-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.admin-stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;transition:.2s}
-.admin-stat:hover{border-color:#dc2626;background:#fef2f2}
-.admin-stat-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:#f1f5f9}
-.admin-stat-info{flex:1;min-width:0}
-.admin-stat-label{font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px}
-.admin-stat-value{font-size:16px;font-weight:900;color:#1e293b}
+/* QUICK CARDS */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quick-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:.2s;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
+.quick-card:hover{border-color:var(--teal);background:#f0fdfa;transform:translateY(-2px);box-shadow:0 8px 16px rgba(13,148,136,.15)}
+.quick-icon{font-size:28px}
+.quick-title{font-size:12px;font-weight:800;color:#1e293b}
+.quick-desc{font-size:9px;color:#64748b;font-weight:600}
 
-/* BUTTONS */
-.a-btn{padding:10px 14px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
-.a-btn.primary{background:#2563eb;color:#fff}
-.a-btn.primary:hover{background:#1d4ed8}
-.a-btn.danger{background:#dc2626;color:#fff}
-.a-btn.danger:hover{background:#b91c1c}
-.a-btn.success{background:#16a34a;color:#fff}
-.a-btn.success:hover{background:#15803d}
-.a-btn.warning{background:#ea580c;color:#fff}
-.a-btn.warning:hover{background:#c2410c}
-.a-btn.secondary{background:#e2e8f0;color:#334155}
-.a-btn.secondary:hover{background:#cbd5e1}
-.a-btn.small{padding:7px 12px;font-size:11px}
-.a-btn.full{width:100%}
+/* INFO CARD */
+.info-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
+.info-card .title{font-size:12px;font-weight:800;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #f1f5f9;font-size:11px;font-weight:700}
+.info-row:last-child{border-bottom:none}
+.info-row .k{color:#64748b}
+.info-row .v{color:#1e293b}
 
-/* FORM */
-.a-input,.a-select,.a-textarea{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:600;outline:none;background:#fff;font-family:inherit;margin-bottom:8px;color:#1e293b}
-.a-input:focus,.a-select:focus,.a-textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
-.a-textarea{min-height:80px;resize:vertical}
+/* STATUS PILL */
+.status-pill{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.15);font-size:10px;font-weight:700}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;animation:pulse 1.5s infinite}
+.status-pill.offline .status-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
-/* DATA LIST */
-.a-data-list{max-height:340px;overflow-y:auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:6px;margin-top:8px}
-.a-data-list::-webkit-scrollbar{width:5px}
-.a-data-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
-.a-record{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:6px;transition:.2s}
-.a-record:hover{border-color:#2563eb;background:#eff6ff}
-.a-record-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
-.a-record-title{font-size:12px;font-weight:800;color:#1e293b;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.a-record-date{font-size:10px;color:#64748b;font-weight:600}
-.a-record-actions{display:flex;gap:5px;flex-wrap:wrap}
+/* BOTTOM NAV — FIXED & ALWAYS VISIBLE */
+.bottom-nav{padding:10px 6px calc(var(--safe-bottom) + 10px);background:#fff;border-top:2px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;flex-shrink:0;box-shadow:0 -4px 12px rgba(15,23,42,.06);position:sticky;bottom:0;z-index:50}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:8px 4px;border-radius:12px;transition:.2s;color:#94a3b8;width:24%;font-family:inherit;position:relative}
+.nav-item:active{transform:scale(.95)}
+.nav-item.active{color:var(--teal);background:rgba(13,148,136,.1)}
+.nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:.2s}
+.nav-item.active .nav-icon{stroke:var(--teal)}
+.nav-label{font-size:9.5px;font-weight:800;transition:.2s}
+.nav-item.active .nav-label{color:var(--teal)}
 
-/* USER CARD */
-.a-user{display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px}
-.a-user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
-.a-user-info{flex:1;min-width:0}
-.a-user-name{font-size:12px;font-weight:800;color:#1e293b}
-.a-user-status{font-size:10px;font-weight:700;margin-top:2px}
-.a-user-status.online{color:#16a34a}
-.a-user-status.offline{color:#dc2626}
+/* SIDE MENU */
+.side-menu{position:fixed;top:0;right:-320px;width:300px;height:100vh;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.15);transition:right .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;overflow-y:auto}
+.side-menu.open{right:0}
+.side-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:2}
+.side-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
+.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;font-family:inherit}
+.side-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.side-list{padding:10px;flex:1}
+.side-item{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:.2s;font-family:inherit;font-size:12px;font-weight:700;color:#334155;width:100%;text-align:right}
+.side-item:hover{background:#eff6ff;color:var(--accent);border-color:#bfdbfe;transform:translateX(-3px)}
+.side-item-icon{font-size:18px;flex-shrink:0}
+.side-item-num{background:#e2e8f0;color:#475569;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex-shrink:0}
+.side-item.admin{background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca;color:#991b1b}
+.side-item.admin:hover{background:#dc2626;color:#fff}
+.side-item.admin:hover .side-item-num{background:#fff;color:#dc2626}
+.side-footer{padding:12px;border-top:1px solid #e2e8f0;text-align:center;color:#94a3b8;font-size:10px;font-weight:700}
 
-/* LOG */
-.a-log{display:flex;gap:8px;padding:8px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:5px;font-size:11px}
-.a-log-time{background:#2563eb;color:#fff;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:800;flex-shrink:0;display:flex;align-items:center}
-.a-log-text{color:#334155;font-weight:600;flex:1;min-width:0}
+/* OVERLAY */
+.menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:998;opacity:0;visibility:hidden;transition:.3s}
+.menu-overlay.active{opacity:1;visibility:visible}
 
-/* CHECKBOX */
-.a-check{display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;margin-bottom:5px;transition:.2s}
-.a-check:hover{border-color:#2563eb}
-.a-check.checked{background:#eff6ff;border-color:#2563eb}
-.a-check input[type="checkbox"]{width:16px;height:16px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
-.a-check label{font-size:12px;font-weight:700;color:#334155;cursor:pointer;flex:1}
-
-/* EMPTY */
-.a-empty{text-align:center;padding:30px 16px;color:#94a3b8}
-.a-empty .empty-icon{font-size:36px;margin-bottom:8px;display:block;opacity:.5}
-.a-empty .empty-text{font-size:12px;font-weight:700}
-
-/* TAB CONTENT */
-.a-tab-content{display:none}
-.a-tab-content.active{display:block;animation:fadeIn .3s}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-
-/* LOCK STATUS */
-.lock-status-box{padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px;font-size:13px;font-weight:800;text-align:center}
-.lock-status-box.on{background:#f0fdf4;border-color:#bbf7d0;color:#16a34a}
-.lock-status-box.off{background:#fef2f2;border-color:#fecaca;color:#dc2626}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:24px;font-size:12px;font-weight:700;z-index:99999;opacity:0;transition:all .3s;border:1px solid #334155;max-width:90vw;text-align:center;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
-.toast.active{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{background:#16a34a;border-color:#22c55e}
-.toast.error{background:#dc2626;border-color:#ef4444}
-.toast.warning{background:#ea580c;border-color:#f97316}
-
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.active{display:flex}
-.modal-box{background:#fff;border-radius:14px;max-width:400px;width:100%;overflow:hidden;animation:modalIn .25s;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-@keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-header{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:8px}
-.modal-header .m-icon{font-size:22px}
-.modal-header h3{font-size:14px;font-weight:800}
-.modal-body{padding:16px;font-size:13px;color:#334155;line-height:1.6;font-weight:600}
-.modal-body input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:700;outline:none;margin-top:10px;font-family:inherit}
-.modal-body input:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.15)}
-.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
-.modal-btn{padding:12px;font-size:13px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s}
-.modal-btn.primary{background:#dc2626;color:#fff}
-.modal-btn.primary:hover{background:#b91c1c}
-.modal-btn.cancel{background:#f1f5f9;color:#64748b}
-.modal-btn.cancel:hover{background:#e2e8f0}
-
-@media(max-width:520px){
-.admin-stats{grid-template-columns:1fr}
-.admin-tabs{grid-template-columns:repeat(4,1fr)}
+/* DESKTOP */
+@media(min-width:640px){
+body{padding:20px 0;background:#e2e8f0;display:flex;justify-content:center;align-items:center}
+.app-shell{height:92vh;max-height:880px;border-radius:36px;border:1px solid rgba(255,255,255,.8);box-shadow:0 25px 60px -15px rgba(15,23,42,.12)}
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-shell">
 
     <!-- HEADER -->
-    <div class="admin-header">
+    <header class="app-header">
         <div class="brand">
-            <div class="brand-icon">👮</div>
+            <div class="brand-icon">⚡</div>
             <div>
-                <div class="brand-title">ایڈمن کنٹرول پینل</div>
-                <div class="brand-sub">پوری ایپ پر مکمل کنٹرول</div>
+                <div class="brand-title">Smart Tracker</div>
+                <div class="brand-sub">Management & Life</div>
             </div>
         </div>
-        <button class="back-btn" onclick="goBack()">← واپس</button>
-    </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <div class="status-pill" id="statusPill">
+                <span class="status-dot"></span>
+                <span id="statusText">آن لائن</span>
+            </div>
+            <button class="menu-btn" id="menuBtn" onclick="toggleMenu()" aria-label="مینو">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
 
-    <!-- TABS -->
-    <div class="admin-tabs">
-        <button class="admin-tab-btn active" onclick="switchTab('dashboard',this)">
-            <span class="tab-icon">📊</span>
-            <span>ڈیش بورڈ</span>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <div class="hero-card">
+            <h2 class="hero-title">⚡ Smart Management & Life Tracker</h2>
+            <div class="hero-sub">
+                <span>✦</span> تیز • محفوظ • بھروسہ مند <span>✦</span>
+            </div>
+        </div>
+
+        <!-- QUICK ACCESS -->
+        <div class="quick-grid">
+            <a class="quick-card" href="dashboard.html">
+                <span class="quick-icon">🏠</span>
+                <span class="quick-title">ڈیش بورڈ</span>
+                <span class="quick-desc">Live Display</span>
+            </a>
+            <a class="quick-card" href="entry.html">
+                <span class="quick-icon">➕</span>
+                <span class="quick-title">ڈیٹا انٹری</span>
+                <span class="quick-desc">Add Data</span>
+            </a>
+            <a class="quick-card" href="history.html">
+                <span class="quick-icon">📜</span>
+                <span class="quick-title">ہسٹری</span>
+                <span class="quick-desc">Records</span>
+            </a>
+            <a class="quick-card" href="manager.html">
+                <span class="quick-icon">👥</span>
+                <span class="quick-title">مینیجر</span>
+                <span class="quick-desc">Full Control</span>
+            </a>
+        </div>
+
+        <!-- INFO CARD -->
+        <div class="info-card">
+            <div class="title">📊 سسٹم کی معلومات</div>
+            <div class="info-row">
+                <span class="k">📦 کل سیکشنز</span>
+                <span class="v" id="infoSections">8</span>
+            </div>
+            <div class="info-row">
+                <span class="k">💾 اسٹوریج استعمال</span>
+                <span class="v" id="infoStorage">0 KB</span>
+            </div>
+            <div class="info-row">
+                <span class="k">👥 کل ممبران</span>
+                <span class="v" id="infoMembers">0</span>
+            </div>
+            <div class="info-row">
+                <span class="k">🕒 آخری اپڈیٹ</span>
+                <span class="v" id="infoTime">—</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM NAV — ALWAYS VISIBLE -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="go('dashboard.html')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-label">ڈیش بورڈ</span>
         </button>
-        <button class="admin-tab-btn" onclick="switchTab('data',this)">
-            <span class="tab-icon">✏️</span>
-            <span>ڈیٹا ایڈٹ</span>
+        <button class="nav-item" onclick="go('entry.html')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span class="nav-label">انٹری</span>
         </button>
-        <button class="admin-tab-btn" onclick="switchTab('users',this)">
-            <span class="tab-icon">👥</span>
-            <span>صارفین</span>
+        <button class="nav-item" onclick="go('history.html')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="nav-label">ہسٹری</span>
         </button>
-        <button class="admin-tab-btn" onclick="switchTab('tools',this)">
-            <span class="tab-icon">🔧</span>
-            <span>ٹولز</span>
+        <button class="nav-item" onclick="go('manager.html')">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="nav-label">مینیجر</span>
         </button>
-    </div>
-
-    <!-- TAB 1: DASHBOARD -->
-    <div class="a-tab-content active" id="tabDashboard">
-        <div class="admin-card">
-            <div class="card-title">
-                <span>📊 لائیو ڈیٹا</span>
-                <span class="badge" id="adminTotalBadge">0</span>
-            </div>
-            <div class="admin-stats" id="adminStatsGrid"></div>
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title"><span>📜 آخری لاگ</span></div>
-            <div id="adminLogList"></div>
-        </div>
-    </div>
-
-    <!-- TAB 2: DATA EDIT -->
-    <div class="a-tab-content" id="tabData">
-        <div class="admin-card">
-            <div class="card-title"><span>✏️ ڈیٹا ایڈٹ</span></div>
-            <select id="adminSectionSelect" class="a-select" onchange="adminLoadSectionData()">
-                <option value="">سیکشن منتخب کریں...</option>
-            </select>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <button class="a-btn danger small" onclick="adminClearSection()">🗑️ سیکشن صاف</button>
-                <button class="a-btn success small" onclick="adminExportSection()">📥 ایکسپورٹ</button>
-                <button class="a-btn warning small" onclick="adminAddRecord()">➕ نیا ریکارڈ</button>
-            </div>
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title">
-                <span>📋 ریکارڈز</span>
-                <span class="badge" id="adminRecordBadge">0</span>
-            </div>
-            <div class="a-data-list" id="adminDataList">
-                <div class="a-empty">
-                    <span class="empty-icon">📋</span>
-                    <span class="empty-text">سیکشن منتخب کریں</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TAB 3: USERS -->
-    <div class="a-tab-content" id="tabUsers">
-        <div class="admin-card">
-            <div class="card-title"><span>💬 پیغام بھیجیں</span></div>
-            <select id="adminMsgTarget" class="a-select">
-                <option value="all">📢 تمام صارفین کو</option>
-                <option value="specific">👤 مخصوص صارف کو</option>
-            </select>
-            <textarea id="adminMsgText" class="a-textarea" placeholder="اپنا پیغام یہاں لکھیں..."></textarea>
-            <button class="a-btn primary full" onclick="adminSendMessage()">📤 پیغام بھیجیں</button>
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title"><span>🔒 ایپ لاک کنٹرول</span></div>
-            <div class="lock-status-box off" id="adminLockStatus">✅ ایپ آن ہے</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <button class="a-btn danger full" onclick="adminLockApp()">🔒 لاک</button>
-                <button class="a-btn success full" onclick="adminUnlockApp()">🔓 انلاک</button>
-            </div>
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title">
-                <span>👥 تمام ممبران</span>
-                <span class="badge" id="adminUsersBadge">0</span>
-            </div>
-            <div id="adminUsersList"></div>
-        </div>
-    </div>
-
-    <!-- TAB 4: TOOLS -->
-    <div class="a-tab-content" id="tabTools">
-        <div class="admin-card">
-            <div class="card-title"><span>📥 ڈیٹا ڈاؤن لوڈ</span></div>
-            <div id="adminDownloadOptions"></div>
-            <div style="display:flex;gap:6px;margin-bottom:10px;">
-                <button class="a-btn secondary small" onclick="adminSelectAllDownloads(true)">✅ تمام</button>
-                <button class="a-btn secondary small" onclick="adminSelectAllDownloads(false)">⬜ ہٹائیں</button>
-            </div>
-            <select id="adminDownloadFormat" class="a-select">
-                <option value="json">📄 JSON</option>
-                <option value="csv">📊 CSV (Excel)</option>
-                <option value="txt">📝 Text</option>
-            </select>
-            <button class="a-btn primary full" onclick="adminDownloadSelected()">📥 ڈاؤن لوڈ کریں</button>
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title"><span>💾 بیک اپ و ری اسٹور</span></div>
-            <button class="a-btn success full" style="margin-bottom:8px;" onclick="adminBackupAll()">💾 مکمل بیک اپ</button>
-            <button class="a-btn warning full" style="margin-bottom:8px;" onclick="adminRestoreBackup()">📥 بیک اپ ری اسٹور</button>
-            <input type="file" id="adminBackupFile" accept=".json" style="display:none;" onchange="adminHandleBackupFile(event)">
-        </div>
-
-        <div class="admin-card">
-            <div class="card-title"><span>⚠️ ڈیٹا ری سیٹ</span></div>
-            <p style="font-size:12px;color:#64748b;margin-bottom:10px;font-weight:600;">تمام ڈیٹا مستقل حذف ہو گا۔</p>
-            <button class="a-btn danger full" onclick="adminConfirmReset()">🗑️ تمام ڈیٹا ری سیٹ</button>
-        </div>
-    </div>
+    </nav>
 
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toastBox"></div>
+<!-- OVERLAY -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <div class="modal-header">
-            <span class="m-icon" id="modalIcon">ℹ️</span>
-            <h3 id="modalTitle">اطلاع</h3>
-        </div>
-        <div class="modal-body" id="modalBody">—</div>
-        <div class="modal-actions">
-            <button class="modal-btn cancel" onclick="closeModal()">✕ بند</button>
-            <button class="modal-btn primary" onclick="modalConfirm()">✅ ٹھیک ہے</button>
-        </div>
+<!-- SIDE MENU -->
+<div class="side-menu" id="sideMenu">
+    <div class="side-header">
+        <div class="side-title"><span>📑</span> <span>کنٹرول پینل</span></div>
+        <button class="side-close" onclick="toggleMenu()">✕</button>
     </div>
+    <div class="side-list">
+        <button class="side-item admin" onclick="openAdmin()">
+            <span class="side-item-icon">👮</span>
+            <span class="side-item-num">1</span>
+            <span style="flex:1;">ایڈمن کنٹرول پینل</span>
+        </button>
+        <button class="side-item" onclick="go('dashboard.html')">
+            <span class="side-item-icon">🏠</span>
+            <span class="side-item-num">2</span>
+            <span style="flex:1;">ڈیش بورڈ</span>
+        </button>
+        <button class="side-item" onclick="go('entry.html')">
+            <span class="side-item-icon">➕</span>
+            <span class="side-item-num">3</span>
+            <span style="flex:1;">ڈیٹا انٹری</span>
+        </button>
+        <button class="side-item" onclick="go('history.html')">
+            <span class="side-item-icon">📜</span>
+            <span class="side-item-num">4</span>
+            <span style="flex:1;">ہسٹری</span>
+        </button>
+        <button class="side-item" onclick="go('manager.html')">
+            <span class="side-item-icon">👥</span>
+            <span class="side-item-num">5</span>
+            <span style="flex:1;">مینیجر</span>
+        </button>
+        <button class="side-item" onclick="showInfo('📱','Multi Mobile Sync — آف لائن موڈ میں بھی کام')">
+            <span class="side-item-icon">📱</span>
+            <span class="side-item-num">6</span>
+            <span style="flex:1;">ملٹی موبائل سنک</span>
+        </button>
+        <button class="side-item" onclick="showInfo('📴','Offline Mode — انٹرنیٹ کے بغیر کام')">
+            <span class="side-item-icon">📴</span>
+            <span class="side-item-num">7</span>
+            <span style="flex:1;">آف لائن موڈ</span>
+        </button>
+        <button class="side-item" onclick="showInfo('🔑','Admin Key — پاس ورڈ تبدیل کریں')">
+            <span class="side-item-icon">🔑</span>
+            <span class="side-item-num">8</span>
+            <span style="flex:1;">ایڈمن کی تبدیلی</span>
+        </button>
+        <button class="side-item" onclick="exportData()">
+            <span class="side-item-icon">📤</span>
+            <span class="side-item-num">9</span>
+            <span style="flex:1;">ایکسپورٹ ڈیٹا</span>
+        </button>
+        <button class="side-item" onclick="showInfo('🔒','Password & Security — لاک آن/آف')">
+            <span class="side-item-icon">🔒</span>
+            <span class="side-item-num">10</span>
+            <span style="flex:1;">پاس ورڈ سیکیورٹی</span>
+        </button>
+    </div>
+    <div class="side-footer">Smart Tracker v1.0</div>
 </div>
 
-<!-- SCRIPT PART YAHAN AAYEGA — PART 2 MEIN -->
+<script>
+/* ============ NAVIGATION ============ */
+function go(file){
+    closeMenu();
+    window.location.href = file;
+}
+
+/* ============ SIDE MENU ============ */
+function toggleMenu(){
+    var m = document.getElementById('sideMenu');
+    var o = document.getElementById('menuOverlay');
+    var b = document.getElementById('menuBtn');
+    var open = !m.classList.contains('open');
+    m.classList.toggle('open', open);
+    o.classList.toggle('active', open);
+    b.classList.toggle('active', open);
+}
+function closeMenu(){
+    var m = document.getElementById('sideMenu');
+    var o = document.getElementById('menuOverlay');
+    var b = document.getElementById('menuBtn');
+    if(m) m.classList.remove('open');
+    if(o) o.classList.remove('active');
+    if(b) b.classList.remove('active');
+}
+
+/* ============ ADMIN ============ */
+function openAdmin(){
+    closeMenu();
+    var pass = localStorage.getItem('admin_key') || '1234';
+    var inp = prompt('👮 ایڈمن پاس ورڈ درج کریں:', '');
+    if(inp === null) return;
+    if(inp === pass){
+        window.location.href = 'side-menu.html';
+    } else {
+        alert('❌ غلط پاس ورڈ');
+    }
+}
+
+/* ============ EXPORT ============ */
+function exportData(){
+    closeMenu();
+    try{
+        var data = {};
+        for(var i=0;i<localStorage.length;i++){
+            var k = localStorage.key(i);
+            data[k] = localStorage.getItem(k);
+        }
+        var blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'smart_tracker_backup_' + Date.now() + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){URL.revokeObjectURL(url);},1000);
+        alert('✅ بیک اپ ڈاؤن لوڈ ہو گیا');
+    }catch(e){
+        alert('❌ مسئلہ');
+    }
+}
+
+/* ============ INFO ============ */
+function showInfo(icon, text){
+    closeMenu();
+    alert(icon + ' ' + text);
+}
+
+/* ============ ONLINE STATUS ============ */
+function updateOnline(){
+    var p = document.getElementById('statusPill');
+    var t = document.getElementById('statusText');
+    if(navigator.onLine){
+        p.classList.remove('offline');
+        t.textContent = 'آن لائن';
+    } else {
+        p.classList.add('offline');
+        t.textContent = 'آف لائن';
+    }
+}
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+
+/* ============ SYSTEM INFO ============ */
+function updateInfo(){
+    // Storage size
+    var total = 0;
+    for(var i=0;i<localStorage.length;i++){
+        var k = localStorage.key(i);
+        total += (k.length + (localStorage.getItem(k)||'').length);
+    }
+    var kb = (total / 1024).toFixed(1);
+    var el = document.getElementById('infoStorage');
+    if(el) el.textContent = kb + ' KB';
+    
+    // Members count
+    try{
+        var m = JSON.parse(localStorage.getItem('sec4_duty_manager_data_v4') || '[]');
+        var memEl = document.getElementById('infoMembers');
+        if(memEl) memEl.textContent = Array.isArray(m) ? m.length : 0;
+    }catch(e){}
+    
+    // Time
+    var now = new Date();
+    var t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    var timeEl = document.getElementById('infoTime');
+    if(timeEl) timeEl.textContent = t;
+}
+
+/* ============ KEYBOARD ============ */
+document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeMenu();
+});
+
+/* ============ BOOT ============ */
+function boot(){
+    updateOnline();
+    updateInfo();
+    setInterval(updateInfo, 30000);
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+</script>
 
 </body>
 </html>
-<script>
-/* ============ STORAGE KEYS ============ */
-var ALL_SECTIONS=[
-{key:'sec4_duty_manager_data_v4',icon:'👮',name:'Duty Manager'},
-{key:'sec4_duty_history_data_v4',icon:'📜',name:'Duty History'},
-{key:'sec4_duty_leaves_data_v4',icon:'🏖️',name:'Duty Leaves'},
-{key:'sec3_task_and_point_manager_data',icon:'📋',name:'Task Manager'},
-{key:'sec12_task_records',icon:'📝',name:'Task Records'},
-{key:'sec4_duty_skipped_data',icon:'⛔',name:'Skip Section'},
-{key:'sec10_news_alerts_data',icon:'📰',name:'News & Alerts'},
-{key:'symptoms',icon:'🩺',name:'Alamat Tracker'},
-{key:'diets',icon:'🍽️',name:'Diet Manager'},
-{key:'sec11_rashan_data_v2',icon:'🛒',name:'Rashan Manager'},
-{key:'sec11_rashan_budget_v2',icon:'💰',name:'Rashan Budget'},
-{key:'sec16_rashan_history_data',icon:'🧾',name:'Rashan History'},
-{key:'sec21_green_bus_data_v19',icon:'🚌',name:'Green Bus'},
-{key:'sec21_green_bus_routes_v19',icon:'🛣️',name:'Green Bus Routes'},
-{key:'member_complain_data_v4',icon:'📢',name:'Member Complain'},
-{key:'member_complain_cats_v4',icon:'📂',name:'Complain Categories'},
-{key:'work_manager_data_v14',icon:'💼',name:'Work Manager'},
-{key:'work_manager_categories_v14',icon:'📂',name:'Work Categories'},
-{key:'ghr_tafseeli_data_v2',icon:'🏠',name:'Ghr Tafseeli'},
-{key:'ghr_tafseeli_cats_v2',icon:'📂',name:'Ghr Categories'},
-{key:'alert_manager_history_v2',icon:'🔔',name:'Alert History'},
-{key:'alert_manager_settings_v2',icon:'⚙️',name:'Alert Settings'},
-{key:'ghr_inventory_data_v2',icon:'📦',name:'Ghr ka Saman'},
-{key:'ghr_inventory_cats_v2',icon:'📂',name:'Saman Categories'},
-{key:'admin_key',icon:'🔑',name:'Admin Key'},
-{key:'app_password',icon:'🔒',name:'App Password'},
-{key:'app_logs',icon:'📜',name:'Activity Logs'},
-{key:'recycle_bin',icon:'♻️',name:'Recycle Bin'},
-{key:'admin_message',icon:'💬',name:'Admin Message'}
-];
-
-var DEFAULT_MEMBERS=['Ali','Nimra','Shaban','Jutt','Aysha'];
-
-function $(id){return document.getElementById(id);}
-function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
-function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
-function lsJSON(k,d){try{var raw=localStorage.getItem(k);if(!raw)return d;var p=JSON.parse(raw);return p===null||p===undefined?d:p;}catch(e){return d;}}
-function esc(v){var d=document.createElement('div');d.textContent=String(v==null?'':v);return d.innerHTML;}
-
-/* ============ TOAST ============ */
-function showToast(msg,type){
-var t=$('toastBox');if(!t)return;
-t.textContent=msg;
-t.className='toast active '+(type||'');
-clearTimeout(t._timer);
-t._timer=setTimeout(function(){t.classList.remove('active');},2500);
-}
-
-/* ============ MODAL ============ */
-var modalCallback=null,modalNeedsInput=false,modalInputType='text';
-
-function showModal(title,message,icon,needsInput,callback,inputType){
-$('modalTitle').textContent=title;
-$('modalBody').innerHTML=message+(needsInput?'<input type="'+(inputType||'text')+'" id="modalInputField" placeholder="یہاں لکھیں..." autocomplete="off">':'');
-$('modalIcon').textContent=icon||'ℹ️';
-$('modalOverlay').classList.add('active');
-modalCallback=callback||null;
-modalNeedsInput=!!needsInput;
-modalInputType=inputType||'text';
-if(needsInput){
-setTimeout(function(){var inp=$('modalInputField');if(inp)inp.focus();},200);
-}
-}
-
-function closeModal(){
-$('modalOverlay').classList.remove('active');
-modalCallback=null;modalNeedsInput=false;
-}
-
-function modalConfirm(){
-var value=null;
-if(modalNeedsInput){
-var inp=$('modalInputField');
-value=inp?inp.value.trim():'';
-}
-var cb=modalCallback;
-closeModal();
-if(cb)cb(value);
-}
-
-/* ============ TABS ============ */
-window.switchTab=function(tab,btn){
-document.querySelectorAll('.a-tab-content').forEach(function(el){el.classList.remove('active');});
-document.querySelectorAll('.admin-tab-btn').forEach(function(el){el.classList.remove('active');});
-var target=$('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
-if(target)target.classList.add('active');
-if(btn)btn.classList.add('active');
-if(tab==='dashboard')adminLoadDashboard();
-if(tab==='users'){adminRenderUsers();adminUpdateLockStatus();}
-if(tab==='data')adminPopulateSections();
-if(tab==='tools')adminPopulateDownloads();
-};
-
-window.goBack=function(){
-if(history.length>1)history.back();
-else location.href='index.html';
-};
-
-/* ============ DASHBOARD ============ */
-function adminLoadDashboard(){
-var total=0;
-var grid=$('adminStatsGrid');
-var html='';
-ALL_SECTIONS.forEach(function(sec){
-var parsed=lsJSON(sec.key,[]);
-var count=Array.isArray(parsed)?parsed.length:(parsed&&typeof parsed==='object'?Object.keys(parsed).length:(parsed?1:0));
-total+=count;
-html+='<div class="admin-stat">'+
-'<div class="admin-stat-icon">'+sec.icon+'</div>'+
-'<div class="admin-stat-info">'+
-'<div class="admin-stat-label">'+esc(sec.name)+'</div>'+
-'<div class="admin-stat-value">'+count+'</div>'+
-'</div>'+
-'</div>';
-});
-grid.innerHTML=html;
-$('adminTotalBadge').textContent=total;
-adminRenderLogs();
-}
-
-function adminRenderLogs(){
-var c=$('adminLogList');
-var logs=lsJSON('app_logs',[]);
-if(!Array.isArray(logs)||!logs.length){
-c.innerHTML='<div class="a-empty"><span class="empty-icon">📜</span><span class="empty-text">ابھی کوئی لاگ نہیں</span></div>';
-return;
-}
-var html='';
-logs.slice(0,15).forEach(function(log){
-html+='<div class="a-log">'+
-'<div class="a-log-time">'+esc(log.time||'')+'</div>'+
-'<div class="a-log-text">'+esc(log.text||'')+'</div>'+
-'</div>';
-});
-c.innerHTML=html;
-}
-
-function addLog(text){
-try{
-var logs=lsJSON('app_logs',[]);
-if(!Array.isArray(logs))logs=[];
-var d=new Date();
-logs.unshift({
-time:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'),
-text:text,
-ts:Date.now()
-});
-if(logs.length>30)logs=logs.slice(0,30);
-lsSet('app_logs',JSON.stringify(logs));
-}catch(e){}
-}
-
-/* ============ DATA EDIT ============ */
-function adminPopulateSections(){
-var sel=$('adminSectionSelect');
-if(!sel)return;
-var current=sel.value;
-sel.innerHTML='<option value="">سیکشن منتخب کریں...</option>';
-ALL_SECTIONS.forEach(function(sec){
-var o=new Option(sec.icon+' '+sec.name,sec.key);
-sel.appendChild(o);
-});
-if(current)sel.value=current;
-}
-
-window.adminLoadSectionData=function(){
-var key=$('adminSectionSelect').value;
-var c=$('adminDataList');
-if(!key){
-c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">سیکشن منتخب کریں</span></div>';
-$('adminRecordBadge').textContent='0';
-return;
-}
-var data=lsJSON(key,[]);
-if(!Array.isArray(data))data=Array.isArray(JSON.parse(lsGet(key,'[]')))?JSON.parse(lsGet(key,'[]')):[];
-if(!Array.isArray(data)){
-c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">یہ سیکشن object ہے (array نہیں)</span></div>';
-$('adminRecordBadge').textContent='-';
-return;
-}
-$('adminRecordBadge').textContent=data.length;
-if(!data.length){
-c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">کوئی ریکارڈ نہیں</span></div>';
-return;
-}
-var html='';
-data.forEach(function(rec,i){
-var title='';
-if(typeof rec==='object'&&rec!==null){
-title=rec.name||rec.title||rec.task||rec.taskName||rec.member||rec.memberName||rec.alamat||rec.busName||rec.category||rec.content||rec.title||('ریکارڈ #'+(i+1));
-}else{
-title=String(rec);
-}
-var dateStr='';
-if(rec&&rec.timestamp){
-var d=new Date(rec.timestamp);
-if(!isNaN(d.getTime())){
-dateStr=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-}
-}
-html+='<div class="a-record">'+
-'<div class="a-record-header">'+
-'<div class="a-record-title">#'+(i+1)+' — '+esc(title)+'</div>'+
-'<div class="a-record-date">'+dateStr+'</div>'+
-'</div>'+
-'<div class="a-record-actions">'+
-'<button class="a-btn danger small" onclick="adminDeleteRecord('+i+')">🗑️ ڈیلیٹ</button>'+
-'<button class="a-btn primary small" onclick="adminEditRecord('+i+')">✏️ ایڈٹ</button>'+
-'</div>'+
-'</div>';
-});
-c.innerHTML=html;
-};
-
-function adminCurrentKey(){return $('adminSectionSelect').value;}
-
-window.adminDeleteRecord=function(idx){
-var key=adminCurrentKey();
-if(!key)return;
-if(!confirm('یہ ریکارڈ ڈیلیٹ کریں؟'))return;
-var data=lsJSON(key,[]);
-if(!Array.isArray(data)||!data[idx])return;
-pushToRecycleBin(key,data[idx]);
-data.splice(idx,1);
-lsSet(key,JSON.stringify(data));
-adminLoadSectionData();
-adminLoadDashboard();
-addLog('ریکارڈ ڈیلیٹ ('+key+')');
-showToast('✅ ڈیلیٹ ہو گیا','success');
-};
-
-window.adminEditRecord=function(idx){
-var key=adminCurrentKey();
-if(!key)return;
-var data=lsJSON(key,[]);
-if(!Array.isArray(data)||!data[idx])return;
-var rec=data[idx];
-var oldVal='';
-if(typeof rec==='object'&&rec!==null){
-oldVal=rec.name||rec.title||rec.task||rec.member||'';
-}else{
-oldVal=String(rec);
-}
-var newTitle=prompt('نیا نام / تفصیل:',oldVal);
-if(newTitle===null)return;
-newTitle=newTitle.trim();
-if(!newTitle){showToast('⚠️ خالی نہیں ہو سکتا','warning');return;}
-if(typeof rec==='object'&&rec!==null){
-if(rec.name!==undefined)rec.name=newTitle;
-else if(rec.title!==undefined)rec.title=newTitle;
-else if(rec.task!==undefined)rec.task=newTitle;
-else if(rec.member!==undefined)rec.member=newTitle;
-else rec.name=newTitle;
-}else{
-data[idx]=newTitle;
-}
-lsSet(key,JSON.stringify(data));
-adminLoadSectionData();
-addLog('ریکارڈ ایڈٹ');
-showToast('✅ اپڈیٹ ہو گیا','success');
-};
-
-window.adminClearSection=function(){
-var key=adminCurrentKey();
-if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}
-if(!confirm('پورا سیکشن صاف کرنا ہے؟'))return;
-lsSet(key,'[]');
-adminLoadSectionData();
-adminLoadDashboard();
-addLog('سیکشن صاف ('+key+')');
-showToast('✅ سیکشن صاف','success');
-};
-
-window.adminAddRecord=function(){
-var key=adminCurrentKey();
-if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}
-var name=prompt('نیا ریکارڈ کا نام:');
-if(!name||!name.trim())return;
-var data=lsJSON(key,[]);
-if(!Array.isArray(data))data=[];
-data.unshift({id:Date.now(),name:name.trim(),timestamp:Date.now()});
-lsSet(key,JSON.stringify(data));
-adminLoadSectionData();
-adminLoadDashboard();
-addLog('نیا ریکارڈ شامل');
-showToast('✅ نیا ریکارڈ','success');
-};
-
-window.adminExportSection=function(){
-var key=adminCurrentKey();
-if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}
-try{
-var data=lsGet(key,'[]');
-var blob=new Blob([data],{type:'application/json'});
-var url=URL.createObjectURL(blob);
-var a=document.createElement('a');
-a.href=url;
-a.download=key+'_'+Date.now()+'.json';
-document.body.appendChild(a);a.click();document.body.removeChild(a);
-setTimeout(function(){URL.revokeObjectURL(url);},1000);
-showToast('📥 ایکسپورٹ','success');
-}catch(e){showToast('❌ مسئلہ','error');}
-};
-
-/* ============ RECYCLE BIN ============ */
-function getRecycleBin(){var b=lsJSON('recycle_bin',[]);return Array.isArray(b)?b:[];}
-function pushToRecycleBin(key,record){
-var bin=getRecycleBin();
-bin.unshift({key:key,record:record,deletedAt:Date.now()});
-if(bin.length>100)bin=bin.slice(0,100);
-lsSet('recycle_bin',JSON.stringify(bin));
-}
-
-/* ============ USERS ============ */
-function adminRenderUsers(){
-var c=$('adminUsersList');
-if(!c)return;
-var html='';
-DEFAULT_MEMBERS.forEach(function(m,i){
-var isOnline=(i%3)!==2;
-html+='<div class="a-user">'+
-'<div class="a-user-avatar">'+esc(m.charAt(0))+'</div>'+
-'<div class="a-user-info">'+
-'<div class="a-user-name">'+esc(m)+'</div>'+
-'<div class="a-user-status '+(isOnline?'online':'offline')+'">'+(isOnline?'🟢 آن لائن':'🔴 آف لائن')+'</div>'+
-'</div>'+
-'</div>';
-});
-c.innerHTML=html;
-$('adminUsersBadge').textContent=DEFAULT_MEMBERS.length;
-}
-
-window.adminSendMessage=function(){
-var text=$('adminMsgText').value.trim();
-if(!text){showToast('⚠️ پیغام لکھیں','warning');return;}
-lsSet('admin_message',JSON.stringify({
-text:text,
-timestamp:Date.now(),
-from:'Admin',
-target:$('adminMsgTarget').value
-}));
-$('adminMsgText').value='';
-addLog('ایڈمن پیغام بھیجا');
-showToast('📤 پیغام بھیج دیا','success');
-};
-
-window.adminUpdateLockStatus=function(){
-var status=$('adminLockStatus');
-if(!status)return;
-var locked=lsGet('app_locked','0')==='1';
-if(locked){
-status.className='lock-status-box on';
-status.textContent='🔒 ایپ لاک ہے';
-}else{
-status.className='lock-status-box off';
-status.textContent='✅ ایپ آن ہے';
-}
-};
-
-window.adminLockApp=function(){
-lsSet('app_locked','1');
-adminUpdateLockStatus();
-addLog('ایپ لاک (ایڈمن)');
-showToast('🔒 ایپ لاک','success');
-};
-
-window.adminUnlockApp=function(){
-lsSet('app_locked','0');
-adminUpdateLockStatus();
-addLog('ایپ انلاک (ایڈمن)');
-showToast('🔓 ایپ انلاک','success');
-};
-
-/* ============ TOOLS — DOWNLOAD ============ */
-function adminPopulateDownloads(){
-var c=$('adminDownloadOptions');
-if(!c)return;
-var html='';
-ALL_SECTIONS.forEach(function(sec,i){
-html+='<div class="a-check" id="dlwrap_'+i+'" onclick="toggleAdminDownload('+i+')">'+
-'<input type="checkbox" id="dl_'+i+'" onclick="event.stopPropagation();toggleAdminDownload('+i+')">'+
-'<label onclick="event.preventDefault();toggleAdminDownload('+i+')">'+sec.icon+' '+esc(sec.name)+'</label>'+
-'</div>';
-});
-c.innerHTML=html;
-}
-
-window.toggleAdminDownload=function(i){
-var wrap=$('dlwrap_'+i),cb=$('dl_'+i);
-if(!wrap||!cb)return;
-var nowChecked=!wrap.classList.contains('checked');
-wrap.classList.toggle('checked',nowChecked);
-cb.checked=nowChecked;
-};
-
-window.adminSelectAllDownloads=function(status){
-ALL_SECTIONS.forEach(function(sec,i){
-var wrap=$('dlwrap_'+i),cb=$('dl_'+i);
-if(!wrap||!cb)return;
-wrap.classList.toggle('checked',!!status);
-cb.checked=!!status;
-});
-};
-
-window.adminDownloadSelected=function(){
-var format=$('adminDownloadFormat').value;
-var selected=[];
-ALL_SECTIONS.forEach(function(sec,i){
-var cb=$('dl_'+i);
-if(cb&&cb.checked)selected.push(sec);
-});
-if(!selected.length){showToast('⚠️ کوئی سیکشن منتخب نہیں','warning');return;}
-var allData={};
-selected.forEach(function(sec){
-allData[sec.name]=lsJSON(sec.key,[]);
-});
-var content,mime,ext;
-if(format==='json'){
-content=JSON.stringify(allData,null,2);
-mime='application/json';ext='json';
-}else if(format==='csv'){
-content='Section,Index,Data\n';
-for(var name in allData){
-if(!Object.prototype.hasOwnProperty.call(allData,name))continue;
-var arr=allData[name];
-if(!Array.isArray(arr))continue;
-arr.forEach(function(rec,i){
-content+='"'+name.replace(/"/g,'""')+'",'+(i+1)+',"'+JSON.stringify(rec).replace(/"/g,'""')+'"\n';
-});
-}
-mime='text/csv;charset=utf-8';ext='csv';
-}else{
-content='';
-for(var name2 in allData){
-if(!Object.prototype.hasOwnProperty.call(allData,name2))continue;
-content+='=== '+name2+' ===\n';
-var arr2=allData[name2];
-if(Array.isArray(arr2)){
-arr2.forEach(function(rec,i){content+=(i+1)+'. '+JSON.stringify(rec)+'\n';});
-}else{
-content+=JSON.stringify(arr2)+'\n';
-}
-content+='\n';
-}
-mime='text/plain;charset=utf-8';ext='txt';
-}
-var blob=new Blob([content],{type:mime});
-var url=URL.createObjectURL(blob);
-var a=document.createElement('a');
-a.href=url;
-a.download='smart_tracker_data_'+Date.now()+'.'+ext;
-document.body.appendChild(a);a.click();document.body.removeChild(a);
-setTimeout(function(){URL.revokeObjectURL(url);},1000);
-addLog('ڈیٹا ڈاؤن لوڈ ('+ext.toUpperCase()+')');
-showToast('📥 ڈاؤن لوڈ','success');
-};
-
-/* ============ BACKUP/RESTORE ============ */
-window.adminBackupAll=function(){
-try{
-var all={};
-for(var i=0;i<localStorage.length;i++){
-var k=localStorage.key(i);
-all[k]=localStorage.getItem(k);
-}
-var blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});
-var url=URL.createObjectURL(blob);
-var a=document.createElement('a');
-a.href=url;
-a.download='smart_tracker_backup_'+Date.now()+'.json';
-document.body.appendChild(a);a.click();document.body.removeChild(a);
-setTimeout(function(){URL.revokeObjectURL(url);},1000);
-addLog('مکمل بیک اپ');
-showToast('💾 بیک اپ ڈاؤن لوڈ','success');
-}catch(e){showToast('❌ مسئلہ','error');}
-};
-
-window.adminRestoreBackup=function(){
-$('adminBackupFile').click();
-};
-
-window.adminHandleBackupFile=function(e){
-var file=e.target.files[0];
-if(!file)return;
-var reader=new FileReader();
-reader.onload=function(ev){
-try{
-var data=JSON.parse(ev.target.result);
-for(var k in data){
-if(Object.prototype.hasOwnProperty.call(data,k)){
-localStorage.setItem(k,data[k]);
-}
-}
-adminLoadDashboard();
-adminPopulateSections();
-adminRenderLogs();
-addLog('بیک اپ ری اسٹور');
-showToast('✅ بیک اپ ری اسٹور','success');
-}catch(err){showToast('❌ فائل غلط','error');}
-};
-reader.readAsText(file);
-e.target.value='';
-};
-
-window.adminConfirmReset=function(){
-if(!confirm('تمام ڈیٹا صاف کرنا ہے؟ واپس نہیں ہوگا!'))return;
-if(!confirm('کیا آپ واقعی یقین رکھتے ہیں؟'))return;
-var keep=['admin_key','app_password'];
-var toRemove=[];
-for(var i=0;i<localStorage.length;i++){
-var k=localStorage.key(i);
-if(keep.indexOf(k)===-1)toRemove.push(k);
-}
-toRemove.forEach(function(k){localStorage.removeItem(k);});
-adminLoadDashboard();
-adminPopulateSections();
-adminRenderLogs();
-addLog('ایپ ری سیٹ');
-showToast('✅ ایپ ری سیٹ','success');
-};
-
-/* ============ GLOBAL EVENTS ============ */
-document.addEventListener('keydown',function(e){
-var modalOpen=$('modalOverlay').classList.contains('active');
-if(e.key==='Escape'){
-if(modalOpen){closeModal();return;}
-}
-if(e.key==='Enter'&&modalOpen&&modalNeedsInput){
-e.preventDefault();
-modalConfirm();
-}
-});
-
-document.addEventListener('click',function(e){
-if(e.target===$('modalOverlay'))closeModal();
-});
-
-/* ============ INIT ============ */
-function boot(){
-adminPopulateSections();
-adminLoadDashboard();
-adminPopulateDownloads();
-adminRenderUsers();
-adminUpdateLockStatus();
-addLog('ایڈمن پینل کھولا گیا');
-if(lsGet('admin_key',null)===null)lsSet('admin_key','1234');
-if(lsGet('app_password',null)===null)lsSet('app_password','1234');
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
-</script>
