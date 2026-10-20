@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Control Panel</title>
+<style>
+:root{--primary:#1e293b;--accent:#2563eb;--danger:#dc2626;--golden:#d97706;--success:#16a34a;--purple:#7c3aed;--teal:#0d9488;--bg:#f1f5f9;--card:#fff;--text:#334155;--border:#e2e8f0;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#f8fafc;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;padding:10px;color:var(--text);min-height:100vh}
+.container{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.admin-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:4px solid var(--accent)}
+.admin-header .brand{display:flex;align-items:center;gap:10px}
+.admin-header .brand-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#dc2626,#b91c1c);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px rgba(220,38,38,.3)}
+.admin-header .brand-title{font-size:16px;font-weight:900}
+.admin-header .brand-sub{font-size:11px;opacity:.75;margin-top:2px}
+.admin-header .back-btn{padding:8px 14px;font-size:12px;font-weight:800;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit}
+.admin-header .back-btn:hover{background:rgba(255,255,255,.25)}
+.admin-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:6px;margin-bottom:4px}
+.admin-tab-btn{padding:10px 4px;font-size:10px;font-weight:700;color:#64748b;background:transparent;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.admin-tab-btn .tab-icon{font-size:18px}
+.admin-tab-btn:hover{background:#f1f5f9;color:#334155}
+.admin-tab-btn.active{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;box-shadow:0 2px 8px rgba(220,38,38,.3)}
+.admin-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.admin-card .card-title{font-size:13px;font-weight:800;color:#1e293b;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:8px}
+.admin-card .card-title .badge{background:#dc2626;color:#fff;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:800;margin-right:auto}
+.admin-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.admin-stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;transition:.2s}
+.admin-stat:hover{border-color:#dc2626;background:#fef2f2}
+.admin-stat-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:#f1f5f9}
+.admin-stat-info{flex:1;min-width:0}
+.admin-stat-label{font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px}
+.admin-stat-value{font-size:16px;font-weight:900;color:#1e293b}
+.a-btn{padding:10px 14px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+.a-btn.primary{background:#2563eb;color:#fff}.a-btn.primary:hover{background:#1d4ed8}
+.a-btn.danger{background:#dc2626;color:#fff}.a-btn.danger:hover{background:#b91c1c}
+.a-btn.success{background:#16a34a;color:#fff}.a-btn.success:hover{background:#15803d}
+.a-btn.warning{background:#ea580c;color:#fff}.a-btn.warning:hover{background:#c2410c}
+.a-btn.secondary{background:#e2e8f0;color:#334155}.a-btn.secondary:hover{background:#cbd5e1}
+.a-btn.small{padding:7px 12px;font-size:11px}.a-btn.full{width:100%}
+.a-input,.a-select,.a-textarea{width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:600;outline:none;background:#fff;font-family:inherit;margin-bottom:8px;color:#1e293b}
+.a-input:focus,.a-select:focus,.a-textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.a-textarea{min-height:80px;resize:vertical}
+.a-data-list{max-height:340px;overflow-y:auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:6px;margin-top:8px}
+.a-record{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:6px;transition:.2s}
+.a-record:hover{border-color:#2563eb;background:#eff6ff}
+.a-record-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.a-record-title{font-size:12px;font-weight:800;color:#1e293b;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.a-record-date{font-size:10px;color:#64748b;font-weight:600}
+.a-record-actions{display:flex;gap:5px;flex-wrap:wrap}
+.a-user{display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px}
+.a-user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.a-user-info{flex:1;min-width:0}
+.a-user-name{font-size:12px;font-weight:800;color:#1e293b}
+.a-user-status{font-size:10px;font-weight:700;margin-top:2px}
+.a-user-status.online{color:#16a34a}.a-user-status.offline{color:#dc2626}
+.a-log{display:flex;gap:8px;padding:8px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:5px;font-size:11px}
+.a-log-time{background:#2563eb;color:#fff;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:800;flex-shrink:0;display:flex;align-items:center}
+.a-log-text{color:#334155;font-weight:600;flex:1;min-width:0}
+.a-check{display:flex;align-items:center;gap:8px;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;margin-bottom:5px;transition:.2s}
+.a-check:hover{border-color:#2563eb}.a-check.checked{background:#eff6ff;border-color:#2563eb}
+.a-check input[type="checkbox"]{width:16px;height:16px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
+.a-check label{font-size:12px;font-weight:700;color:#334155;cursor:pointer;flex:1}
+.a-empty{text-align:center;padding:30px 16px;color:#94a3b8}
+.a-empty .empty-icon{font-size:36px;margin-bottom:8px;display:block;opacity:.5}
+.a-empty .empty-text{font-size:12px;font-weight:700}
+.a-tab-content{display:none}.a-tab-content.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.lock-status-box{padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px;font-size:13px;font-weight:800;text-align:center}
+.lock-status-box.on{background:#f0fdf4;border-color:#bbf7d0;color:#16a34a}
+.lock-status-box.off{background:#fef2f2;border-color:#fecaca;color:#dc2626}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:12px 22px;border-radius:24px;font-size:12px;font-weight:700;z-index:99999;opacity:0;transition:all .3s;border:1px solid #334155;max-width:90vw;text-align:center;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.toast.active{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:#16a34a;border-color:#22c55e}.toast.error{background:#dc2626;border-color:#ef4444}.toast.warning{background:#ea580c;border-color:#f97316}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.active{display:flex}
+.modal-box{background:#fff;border-radius:14px;max-width:400px;width:100%;overflow:hidden;animation:modalIn .25s;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+@keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:8px}
+.modal-header .m-icon{font-size:22px}.modal-header h3{font-size:14px;font-weight:800}
+.modal-body{padding:16px;font-size:13px;color:#334155;line-height:1.6;font-weight:600}
+.modal-body input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:700;outline:none;margin-top:10px;font-family:inherit}
+.modal-body input:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.15)}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
+.modal-btn{padding:12px;font-size:13px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s}
+.modal-btn.primary{background:#dc2626;color:#fff}.modal-btn.primary:hover{background:#b91c1c}
+.modal-btn.cancel{background:#f1f5f9;color:#64748b}.modal-btn.cancel:hover{background:#e2e8f0}
+@media(max-width:520px){.admin-stats{grid-template-columns:1fr}.admin-tabs{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="admin-header">
+        <div class="brand"><div class="brand-icon">👮</div><div><div class="brand-title">ایڈمن کنٹرول پینل</div><div class="brand-sub">پوری ایپ پر مکمل کنٹرول</div></div></div>
+        <button class="back-btn" onclick="goBack()">← واپس</button>
+    </div>
+    <div class="admin-tabs">
+        <button class="admin-tab-btn active" onclick="switchTab('dashboard',this)"><span class="tab-icon">📊</span><span>ڈیش بورڈ</span></button>
+        <button class="admin-tab-btn" onclick="switchTab('data',this)"><span class="tab-icon">✏️</span><span>ڈیٹا ایڈٹ</span></button>
+        <button class="admin-tab-btn" onclick="switchTab('users',this)"><span class="tab-icon">👥</span><span>صارفین</span></button>
+        <button class="admin-tab-btn" onclick="switchTab('tools',this)"><span class="tab-icon">🔧</span><span>ٹولز</span></button>
+    </div>
+    <div class="a-tab-content active" id="tabDashboard">
+        <div class="admin-card"><div class="card-title"><span>📊 لائیو ڈیٹا</span><span class="badge" id="adminTotalBadge">0</span></div><div class="admin-stats" id="adminStatsGrid"></div></div>
+        <div class="admin-card"><div class="card-title"><span>📜 آخری لاگ</span></div><div id="adminLogList"></div></div>
+    </div>
+    <div class="a-tab-content" id="tabData">
+        <div class="admin-card">
+            <div class="card-title"><span>✏️ ڈیٹا ایڈٹ</span></div>
+            <select id="adminSectionSelect" class="a-select" onchange="adminLoadSectionData()"><option value="">سیکشن منتخب کریں...</option></select>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="a-btn danger small" onclick="adminClearSection()">🗑️ سیکشن صاف</button><button class="a-btn success small" onclick="adminExportSection()">📥 ایکسپورٹ</button><button class="a-btn warning small" onclick="adminAddRecord()">➕ نیا ریکارڈ</button></div>
+        </div>
+        <div class="admin-card"><div class="card-title"><span>📋 ریکارڈز</span><span class="badge" id="adminRecordBadge">0</span></div><div class="a-data-list" id="adminDataList"><div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">سیکشن منتخب کریں</span></div></div></div>
+    </div>
+    <div class="a-tab-content" id="tabUsers">
+        <div class="admin-card"><div class="card-title"><span>💬 پیغام بھیجیں</span></div><select id="adminMsgTarget" class="a-select"><option value="all">📢 تمام صارفین کو</option><option value="specific">👤 مخصوص صارف کو</option></select><textarea id="adminMsgText" class="a-textarea" placeholder="اپنا پیغام یہاں لکھیں..."></textarea><button class="a-btn primary full" onclick="adminSendMessage()">📤 پیغام بھیجیں</button></div>
+        <div class="admin-card"><div class="card-title"><span>🔒 ایپ لاک کنٹرول</span></div><div class="lock-status-box off" id="adminLockStatus">✅ ایپ آن ہے</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><button class="a-btn danger full" onclick="adminLockApp()">🔒 لاک</button><button class="a-btn success full" onclick="adminUnlockApp()">🔓 انلاک</button></div></div>
+        <div class="admin-card"><div class="card-title"><span>👥 تمام ممبران</span><span class="badge" id="adminUsersBadge">0</span></div><div id="adminUsersList"></div></div>
+    </div>
+    <div class="a-tab-content" id="tabTools">
+        <div class="admin-card">
+            <div class="card-title"><span>📥 ڈیٹا ڈاؤن لوڈ</span></div>
+            <div id="adminDownloadOptions"></div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;"><button class="a-btn secondary small" onclick="adminSelectAllDownloads(true)">✅ تمام</button><button class="a-btn secondary small" onclick="adminSelectAllDownloads(false)">⬜ ہٹائیں</button></div>
+            <select id="adminDownloadFormat" class="a-select"><option value="json">📄 JSON</option><option value="csv">📊 CSV (Excel)</option><option value="txt">📝 Text</option></select>
+            <button class="a-btn primary full" onclick="adminDownloadSelected()">📥 ڈاؤن لوڈ کریں</button>
+        </div>
+        <div class="admin-card"><div class="card-title"><span>💾 بیک اپ و ری اسٹور</span></div><button class="a-btn success full" style="margin-bottom:8px;" onclick="adminBackupAll()">💾 مکمل بیک اپ</button><button class="a-btn warning full" style="margin-bottom:8px;" onclick="adminRestoreBackup()">📥 بیک اپ ری اسٹور</button><input type="file" id="adminBackupFile" accept=".json" style="display:none;" onchange="adminHandleBackupFile(event)"></div>
+        <div class="admin-card"><div class="card-title"><span>⚠️ ڈیٹا ری سیٹ</span></div><p style="font-size:12px;color:#64748b;margin-bottom:10px;font-weight:600;">تمام ڈیٹا مستقل حذف ہو گا۔</p><button class="a-btn danger full" onclick="adminConfirmReset()">🗑️ تمام ڈیٹا ری سیٹ</button></div>
+    </div>
+</div>
+<div class="toast" id="toastBox"></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal-box"><div class="modal-header"><span class="m-icon" id="modalIcon">ℹ️</span><h3 id="modalTitle">اطلاع</h3></div><div class="modal-body" id="modalBody">—</div><div class="modal-actions"><button class="modal-btn cancel" onclick="closeModal()">✕ بند</button><button class="modal-btn primary" onclick="modalConfirm()">✅ ٹھیک ہے</button></div></div></div>
+<script>
+var ALL_SECTIONS=[{key:'sec4_duty_manager_data_v4',icon:'👮',name:'Duty Manager'},{key:'sec4_duty_history_data_v4',icon:'📜',name:'Duty History'},{key:'sec4_duty_leaves_data_v4',icon:'🏖️',name:'Duty Leaves'},{key:'sec3_task_and_point_manager_data',icon:'📋',name:'Task Manager'},{key:'sec12_task_records',icon:'📝',name:'Task Records'},{key:'sec4_duty_skipped_data',icon:'⛔',name:'Skip Section'},{key:'sec10_news_alerts_data',icon:'📰',name:'News & Alerts'},{key:'symptoms',icon:'🩺',name:'Alamat Tracker'},{key:'diets',icon:'🍽️',name:'Diet Manager'},{key:'sec11_rashan_data_v2',icon:'🛒',name:'Rashan Manager'},{key:'sec11_rashan_budget_v2',icon:'💰',name:'Rashan Budget'},{key:'sec16_rashan_history_data',icon:'🧾',name:'Rashan History'},{key:'sec21_green_bus_data_v19',icon:'🚌',name:'Green Bus'},{key:'sec21_green_bus_routes_v19',icon:'🛣️',name:'Green Bus Routes'},{key:'member_complain_data_v4',icon:'📢',name:'Member Complain'},{key:'work_manager_data_v14',icon:'💼',name:'Work Manager'},{key:'ghr_tafseeli_data_v2',icon:'🏠',name:'Ghr Tafseeli'},{key:'alert_manager_history_v2',icon:'🔔',name:'Alert History'},{key:'ghr_inventory_data_v2',icon:'📦',name:'Ghr ka Saman'},{key:'admin_key',icon:'🔑',name:'Admin Key'},{key:'app_password',icon:'🔒',name:'App Password'},{key:'app_logs',icon:'📜',name:'Activity Logs'},{key:'recycle_bin',icon:'♻️',name:'Recycle Bin'}];
+var DEFAULT_MEMBERS=['Ali','Nimra','Shaban','Jutt','Aysha'];
+function $(id){return document.getElementById(id);}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+function lsJSON(k,d){try{var raw=localStorage.getItem(k);if(!raw)return d;var p=JSON.parse(raw);return p===null||p===undefined?d:p;}catch(e){return d;}}
+function esc(v){var d=document.createElement('div');d.textContent=String(v==null?'':v);return d.innerHTML;}
+function showToast(msg,type){var t=$('toastBox');if(!t)return;t.textContent=msg;t.className='toast active '+(type||'');clearTimeout(t._timer);t._timer=setTimeout(function(){t.classList.remove('active');},2500);}
+var modalCallback=null,modalNeedsInput=false;
+function showModal(title,message,icon,needsInput,callback,inputType){$('modalTitle').textContent=title;$('modalBody').innerHTML=message+(needsInput?'<input type="'+(inputType||'text')+'" id="modalInputField" placeholder="یہاں لکھیں..." autocomplete="off">':'');$('modalIcon').textContent=icon||'ℹ️';$('modalOverlay').classList.add('active');modalCallback=callback||null;modalNeedsInput=!!needsInput;if(needsInput){setTimeout(function(){var inp=$('modalInputField');if(inp)inp.focus();},200);}}
+function closeModal(){$('modalOverlay').classList.remove('active');modalCallback=null;modalNeedsInput=false;}
+function modalConfirm(){var value=null;if(modalNeedsInput){var inp=$('modalInputField');value=inp?inp.value.trim():'';}var cb=modalCallback;closeModal();if(cb)cb(value);}
+function switchTab(tab,btn){document.querySelectorAll('.a-tab-content').forEach(function(el){el.classList.remove('active');});document.querySelectorAll('.admin-tab-btn').forEach(function(el){el.classList.remove('active');});var target=$('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));if(target)target.classList.add('active');if(btn)btn.classList.add('active');if(tab==='dashboard')adminLoadDashboard();if(tab==='users'){adminRenderUsers();adminUpdateLockStatus();}if(tab==='data')adminPopulateSections();if(tab==='tools')adminPopulateDownloads();}
+function goBack(){if(history.length>1)history.back();else location.href='index.html';}
+function adminLoadDashboard(){var total=0;var grid=$('adminStatsGrid');var html='';ALL_SECTIONS.forEach(function(sec){var parsed=lsJSON(sec.key,[]);var count=Array.isArray(parsed)?parsed.length:(parsed&&typeof parsed==='object'?Object.keys(parsed).length:(parsed?1:0));total+=count;html+='<div class="admin-stat"><div class="admin-stat-icon">'+sec.icon+'</div><div class="admin-stat-info"><div class="admin-stat-label">'+esc(sec.name)+'</div><div class="admin-stat-value">'+count+'</div></div></div>';});grid.innerHTML=html;$('adminTotalBadge').textContent=total;adminRenderLogs();}
+function adminRenderLogs(){var c=$('adminLogList');var logs=lsJSON('app_logs',[]);if(!Array.isArray(logs)||!logs.length){c.innerHTML='<div class="a-empty"><span class="empty-icon">📜</span><span class="empty-text">ابھی کوئی لاگ نہیں</span></div>';return;}var html='';logs.slice(0,15).forEach(function(log){html+='<div class="a-log"><div class="a-log-time">'+esc(log.time||'')+'</div><div class="a-log-text">'+esc(log.text||'')+'</div></div>';});c.innerHTML=html;}
+function addLog(text){try{var logs=lsJSON('app_logs',[]);if(!Array.isArray(logs))logs=[];var d=new Date();logs.unshift({time:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'),text:text,ts:Date.now()});if(logs.length>30)logs=logs.slice(0,30);lsSet('app_logs',JSON.stringify(logs));}catch(e){}}
+function adminPopulateSections(){var sel=$('adminSectionSelect');if(!sel)return;var current=sel.value;sel.innerHTML='<option value="">سیکشن منتخب کریں...</option>';ALL_SECTIONS.forEach(function(sec){var o=new Option(sec.icon+' '+sec.name,sec.key);sel.appendChild(o);});if(current)sel.value=current;}
+function adminLoadSectionData(){var key=$('adminSectionSelect').value;var c=$('adminDataList');if(!key){c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">سیکشن منتخب کریں</span></div>';$('adminRecordBadge').textContent='0';return;}var data=lsJSON(key,[]);if(!Array.isArray(data))data=Array.isArray(JSON.parse(lsGet(key,'[]')))?JSON.parse(lsGet(key,'[]')):[];if(!Array.isArray(data)){c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">یہ سیکشن object ہے (array نہیں)</span></div>';$('adminRecordBadge').textContent='-';return;}$('adminRecordBadge').textContent=data.length;if(!data.length){c.innerHTML='<div class="a-empty"><span class="empty-icon">📋</span><span class="empty-text">کوئی ریکارڈ نہیں</span></div>';return;}var html='';data.forEach(function(rec,i){var title='';if(typeof rec==='object'&&rec!==null){title=rec.name||rec.title||rec.task||rec.taskName||rec.member||rec.memberName||rec.alamat||rec.busName||rec.category||rec.content||('ریکارڈ #'+(i+1));}else{title=String(rec);}var dateStr='';if(rec&&rec.timestamp){var d=new Date(rec.timestamp);if(!isNaN(d.getTime())){dateStr=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}}html+='<div class="a-record"><div class="a-record-header"><div class="a-record-title">#'+(i+1)+' — '+esc(title)+'</div><div class="a-record-date">'+dateStr+'</div></div><div class="a-record-actions"><button class="a-btn danger small" onclick="adminDeleteRecord('+i+')">🗑️ ڈیلیٹ</button><button class="a-btn primary small" onclick="adminEditRecord('+i+')">✏️ ایڈٹ</button></div></div>';});c.innerHTML=html;}
+function adminCurrentKey(){return $('adminSectionSelect').value;}
+function adminDeleteRecord(idx){var key=adminCurrentKey();if(!key)return;if(!confirm('یہ ریکارڈ ڈیلیٹ کریں؟'))return;var data=lsJSON(key,[]);if(!Array.isArray(data)||!data[idx])return;pushToRecycleBin(key,data[idx]);data.splice(idx,1);lsSet(key,JSON.stringify(data));adminLoadSectionData();adminLoadDashboard();addLog('ریکارڈ ڈیلیٹ ('+key+')');showToast('✅ ڈیلیٹ ہو گیا','success');}
+function adminEditRecord(idx){var key=adminCurrentKey();if(!key)return;var data=lsJSON(key,[]);if(!Array.isArray(data)||!data[idx])return;var rec=data[idx];var oldVal='';if(typeof rec==='object'&&rec!==null){oldVal=rec.name||rec.title||rec.task||rec.member||'';}else{oldVal=String(rec);}var newTitle=prompt('نیا نام / تفصیل:',oldVal);if(newTitle===null)return;newTitle=newTitle.trim();if(!newTitle){showToast('⚠️ خالی نہیں ہو سکتا','warning');return;}if(typeof rec==='object'&&rec!==null){if(rec.name!==undefined)rec.name=newTitle;else if(rec.title!==undefined)rec.title=newTitle;else if(rec.task!==undefined)rec.task=newTitle;else if(rec.member!==undefined)rec.member=newTitle;else rec.name=newTitle;}else{data[idx]=newTitle;}lsSet(key,JSON.stringify(data));adminLoadSectionData();addLog('ریکارڈ ایڈٹ');showToast('✅ اپڈیٹ ہو گیا','success');}
+function adminClearSection(){var key=adminCurrentKey();if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}if(!confirm('پورا سیکشن صاف کرنا ہے؟'))return;lsSet(key,'[]');adminLoadSectionData();adminLoadDashboard();addLog('سیکشن صاف ('+key+')');showToast('✅ سیکشن صاف','success');}
+function adminAddRecord(){var key=adminCurrentKey();if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}var name=prompt('نیا ریکارڈ کا نام:');if(!name||!name.trim())return;var data=lsJSON(key,[]);if(!Array.isArray(data))data=[];data.unshift({id:Date.now(),name:name.trim(),timestamp:Date.now()});lsSet(key,JSON.stringify(data));adminLoadSectionData();adminLoadDashboard();addLog('نیا ریکارڈ شامل');showToast('✅ نیا ریکارڈ','success');}
+function adminExportSection(){var key=adminCurrentKey();if(!key){showToast('⚠️ سیکشن منتخب کریں','warning');return;}try{var data=lsGet(key,'[]');var blob=new Blob([data],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=key+'_'+Date.now()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);showToast('📥 ایکسپورٹ','success');}catch(e){showToast('❌ مسئلہ','error');}}
+function getRecycleBin(){var b=lsJSON('recycle_bin',[]);return Array.isArray(b)?b:[];}
+function pushToRecycleBin(key,record){var bin=getRecycleBin();bin.unshift({key:key,record:record,deletedAt:Date.now()});if(bin.length>100)bin=bin.slice(0,100);lsSet('recycle_bin',JSON.stringify(bin));}
+function adminRenderUsers(){var c=$('adminUsersList');if(!c)return;var html='';DEFAULT_MEMBERS.forEach(function(m,i){var isOnline=(i%3)!==2;html+='<div class="a-user"><div class="a-user-avatar">'+esc(m.charAt(0))+'</div><div class="a-user-info"><div class="a-user-name">'+esc(m)+'</div><div class="a-user-status '+(isOnline?'online':'offline')+'">'+(isOnline?'🟢 آن لائن':'🔴 آف لائن')+'</div></div></div>';});c.innerHTML=html;$('adminUsersBadge').textContent=DEFAULT_MEMBERS.length;}
+function adminSendMessage(){var text=$('adminMsgText').value.trim();if(!text){showToast('⚠️ پیغام لکھیں','warning');return;}lsSet('admin_message',JSON.stringify({text:text,timestamp:Date.now(),from:'Admin',target:$('adminMsgTarget').value}));$('adminMsgText').value='';addLog('ایڈمن پیغام بھیجا');showToast('📤 پیغام بھیج دیا','success');}
+function adminUpdateLockStatus(){var status=$('adminLockStatus');if(!status)return;var locked=lsGet('app_locked','0')==='1';if(locked){status.className='lock-status-box on';status.textContent='🔒 ایپ لاک ہے';}else{status.className='lock-status-box off';status.textContent='✅ ایپ آن ہے';}}
+function adminLockApp(){lsSet('app_locked','1');adminUpdateLockStatus();addLog('ایپ لاک (ایڈمن)');showToast('🔒 ایپ لاک','success');}
+function adminUnlockApp(){lsSet('app_locked','0');adminUpdateLockStatus();addLog('ایپ انلاک (ایڈمن)');showToast('🔓 ایپ انلاک','success');}
+function adminPopulateDownloads(){var c=$('adminDownloadOptions');if(!c)return;var html='';ALL_SECTIONS.forEach(function(sec,i){html+='<div class="a-check" id="dlwrap_'+i+'" onclick="toggleAdminDownload('+i+')"><input type="checkbox" id="dl_'+i+'" onclick="event.stopPropagation();toggleAdminDownload('+i+')"><label onclick="event.preventDefault();toggleAdminDownload('+i+')">'+sec.icon+' '+esc(sec.name)+'</label></div>';});c.innerHTML=html;}
+function toggleAdminDownload(i){var wrap=$('dlwrap_'+i),cb=$('dl_'+i);if(!wrap||!cb)return;var nowChecked=!wrap.classList.contains('checked');wrap.classList.toggle('checked',nowChecked);cb.checked=nowChecked;}
+function adminSelectAllDownloads(status){ALL_SECTIONS.forEach(function(sec,i){var wrap=$('dlwrap_'+i),cb=$('dl_'+i);if(!wrap||!cb)return;wrap.classList.toggle('checked',!!status);cb.checked=!!status;});}
+function adminDownloadSelected(){var format=$('adminDownloadFormat').value;var selected=[];ALL_SECTIONS.forEach(function(sec,i){var cb=$('dl_'+i);if(cb&&cb.checked)selected.push(sec);});if(!selected.length){showToast('⚠️ کوئی سیکشن منتخب نہیں','warning');return;}var allData={};selected.forEach(function(sec){allData[sec.name]=lsJSON(sec.key,[]);});var content,mime,ext;if(format==='json'){content=JSON.stringify(allData,null,2);mime='application/json';ext='json';}else if(format==='csv'){content='Section,Index,Data\n';for(var name in allData){if(!Object.prototype.hasOwnProperty.call(allData,name))continue;var arr=allData[name];if(!Array.isArray(arr))continue;arr.forEach(function(rec,i){content+='"'+name.replace(/"/g,'""')+'",'+(i+1)+',"'+JSON.stringify(rec).replace(/"/g,'""')+'"\n';});}mime='text/csv;charset=utf-8';ext='csv';}else{content='';for(var name2 in allData){if(!Object.prototype.hasOwnProperty.call(allData,name2))continue;content+='=== '+name2+' ===\n';var arr2=allData[name2];if(Array.isArray(arr2)){arr2.forEach(function(rec,i){content+=(i+1)+'. '+JSON.stringify(rec)+'\n';});}else{content+=JSON.stringify(arr2)+'\n';}content+='\n';}mime='text/plain;charset=utf-8';ext='txt';}var blob=new Blob([content],{type:mime});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='smart_tracker_data_'+Date.now()+'.'+ext;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);addLog('ڈیٹا ڈاؤن لوڈ ('+ext.toUpperCase()+')');showToast('📥 ڈاؤن لوڈ','success');}
+function adminBackupAll(){try{var all={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);all[k]=localStorage.getItem(k);}var blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='smart_tracker_backup_'+Date.now()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);addLog('مکمل بیک اپ');showToast('💾 بیک اپ ڈاؤن لوڈ','success');}catch(e){showToast('❌ مسئلہ','error');}}
+function adminRestoreBackup(){$('adminBackupFile').click();}
+function adminHandleBackupFile(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){try{var data=JSON.parse(ev.target.result);for(var k in data){if(Object.prototype.hasOwnProperty.call(data,k)){localStorage.setItem(k,data[k]);}}adminLoadDashboard();adminPopulateSections();adminRenderLogs();addLog('بیک اپ ری اسٹور');showToast('✅ بیک اپ ری اسٹور','success');}catch(err){showToast('❌ فائل غلط','error');}};reader.readAsText(file);e.target.value='';}
+function adminConfirmReset(){if(!confirm('تمام ڈیٹا صاف کرنا ہے؟ واپس نہیں ہوگا!'))return;if(!confirm('کیا آپ واقعی یقین رکھتے ہیں؟'))return;var keep=['admin_key','app_password'];var toRemove=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(keep.indexOf(k)===-1)toRemove.push(k);}toRemove.forEach(function(k){localStorage.removeItem(k);});adminLoadDashboard();adminPopulateSections();adminRenderLogs();addLog('ایپ ری سیٹ');showToast('✅ ایپ ری سیٹ','success');}
+document.addEventListener('keydown',function(e){var modalOpen=$('modalOverlay').classList.contains('active');if(e.key==='Escape'){if(modalOpen){closeModal();return;}}if(e.key==='Enter'&&modalOpen&&modalNeedsInput){e.preventDefault();modalConfirm();}});
+document.addEventListener('click',function(e){if(e.target===$('modalOverlay'))closeModal();});
+function boot(){adminPopulateSections();adminLoadDashboard();adminPopulateDownloads();adminRenderUsers();adminUpdateLockStatus();addLog('ایڈمن پینل کھولا گیا');if(lsGet('admin_key',null)===null)lsSet('admin_key','1234');if(lsGet('app_password',null)===null)lsSet('app_password','1234');}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+</script>
+</body>
+</html>
