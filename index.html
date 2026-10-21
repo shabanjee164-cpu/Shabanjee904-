@@ -5,133 +5,167 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>⚡ Smart Management & Life Tracker</title>
 <style>
-:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--golden:#d97706;--success:#10b981;--purple:#8b5cf6;--teal:#0d9488;--bg:#f1f5f9;--card:#fff;--text:#334155;--border:#e2e8f0;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);}
+:root{
+--primary:#1e293b;--accent:#2563eb;--teal:#0d9488;
+--safe-top:env(safe-area-inset-top,0px);
+--safe-bottom:env(safe-area-inset-bottom,0px);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:var(--text)}
+body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:#334155}
 .app-shell{max-width:480px;margin:0 auto;height:100vh;height:-webkit-fill-available;display:flex;flex-direction:column;background:#f8fafc;position:relative;overflow:hidden}
-.app-header{padding:calc(var(--safe-top) + 12px) 16px 14px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid var(--teal);flex-shrink:0;position:sticky;top:0;z-index:50}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(13,148,136,.3)}
-.brand-title{font-size:15px;font-weight:900;letter-spacing:-.3px}
-.brand-sub{font-size:10px;font-weight:600;opacity:.75;margin-top:2px}
-.menu-btn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.2s;flex-shrink:0}
+
+/* 1. HEADER: Left (Menu), Center (Fancy App Name), Right (Online/Offline) */
+.app-header{padding:calc(var(--safe-top) + 12px) 16px 14px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:50;border-bottom:2px solid #0d9488}
+
+/* Left Menu Button */
+.menu-btn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.2s}
 .menu-btn:hover{background:rgba(255,255,255,.15)}
-.menu-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:.3s}
-.menu-btn.active span:nth-child(1){transform:rotate(45deg) translateY(6px)}
-.menu-btn.active span:nth-child(2){opacity:0}
-.menu-btn.active span:nth-child(3){transform:rotate(-45deg) translateY(-6px)}
-.main-content{flex:1;padding:20px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
-.hero-card{width:100%;background:linear-gradient(135deg,#fff,#f8fafc);border:1px solid #fff;border-radius:20px;padding:28px 18px;box-shadow:0 12px 32px -8px rgba(15,23,42,.08);text-align:center;position:relative;overflow:hidden}
-.hero-title{font-size:19px;font-weight:900;line-height:1.3;letter-spacing:-.5px;margin-bottom:10px;background:linear-gradient(135deg,#0f172a 0%,#0d9488 40%,#0891b2 70%,#2563eb 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#64748b;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
-.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.quick-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:.2s;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
-.quick-card:hover{border-color:var(--teal);background:#f0fdfa;transform:translateY(-2px);box-shadow:0 8px 16px rgba(13,148,136,.15)}
-.quick-icon{font-size:28px}
-.quick-title{font-size:12px;font-weight:800;color:#1e293b}
-.quick-desc{font-size:9px;color:#64748b;font-weight:600}
-.info-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px}
-.info-card .title{font-size:12px;font-weight:800;color:#1e293b;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #f1f5f9;font-size:11px;font-weight:700}
-.info-row:last-child{border-bottom:none}
-.info-row .k{color:#64748b}
-.info-row .v{color:#1e293b}
-.status-pill{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.15);font-size:10px;font-weight:700}
-.status-dot{width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;animation:pulse 1.5s infinite}
+.menu-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px}
+
+/* Center Fancy App Name */
+.brand{display:flex;align-items:center;gap:8px}
+.brand-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 10px rgba(13,148,136,.3)}
+.brand-title{font-size:16px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 4px rgba(0,0,0,0.2)}
+
+/* Right Online/Offline Status */
+.status-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.1);font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,.15)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;transition:all 0.3s}
 .status-pill.offline .status-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.bottom-nav{padding:10px 6px calc(var(--safe-bottom) + 10px);background:#fff;border-top:2px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;flex-shrink:0;box-shadow:0 -4px 12px rgba(15,23,42,.06);position:sticky;bottom:0;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:8px 4px;border-radius:12px;transition:.2s;color:#94a3b8;width:24%;font-family:inherit;position:relative}
-.nav-item:active{transform:scale(.95)}
-.nav-item.active{color:var(--teal);background:rgba(13,148,136,.1)}
-.nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:.2s}
-.nav-item.active .nav-icon{stroke:var(--teal)}
-.nav-label{font-size:9.5px;font-weight:800;transition:.2s}
-.nav-item.active .nav-label{color:var(--teal)}
-.side-menu{position:fixed;top:0;right:-320px;width:300px;height:100vh;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.15);transition:right .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;overflow-y:auto}
-.side-menu.open{right:0}
-.side-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:2}
-.side-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px}
-.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;font-family:inherit}
-.side-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
-.side-list{padding:10px;flex:1}
-.side-item{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:6px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:.2s;font-family:inherit;font-size:12px;font-weight:700;color:#334155;width:100%;text-align:right}
-.side-item:hover{background:#eff6ff;color:var(--accent);border-color:#bfdbfe;transform:translateX(-3px)}
-.side-item-icon{font-size:18px;flex-shrink:0}
-.side-item-num{background:#e2e8f0;color:#475569;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex-shrink:0}
-.side-item.admin{background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca;color:#991b1b}
-.side-item.admin:hover{background:#dc2626;color:#fff}
-.side-item.admin:hover .side-item-num{background:#fff;color:#dc2626}
+.status-pill.offline{border-color:rgba(239,68,68,.3)}
+
+/* 2. MAIN CONTENT (Khali aur Saaf) */
+.main-content{flex:1;padding:20px 16px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+
+/* 3. BOTTOM NAV (Furan Kaam karne wale) */
+.bottom-nav{padding:10px 15px calc(var(--safe-bottom) + 10px);background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:sticky;bottom:0;z-index:50}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:8px;border-radius:12px;color:#94a3b8;font-family:inherit;transition:.2s;width:23%;text-decoration:none;}
+.nav-item:active{background:#f1f5f9}
+.nav-item.active{color:var(--teal)}
+.nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.nav-label{font-size:9.5px;font-weight:800}
+
+/* 4. SIDE MENU (Left Side Se Khulega) */
+.side-menu{position:fixed;top:0;left:-320px;width:300px;height:100vh;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.15);transition:left .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;overflow-y:auto}
+.side-menu.open{left:0}
+.side-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.side-title{font-size:14px;font-weight:800}
+.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.side-list{padding:10px;flex:1;display:flex;flex-direction:column;gap:10px}
+.side-item{display:flex;align-items:center;justify-content:center;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:#334155;width:100%;text-align:center;font-family:inherit;text-decoration:none;transition:.2s}
+.side-item:hover{background:#eff6ff;color:var(--accent);border-color:#bfdbfe}
 .side-footer{padding:12px;border-top:1px solid #e2e8f0;text-align:center;color:#94a3b8;font-size:10px;font-weight:700}
+
+/* OVERLAY */
 .menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:998;opacity:0;visibility:hidden;transition:.3s}
 .menu-overlay.active{opacity:1;visibility:visible}
-@media(min-width:640px){body{padding:20px 0;background:#e2e8f0;display:flex;justify-content:center;align-items:center}.app-shell{height:92vh;max-height:880px;border-radius:36px;border:1px solid rgba(255,255,255,.8);box-shadow:0 25px 60px -15px rgba(15,23,42,.12)}}
 </style>
 </head>
 <body>
+
 <div class="app-shell">
+    <!-- HEADER -->
     <header class="app-header">
+        <!-- Left: Menu Button -->
+        <button class="menu-btn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+
+        <!-- Center: Fancy App Name -->
         <div class="brand">
             <div class="brand-icon">⚡</div>
-            <div><div class="brand-title">Smart Tracker</div><div class="brand-sub">Management & Life</div></div>
+            <div class="brand-title">Smart Tracker</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-            <div class="status-pill" id="statusPill"><span class="status-dot"></span><span id="statusText">آن لائن</span></div>
-            <button class="menu-btn" id="menuBtn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+
+        <!-- Right: Online/Offline -->
+        <div class="status-pill" id="statusPill">
+            <span class="status-dot"></span>
+            <span id="statusText">آن لائن</span>
         </div>
     </header>
+
+    <!-- MAIN CONTENT (Khali) -->
     <main class="main-content">
-        <div class="hero-card">
-            <h2 class="hero-title">⚡ Smart Management & Life Tracker</h2>
-            <div class="hero-sub"><span>✦</span> تیز • محفوظ • بھروسہ مند <span>✦</span></div>
-        </div>
-        <div class="quick-grid">
-            <a class="quick-card" href="dashboard.html"><span class="quick-icon">🏠</span><span class="quick-title">ڈیش بورڈ</span><span class="quick-desc">Live Display</span></a>
-            <a class="quick-card" href="entry.html"><span class="quick-icon">➕</span><span class="quick-title">ڈیٹا انٹری</span><span class="quick-desc">Add Data</span></a>
-            <a class="quick-card" href="history.html"><span class="quick-icon">📜</span><span class="quick-title">ہسٹری</span><span class="quick-desc">Records</span></a>
-            <a class="quick-card" href="manager.html"><span class="quick-icon">👥</span><span class="quick-title">مینیجر</span><span class="quick-desc">Full Control</span></a>
-        </div>
-        <div class="info-card">
-            <div class="title">📊 سسٹم کی معلومات</div>
-            <div class="info-row"><span class="k">📦 کل سیکشنز</span><span class="v" id="infoSections">8</span></div>
-            <div class="info-row"><span class="k">💾 اسٹوریج استعمال</span><span class="v" id="infoStorage">0 KB</span></div>
-            <div class="info-row"><span class="k">👥 کل ممبران</span><span class="v" id="infoMembers">0</span></div>
-            <div class="info-row"><span class="k">🕒 آخری اپڈیٹ</span><span class="v" id="infoTime">—</span></div>
+        <div style="text-align:center; color:#94a3b8; font-weight:700; font-size:14px;">
+            <p>خوش آمدید</p>
+            <p style="font-size:12px; margin-top:5px;">نیچے دیے گئے بٹنوں سے اپنا سیکشن کھولیں</p>
         </div>
     </main>
+
+    <!-- BOTTOM NAV (Furan Kaam Karega) -->
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="go('dashboard.html')"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="nav-label">ڈیش بورڈ</span></button>
-        <button class="nav-item" onclick="go('entry.html')"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span class="nav-label">انٹری</span></button>
-        <button class="nav-item" onclick="go('history.html')"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="nav-label">ہسٹری</span></button>
-        <button class="nav-item" onclick="go('manager.html')"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="nav-label">مینیجر</span></button>
+        <a href="dashboard.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-label">ڈیش بورڈ</span>
+        </a>
+        <a href="entry.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span class="nav-label">انٹری</span>
+        </a>
+        <a href="history.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="nav-label">ہسٹری</span>
+        </a>
+        <a href="manager.html" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="nav-label">مینیجر</span>
+        </a>
     </nav>
 </div>
+
+<!-- SIDE MENU DRAWER (Left Side) -->
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="side-menu" id="sideMenu">
-    <div class="side-header"><div class="side-title"><span>📑</span> <span>کنٹرول پینل</span></div><button class="side-close" onclick="toggleMenu()">✕</button></div>
+    <div class="side-header">
+        <div class="side-title"><span>📑</span> کنٹرول پینل</div>
+        <button class="side-close" onclick="toggleMenu()">✕</button>
+    </div>
     <div class="side-list">
-        <button class="side-item admin" onclick="openAdmin()"><span class="side-item-icon">👮</span><span class="side-item-num">1</span><span style="flex:1;">ایڈمن کنٹرول پینل</span></button>
-        <button class="side-item" onclick="go('dashboard.html')"><span class="side-item-icon">🏠</span><span class="side-item-num">2</span><span style="flex:1;">ڈیش بورڈ</span></button>
-        <button class="side-item" onclick="go('entry.html')"><span class="side-item-icon">➕</span><span class="side-item-num">3</span><span style="flex:1;">ڈیٹا انٹری</span></button>
-        <button class="side-item" onclick="go('history.html')"><span class="side-item-icon">📜</span><span class="side-item-num">4</span><span style="flex:1;">ہسٹری</span></button>
-        <button class="side-item" onclick="go('manager.html')"><span class="side-item-icon">👥</span><span class="side-item-num">5</span><span style="flex:1;">مینیجر</span></button>
-        <button class="side-item" onclick="exportData()"><span class="side-item-icon">📤</span><span class="side-item-num">6</span><span style="flex:1;">ایکسپورٹ ڈیٹا</span></button>
+        <!-- Jab side-menu.html ka code aayega, wo yahan show hoga -->
+        <div style="text-align:center; padding:20px; color:#94a3b8; font-size:12px; font-weight:700;">
+            سائیڈ مینو یہاں آئے گا<br>
+            (side-menu.html)
+        </div>
+        
+        <!-- Abhi ke liye ek button jisse wo page khul jaye -->
+        <a href="side-menu.html" class="side-item" style="background:#2563eb; color:#fff; border:none;">
+            کھولیں (Open Side Menu)
+        </a>
     </div>
     <div class="side-footer">Smart Tracker v1.0</div>
 </div>
+
 <script>
-function go(file){closeMenu();window.location.href=file;}
-function toggleMenu(){var m=document.getElementById('sideMenu'),o=document.getElementById('menuOverlay'),b=document.getElementById('menuBtn');var open=!m.classList.contains('open');m.classList.toggle('open',open);o.classList.toggle('active',open);b.classList.toggle('active',open);}
-function closeMenu(){document.getElementById('sideMenu').classList.remove('open');document.getElementById('menuOverlay').classList.remove('active');document.getElementById('menuBtn').classList.remove('active');}
-function openAdmin(){closeMenu();var pass=localStorage.getItem('admin_key')||'1234';var inp=prompt('👮 ایڈمن پاس ورڈ درج کریں:','');if(inp===null)return;if(inp===pass){window.location.href='side-menu.html';}else{alert('❌ غلط پاس ورڈ');}}
-function exportData(){closeMenu();try{var data={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);data[k]=localStorage.getItem(k);}var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='smart_tracker_backup_'+Date.now()+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);alert('✅ بیک اپ ڈاؤن لوڈ ہو گیا');}catch(e){alert('❌ مسئلہ');}}
-function updateOnline(){var p=document.getElementById('statusPill'),t=document.getElementById('statusText');if(navigator.onLine){p.classList.remove('offline');t.textContent='آن لائن';}else{p.classList.add('offline');t.textContent='آف لائن';}}
-window.addEventListener('online',updateOnline);window.addEventListener('offline',updateOnline);
-function updateInfo(){var total=0;for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);total+=(k.length+(localStorage.getItem(k)||'').length);}var kb=(total/1024).toFixed(1);var el=document.getElementById('infoStorage');if(el)el.textContent=kb+' KB';try{var m=JSON.parse(localStorage.getItem('sec4_duty_manager_data_v4')||'[]');var memEl=document.getElementById('infoMembers');if(memEl)memEl.textContent=Array.isArray(m)?m.length:0;}catch(e){}var now=new Date();var t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');var timeEl=document.getElementById('infoTime');if(timeEl)timeEl.textContent=t;}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
-function boot(){updateOnline();updateInfo();setInterval(updateInfo,30000);}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+/* ONLINE / OFFLINE STATUS */
+function updateOnlineStatus() {
+    var pill = document.getElementById('statusPill');
+    var text = document.getElementById('statusText');
+    if (navigator.onLine) {
+        pill.classList.remove('offline');
+        text.textContent = 'آن لائن';
+    } else {
+        pill.classList.add('offline');
+        text.textContent = 'آف لائن';
+    }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+
+/* SIDE MENU TOGGLE */
+function toggleMenu() {
+    var menu = document.getElementById('sideMenu');
+    var overlay = document.getElementById('menuOverlay');
+    var isOpen = menu.classList.contains('open');
+    
+    if (isOpen) {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    } else {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+    }
+}
 </script>
 </body>
 </html>
