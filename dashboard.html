@@ -3,106 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
+<title>Dashboard - Live</title>
 <style>
-/* Purana CSS waisa hi rahega, maine sirf zaroori cheezein update ki hain */
-:root{--primary:#1e293b;--accent:#7c3aed;--success:#10b981;--golden:#d97706;--danger:#ef4444;--bg:#eef2f6;}
+:root{
+--primary:#1e293b;--accent:#7c3aed;--success:#10b981;--danger:#ef4444;--golden:#d97706;--bg:#eef2f6;--card:#fff;--border:#e2e8f0;--text:#334155;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:#334155;padding-bottom:80px;}
-.container{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:16px;border-radius:12px;font-size:16px;font-weight:800;}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:var(--text);display:flex;justify-content:center;padding-bottom:80px;}
+.container{width:100%;max-width:600px;display:flex;flex-direction:column;gap:14px;}
 
-/* Duty Card (Dashboard) */
+/* App Header */
+.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:16px;border-radius:12px;font-size:18px;font-weight:900;}
+
+/* News & Alert */
+.news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;overflow:hidden;white-space:nowrap;}
+.news-text{display:inline-block;animation:tickerMove 60s linear infinite;padding-right:100%}
+@keyframes tickerMove{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.alert-bar{background:#fef2f2;border:1px solid #fecaca;color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.alert-bar.blink{animation:alertBlink .8s infinite alternate}
+@keyframes alertBlink{0%{opacity:1}100%{opacity:.35;background:#ef4444;color:#fff}}
+.alert-bar button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;}
+
+/* Card Base */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);position:relative;overflow:hidden;}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #f1f5f9;}
+.card-title{font-size:15px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:6px;}
+.card-btns{display:flex;gap:6px;}
+.card-btns button{background:#f8fafc;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.card-btns button:hover{background:#e2e8f0;}
+
+/* Hidden Settings */
+.settings-panel{display:none;position:absolute;top:50px;left:10px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:100;min-width:140px;}
+.settings-panel.open{display:block;}
+.settings-panel button{display:block;width:100%;padding:8px;font-size:11px;font-weight:700;border:none;border-radius:6px;cursor:pointer;text-align:right;margin-bottom:4px;background:#f8fafc;color:#334155;font-family:inherit;}
+.settings-panel button:hover{background:#e2e8f0;}
+.settings-panel button.del{color:var(--danger);}
+
+/* Duty Manager Dashboard */
 .duty-active-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border:1px solid #c4b5fd;border-radius:10px;padding:12px;margin-bottom:12px;}
-.duty-active-row{display:flex;justify-content:space-between;font-size:15px;font-weight:800;color:#4c1d95;}
+.duty-active-row{display:flex;justify-content:space-between;font-size:16px;font-weight:900;color:#4c1d95;}
 .duty-timer{text-align:center;font-size:16px;font-weight:900;color:#6d28d9;background:#fff;padding:8px;border-radius:6px;margin-top:8px;}
 .leave-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px;}
 .leave-box label{font-size:11px;font-weight:800;color:#92400e;margin-bottom:4px;display:block;}
 .leave-box select,.leave-box input{width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:6px;font-size:12px;font-weight:700;outline:none;}
 .leave-box button{width:100%;padding:10px;background:var(--golden);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;}
 
-/* News/Alert (Dashboard) */
-.news-bar{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;overflow:hidden;white-space:nowrap;margin-bottom:10px;}
-.news-text{display:inline-block;animation:tickerMove 60s linear infinite;padding-right:100%}
-@keyframes tickerMove{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.alert-bar{background:#fef2f2;border:1px solid #fecaca;color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:all .3s}
-.alert-bar.blink{animation:alertBlink .8s infinite alternate}
-@keyframes alertBlink{0%{opacity:1}100%{opacity:.35;background:#ef4444;color:#fff}}
-.alert-bar button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit}
+/* Task Tracker Dashboard */
+.task-member-sel{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin-bottom:10px;}
+.task-member-sel label{font-size:11px;font-weight:800;color:#15803d;display:block;margin-bottom:6px;}
+.task-member-sel select{width:100%;padding:9px 10px;border:1px solid #86efac;border-radius:6px;font-size:13px;font-weight:700;font-family:inherit;background:#fff;outline:none;}
+.task-display{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border:2px solid #86efac;border-radius:10px;padding:14px;text-align:center;margin-bottom:10px;}
+.task-display .lbl{font-size:10px;font-weight:800;color:#15803d;margin-bottom:6px;}
+.task-display .nm{font-size:18px;font-weight:900;color:#166534;line-height:1.3;}
+.task-display .pts{display:inline-block;background:#16a34a;color:#fff;font-size:12px;font-weight:800;padding:3px 12px;border-radius:20px;margin-top:8px;}
+.task-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.task-btns button{padding:11px 4px;font-size:12px;font-weight:800;border:none;border-radius:8px;cursor:pointer;font-family:inherit;color:#fff;}
+.task-btns .done{background:#16a34a;}
+.task-btns .notdone{background:#dc2626;}
+.task-btns .skip{background:#64748b;}
+.task-history{max-height:180px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;margin-top:10px;}
+.task-history .row{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:7px 10px;margin-bottom:4px;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.task-score{background:#1e293b;color:#fff;border-radius:8px;padding:12px 14px;text-align:center;font-size:13px;font-weight:800;margin-top:12px;}
 
-/* Fixed Bottom Nav */
+/* Skip Section Dashboard */
+.skip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.skip-col{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px;}
+.skip-col.senior{border-right:4px solid var(--accent);}
+.skip-col.junior{border-right:4px solid var(--success);}
+.skip-col h4{text-align:center;font-size:14px;font-weight:800;margin-bottom:8px;color:var(--primary);padding-bottom:6px;border-bottom:2px dashed #e2e8f0;}
+.skip-list{max-height:220px;overflow-y:auto;min-height:60px;}
+.skip-item{background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:5px;font-size:11px;}
+.skip-item.pending{border-right:4px solid #f59e0b;}
+.skip-item.done{border-right:4px solid #16a34a;background:#f0fdf4;}
+.skip-item .name{font-weight:800;color:#0f172a;margin-bottom:3px;}
+.skip-item .reason-warning{color:#d97706;font-size:10px;font-weight:700;}
+.skip-item .reason-text{color:#15803d;font-size:12px;font-weight:800;margin-bottom:3px;}
+.skip-item .date{font-size:9px;color:#94a3b8;}
+
+/* Result Section Dashboard */
+.result-grid{display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;padding-right:4px;}
+.r-item{background:#fff;border:2px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;transition:0.2s;}
+.r-item:hover{border-color:var(--golden);}
+.r-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #f1f5f9;padding-bottom:8px;}
+.r-name{font-size:15px;font-weight:900;color:var(--primary);}
+.r-pts{font-size:14px;font-weight:800;color:var(--golden);background:#fffbeb;padding:2px 10px;border-radius:20px;}
+.r-bar-wrap{display:flex;align-items:center;gap:10px;}
+.r-bar-bg{flex:1;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;}
+.r-bar-fill{height:100%;border-radius:4px;transition:width 0.5s ease;}
+.r-pct{font-size:12px;font-weight:800;color:#475569;width:45px;text-align:left;}
+.r-msg{font-size:12px;font-weight:800;padding:6px 10px;border-radius:6px;text-align:center;}
+.g-excellent .r-bar-fill{background:var(--success);}
+.g-excellent .r-msg{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;}
+.g-good .r-bar-fill{background:#3b82f6;}
+.g-good .r-msg{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.g-poor .r-bar-fill{background:var(--danger);}
+.g-poor .r-msg{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+
+/* Alamat Tracker Dashboard */
+.alamat-member-sel{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px;margin-bottom:10px;}
+.alamat-member-sel label{font-size:11px;font-weight:800;color:#5b21b6;display:block;margin-bottom:6px;}
+.alamat-member-sel select{width:100%;padding:9px 10px;border:1px solid #a78bfa;border-radius:6px;font-size:13px;font-weight:700;font-family:inherit;background:#fff;outline:none;}
+.symptom-stage{background:#f5f3ff;border:2px solid #ddd6fe;border-radius:10px;padding:14px;text-align:center;margin-bottom:12px;}
+.symptom-stage .stage-num{font-size:11px;font-weight:800;color:var(--accent);margin-bottom:4px;}
+.symptom-stage .stage-name{font-size:18px;font-weight:900;color:#5b21b6;}
+.symptom-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;margin-bottom:12px;}
+.symptom-btn{padding:10px 6px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .1s;}
+
+/* Diet Manager Dashboard */
+.diet-member-display{background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #fcd34d;color:#92400e;padding:10px;border-radius:8px;font-size:15px;font-weight:900;text-align:center;margin-bottom:12px;}
+.diet-form{display:flex;flex-direction:column;gap:10px;}
+.diet-cat-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;}
+.diet-cat-title{font-size:12px;font-weight:800;color:#475569;margin-bottom:6px;}
+.diet-cat-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;background:#fff;padding:6px;border-radius:6px;border:1px solid #e2e8f0;}
+.diet-cat-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--golden);}
+.diet-cat-row span{flex:1;font-size:12px;font-weight:700;color:#334155;}
+.diet-cat-row select{padding:4px;border:1px solid #cbd5e1;border-radius:4px;font-size:11px;font-weight:700;}
+
+/* Rashan Manager Dashboard */
+.rashan-section{background:#fffdf4;border:1px solid #fde68a;border-radius:8px;padding:10px;margin-bottom:10px;}
+.rashan-section h4{font-size:13px;font-weight:800;color:var(--golden);margin-bottom:6px;}
+.rashan-list{max-height:150px;overflow-y:auto;padding:4px;}
+.rashan-item{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:4px;font-size:12px;font-weight:700;}
+.rashan-item .qty{color:var(--accent);}
+.rashan-bill{background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px;margin-top:10px;}
+.rashan-bill .total{font-size:16px;font-weight:900;color:var(--success);text-align:left;}
+.rashan-bill .balance{font-size:16px;font-weight:900;color:var(--golden);text-align:left;}
+
+/* Green Bus Dashboard */
+.bus-clock-banner{background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:10px;padding:12px;color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.bus-clock-time{font-size:22px;font-weight:900;}
+.bus-large-box{display:none;background:linear-gradient(135deg,#16a34a,#15803d);border-radius:14px;padding:16px;color:#fff;margin-top:12px;}
+.bus-large-box.active{display:block;}
+.bus-large-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.2);}
+.bus-large-timer{background:rgba(0,0,0,.25);border-radius:12px;padding:14px;text-align:center;margin-top:10px;}
+.bus-large-timer-time{font-size:32px;font-weight:900;letter-spacing:2px;}
+
+/* Bottom Nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;padding:10px;z-index:1000;}
 .nav-item{text-decoration:none;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:5px;width:23%;}
 .nav-item.active{color:var(--accent);}
 .nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Utility */
+.hidden{display:none;}
 </style>
 </head>
 <body>
+
 <div class="container">
     <div class="app-header">⚡ ڈیش بورڈ</div>
 
-    <!-- 1. News / Alert (Top) -->
+    <!-- 1. News & Alert -->
     <div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ ہو رہا ہے...</div></div>
-    <div class="alert-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ: <b id="alertTimer">25</b> سیکنڈ کا ٹائمر جاری ہے...</span><button onclick="skipAlert()">اسکیپ ❌</button></div>
+    <div class="alert-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ...</span><button onclick="skipAlert()">اسکیپ ❌</button></div>
 
     <!-- 2. Duty Manager Card -->
-    <div class="card">
-        <h3 style="font-size:14px;margin-bottom:10px;color:var(--accent);">👮 آج کی ڈیوٹی</h3>
-        <div class="duty-active-box">
-            <div class="duty-active-row">
-                <span>🟢 سینئر: <span id="dashSenior">—</span></span>
-                <span>🔵 جونیئر: <span id="dashJunior">—</span></span>
-            </div>
-            <div class="duty-timer">⏱️ <span id="dashTimer">00:00:00</span></div>
+    <div class="card" id="dutyCard">
+        <div class="card-head">
+            <div class="card-title">👮 آج کی ڈیوٹی</div>
+            <div class="card-btns"><button onclick="toggleSettings('dutySettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dutyBody')" id="dutyBtn">⬇️</button></div>
         </div>
-        <div class="leave-box">
-            <label>🏖️ چھٹی کے لیے ممبر منتخب کریں:</label>
-            <select id="dashLeaveSelect"><option value="">ممبر منتخب کریں...</option></select>
-            <input type="text" id="dashLeaveReason" placeholder="وجہ لکھیں...">
-            <button onclick="submitDashLeave()">✅ چھٹی سبمٹ کریں</button>
+        <div class="settings-panel" id="dutySettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="dutyBody">
+            <div class="duty-active-box">
+                <div class="duty-active-row"><span>🟢 سینئر: <span id="dashSenior">—</span></span><span>🔵 جونیئر: <span id="dashJunior">—</span></span></div>
+                <div class="duty-timer">⏱️ <span id="dashTimer">00:00:00</span></div>
+            </div>
+            <div class="leave-box">
+                <label>🏖️ چھٹی سبمٹ کریں:</label>
+                <select id="dashLeaveSelect"><option value="">ممبر...</option></select>
+                <input type="text" id="dashLeaveReason" placeholder="وجہ...">
+                <button onclick="submitDashLeave()">✅ چھٹی سبمٹ</button>
+            </div>
         </div>
     </div>
 
-    <!-- Baqi sections (Task, Skip etc) aapke purane code ke mutabiq yahan aayenge. 
-         Humne sirf Duty aur News/Alert ko final kiya hai. -->
+    <!-- 3. Task Tracker Card -->
+    <div class="card" id="taskCard">
+        <div class="card-head">
+            <div class="card-title">📋 ٹاسک ٹریکر</div>
+            <div class="card-btns"><button onclick="toggleSettings('taskSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('taskBody')" id="taskBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="taskSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="taskBody">
+            <div class="task-member-sel">
+                <label>ممبر منتخب کریں</label>
+                <select id="taskMemberSelect" onchange="startTaskTracking()"><option value="">-- ممبر منتخب کریں --</option></select>
+            </div>
+            <div class="task-display" id="taskCurrent">
+                <div class="lbl">📌 موجودہ ٹاسک</div>
+                <div class="nm">پہلے ممبر منتخب کریں</div>
+                <div class="pts">0 Points</div>
+            </div>
+            <div class="task-btns">
+                <button class="done" onclick="submitTask('done')">✅ ہو گیا</button>
+                <button class="notdone" onclick="submitTask('notdone')">❌ نہیں ہوا</button>
+                <button class="skip" onclick="submitTask('skip')">⚪ چھوڑا</button>
+            </div>
+            <div class="task-history" id="taskHistList"></div>
+            <div class="task-score">🏆 ٹوٹل پوائنٹس: <b id="totalPoints">0</b></div>
+        </div>
+    </div>
+
+    <!-- 4. Skip Section Card -->
+    <div class="card" id="skipCard">
+        <div class="card-head">
+            <div class="card-title">⛔ چھوڑے ہوئے کام</div>
+            <div class="card-btns"><button onclick="toggleSettings('skipSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('skipBody')" id="skipBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="skipSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="skipBody">
+            <div class="skip-grid">
+                <div class="skip-col senior"><h4>🟢 سینئر</h4><div class="skip-list" id="skipSeniorList"></div></div>
+                <div class="skip-col junior"><h4>🔵 جونیئر</h4><div class="skip-list" id="skipJuniorList"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Result Card -->
+    <div class="card" id="resultCard">
+        <div class="card-head">
+            <div class="card-title">🏆 ممبران فائنل رزلٹ</div>
+            <div class="card-btns"><button onclick="toggleSettings('resultSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('resultBody')" id="resultBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="resultSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div class="result-grid" id="resultList"></div>
+    </div>
+
+    <!-- 6. Alamat Card -->
+    <div class="card" id="alamatCard">
+        <div class="card-head">
+            <div class="card-title">🩺 صحت اور علامات</div>
+            <div class="card-btns"><button onclick="toggleSettings('alamatSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('alamatBody')" id="alamatBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="alamatSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="alamatBody">
+            <div class="alamat-member-sel">
+                <label>ممبر منتخب کریں</label>
+                <select id="alamatMemberSel" onchange="renderAlamat()"><option value="">-- ممبر --</option></select>
+            </div>
+            <div class="symptom-stage" id="symptomStage">
+                <div class="stage-num">علامت <span id="stageNum">1</span> / 5</div>
+                <div class="stage-name" id="stageName">—</div>
+            </div>
+            <div class="symptom-buttons" id="symptomButtons"></div>
+        </div>
+    </div>
+
+    <!-- 7. Diet Card -->
+    <div class="card" id="dietCard">
+        <div class="card-head">
+            <div class="card-title">🍽️ ڈائٹ روٹین</div>
+            <div class="card-btns"><button onclick="toggleSettings('dietSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dietBody')" id="dietBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="dietSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="dietBody">
+            <div class="diet-member-display" id="dietMemberDisplay">👤 ممبر</div>
+            <div class="diet-form">
+                <div class="diet-cat-box">
+                    <div class="diet-cat-title">🍞 Daily Atm:</div>
+                    <div id="dietDailyList"></div>
+                </div>
+                <div class="diet-cat-box">
+                    <div class="diet-cat-title">🍽️ Kabhi Kabhi:</div>
+                    <div id="dietSometimesList"></div>
+                </div>
+                <div class="diet-cat-box">
+                    <div class="diet-cat-title">🍟 Junk Food:</div>
+                    <div id="dietJunkList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. Rashan Card -->
+    <div class="card" id="rashanCard">
+        <div class="card-head">
+            <div class="card-title">🛒 راشن منیجر</div>
+            <div class="card-btns"><button onclick="toggleSettings('rashanSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('rashanBody')" id="rashanBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="rashanSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="rashanBody">
+            <div class="rashan-section">
+                <h4>📦 آٹم سلیکٹ کریں:</h4>
+                <div class="rashan-list" id="rashanItemsList"></div>
+            </div>
+            <div class="rashan-bill" id="rashanBillBox">
+                <h4>🧾 آپ کا بل:</h4>
+                <div id="rashanBillList"></div>
+                <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:14px;font-weight:800;">
+                    <span>💰 کل بل:</span><span class="total" id="rashanTotal">0</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:12px;font-weight:700;">
+                    <span>💵 فکسڈ بجٹ:</span><span id="rashanBudget">0</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:14px;font-weight:800;">
+                    <span>✅ بیلنس:</span><span class="balance" id="rashanBalance">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. Green Bus Card -->
+    <div class="card" id="busCard">
+        <div class="card-head">
+            <div class="card-title">🚌 گرین بس شیڈول</div>
+            <div class="card-btns"><button onclick="toggleSettings('busSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('busBody')" id="busBtn">⬇️</button></div>
+        </div>
+        <div class="settings-panel" id="busSettings">
+            <button onclick="alert('ایڈٹ موڈ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button>
+        </div>
+        <div id="busBody">
+            <div class="bus-clock-banner"><div><div style="font-size:10px;opacity:.8;">🕒 موجودہ وقت</div><div class="bus-clock-time" id="busClock">--:--:-- --</div></div><div style="font-size:34px;">⏰</div></div>
+            <!-- Bus Controls -->
+            <div id="busControls">
+                <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">1️⃣ روٹ:</label>
+                <select id="busRouteSelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px;"></select>
+                <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">2️⃣ دن:</label>
+                <select id="busDaySelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px;"></select>
+                <label style="font-size:12px;font-weight:800;color:#16a34a;display:block;margin-bottom:4px;">3️⃣ اسٹاپ:</label>
+                <select id="busStopSelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:10px;"></select>
+                <button onclick="busTrackNow()" style="width:100%;padding:10px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:800;cursor:pointer;">🔍 ابھی ٹریک کریں</button>
+            </div>
+            <div id="busResult" class="bus-large-box">
+                <div class="bus-large-row"><span>🚌 آنے والی بس</span><span id="busNo">--</span></div>
+                <div class="bus-large-timer"><div style="font-size:11px;">⏳ اتنے ٹائم میں بس آ رہی ہے</div><div class="bus-large-timer-time" id="busCountdown">00:00:00</div><div id="busCountdownSub">--</div></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<!-- Fixed Bottom Nav -->
+<!-- Bottom Nav -->
 <nav class="bottom-nav">
     <a href="dashboard.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>ڈیش بورڈ</a>
     <a href="entry.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>انٹری</a>
     <a href="history.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ہسٹری</a>
     <a href="manager.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>مینیجر</a>
 </nav>
-
 <script>
-// ========== DUTY LOGIC ==========
-function getMembers() { return JSON.parse(localStorage.getItem('sec4_duty_manager_data_v4') || '[]'); }
-function saveMembers(m) { localStorage.setItem('sec4_duty_manager_data_v4', JSON.stringify(m)); }
+// ========== GLOBAL KEYS ==========
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
+var NEWS_KEY = 'sec10_news_alerts_data';
+var TASK_KEY = 'sec3_task_and_point_manager_data';
+var REC_KEY = 'sec12_task_records';
+var SKIP_KEY = 'sec4_duty_skipped_data';
+
+// ========== UTILITIES ==========
+function $(id) { return document.getElementById(id); }
+function ls(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function lss(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function toggleSettings(id) { var el = $(id); if(el) el.classList.toggle('open'); }
+function toggleBody(id) {
+    var b = $(id);
+    var btn = b.previousElementSibling.querySelector('.card-btns button:last-child');
+    if (b.style.display === 'none') { b.style.display = 'block'; if(btn) btn.textContent = '⬇️'; }
+    else { b.style.display = 'none'; if(btn) btn.textContent = '⬆️'; }
+}
+
+// ========== 1. DUTY MANAGER ==========
+function getMembers() { return ls(DUTY_KEY, []); }
+function saveMembers(m) { lss(DUTY_KEY, m); }
 
 function updateDashDuty() {
     var m = getMembers();
     var s = m.find(x => x.onDuty && x.rank === 'Senior');
     var j = m.find(x => x.onDuty && x.rank === 'Junior');
-    document.getElementById('dashSenior').textContent = s ? s.name : '—';
-    document.getElementById('dashJunior').textContent = j ? j.name : '—';
+    $('dashSenior').textContent = s ? s.name : '—';
+    $('dashJunior').textContent = j ? j.name : '—';
     
     var active = s || j;
     if (active && active.dutyStart) {
         var el = Math.floor((Date.now() - active.dutyStart) / 1000);
-        document.getElementById('dashTimer').textContent = String(Math.floor(el/3600)).padStart(2,'0') + ':' + String(Math.floor((el%3600)/60)).padStart(2,'0') + ':' + String(el%60).padStart(2,'0');
-    } else { document.getElementById('dashTimer').textContent = '00:00:00'; }
-
-    var sel = document.getElementById('dashLeaveSelect');
-    if (sel.options.length <= 1) {
-        m.filter(x => !x.onLeave).forEach(x => { sel.innerHTML += `<option value="${x.id}">${x.name} (${x.rank})</option>`; });
+        $('dashTimer').textContent = pad(Math.floor(el/3600)) + ':' + pad(Math.floor((el%3600)/60)) + ':' + pad(el%60);
+    } else {
+        $('dashTimer').textContent = '00:00:00';
     }
 }
 
+function populateLeaveDropdown() {
+    var sel = $('dashLeaveSelect');
+    if (!sel) return;
+    var m = getMembers();
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">ممبر...</option>';
+    m.filter(x => !x.onLeave).forEach(x => {
+        sel.innerHTML += `<option value="${x.id}">${x.name} (${x.rank})</option>`;
+    });
+    if (cur) sel.value = cur;
+}
+
 function submitDashLeave() {
-    var id = document.getElementById('dashLeaveSelect').value;
-    var reason = document.getElementById('dashLeaveReason').value.trim();
+    var id = $('dashLeaveSelect').value;
+    var reason = $('dashLeaveReason').value.trim();
     if (!id) { alert('ممبر منتخب کریں'); return; }
     if (!reason) { alert('وجہ لکھیں'); return; }
     
@@ -112,55 +422,372 @@ function submitDashLeave() {
         t.onLeave = true;
         t.leaveCount = (t.leaveCount || 0) + 1;
         
-        var leaves = JSON.parse(localStorage.getItem('sec4_duty_leaves_data_v4') || '[]');
-        leaves.push({ name: t.name, rank: t.rank, reason: reason, date: new Date().toLocaleString('ur-PK') });
-        localStorage.setItem('sec4_duty_leaves_data_v4', JSON.stringify(leaves));
+        var leaves = ls(LEAVE_KEY, []);
+        var d = new Date();
+        leaves.push({ 
+            name: t.name, rank: t.rank, reason: reason, 
+            date: pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear(),
+            time: pad(d.getHours())+':'+pad(d.getMinutes()),
+            day: ['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'][d.getDay()]
+        });
+        lss(LEAVE_KEY, leaves);
         
         if (t.onDuty) {
-            t.onDuty = false; t.dutyStart = null;
+            t.onDuty = false;
+            t.dutyStart = null;
             var pool = m.filter(x => x.rank === t.rank && !x.onLeave && !x.onDuty);
             if (pool.length > 0) {
                 pool.sort((a,b) => (a.leaveCount || 0) - (b.leaveCount || 0));
-                var next = pool[0]; next.onDuty = true; next.dutyStart = Date.now();
+                var next = pool[0];
+                next.onDuty = true;
+                next.dutyStart = Date.now();
             }
         }
+        
         saveMembers(m);
-        document.getElementById('dashLeaveReason').value = '';
+        $('dashLeaveReason').value = '';
         updateDashDuty();
-        alert('✅ چھٹی محفوظ');
+        populateLeaveDropdown();
+        alert('✅ چھٹی محفوظ، اگلی ڈیوٹی لگ گئی');
     }
 }
 
-// ========== NEWS / ALERT LOGIC ==========
-var NEWS_KEY = 'sec10_news_alerts_data';
+// ========== 2. TASK TRACKER ==========
+var currentMember = '';
+var currentTaskIndex = 0;
+var FALLBACK_TASKS = [
+    { title:'کمرے کی صفائی اور ترتیب', points:10 },
+    { title:'حاضری لاگ بک کی تیاری', points:5 },
+    { title:'سیکیورٹی کیمرہ چیکنگ', points:10 },
+    { title:'سامان کا جائزہ', points:5 }
+];
+
+function getTasks() { return ls(TASK_KEY, []); }
+function getRecords() { return ls(REC_KEY, []); }
+
+function populateTaskMembers() {
+    var sel = $('taskMemberSelect');
+    if (!sel) return;
+    var m = getMembers();
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">-- ممبر منتخب کریں --</option>';
+    m.filter(x => !x.onLeave).forEach(x => {
+        sel.innerHTML += `<option value="${x.name}">${x.name}</option>`;
+    });
+    if (cur) sel.value = cur;
+}
+
+function startTaskTracking() {
+    currentMember = $('taskMemberSelect').value;
+    currentTaskIndex = 0;
+    renderCurrentTask();
+    renderTaskHistory();
+    renderTotalPoints();
+}
+
+function renderCurrentTask() {
+    var el = $('taskCurrent');
+    if (!currentMember) {
+        el.innerHTML = '<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">پہلے ممبر منتخب کریں</div><div class="pts">0 Points</div>';
+        return;
+    }
+    var t = getTasks();
+    var c = t.length ? t[currentTaskIndex] : FALLBACK_TASKS[currentTaskIndex];
+    if (!c) {
+        el.innerHTML = '<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">🎉 تمام کام مکمل!</div><div class="pts">—</div>';
+        return;
+    }
+    el.innerHTML = `<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">${esc(c.title)}</div><div class="pts">🏆 ${c.points} Points</div>`;
+}
+
+function submitTask(status) {
+    if (!currentMember) { alert('پہلے ممبر منتخب کریں'); return; }
+    var t = getTasks();
+    var c = t.length ? t[currentTaskIndex] : FALLBACK_TASKS[currentTaskIndex];
+    if (!c) return;
+    
+    var recs = getRecords();
+    var pts = (status === 'done') ? (parseInt(c.points,10) || 0) : 0;
+    var d = new Date();
+    
+    recs.unshift({
+        id: Date.now(),
+        member: currentMember,
+        task: c.title,
+        points: pts,
+        status: status,
+        timestamp: Date.now(),
+        dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear(),
+        timeStr: pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    if (recs.length > 500) recs = recs.slice(0, 500);
+    lss(REC_KEY, recs);
+    
+    if (status === 'notdone') {
+        var sk = ls(SKIP_KEY, []);
+        sk.unshift({
+            id: Date.now(), member: currentMember, task: c.title,
+            reason: '', hasReason: false, timestamp: Date.now()
+        });
+        lss(SKIP_KEY, sk);
+    }
+    
+    currentTaskIndex++;
+    renderCurrentTask();
+    renderTaskHistory();
+    renderTotalPoints();
+    renderSkip();
+    renderResult();
+}
+
+function renderTaskHistory() {
+    var box = $('taskHistList');
+    if (!box) return;
+    if (!currentMember) { box.innerHTML = ''; return; }
+    var r = getRecords().filter(x => x.member === currentMember);
+    if (!r.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>'; return; }
+    box.innerHTML = r.slice(0, 20).map(x => {
+        var stLbl = x.status === 'done' ? '✅ ہو گیا' : (x.status === 'notdone' ? '❌ نہیں ہوا' : '⚪ چھوڑا');
+        return `<div class="row"><div style="flex:1;">${esc(x.task)}</div><span style="font-size:10px;">${stLbl}</span></div>`;
+    }).join('');
+}
+
+function renderTotalPoints() {
+    if (!currentMember) { $('totalPoints').textContent = '0'; return; }
+    var r = getRecords().filter(x => x.member === currentMember);
+    var t = 0; r.forEach(x => { t += (x.points || 0); });
+    $('totalPoints').textContent = t;
+}
+
+// ========== 3. SKIP SECTION ==========
+function renderSkip() {
+    var s = ls(SKIP_KEY, []);
+    var m = getMembers();
+    var senior = m.find(x => x.onDuty && x.rank === 'Senior');
+    var junior = m.find(x => x.onDuty && x.rank === 'Junior');
+    var sName = senior ? senior.name : '';
+    var jName = junior ? junior.name : '';
+    
+    var sList = s.filter(x => x.member === sName);
+    var jList = s.filter(x => x.member === jName);
+    
+    function renderItems(arr) {
+        if (!arr.length) return '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی نہیں</div>';
+        return arr.map(x => {
+            var d = new Date(x.timestamp);
+            var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+            if (x.hasReason) {
+                return `<div class="skip-item done"><div class="name">👤 ${esc(x.member)}</div><div class="reason-text">✅ "${esc(x.reason)}"</div><div class="date">${ds}</div></div>`;
+            }
+            return `<div class="skip-item pending"><div class="name">👤 ${esc(x.member)}</div><div class="reason-warning">⚠️ ${esc(x.task)} — وجہ نہیں دی</div><div class="date">${ds}</div></div>`;
+        }).join('');
+    }
+    
+    $('skipSeniorList').innerHTML = renderItems(sList);
+    $('skipJuniorList').innerHTML = renderItems(jList);
+}
+
+// ========== 4. RESULT SECTION ==========
+function renderResult() {
+    var box = $('resultList');
+    if (!box) return;
+    var m = getMembers();
+    var filtered = m.filter(x => !x.onLeave);
+    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:15px;">کوئی ممبر نہیں</div>'; return; }
+    
+    var recs = getRecords();
+    var scores = {};
+    filtered.forEach(x => { scores[x.name] = 0; });
+    recs.forEach(r => { if (scores[r.member] !== undefined) scores[r.member] += (r.points || 0); });
+    
+    var sorted = filtered.slice().sort((a,b) => (scores[b.name]||0) - (scores[a.name]||0));
+    var maxPts = Math.max(...sorted.map(x => scores[x.name]||0), 1);
+    
+    box.innerHTML = sorted.map(x => {
+        var pts = scores[x.name] || 0;
+        var pct = Math.round((pts / maxPts) * 100);
+        var cls = pct >= 75 ? 'g-excellent' : (pct >= 40 ? 'g-good' : 'g-poor');
+        var msg = pct >= 75 ? '⭐ شاباش! آپ کی مزدوری ٹریٹ ہوئی 🎉' : (pct >= 40 ? '✅ مزید محنت کریں، آپ کر سکتے ہیں 💪' : '⚠️ سزا ملے گی، کام بہت برا ہے ❌');
+        
+        return `<div class="r-item ${cls}">
+            <div class="r-top"><div class="r-name">👤 ${esc(x.name)}</div><div class="r-pts">🏆 ${pts} Points</div></div>
+            <div class="r-bar-wrap"><div class="r-bar-bg"><div class="r-bar-fill" style="width:${pct}%;"></div></div><div class="r-pct">${pct}%</div></div>
+            <div class="r-msg">${msg}</div>
+        </div>`;
+    }).join('');
+}
+
+// ========== 5. ALAMAT TRACKER ==========
+var ALAMAT_SYMPTOMS = ['جلنا','قبض','پیٹ درد','سر درد','ذائقہ خراب'];
+var ALAMAT_STATES = [
+    {text:'1. ٹھیک ہے', bg:'#d1fae5', fg:'#065f46', positive:true},
+    {text:'2. نہیں ٹھیک', bg:'#fee2e2', fg:'#991b1b', positive:false},
+    {text:'3. تھوڑا مسئلہ', bg:'#fef3c7', fg:'#92400e', positive:false},
+    {text:'4. کبھی کبھی', bg:'#e0f2fe', fg:'#0369a1', positive:false},
+    {text:'5. سیم پہلے', bg:'#e0e7ff', fg:'#3730a3', positive:false},
+    {text:'6. بہتر ہے', bg:'#ccfbf1', fg:'#115e59', positive:true},
+    {text:'7. کبھی زیادہ', bg:'#ffedd5', fg:'#9a3412', positive:false},
+    {text:'8. بہت زیادہ', bg:'#fce7f3', fg:'#9d174d', positive:false},
+    {text:'9. مسئلہ زیادہ', bg:'#fee2e2', fg:'#b91c1c', positive:false},
+    {text:'10. بار بار', bg:'#ede9fe', fg:'#6d28d9', positive:false},
+    {text:'11. دیگر', bg:'#ccfbf1', fg:'#0f766e', positive:false}
+];
+var alamatIdx = 0;
+var alamatMember = '';
+
+function populateAlamatMembers() {
+    var sel = $('alamatMemberSel');
+    if (!sel) return;
+    var m = getMembers().filter(x => !x.onLeave);
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+    if (cur) sel.value = cur;
+}
+
+function renderAlamat() {
+    alamatMember = $('alamatMemberSel').value;
+    alamatIdx = 0;
+    renderSymptomStage();
+}
+
+function renderSymptomStage() {
+    var stage = $('symptomStage');
+    var btns = $('symptomButtons');
+    if (!alamatMember) {
+        stage.innerHTML = '<div class="stage-name">پہلے ممبر منتخب کریں</div>';
+        btns.innerHTML = '';
+        return;
+    }
+    if (alamatIdx >= ALAMAT_SYMPTOMS.length) {
+        stage.innerHTML = '<div class="stage-num">✅ تمام علامات مکمل</div><div class="stage-name">🎉 شکریہ!</div>';
+        btns.innerHTML = '';
+        return;
+    }
+    $('stageNum').textContent = alamatIdx + 1;
+    $('stageName').textContent = ALAMAT_SYMPTOMS[alamatIdx];
+    btns.innerHTML = ALAMAT_STATES.map((s, i) => 
+        `<button type="button" class="symptom-btn" style="background:${s.bg};color:${s.fg};" onclick="selectSymptom(${i})">${esc(s.text)}</button>`
+    ).join('');
+}
+
+function selectSymptom(idx) {
+    var s = ALAMAT_STATES[idx];
+    var all = ls('symptoms', []);
+    var d = new Date();
+    all.push({
+        id: Date.now(),
+        member: alamatMember,
+        symptom: ALAMAT_SYMPTOMS[alamatIdx],
+        state: s.text,
+        positive: s.positive,
+        timestamp: Date.now(),
+        dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    lss('symptoms', all);
+    alamatIdx++;
+    renderSymptomStage();
+}
+
+// ========== 6. DIET MANAGER ==========
+var DIET_DAILY = ['روٹی','سالن','چائے','پانی','راتھا'];
+var DIET_SOMETIMES = ['دودھ','شیک','دہی','جوس','چاول'];
+var DIET_JUNK = ['کولڈ ڈرنک','سموسہ','پکوڑے','نان','ٹکی','برگر'];
+
+function renderDietLists() {
+    var dL = $('dietDailyList');
+    var sL = $('dietSometimesList');
+    var jL = $('dietJunkList');
+    if (!dL) return;
+    
+    dL.innerHTML = DIET_DAILY.map(item => 
+        `<div class="diet-cat-row"><input type="checkbox"><span>${item}</span><select><option>1</option><option>2</option><option>3</option></select></div>`
+    ).join('');
+    sL.innerHTML = DIET_SOMETIMES.map(item => 
+        `<div class="diet-cat-row"><input type="checkbox"><span>${item}</span><select><option>1</option><option>2</option><option>3</option></select></div>`
+    ).join('');
+    jL.innerHTML = DIET_JUNK.map(item => 
+        `<div class="diet-cat-row"><input type="checkbox"><span>${item}</span><select><option>1</option><option>2</option><option>3</option></select></div>`
+    ).join('');
+}
+
+// ========== 7. RASHAN MANAGER ==========
+var RASHAN_ITEMS_KEY = 'sec11_rashan_data_v2';
+var RASHAN_BUDGET_KEY = 'sec11_rashan_budget_v2';
+
+function renderRashanItems() {
+    var box = $('rashanItemsList');
+    if (!box) return;
+    var items = ls(RASHAN_ITEMS_KEY, []);
+    if (!items.length) {
+        items = [
+            {id:'dal', name:'دال', rate:200}, {id:'chawal', name:'چاول', rate:500},
+            {id:'aata', name:'آٹا', rate:300}, {id:'cheeni', name:'چینی', rate:150},
+            {id:'ghee', name:'گھی', rate:600}, {id:'tel', name:'تیل', rate:400}
+        ];
+    }
+    box.innerHTML = items.map(x => 
+        `<div class="rashan-item"><span>🥘 ${esc(x.name)}</span><span class="qty">ریٹ: ${x.rate}</span></div>`
+    ).join('');
+}
+
+// ========== 8. GREEN BUS ==========
+var busTimer = null;
+function updateBusClock() {
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var dh = h % 12 || 12;
+    var el = $('busClock');
+    if (el) el.textContent = pad(dh)+':'+pad(m)+':'+pad(s)+' '+ap;
+}
+
+// ========== 9. NEWS & ALERT ==========
 function renderNewsAlert() {
-    var items = JSON.parse(localStorage.getItem(NEWS_KEY) || '[]');
-    var news = items.filter(x => x.type === 'news' && x.enabled);
-    var alert = items.filter(x => x.type === 'alert' && x.enabled);
+    var items = ls(NEWS_KEY, []);
+    var news = items.filter(x => x.type === 'news' && x.enabled !== false);
+    var alert = items.filter(x => x.type === 'alert' && x.enabled !== false);
     
-    // News Ticker
     if (news.length > 0) {
-        document.getElementById('newsText').textContent = '📰 ' + news[0].content;
+        $('newsText').textContent = '📰 ' + news[0].content;
     } else {
-        document.getElementById('newsText').textContent = '📰 کوئی نیوز نہیں';
+        $('newsText').textContent = '📰 کوئی نیوز نہیں';
     }
     
-    // Alert Bar
     if (alert.length > 0) {
-        document.getElementById('alertBar').style.display = 'flex';
-        document.getElementById('alertMsg').innerHTML = '🚨 الرٹ: ' + alert[0].content;
+        $('alertBar').style.display = 'flex';
+        $('alertMsg').textContent = '🚨 ' + alert[0].content;
     } else {
-        document.getElementById('alertBar').style.display = 'none';
+        $('alertBar').style.display = 'none';
     }
 }
 
-function skipAlert() { document.getElementById('alertBar').style.display = 'none'; }
+function skipAlert() {
+    $('alertBar').style.display = 'none';
+}
 
-setInterval(updateDashDuty, 1000);
-document.addEventListener('DOMContentLoaded', () => {
+// ========== INIT ==========
+function initDashboard() {
     updateDashDuty();
+    populateLeaveDropdown();
+    populateTaskMembers();
+    renderCurrentTask();
+    renderTaskHistory();
+    renderTotalPoints();
+    renderSkip();
+    renderResult();
+    populateAlamatMembers();
+    renderDietLists();
+    renderRashanItems();
     renderNewsAlert();
-});
+    updateBusClock();
+    
+    setInterval(updateDashDuty, 1000);
+    setInterval(updateBusClock, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', initDashboard);
 </script>
-</body>
-</html>
+
+
+
