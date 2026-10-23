@@ -3,23 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entry - Duty</title>
+<title>Entry - Data Add</title>
 <style>
-:root{--primary:#1e293b;--accent:#7c3aed;--success:#10b981;--danger:#ef4444;--bg:#eef2f6;}
+:root{--primary:#1e293b;--accent:#2563eb;--success:#10b981;--danger:#ef4444;--golden:#d97706;--bg:#eef2f6;--card:#fff;--border:#e2e8f0;--text:#334155;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:#334155;padding-bottom:80px;}
-.container{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:16px;border-radius:12px;font-size:16px;font-weight:800;}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:var(--text);display:flex;justify-content:center;padding-bottom:80px;}
+.container{width:100%;max-width:600px;display:flex;flex-direction:column;gap:14px;}
+
+/* Card Base */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);position:relative;overflow:hidden;}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #f1f5f9;}
+.card-title{font-size:15px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:6px;}
+.card-btns{display:flex;gap:6px;}
+.card-btns button{background:#f8fafc;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.card-btns button:hover{background:#e2e8f0;}
+
+/* Hidden Settings */
+.settings-panel{display:none;position:absolute;top:50px;left:10px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:100;min-width:160px;}
+.settings-panel.open{display:block;}
+.settings-panel button{display:block;width:100%;padding:8px;font-size:11px;font-weight:700;border:none;border-radius:6px;cursor:pointer;text-align:right;margin-bottom:4px;background:#f8fafc;color:#334155;font-family:inherit;}
+.settings-panel button:hover{background:#e2e8f0;}
+.settings-panel button.del{color:var(--danger);}
+
+/* Forms */
 .form-label{font-size:12px;font-weight:800;color:#334155;display:block;margin-bottom:6px;margin-top:10px;}
-.form-row{display:flex;gap:6px;margin-bottom:10px;align-items:center;}
-.form-row input,.form-row select{padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;outline:none;}
-.form-row button{padding:10px 14px;background:var(--success);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;}
+.form-row{display:flex;gap:6px;margin-bottom:10px;align-items:center;flex-wrap:wrap;}
+.form-row input,.form-row select{flex:1;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;outline:none;min-width:60px;}
+.form-row button{padding:10px 14px;background:var(--success);color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer;}
+.form-row button.purple{background:var(--accent);}
+.form-row button.blue{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
+.form-row button.red{background:var(--danger);}
+.input-line{display:flex;gap:6px;margin-bottom:10px;}
+.input-line input{flex:1;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;outline:none;}
+.input-line button{padding:0 14px;background:var(--success);color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer;}
+
+/* Lists */
 .list-box{max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;}
-.list-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.list-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
 .badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:800;}
-.badge.senior{background:#dbeafe;color:#1e40af;}
-.badge.junior{background:#fce7f3;color:#9d174d;}
+
+/* Section specific */
+.duty-active-box{background:linear-gradient(135deg,#ede9fe,#ddd6fe);border:1px solid #c4b5fd;border-radius:10px;padding:12px;margin-bottom:12px;display:flex;flex-direction:column;gap:6px;}
+.duty-active-box .row{display:flex;justify-content:space-between;font-size:14px;font-weight:800;color:#4c1d95;}
+.duty-active-box .timer{text-align:center;font-size:15px;font-weight:900;color:#6d28d9;background:#fff;padding:6px;border-radius:6px;margin-top:4px;}
+.active-member{background:#f0fdf4;border:1px solid #86efac;padding:8px;border-radius:6px;margin-bottom:4px;font-size:13px;font-weight:800;color:#166534;}
+.leave-member{background:#fef2f2;border:1px solid #fca5a5;padding:8px;border-radius:6px;margin-bottom:4px;font-size:13px;font-weight:800;color:#991b1b;}
+.member-detail{background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin-bottom:4px;font-size:12px;font-weight:700;}
+.complaint-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+
+/* Task */
+.task-list-container{max-height:220px;overflow-y:auto;}
+.task-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid #f1f5f9;font-size:12px;font-weight:700;}
+.task-item input[type="checkbox"]{display:none;}
+
+/* Alamat / Diet */
+.symptom-box{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px;margin-bottom:10px;text-align:center;}
+.symptom-box .sym-name{font-size:15px;font-weight:900;color:#5b21b6;}
+.symptom-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;margin-top:8px;}
+.diet-input-row{display:flex;gap:6px;align-items:center;background:#fff;padding:6px;border-radius:6px;border:1px solid #e2e8f0;margin-bottom:4px;}
+.diet-input-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--golden);}
+.diet-input-row span{flex:1;font-size:12px;font-weight:700;color:#334155;}
+.diet-input-row input[type="number"]{width:60px;padding:4px;border:1px solid #cbd5e1;border-radius:4px;font-size:11px;font-weight:700;}
+
+/* Rashan */
+.rashan-item-row{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:6px;align-items:center;background:#fff;padding:8px;border-radius:6px;margin-bottom:5px;border:1px solid #e2e8f0;font-size:11px;font-weight:700;}
+.rashan-item-row input{width:100%;padding:6px;border:1px solid #cbd5e1;border-radius:4px;font-size:11px;text-align:center;outline:none;}
+
+/* Bottom Nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;padding:10px;z-index:1000;}
 .nav-item{text-decoration:none;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:5px;width:23%;}
 .nav-item.active{color:var(--accent);}
@@ -27,35 +77,187 @@ body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;directio
 </style>
 </head>
 <body>
+
 <div class="container">
-    <div class="app-header">⚡ ڈیٹا انٹری (Duty)</div>
+
+    <!-- 1. DUTY MANAGER -->
     <div class="card">
-        <label class="form-label">👤 ممبر شامل کریں / ایڈٹ کریں:</label>
-        <div class="form-row" style="flex-wrap:wrap;">
-            <input type="text" id="memName" placeholder="نیا نام..." style="flex:1;min-width:120px;">
-            <select id="memRank" style="width:90px;"><option value="Senior">🟢 سینئر</option><option value="Junior">🔵 جونیئر</option></select>
-            <button onclick="addMember()">➕</button>
+        <div class="card-head"><div class="card-title">👮 ڈیوٹی مینیجر (Member Add)</div><div class="card-btns"><button onclick="toggleSettings('dutySettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dutyBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="dutySettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="dutyBody">
+            <label class="form-label">👤 نیا ممبر شامل کریں:</label>
+            <div class="form-row">
+                <input type="text" id="newMemName" placeholder="نام...">
+                <select id="newMemRank" style="width:90px;"><option value="Senior">🟢 سینئر</option><option value="Junior">🔵 جونیئر</option></select>
+                <button onclick="addMember()">➕</button>
+            </div>
+            <label class="form-label">✏️ ممبر منتخب کریں:</label>
+            <div class="form-row">
+                <select id="editMemSelect" onchange="toggleEditDeleteBtns()"><option value="">-- ممبر --</option></select>
+                <button id="btnEdit" style="display:none;" class="blue" onclick="editMember()">✏️</button>
+                <button id="btnDel" style="display:none;" class="red" onclick="deleteMember()">🗑️</button>
+            </div>
+            <label class="form-label">⚡ ڈیوٹی تفویض:</label>
+            <div class="form-row">
+                <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
+                <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
+                <button class="purple" onclick="assignDuty()">✅</button>
+            </div>
+            <label class="form-label">📊 ایکٹو ممبر:</label>
+            <div id="activeDutyList"></div>
+            <label class="form-label">🏖️ چھٹی والے:</label>
+            <div id="onLeaveList"></div>
+            <label class="form-label">📋 مکمل حساب:</label>
+            <div class="list-box" id="memberDetailList"></div>
         </div>
-        
-        <div class="form-row">
-            <select id="editMemberSelect" style="flex:1;" onchange="toggleEditDeleteBtns()"><option value="">-- ممبر منتخب کریں --</option></select>
-            <button id="btnEditMem" onclick="editSelectedMember()" style="display:none;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:6px;padding:0 10px;font-weight:800;cursor:pointer;font-size:12px;">✏️</button>
-            <button id="btnDelMem" onclick="deleteSelectedMember()" style="display:none;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;padding:0 10px;font-weight:800;cursor:pointer;font-size:12px;">🗑️</button>
-        </div>
-
-        <label class="form-label">⚡ ڈیوٹی تفویض کریں:</label>
-        <div class="form-row">
-            <select id="assignSenior" style="flex:1;"><option value="">🟢 سینئر...</option></select>
-            <select id="assignJunior" style="flex:1;"><option value="">🔵 جونیئر...</option></select>
-            <button onclick="assignDuty()" style="background:var(--accent);">✅</button>
-        </div>
-
-        <label class="form-label">👥 ممبرز لسٹ:</label>
-        <div class="list-box" id="memberList"></div>
     </div>
+
+    <!-- 2. TASK MANAGER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">📋 ٹاسک مینیجر</div><div class="card-btns"><button onclick="toggleSettings('taskSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="taskSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="taskBody">
+            <label class="form-label">📝 نیا ٹاسک شامل کریں:</label>
+            <div class="form-row">
+                <input type="text" id="newTaskName" placeholder="ٹاسک کا نام...">
+                <select id="newTaskType" style="width:100px;"><option value="Daily">روزانہ</option><option value="Occasional">کبھی کبھی</option></select>
+                <input type="number" id="newTaskPoints" placeholder="پوائنٹس" value="5" style="width:70px;">
+                <button onclick="addTask()">➕</button>
+            </div>
+            <div class="task-list-container" id="taskListContainer"></div>
+            <label class="form-label">✏️ ٹاسک منتخب کریں:</label>
+            <div class="form-row">
+                <select id="editTaskSelect"><option value="">-- ٹاسک --</option></select>
+                <button class="blue" onclick="editTask()">✏️</button>
+                <button class="red" onclick="deleteTask()">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SKIP SECTION -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">⛔ اسکیپ سیکشن (Reason)</div><div class="card-btns"><button onclick="toggleSettings('skipSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="skipSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="skipBody">
+            <label class="form-label">👤 آج کی ڈیوٹی ممبران:</label>
+            <div id="skipActiveMembers"></div>
+            <label class="form-label">📝 وجہ لکھیں:</label>
+            <div class="form-row">
+                <select id="skipMemberSelect"><option value="">ممبر...</option></select>
+                <select id="skipTaskSelect"><option value="">کام...</option></select>
+            </div>
+            <div class="input-line">
+                <input type="text" id="skipReasonInput" placeholder="وجہ لکھیں...">
+                <button onclick="submitSkipReason()">✅</button>
+            </div>
+            <label class="form-label">📋 اسکیپ شدہ کام:</label>
+            <div class="list-box" id="skipRecordList"></div>
+        </div>
+    </div>
+
+    <!-- 4. NEWS & ALERT -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">📰 نیوز اور الرٹ</div><div class="card-btns"><button onclick="toggleSettings('newsSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="newsSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="newsBody">
+            <div class="input-line">
+                <select id="newsType" style="flex:0 0 100px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;">
+                    <option value="news">📰 News</option>
+                    <option value="alert">🚨 Alert</option>
+                    <option value="complaint">⏰ Time</option>
+                </select>
+                <input type="text" id="newsContent" placeholder="متن لکھیں...">
+                <button onclick="saveNews()">💾</button>
+            </div>
+            <div id="newsTimeRow" style="display:none;"><input type="time" id="newsTime" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;"></div>
+            <label class="form-label">📋 ریکارڈز:</label>
+            <div class="list-box" id="newsRecordList"></div>
+        </div>
+    </div>
+
+    <!-- 5. ALAMAT TRACKER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🩺 صحت اور علامات</div><div class="card-btns"><button onclick="toggleSettings('alamatSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="alamatSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="alamatBody">
+            <label class="form-label">👤 ممبر:</label>
+            <select id="alamatMember" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;"></select>
+            <div class="input-line" style="margin-top:10px;">
+                <input type="text" id="alamatSymptomInput" placeholder="علامت لکھیں...">
+                <button onclick="addAlamatSymptom()">➕</button>
+            </div>
+            <div class="list-box" id="alamatSymptomList"></div>
+        </div>
+    </div>
+
+    <!-- 6. DIET MANAGER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🍽️ ڈائٹ مینیجر</div><div class="card-btns"><button onclick="toggleSettings('dietSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="dietSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="dietBody">
+            <label class="form-label">👤 ممبر:</label>
+            <select id="dietMember" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;"></select>
+            <div class="input-line" style="margin-top:10px;">
+                <input type="text" id="dietTimeInput" placeholder="وقت لکھیں...">
+                <button onclick="addDietTime()">➕</button>
+            </div>
+            <div class="list-box" id="dietItemList"></div>
+        </div>
+    </div>
+
+    <!-- 7. RASHAN MANAGER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🛒 راشن مینیجر</div><div class="card-btns"><button onclick="toggleSettings('rashanSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="rashanSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="rashanBody">
+            <label class="form-label">👤 ممبر:</label>
+            <select id="rashanMember" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;"></select>
+            <div class="input-line" style="margin-top:10px;">
+                <input type="text" id="rashanItemName" placeholder="آٹم کا نام...">
+                <input type="number" id="rashanItemQty" placeholder="Qty" style="width:60px;">
+                <input type="number" id="rashanItemRate" placeholder="Rate" style="width:70px;">
+                <button onclick="addRashanItem()">➕</button>
+            </div>
+            <div class="list-box" id="rashanItemList"></div>
+            <div class="input-line" style="margin-top:10px;">
+                <input type="number" id="rashanBudgetInput" placeholder="بجٹ رقم...">
+                <button onclick="saveRashanBudget()">💾</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. GREEN BUS -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🚌 گرین بس مینیجر</div><div class="card-btns"><button onclick="toggleSettings('busSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('busBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="busSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="busBody">
+            <label class="form-label">🛣️ روٹ شامل کریں:</label>
+            <div class="input-line">
+                <input type="text" id="busRouteInput" placeholder="روٹ کا نام...">
+                <button onclick="addBusRoute()">➕</button>
+            </div>
+            <label class="form-label">📅 دن:</label>
+            <select id="busDaySelect" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;">
+                <option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option>
+            </select>
+            <label class="form-label">⏰ وقت:</label>
+            <div class="form-row">
+                <input type="time" id="busStartTime">
+                <input type="time" id="busEndTime">
+                <input type="number" id="busGap" placeholder="وقفہ" value="30" style="width:70px;">
+            </div>
+            <label class="form-label">📍 اسٹاپ:</label>
+            <div class="input-line">
+                <input type="text" id="busStopInput" placeholder="اسٹاپ کا نام...">
+                <button onclick="addBusStop()">➕</button>
+            </div>
+            <div class="list-box" id="busStopList"></div>
+        </div>
+    </div>
+
 </div>
 
-<!-- Fixed Bottom Nav -->
+<!-- Bottom Nav -->
 <nav class="bottom-nav">
     <a href="dashboard.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>ڈیش بورڈ</a>
     <a href="entry.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>انٹری</a>
@@ -63,31 +265,61 @@ body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;directio
     <a href="manager.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>مینیجر</a>
 </nav>
 
+<!-- SCRIPT PART YAHAN AAYEGA -->
+</body>
+</html>
 <script>
-function getMembers() { return JSON.parse(localStorage.getItem('sec4_duty_manager_data_v4') || '[]'); }
-function saveMembers(m) { localStorage.setItem('sec4_duty_manager_data_v4', JSON.stringify(m)); }
+// ========== STORAGE KEYS ==========
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var TASK_KEY = 'sec3_task_and_point_manager_data';
+var SKIP_KEY = 'sec4_duty_skipped_data';
+var NEWS_KEY = 'sec10_news_alerts_data';
+var ALAMAT_KEY = 'symptoms'; // Jo dashboard se linked hai
+var DIET_KEY = 'diets';
+var RASHAN_ITEMS_KEY = 'sec11_rashan_data_v2';
+var RASHAN_BUDGET_KEY = 'sec11_rashan_budget_v2';
+var BUS_ROUTES_KEY = 'sec21_green_bus_routes_v19';
+var BUS_DATA_KEY = 'sec21_green_bus_data_v19';
+
+// ========== UTILITIES ==========
+function $(id) { return document.getElementById(id); }
+function ls(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function lss(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function toggleSettings(id) { var el = $(id); if(el) el.classList.toggle('open'); }
+function toggleBody(id) {
+    var b = $(id);
+    var btn = b.previousElementSibling.querySelector('.card-btns button:last-child');
+    if (b.style.display === 'none') { b.style.display = 'block'; if(btn) btn.textContent = '⬇️'; }
+    else { b.style.display = 'none'; if(btn) btn.textContent = '⬆️'; }
+}
+
+// ========== 1. DUTY MANAGER ==========
+function getMembers() { return ls(DUTY_KEY, []); }
+function saveMembers(m) { lss(DUTY_KEY, m); }
 
 function addMember() {
-    var name = document.getElementById('memName').value.trim();
-    var rank = document.getElementById('memRank').value;
+    var name = $('newMemName').value.trim();
+    var rank = $('newMemRank').value;
     if (!name) { alert('نام لکھیں'); return; }
     var m = getMembers();
     if (m.some(x => x.name.toLowerCase() === name.toLowerCase())) { alert('ممبر موجود ہے!'); return; }
-    m.push({ id: Date.now(), name: name, rank: rank, onDuty: false, dutyStart: null });
+    m.push({ id: Date.now(), name: name, rank: rank, onDuty: false, onLeave: false, points: 0, dutyCount: 0 });
     saveMembers(m);
-    document.getElementById('memName').value = '';
-    renderEntry();
+    $('newMemName').value = '';
+    renderDuty();
     alert('✅ ممبر شامل');
 }
 
 function toggleEditDeleteBtns() {
-    var sel = document.getElementById('editMemberSelect');
-    document.getElementById('btnEditMem').style.display = sel.value ? 'block' : 'none';
-    document.getElementById('btnDelMem').style.display = sel.value ? 'block' : 'none';
+    var sel = $('editMemSelect');
+    $('btnEdit').style.display = sel.value ? 'inline-block' : 'none';
+    $('btnDel').style.display = sel.value ? 'inline-block' : 'none';
 }
 
-function editSelectedMember() {
-    var id = document.getElementById('editMemberSelect').value;
+function editMember() {
+    var id = $('editMemSelect').value;
     var m = getMembers();
     var member = m.find(x => String(x.id) === String(id));
     if (!member) return;
@@ -95,40 +327,47 @@ function editSelectedMember() {
     if (newName && newName.trim()) {
         member.name = newName.trim();
         saveMembers(m);
-        renderEntry();
+        renderDuty();
         alert('✅ نام تبدیل');
     }
 }
 
-function deleteSelectedMember() {
-    var id = document.getElementById('editMemberSelect').value;
+function deleteMember() {
+    var id = $('editMemSelect').value;
     if (!confirm('ڈیلیٹ کریں؟')) return;
     var m = getMembers().filter(x => String(x.id) !== String(id));
     saveMembers(m);
-    renderEntry();
+    renderDuty();
     alert('✅ ڈیلیٹ');
 }
 
 function assignDuty() {
-    var sid = document.getElementById('assignSenior').value;
-    var jid = document.getElementById('assignJunior').value;
+    var sid = $('assignSenior').value;
+    var jid = $('assignJunior').value;
+    if (!sid && !jid) { alert('ممبر منتخب کریں'); return; }
     var m = getMembers();
     var now = Date.now();
-    if (sid) { var s = m.find(x => String(x.id) === sid); if (s) { s.onDuty = true; s.dutyStart = now; } }
-    if (jid) { var j = m.find(x => String(x.id) === jid); if (j) { j.onDuty = true; j.dutyStart = now; } }
+    if (sid) { var s = m.find(x => String(x.id) === sid); if (s) { s.onDuty = true; s.onLeave = false; s.dutyCount++; s.dutyStart = now; } }
+    if (jid) { var j = m.find(x => String(x.id) === jid); if (j) { j.onDuty = true; j.onLeave = false; j.dutyCount++; j.dutyStart = now; } }
     saveMembers(m);
-    renderEntry();
+    renderDuty();
     alert('✅ ڈیوٹی تفویض');
 }
 
-function renderEntry() {
+function renderDuty() {
     var m = getMembers();
-    var eSel = document.getElementById('editMemberSelect');
-    eSel.innerHTML = '<option value="">-- ممبر منتخب کریں --</option>';
-    m.forEach(x => { eSel.innerHTML += `<option value="${x.id}">${x.name}</option>`; });
     
-    var sSel = document.getElementById('assignSenior');
-    var jSel = document.getElementById('assignJunior');
+    // Edit Dropdown
+    var eSel = $('editMemSelect');
+    var cur = eSel.value;
+    eSel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { eSel.innerHTML += `<option value="${x.id}">${x.name}</option>`; });
+    if (cur) eSel.value = cur;
+    toggleEditDeleteBtns();
+
+    // Duty Dropdowns
+    var sSel = $('assignSenior');
+    var jSel = $('assignJunior');
     sSel.innerHTML = '<option value="">🟢 سینئر...</option>';
     jSel.innerHTML = '<option value="">🔵 جونیئر...</option>';
     m.filter(x => !x.onLeave).forEach(x => {
@@ -136,15 +375,699 @@ function renderEntry() {
         if (x.rank === 'Junior') jSel.innerHTML += `<option value="${x.id}">${x.name}</option>`;
     });
 
-    var list = document.getElementById('memberList');
-    if (m.length === 0) { list.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ممبر نہیں</div>'; return; }
-    list.innerHTML = m.map(x => {
-        var bc = x.rank === 'Senior' ? 'senior' : 'junior';
-        return `<div class="list-item"><div><span>${x.name}</span> <span class="badge ${bc}">${x.rank}</span></div><div style="font-size:10px;color:${x.onDuty ? '#16a34a' : '#64748b'}">${x.onDuty ? '🟢 ڈیوٹی پر' : '⚪'}</div></div>`;
-    }).join('');
+    // Active / Leave / Detail
+    var activeBox = $('activeDutyList');
+    var leaveBox = $('onLeaveList');
+    var detailBox = $('memberDetailList');
+    
+    var active = m.filter(x => x.onDuty);
+    activeBox.innerHTML = active.length ? active.map(x => `<div class="active-member">👤 ${esc(x.name)} — ${x.rank}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
+    
+    var leave = m.filter(x => x.onLeave);
+    leaveBox.innerHTML = leave.length ? leave.map(x => `<div class="leave-member">👤 ${esc(x.name)} — چھٹی</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
+    
+    detailBox.innerHTML = m.length ? m.map(x => `<div class="member-detail">👤 ${esc(x.name)} (${x.rank}) — ڈیوٹی: ${x.dutyCount||0} | چھٹی: ${x.onLeave?'ہاں':'نہیں'}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
 }
 
-document.addEventListener('DOMContentLoaded', renderEntry);
+// ========== 2. TASK MANAGER ==========
+function getTasks() { return ls(TASK_KEY, []); }
+function saveTasks(t) { lss(TASK_KEY, t); }
+
+function addTask() {
+    var name = $('newTaskName').value.trim();
+    var type = $('newTaskType').value;
+    var pts = parseInt($('newTaskPoints').value, 10) || 5;
+    if (!name) { alert('ٹاسک کا نام لکھیں'); return; }
+    var t = getTasks();
+    t.unshift({ id: Date.now(), title: name, type: type, points: pts });
+    saveTasks(t);
+    $('newTaskName').value = '';
+    renderTasks();
+    alert('✅ ٹاسک شامل');
+}
+
+function renderTasks() {
+    var t = getTasks();
+    var box = $('taskListContainer');
+    box.innerHTML = t.length ? t.map(x => `<div class="task-item"><span>${esc(x.title)} (${x.type === 'Daily'?'روزانہ':'کبھی کبھی'})</span><span>🏆 ${x.points}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ٹاسک نہیں</div>';
+    
+    var eSel = $('editTaskSelect');
+    var cur = eSel.value;
+    eSel.innerHTML = '<option value="">-- ٹاسک --</option>';
+    t.forEach(x => { eSel.innerHTML += `<option value="${x.id}">${x.title}</option>`; });
+    if (cur) eSel.value = cur;
+}
+
+function editTask() {
+    var id = $('editTaskSelect').value;
+    if (!id) { alert('ٹاسک منتخب کریں'); return; }
+    var t = getTasks();
+    var task = t.find(x => String(x.id) === String(id));
+    if (!task) return;
+    var newName = prompt('نیا نام:', task.title);
+    if (newName && newName.trim()) {
+        task.title = newName.trim();
+        saveTasks(t);
+        renderTasks();
+        alert('✅ ٹاسک اپڈیٹ');
+    }
+}
+
+function deleteTask() {
+    var id = $('editTaskSelect').value;
+    if (!id) { alert('ٹاسک منتخب کریں'); return; }
+    if (!confirm('ڈیلیٹ کریں؟')) return;
+    var t = getTasks().filter(x => String(x.id) !== String(id));
+    saveTasks(t);
+    renderTasks();
+    alert('✅ ڈیلیٹ');
+}
+
+// ========== 3. SKIP SECTION ==========
+function renderSkipSection() {
+    var m = getMembers();
+    var active = m.filter(x => x.onDuty);
+    var activeBox = $('skipActiveMembers');
+    activeBox.innerHTML = active.length ? active.map(x => `<div class="active-member">👤 ${esc(x.name)} — ${x.rank}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی ڈیوٹی پر نہیں</div>';
+    
+    var sel = $('skipMemberSelect');
+    sel.innerHTML = '<option value="">ممبر...</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+    
+    var sk = ls(SKIP_KEY, []);
+    var list = $('skipRecordList');
+    list.innerHTML = sk.length ? sk.map(x => {
+        var d = new Date(x.timestamp);
+        return `<div class="list-item"><div><b>${esc(x.member)}</b> — ${esc(x.task)}<br><span style="font-size:10px;color:#64748b;">${pad(d.getDate())}/${pad(d.getMonth()+1)} ${pad(d.getHours())}:${pad(d.getMinutes())}</span></div><span>${x.hasReason ? '✅' : '⏳'}</span></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+function submitSkipReason() {
+    var member = $('skipMemberSelect').value;
+    var task = $('skipTaskSelect').value;
+    var reason = $('skipReasonInput').value.trim();
+    if (!member || !task) { alert('ممبر اور کام منتخب کریں'); return; }
+    if (!reason) { alert('وجہ لکھیں'); return; }
+    
+    var sk = ls(SKIP_KEY, []);
+    var rec = sk.find(x => x.member === member && x.task === task && !x.hasReason);
+    if (rec) {
+        rec.reason = reason;
+        rec.hasReason = true;
+        lss(SKIP_KEY, sk);
+        $('skipReasonInput').value = '';
+        renderSkipSection();
+        alert('✅ وجہ محفوظ');
+    } else {
+        alert('کوئی اسکیپ شدہ کام نہیں ملا');
+    }
+}
+
+// ========== 4. NEWS & ALERT ==========
+function saveNews() {
+    var type = $('newsType').value;
+    var content = $('newsContent').value.trim();
+    if (!content) { alert('متن لکھیں'); return; }
+    var items = ls(NEWS_KEY, []);
+    var d = new Date();
+    items.unshift({
+        id: Date.now(), type: type, content: content,
+        timestamp: Date.now(), enabled: true,
+        dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    lss(NEWS_KEY, items);
+    $('newsContent').value = '';
+    renderNews();
+    alert('✅ محفوظ');
+}
+
+function renderNews() {
+    var items = ls(NEWS_KEY, []);
+    var list = $('newsRecordList');
+    list.innerHTML = items.length ? items.map(x => {
+        var icons = { news: '📰', alert: '🚨', complaint: '⏰' };
+        return `<div class="list-item"><span>${icons[x.type]||''} ${esc(x.content)}</span><span style="font-size:9px;color:#64748b;">${x.dateStr||''}</span></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 5. ALAMAT ==========
+function populateAlamatMembers() {
+    var sel = $('alamatMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addAlamatSymptom() {
+    var member = $('alamatMember').value;
+    var sym = $('alamatSymptomInput').value.trim();
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!sym) { alert('علامت لکھیں'); return; }
+    
+    var all = ls(ALAMAT_KEY, []);
+    var d = new Date();
+    all.push({
+        id: Date.now(), member: member, symptom: sym, state: '1. ٹھیک ہے', positive: true,
+        timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    lss(ALAMAT_KEY, all);
+    $('alamatSymptomInput').value = '';
+    renderAlamat();
+    alert('✅ علامت شامل');
+}
+
+function renderAlamat() {
+    var member = $('alamatMember').value;
+    var all = ls(ALAMAT_KEY, []).filter(x => x.member === member);
+    var list = $('alamatSymptomList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>${esc(x.symptom)} (${esc(x.state)})</span><span style="font-size:9px;color:#64748b;">${x.dateStr||''}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 6. DIET ==========
+function populateDietMembers() {
+    var sel = $('dietMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addDietTime() {
+    var member = $('dietMember').value;
+    var time = $('dietTimeInput').value.trim();
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!time) { alert('وقت لکھیں'); return; }
+    
+    var all = ls(DIET_KEY, []);
+    all.unshift({ id: Date.now(), member: member, time: time, timestamp: Date.now() });
+    lss(DIET_KEY, all);
+    $('dietTimeInput').value = '';
+    renderDiet();
+    alert('✅ وقت شامل');
+}
+
+function renderDiet() {
+    var member = $('dietMember').value;
+    var all = ls(DIET_KEY, []).filter(x => x.member === member);
+    var list = $('dietItemList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>⏰ ${esc(x.time)}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 7. RASHAN ==========
+function populateRashanMembers() {
+    var sel = $('rashanMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addRashanItem() {
+    var member = $('rashanMember').value;
+    var name = $('rashanItemName').value.trim();
+    var qty = parseInt($('rashanItemQty').value, 10) || 1;
+    var rate = parseInt($('rashanItemRate').value, 10) || 0;
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!name) { alert('آٹم کا نام لکھیں'); return; }
+    if (rate <= 0) { alert('ریٹ لکھیں'); return; }
+    
+    var items = ls(RASHAN_ITEMS_KEY, []);
+    items.unshift({ id: Date.now(), member: member, name: name, qty: qty, rate: rate });
+    lss(RASHAN_ITEMS_KEY, items);
+    $('rashanItemName').value = '';
+    $('rashanItemQty').value = '';
+    $('rashanItemRate').value = '';
+    renderRashan();
+    alert('✅ آٹم شامل');
+}
+
+function saveRashanBudget() {
+    var v = parseFloat($('rashanBudgetInput').value);
+    if (isNaN(v) || v < 0) { alert('بجٹ درست درج کریں'); return; }
+    lss(RASHAN_BUDGET_KEY, v);
+    $('rashanBudgetInput').value = '';
+    alert('✅ بجٹ محفوظ');
+}
+
+function renderRashan() {
+    var member = $('rashanMember').value;
+    var all = ls(RASHAN_ITEMS_KEY, []).filter(x => x.member === member);
+    var list = $('rashanItemList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>${esc(x.name)} (Qty: ${x.qty}, Rate: ${x.rate})</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی آٹم نہیں</div>';
+}
+
+// ========== 8. GREEN BUS ==========
+function addBusRoute() {
+    var name = $('busRouteInput').value.trim();
+    if (!name) { alert('روٹ کا نام لکھیں'); return; }
+    var routes = ls(BUS_ROUTES_KEY, []);
+    if (routes.indexOf(name) !== -1) { alert('روٹ موجود ہے'); return; }
+    routes.push(name);
+    lss(BUS_ROUTES_KEY, routes);
+    $('busRouteInput').value = '';
+    alert('✅ روٹ شامل');
+}
+
+function addBusStop() {
+    var stop = $('busStopInput').value.trim();
+    if (!stop) { alert('اسٹاپ کا نام لکھیں'); return; }
+    var stops = ls('bus_stops', []);
+    if (stops.indexOf(stop) !== -1) { alert('اسٹاپ موجود ہے'); return; }
+    stops.push(stop);
+    lss('bus_stops', stops);
+    $('busStopInput').value = '';
+    renderBusStops();
+    alert('✅ اسٹاپ شامل');
+}
+
+function renderBusStops() {
+    var stops = ls('bus_stops', []);
+    var list = $('busStopList');
+    list.innerHTML = stops.length ? stops.map(x => `<div class="list-item"><span>🛑 ${esc(x)}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی اسٹاپ نہیں</div>';
+}
+
+// ========== INIT ==========
+function initEntry() {
+    renderDuty();
+    renderTasks();
+    renderSkipSection();
+    renderNews();
+    populateAlamatMembers();
+    renderAlamat();
+    populateDietMembers();
+    renderDiet();
+    populateRashanMembers();
+    renderRashan();
+    renderBusStops();
+    
+    // Event listeners
+    $('newsType').addEventListener('change', function() {
+        $('newsTimeRow').style.display = this.value === 'complaint' ? 'block' : 'none';
+    });
+    $('alamatMember').addEventListener('change', renderAlamat);
+    $('dietMember').addEventListener('change', renderDiet);
+    $('rashanMember').addEventListener('change', renderRashan);
+}
+
+document.addEventListener('DOMContentLoaded', initEntry);
 </script>
-</body>
-</html>
+<script>
+// ========== STORAGE KEYS ==========
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var TASK_KEY = 'sec3_task_and_point_manager_data';
+var SKIP_KEY = 'sec4_duty_skipped_data';
+var NEWS_KEY = 'sec10_news_alerts_data';
+var ALAMAT_KEY = 'symptoms'; // Jo dashboard se linked hai
+var DIET_KEY = 'diets';
+var RASHAN_ITEMS_KEY = 'sec11_rashan_data_v2';
+var RASHAN_BUDGET_KEY = 'sec11_rashan_budget_v2';
+var BUS_ROUTES_KEY = 'sec21_green_bus_routes_v19';
+var BUS_DATA_KEY = 'sec21_green_bus_data_v19';
+
+// ========== UTILITIES ==========
+function $(id) { return document.getElementById(id); }
+function ls(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function lss(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function toggleSettings(id) { var el = $(id); if(el) el.classList.toggle('open'); }
+function toggleBody(id) {
+    var b = $(id);
+    var btn = b.previousElementSibling.querySelector('.card-btns button:last-child');
+    if (b.style.display === 'none') { b.style.display = 'block'; if(btn) btn.textContent = '⬇️'; }
+    else { b.style.display = 'none'; if(btn) btn.textContent = '⬆️'; }
+}
+
+// ========== 1. DUTY MANAGER ==========
+function getMembers() { return ls(DUTY_KEY, []); }
+function saveMembers(m) { lss(DUTY_KEY, m); }
+
+function addMember() {
+    var name = $('newMemName').value.trim();
+    var rank = $('newMemRank').value;
+    if (!name) { alert('نام لکھیں'); return; }
+    var m = getMembers();
+    if (m.some(x => x.name.toLowerCase() === name.toLowerCase())) { alert('ممبر موجود ہے!'); return; }
+    m.push({ id: Date.now(), name: name, rank: rank, onDuty: false, onLeave: false, points: 0, dutyCount: 0 });
+    saveMembers(m);
+    $('newMemName').value = '';
+    renderDuty();
+    alert('✅ ممبر شامل');
+}
+
+function toggleEditDeleteBtns() {
+    var sel = $('editMemSelect');
+    $('btnEdit').style.display = sel.value ? 'inline-block' : 'none';
+    $('btnDel').style.display = sel.value ? 'inline-block' : 'none';
+}
+
+function editMember() {
+    var id = $('editMemSelect').value;
+    var m = getMembers();
+    var member = m.find(x => String(x.id) === String(id));
+    if (!member) return;
+    var newName = prompt('نیا نام:', member.name);
+    if (newName && newName.trim()) {
+        member.name = newName.trim();
+        saveMembers(m);
+        renderDuty();
+        alert('✅ نام تبدیل');
+    }
+}
+
+function deleteMember() {
+    var id = $('editMemSelect').value;
+    if (!confirm('ڈیلیٹ کریں؟')) return;
+    var m = getMembers().filter(x => String(x.id) !== String(id));
+    saveMembers(m);
+    renderDuty();
+    alert('✅ ڈیلیٹ');
+}
+
+function assignDuty() {
+    var sid = $('assignSenior').value;
+    var jid = $('assignJunior').value;
+    if (!sid && !jid) { alert('ممبر منتخب کریں'); return; }
+    var m = getMembers();
+    var now = Date.now();
+    if (sid) { var s = m.find(x => String(x.id) === sid); if (s) { s.onDuty = true; s.onLeave = false; s.dutyCount++; s.dutyStart = now; } }
+    if (jid) { var j = m.find(x => String(x.id) === jid); if (j) { j.onDuty = true; j.onLeave = false; j.dutyCount++; j.dutyStart = now; } }
+    saveMembers(m);
+    renderDuty();
+    alert('✅ ڈیوٹی تفویض');
+}
+
+function renderDuty() {
+    var m = getMembers();
+    
+    // Edit Dropdown
+    var eSel = $('editMemSelect');
+    var cur = eSel.value;
+    eSel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { eSel.innerHTML += `<option value="${x.id}">${x.name}</option>`; });
+    if (cur) eSel.value = cur;
+    toggleEditDeleteBtns();
+
+    // Duty Dropdowns
+    var sSel = $('assignSenior');
+    var jSel = $('assignJunior');
+    sSel.innerHTML = '<option value="">🟢 سینئر...</option>';
+    jSel.innerHTML = '<option value="">🔵 جونیئر...</option>';
+    m.filter(x => !x.onLeave).forEach(x => {
+        if (x.rank === 'Senior') sSel.innerHTML += `<option value="${x.id}">${x.name}</option>`;
+        if (x.rank === 'Junior') jSel.innerHTML += `<option value="${x.id}">${x.name}</option>`;
+    });
+
+    // Active / Leave / Detail
+    var activeBox = $('activeDutyList');
+    var leaveBox = $('onLeaveList');
+    var detailBox = $('memberDetailList');
+    
+    var active = m.filter(x => x.onDuty);
+    activeBox.innerHTML = active.length ? active.map(x => `<div class="active-member">👤 ${esc(x.name)} — ${x.rank}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
+    
+    var leave = m.filter(x => x.onLeave);
+    leaveBox.innerHTML = leave.length ? leave.map(x => `<div class="leave-member">👤 ${esc(x.name)} — چھٹی</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
+    
+    detailBox.innerHTML = m.length ? m.map(x => `<div class="member-detail">👤 ${esc(x.name)} (${x.rank}) — ڈیوٹی: ${x.dutyCount||0} | چھٹی: ${x.onLeave?'ہاں':'نہیں'}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی نہیں</div>';
+}
+
+// ========== 2. TASK MANAGER ==========
+function getTasks() { return ls(TASK_KEY, []); }
+function saveTasks(t) { lss(TASK_KEY, t); }
+
+function addTask() {
+    var name = $('newTaskName').value.trim();
+    var type = $('newTaskType').value;
+    var pts = parseInt($('newTaskPoints').value, 10) || 5;
+    if (!name) { alert('ٹاسک کا نام لکھیں'); return; }
+    var t = getTasks();
+    t.unshift({ id: Date.now(), title: name, type: type, points: pts });
+    saveTasks(t);
+    $('newTaskName').value = '';
+    renderTasks();
+    alert('✅ ٹاسک شامل');
+}
+
+function renderTasks() {
+    var t = getTasks();
+    var box = $('taskListContainer');
+    box.innerHTML = t.length ? t.map(x => `<div class="task-item"><span>${esc(x.title)} (${x.type === 'Daily'?'روزانہ':'کبھی کبھی'})</span><span>🏆 ${x.points}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ٹاسک نہیں</div>';
+    
+    var eSel = $('editTaskSelect');
+    var cur = eSel.value;
+    eSel.innerHTML = '<option value="">-- ٹاسک --</option>';
+    t.forEach(x => { eSel.innerHTML += `<option value="${x.id}">${x.title}</option>`; });
+    if (cur) eSel.value = cur;
+}
+
+function editTask() {
+    var id = $('editTaskSelect').value;
+    if (!id) { alert('ٹاسک منتخب کریں'); return; }
+    var t = getTasks();
+    var task = t.find(x => String(x.id) === String(id));
+    if (!task) return;
+    var newName = prompt('نیا نام:', task.title);
+    if (newName && newName.trim()) {
+        task.title = newName.trim();
+        saveTasks(t);
+        renderTasks();
+        alert('✅ ٹاسک اپڈیٹ');
+    }
+}
+
+function deleteTask() {
+    var id = $('editTaskSelect').value;
+    if (!id) { alert('ٹاسک منتخب کریں'); return; }
+    if (!confirm('ڈیلیٹ کریں؟')) return;
+    var t = getTasks().filter(x => String(x.id) !== String(id));
+    saveTasks(t);
+    renderTasks();
+    alert('✅ ڈیلیٹ');
+}
+
+// ========== 3. SKIP SECTION ==========
+function renderSkipSection() {
+    var m = getMembers();
+    var active = m.filter(x => x.onDuty);
+    var activeBox = $('skipActiveMembers');
+    activeBox.innerHTML = active.length ? active.map(x => `<div class="active-member">👤 ${esc(x.name)} — ${x.rank}</div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;">کوئی ڈیوٹی پر نہیں</div>';
+    
+    var sel = $('skipMemberSelect');
+    sel.innerHTML = '<option value="">ممبر...</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+    
+    var sk = ls(SKIP_KEY, []);
+    var list = $('skipRecordList');
+    list.innerHTML = sk.length ? sk.map(x => {
+        var d = new Date(x.timestamp);
+        return `<div class="list-item"><div><b>${esc(x.member)}</b> — ${esc(x.task)}<br><span style="font-size:10px;color:#64748b;">${pad(d.getDate())}/${pad(d.getMonth()+1)} ${pad(d.getHours())}:${pad(d.getMinutes())}</span></div><span>${x.hasReason ? '✅' : '⏳'}</span></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+function submitSkipReason() {
+    var member = $('skipMemberSelect').value;
+    var task = $('skipTaskSelect').value;
+    var reason = $('skipReasonInput').value.trim();
+    if (!member || !task) { alert('ممبر اور کام منتخب کریں'); return; }
+    if (!reason) { alert('وجہ لکھیں'); return; }
+    
+    var sk = ls(SKIP_KEY, []);
+    var rec = sk.find(x => x.member === member && x.task === task && !x.hasReason);
+    if (rec) {
+        rec.reason = reason;
+        rec.hasReason = true;
+        lss(SKIP_KEY, sk);
+        $('skipReasonInput').value = '';
+        renderSkipSection();
+        alert('✅ وجہ محفوظ');
+    } else {
+        alert('کوئی اسکیپ شدہ کام نہیں ملا');
+    }
+}
+
+// ========== 4. NEWS & ALERT ==========
+function saveNews() {
+    var type = $('newsType').value;
+    var content = $('newsContent').value.trim();
+    if (!content) { alert('متن لکھیں'); return; }
+    var items = ls(NEWS_KEY, []);
+    var d = new Date();
+    items.unshift({
+        id: Date.now(), type: type, content: content,
+        timestamp: Date.now(), enabled: true,
+        dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    lss(NEWS_KEY, items);
+    $('newsContent').value = '';
+    renderNews();
+    alert('✅ محفوظ');
+}
+
+function renderNews() {
+    var items = ls(NEWS_KEY, []);
+    var list = $('newsRecordList');
+    list.innerHTML = items.length ? items.map(x => {
+        var icons = { news: '📰', alert: '🚨', complaint: '⏰' };
+        return `<div class="list-item"><span>${icons[x.type]||''} ${esc(x.content)}</span><span style="font-size:9px;color:#64748b;">${x.dateStr||''}</span></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 5. ALAMAT ==========
+function populateAlamatMembers() {
+    var sel = $('alamatMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addAlamatSymptom() {
+    var member = $('alamatMember').value;
+    var sym = $('alamatSymptomInput').value.trim();
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!sym) { alert('علامت لکھیں'); return; }
+    
+    var all = ls(ALAMAT_KEY, []);
+    var d = new Date();
+    all.push({
+        id: Date.now(), member: member, symptom: sym, state: '1. ٹھیک ہے', positive: true,
+        timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+    });
+    lss(ALAMAT_KEY, all);
+    $('alamatSymptomInput').value = '';
+    renderAlamat();
+    alert('✅ علامت شامل');
+}
+
+function renderAlamat() {
+    var member = $('alamatMember').value;
+    var all = ls(ALAMAT_KEY, []).filter(x => x.member === member);
+    var list = $('alamatSymptomList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>${esc(x.symptom)} (${esc(x.state)})</span><span style="font-size:9px;color:#64748b;">${x.dateStr||''}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 6. DIET ==========
+function populateDietMembers() {
+    var sel = $('dietMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addDietTime() {
+    var member = $('dietMember').value;
+    var time = $('dietTimeInput').value.trim();
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!time) { alert('وقت لکھیں'); return; }
+    
+    var all = ls(DIET_KEY, []);
+    all.unshift({ id: Date.now(), member: member, time: time, timestamp: Date.now() });
+    lss(DIET_KEY, all);
+    $('dietTimeInput').value = '';
+    renderDiet();
+    alert('✅ وقت شامل');
+}
+
+function renderDiet() {
+    var member = $('dietMember').value;
+    var all = ls(DIET_KEY, []).filter(x => x.member === member);
+    var list = $('dietItemList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>⏰ ${esc(x.time)}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 7. RASHAN ==========
+function populateRashanMembers() {
+    var sel = $('rashanMember');
+    var m = getMembers();
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(x => { sel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
+}
+
+function addRashanItem() {
+    var member = $('rashanMember').value;
+    var name = $('rashanItemName').value.trim();
+    var qty = parseInt($('rashanItemQty').value, 10) || 1;
+    var rate = parseInt($('rashanItemRate').value, 10) || 0;
+    if (!member) { alert('ممبر منتخب کریں'); return; }
+    if (!name) { alert('آٹم کا نام لکھیں'); return; }
+    if (rate <= 0) { alert('ریٹ لکھیں'); return; }
+    
+    var items = ls(RASHAN_ITEMS_KEY, []);
+    items.unshift({ id: Date.now(), member: member, name: name, qty: qty, rate: rate });
+    lss(RASHAN_ITEMS_KEY, items);
+    $('rashanItemName').value = '';
+    $('rashanItemQty').value = '';
+    $('rashanItemRate').value = '';
+    renderRashan();
+    alert('✅ آٹم شامل');
+}
+
+function saveRashanBudget() {
+    var v = parseFloat($('rashanBudgetInput').value);
+    if (isNaN(v) || v < 0) { alert('بجٹ درست درج کریں'); return; }
+    lss(RASHAN_BUDGET_KEY, v);
+    $('rashanBudgetInput').value = '';
+    alert('✅ بجٹ محفوظ');
+}
+
+function renderRashan() {
+    var member = $('rashanMember').value;
+    var all = ls(RASHAN_ITEMS_KEY, []).filter(x => x.member === member);
+    var list = $('rashanItemList');
+    list.innerHTML = all.length ? all.map(x => `<div class="list-item"><span>${esc(x.name)} (Qty: ${x.qty}, Rate: ${x.rate})</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی آٹم نہیں</div>';
+}
+
+// ========== 8. GREEN BUS ==========
+function addBusRoute() {
+    var name = $('busRouteInput').value.trim();
+    if (!name) { alert('روٹ کا نام لکھیں'); return; }
+    var routes = ls(BUS_ROUTES_KEY, []);
+    if (routes.indexOf(name) !== -1) { alert('روٹ موجود ہے'); return; }
+    routes.push(name);
+    lss(BUS_ROUTES_KEY, routes);
+    $('busRouteInput').value = '';
+    alert('✅ روٹ شامل');
+}
+
+function addBusStop() {
+    var stop = $('busStopInput').value.trim();
+    if (!stop) { alert('اسٹاپ کا نام لکھیں'); return; }
+    var stops = ls('bus_stops', []);
+    if (stops.indexOf(stop) !== -1) { alert('اسٹاپ موجود ہے'); return; }
+    stops.push(stop);
+    lss('bus_stops', stops);
+    $('busStopInput').value = '';
+    renderBusStops();
+    alert('✅ اسٹاپ شامل');
+}
+
+function renderBusStops() {
+    var stops = ls('bus_stops', []);
+    var list = $('busStopList');
+    list.innerHTML = stops.length ? stops.map(x => `<div class="list-item"><span>🛑 ${esc(x)}</span></div>`).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی اسٹاپ نہیں</div>';
+}
+
+// ========== INIT ==========
+function initEntry() {
+    renderDuty();
+    renderTasks();
+    renderSkipSection();
+    renderNews();
+    populateAlamatMembers();
+    renderAlamat();
+    populateDietMembers();
+    renderDiet();
+    populateRashanMembers();
+    renderRashan();
+    renderBusStops();
+    
+    // Event listeners
+    $('newsType').addEventListener('change', function() {
+        $('newsTimeRow').style.display = this.value === 'complaint' ? 'block' : 'none';
+    });
+    $('alamatMember').addEventListener('change', renderAlamat);
+    $('dietMember').addEventListener('change', renderDiet);
+    $('rashanMember').addEventListener('change', renderRashan);
+}
+
+document.addEventListener('DOMContentLoaded', initEntry);
+</script>
+
