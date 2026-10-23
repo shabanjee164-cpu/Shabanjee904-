@@ -3,21 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>History - Duty</title>
+<title>Manager - Full Control</title>
 <style>
-:root{--primary:#1e293b;--accent:#7c3aed;--bg:#eef2f6;}
+:root{--primary:#1e293b;--accent:#7c3aed;--success:#10b981;--danger:#ef4444;--golden:#d97706;--bg:#eef2f6;--card:#fff;--border:#e2e8f0;--text:#334155;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:#334155;padding-bottom:80px;}
-.container{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:16px;border-radius:12px;font-size:16px;font-weight:800;}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
-.filter-row{display:flex;gap:6px;margin-bottom:10px;background:#f8fafc;padding:8px;border-radius:6px;border:1px solid #e2e8f0;align-items:center;}
-.filter-row label{font-size:11px;font-weight:800;color:#334155;white-space:nowrap;}
-.filter-row select{flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:4px;font-size:11px;font-weight:700;outline:none;}
-.list-box{max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;}
-.record-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:8px;border-right:4px solid var(--accent);}
-.record-card .name-row{font-size:14px;font-weight:900;color:var(--primary);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
-.record-card .detail{font-size:12px;font-weight:700;color:#475569;margin-bottom:4px;}
+body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:var(--text);display:flex;justify-content:center;padding-bottom:80px;}
+.container{width:100%;max-width:600px;display:flex;flex-direction:column;gap:14px;}
+
+/* Card Base */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);position:relative;overflow:hidden;}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #f1f5f9;}
+.card-title{font-size:15px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:6px;}
+.card-btns{display:flex;gap:6px;}
+.card-btns button{background:#f8fafc;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.card-btns button:hover{background:#e2e8f0;}
+
+/* Hidden Settings */
+.settings-panel{display:none;position:absolute;top:50px;left:10px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:100;min-width:160px;}
+.settings-panel.open{display:block;}
+.settings-panel button{display:block;width:100%;padding:8px;font-size:11px;font-weight:700;border:none;border-radius:6px;cursor:pointer;text-align:right;margin-bottom:4px;background:#f8fafc;color:#334155;font-family:inherit;}
+.settings-panel button:hover{background:#e2e8f0;}
+.settings-panel button.del{color:var(--danger);}
+
+/* Forms */
+.form-label{font-size:12px;font-weight:800;color:#334155;display:block;margin-bottom:6px;margin-top:10px;}
+.form-row{display:flex;gap:6px;margin-bottom:10px;align-items:center;flex-wrap:wrap;}
+.form-row input,.form-row select{flex:1;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;outline:none;min-width:60px;}
+.form-row button{padding:10px 14px;background:var(--success);color:#fff;border:none;border-radius:8px;font-weight:800;cursor:pointer;}
+.form-row button.purple{background:var(--accent);}
+.form-row button.blue{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;}
+.form-row button.red{background:var(--danger);}
+
+/* List */
+.list-box{max-height:200px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;}
+.list-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+
+/* Specific Sections */
+.active-work-box{background:#faf5ff;border:2px solid #d8b4fe;border-radius:8px;padding:10px;margin-bottom:10px;}
+.active-work-box .title{font-size:11px;font-weight:800;color:var(--accent);margin-bottom:4px;}
+.active-work-box .content{font-size:13px;font-weight:900;color:#4c1d95;margin-bottom:8px;}
+.status-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.status-btns button{padding:8px 4px;font-size:10px;font-weight:800;border:none;border-radius:6px;cursor:pointer;color:#fff;}
+.status-btns .done{background:#16a34a;}
+.status-btns .partial{background:#ea580c;}
+.status-btns .notdone{background:#dc2626;}
+
+.percent-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
+.percent-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px;text-align:center;}
+.percent-box .lbl{font-size:9px;font-weight:700;color:#64748b;}
+.percent-box .val{font-size:14px;font-weight:900;color:var(--accent);}
+
+/* Bottom Nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;padding:10px;z-index:1000;}
 .nav-item{text-decoration:none;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:5px;width:23%;}
 .nav-item.active{color:var(--accent);}
@@ -25,62 +61,392 @@ body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;directio
 </style>
 </head>
 <body>
+
 <div class="container">
-    <div class="app-header">⚡ ہسٹری (Duty)</div>
+
+    <!-- 1. MEMBER COMPLAIN -->
     <div class="card">
-        <h3 style="font-size:14px;margin-bottom:10px;color:var(--accent);">👮 ڈیوٹی اور چھٹیوں کا ریکارڈ</h3>
-        <div class="filter-row">
-            <label>🔍 ممبر:</label>
-            <select id="histFilter" onchange="renderHistory()">
-                <option value="all">تمام ممبران</option>
-            </select>
+        <div class="card-head"><div class="card-title">📢 ممبر شکایت (Complain)</div><div class="card-btns"><button onclick="toggleSettings('compSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('compBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="compSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="compBody">
+            <label class="form-label">📝 نئی شکایت شامل کریں:</label>
+            <div class="form-row">
+                <select id="compMember"><option value="">ممبر...</option></select>
+                <select id="compCategory"><option value="کھانا">کھانا</option><option value="صفائی">صفائی</option><option value="کام">کام</option><option value="دیگر">دیگر</option></select>
+                <input type="text" id="compText" placeholder="شکایت...">
+                <button onclick="addComplain()">➕</button>
+            </div>
+            <label class="form-label">🔄 فعال کام (1 سے 2 ترتیب):</label>
+            <div class="active-work-box" id="compActiveBox">
+                <div class="content">کوئی کام موجود نہیں</div>
+            </div>
+            <div class="status-btns">
+                <button class="done" onclick="updateCompStatus('done')">✅ حل ہو گیا</button>
+                <button class="partial" onclick="updateCompStatus('partial')">🟠 تھوڑا ہوا</button>
+                <button class="notdone" onclick="updateCompStatus('notdone')">❌ نہیں ہوا</button>
+            </div>
+            <label class="form-label" style="margin-top:12px;">📜 مکمل ریکارڈ:</label>
+            <div class="list-box" id="compRecordList"></div>
+            <div class="percent-row">
+                <div class="percent-box"><div class="lbl">✅ حل</div><div class="val" id="compPctDone">0%</div></div>
+                <div class="percent-box"><div class="lbl">🟠 ادھورا</div><div class="val" id="compPctPartial">0%</div></div>
+                <div class="percent-box"><div class="lbl">❌ نہیں</div><div class="val" id="compPctNotDone">0%</div></div>
+            </div>
         </div>
-        <div class="list-box" id="historyList"></div>
     </div>
+
+    <!-- 2. WORK MANAGER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">📋 ورک مینیجر (Work)</div><div class="card-btns"><button onclick="toggleSettings('workSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('workBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="workSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="workBody">
+            <label class="form-label">📝 نیا کام شامل کریں:</label>
+            <div class="form-row">
+                <select id="workMember"><option value="">ممبر...</option></select>
+                <select id="workCategory"><option value="گھر کا نظام">گھر کا نظام</option><option value="پڑھائی">پڑھائی</option><option value="خرچہ">خرچہ</option><option value="دیگر">دیگر</option></select>
+                <input type="text" id="workText" placeholder="کام...">
+                <button onclick="addWork()">➕</button>
+            </div>
+            <label class="form-label">🔄 فعال کام (1 سے 2 ترتیب):</label>
+            <div class="active-work-box" id="workActiveBox">
+                <div class="content">کوئی کام موجود نہیں</div>
+            </div>
+            <div class="status-btns">
+                <button class="done" onclick="updateWorkStatus('done')">✅ حل ہو گیا</button>
+                <button class="partial" onclick="updateWorkStatus('partial')">🟠 تھوڑا ہوا</button>
+                <button class="notdone" onclick="updateWorkStatus('notdone')">❌ نہیں ہوا</button>
+            </div>
+            <label class="form-label" style="margin-top:12px;">📜 مکمل ریکارڈ:</label>
+            <div class="list-box" id="workRecordList"></div>
+            <div class="percent-row">
+                <div class="percent-box"><div class="lbl">✅ حل</div><div class="val" id="workPctDone">0%</div></div>
+                <div class="percent-box"><div class="lbl">🟠 ادھورا</div><div class="val" id="workPctPartial">0%</div></div>
+                <div class="percent-box"><div class="lbl">❌ نہیں</div><div class="val" id="workPctNotDone">0%</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. GHR TAFSEELI KAM -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🏠 گھر کا تفصیلی کام</div><div class="card-btns"><button onclick="toggleSettings('ghrSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('ghrBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="ghrSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="ghrBody">
+            <label class="form-label">📝 نیا کام شامل کریں:</label>
+            <div class="form-row">
+                <select id="ghrMember"><option value="">ممبر...</option></select>
+                <select id="ghrCategory"><option value="صفائی">صفائی</option><option value="مرمت">مرمت</option><option value="شاپنگ">شاپنگ</option><option value="دیگر">دیگر</option></select>
+                <input type="text" id="ghrText" placeholder="کام...">
+                <button onclick="addGhr()">➕</button>
+            </div>
+            <label class="form-label">🔄 فعال کام:</label>
+            <div class="active-work-box" id="ghrActiveBox">
+                <div class="content">کوئی کام موجود نہیں</div>
+            </div>
+            <div class="status-btns">
+                <button class="done" onclick="updateGhrStatus('done')">✅ حل ہو گیا</button>
+                <button class="partial" onclick="updateGhrStatus('partial')">🟠 تھوڑا ہوا</button>
+                <button class="notdone" onclick="updateGhrStatus('notdone')">❌ نہیں ہوا</button>
+            </div>
+            <label class="form-label" style="margin-top:12px;">📜 مکمل ریکارڈ:</label>
+            <div class="list-box" id="ghrRecordList"></div>
+        </div>
+    </div>
+
+    <!-- 4. ALERT MANAGER -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🔔 الرٹ مینیجر (Alert)</div><div class="card-btns"><button onclick="toggleSettings('alertSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('alertBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="alertSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="alertBody">
+            <label class="form-label">⏰ آخری وقت (Deadline):</label>
+            <div class="form-row">
+                <input type="number" id="alertDeadH" placeholder="گھنٹہ" value="9" style="width:70px;">
+                <input type="number" id="alertDeadM" placeholder="منٹ" value="0" style="width:70px;">
+                <select id="alertDeadAp" style="width:80px;"><option value="AM">AM</option><option value="PM" selected>PM</option></select>
+            </div>
+            <label class="form-label">🔁 الرٹ فاصلہ (منٹ):</label>
+            <input type="number" id="alertGap" placeholder="فاصلہ" value="5">
+            <label class="form-label">➕ اپنی مرضی کا الرٹ:</label>
+            <div class="form-row">
+                <input type="text" id="alertText" placeholder="متن...">
+                <input type="time" id="alertTime">
+                <button onclick="addCustomAlert()">➕</button>
+            </div>
+            <label class="form-label">📋 آنے والے الرٹس:</label>
+            <div class="list-box" id="alertRecordList"></div>
+        </div>
+    </div>
+
+    <!-- 5. GHR KA SAMAN -->
+    <div class="card">
+        <div class="card-head"><div class="card-title">🏠 گھر کا سامان ریکارڈ</div><div class="card-btns"><button onclick="toggleSettings('samanSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('samanBody')">⬇️</button></div></div>
+        <div class="settings-panel" id="samanSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
+        <div id="samanBody">
+            <label class="form-label">📝 نیا سامان شامل کریں:</label>
+            <div class="form-row">
+                <select id="samanCategory"><option value="کچن">کچن</option><option value="کمرہ">کمرہ</option><option value="باتھ روم">باتھ روم</option><option value="اسٹور">اسٹور</option></select>
+                <input type="text" id="samanName" placeholder="نام...">
+                <input type="text" id="samanLocation" placeholder="کہاں رکھا ہے...">
+                <button onclick="addSaman()">➕</button>
+            </div>
+            <label class="form-label">📋 سامان کی لسٹ:</label>
+            <div class="list-box" id="samanRecordList"></div>
+        </div>
+    </div>
+
 </div>
 
-<!-- Fixed Bottom Nav -->
+<!-- Bottom Nav -->
 <nav class="bottom-nav">
     <a href="dashboard.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>ڈیش بورڈ</a>
     <a href="entry.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>انٹری</a>
-    <a href="history.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ہسٹری</a>
-    <a href="manager.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>مینیجر</a>
+    <a href="history.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ہسٹری</a>
+    <a href="manager.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>مینیجر</a>
 </nav>
 
-<script>
-function renderHistory() {
-    var filter = document.getElementById('histFilter').value;
-    var members = JSON.parse(localStorage.getItem('sec4_duty_manager_data_v4') || '[]');
-    var leaves = JSON.parse(localStorage.getItem('sec4_duty_leaves_data_v4') || '[]');
-    
-    // Filter Dropdown
-    var fSel = document.getElementById('histFilter');
-    if (fSel.options.length <= 1) {
-        members.forEach(x => { fSel.innerHTML += `<option value="${x.name}">${x.name}</option>`; });
-    }
-    
-    var filteredLeaves = (filter === 'all') ? leaves : leaves.filter(l => l.name === filter);
-    var list = document.getElementById('historyList');
-    
-    if (filteredLeaves.length === 0) {
-        list.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
-        return;
-    }
-    
-    list.innerHTML = filteredLeaves.map(l => {
-        var m = members.find(x => x.name === l.name);
-        var status = '⚪ Available';
-        if (m && m.onDuty) status = '🟢 Active';
-        
-        return `<div class="record-card">
-            <div class="name-row"><span>👤 ${l.name}</span><span>${status}</span></div>
-            <div class="detail">📝 وجہ: ${l.reason}</div>
-            <div class="detail">📅 ${l.date}</div>
-        </div>`;
-    }).join('');
-}
-
-document.addEventListener('DOMContentLoaded', renderHistory);
-</script>
+<!-- SCRIPT PART YAHAN AAYEGA -->
 </body>
 </html>
+<script>
+// ========== STORAGE KEYS ==========
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var COMP_KEY = 'member_complain_data_v4';
+var WORK_KEY = 'work_manager_data_v14';
+var GHR_KEY = 'ghr_tafseeli_data_v2';
+var ALERT_KEY = 'alert_manager_data_v1';
+var SAMAN_KEY = 'ghr_inventory_data_v2';
+
+// ========== UTILITIES ==========
+function $(id) { return document.getElementById(id); }
+function ls(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function lss(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function toggleSettings(id) { var el = $(id); if(el) el.classList.toggle('open'); }
+function toggleBody(id) {
+    var b = $(id);
+    var btn = b.previousElementSibling.querySelector('.card-btns button:last-child');
+    if (b.style.display === 'none') { b.style.display = 'block'; if(btn) btn.textContent = '⬇️'; }
+    else { b.style.display = 'none'; if(btn) btn.textContent = '⬆️'; }
+}
+
+// Common function for status updates and percentages
+function updateStats(list, idDone, idPartial, idNotDone) {
+    var total = list.filter(x => x.status !== null).length;
+    if (total === 0) {
+        $(idDone).textContent = '0%';
+        $(idPartial).textContent = '0%';
+        $(idNotDone).textContent = '0%';
+        return;
+    }
+    var done = list.filter(x => x.status === 'done').length;
+    var partial = list.filter(x => x.status === 'partial').length;
+    var notdone = list.filter(x => x.status === 'notdone').length;
+    
+    $(idDone).textContent = Math.round((done / total) * 100) + '%';
+    $(idPartial).textContent = Math.round((partial / total) * 100) + '%';
+    $(idNotDone).textContent = Math.round((notdone / total) * 100) + '%';
+}
+
+function populateMembers(selId) {
+    var sel = $(selId);
+    var members = ls(DUTY_KEY, []);
+    sel.innerHTML = '<option value="">ممبر...</option>';
+    members.forEach(x => {
+        sel.innerHTML += `<option value="${x.name}">${x.name}</option>`;
+    });
+}
+
+// ========== 1. MEMBER COMPLAIN ==========
+function addComplain() {
+    var member = $('compMember').value;
+    var cat = $('compCategory').value;
+    var text = $('compText').value.trim();
+    if (!member || !text) { alert('ممبر اور شکایت لکھیں'); return; }
+    var list = ls(COMP_KEY, []);
+    list.unshift({ id: Date.now(), member: member, category: cat, text: text, status: null, timestamp: Date.now() });
+    lss(COMP_KEY, list);
+    $('compText').value = '';
+    renderComp();
+}
+
+function renderComp() {
+    var list = ls(COMP_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    var completed = list.filter(x => x.status !== null);
+
+    // Active Box (First pending)
+    var activeBox = $('compActiveBox');
+    if (pending.length > 0) {
+        activeBox.innerHTML = `<div class="title">🔄 زیرِ عمل</div><div class="content">👤 ${esc(pending[0].member)} — ${esc(pending[0].text)}</div>`;
+    } else {
+        activeBox.innerHTML = `<div class="content">کوئی کام موجود نہیں</div>`;
+    }
+
+    // Record List
+    var box = $('compRecordList');
+    box.innerHTML = completed.length ? completed.map(x => {
+        var stText = x.status === 'done' ? '✅ حل' : (x.status === 'partial' ? '🟠 ادھورا' : '❌ نہیں');
+        return `<div class="list-item"><div><b>👤 ${esc(x.member)}</b> — ${esc(x.text)}<br><span style="font-size:10px;">${stText}</span></div></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+
+    // Percentages
+    updateStats(list, 'compPctDone', 'compPctPartial', 'compPctNotDone');
+}
+
+function updateCompStatus(st) {
+    var list = ls(COMP_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    if (pending.length > 0) {
+        pending[0].status = st;
+        lss(COMP_KEY, list);
+        renderComp();
+    }
+}
+
+// ========== 2. WORK MANAGER ==========
+function addWork() {
+    var member = $('workMember').value;
+    var cat = $('workCategory').value;
+    var text = $('workText').value.trim();
+    if (!member || !text) { alert('ممبر اور کام لکھیں'); return; }
+    var list = ls(WORK_KEY, []);
+    list.unshift({ id: Date.now(), member: member, category: cat, text: text, status: null, timestamp: Date.now() });
+    lss(WORK_KEY, list);
+    $('workText').value = '';
+    renderWork();
+}
+
+function renderWork() {
+    var list = ls(WORK_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    var completed = list.filter(x => x.status !== null);
+
+    var activeBox = $('workActiveBox');
+    if (pending.length > 0) {
+        activeBox.innerHTML = `<div class="title">🔄 زیرِ عمل</div><div class="content">👤 ${esc(pending[0].member)} — ${esc(pending[0].text)}</div>`;
+    } else {
+        activeBox.innerHTML = `<div class="content">کوئی کام موجود نہیں</div>`;
+    }
+
+    var box = $('workRecordList');
+    box.innerHTML = completed.length ? completed.map(x => {
+        var stText = x.status === 'done' ? '✅ حل' : (x.status === 'partial' ? '🟠 ادھورا' : '❌ نہیں');
+        return `<div class="list-item"><div><b>👤 ${esc(x.member)}</b> — ${esc(x.text)}<br><span style="font-size:10px;">${stText}</span></div></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+
+    updateStats(list, 'workPctDone', 'workPctPartial', 'workPctNotDone');
+}
+
+function updateWorkStatus(st) {
+    var list = ls(WORK_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    if (pending.length > 0) {
+        pending[0].status = st;
+        lss(WORK_KEY, list);
+        renderWork();
+    }
+}
+
+// ========== 3. GHR TAFSEELI KAM ==========
+function addGhr() {
+    var member = $('ghrMember').value;
+    var cat = $('ghrCategory').value;
+    var text = $('ghrText').value.trim();
+    if (!member || !text) { alert('ممبر اور کام لکھیں'); return; }
+    var list = ls(GHR_KEY, []);
+    list.unshift({ id: Date.now(), member: member, category: cat, text: text, status: null, timestamp: Date.now() });
+    lss(GHR_KEY, list);
+    $('ghrText').value = '';
+    renderGhr();
+}
+
+function renderGhr() {
+    var list = ls(GHR_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    var completed = list.filter(x => x.status !== null);
+
+    var activeBox = $('ghrActiveBox');
+    if (pending.length > 0) {
+        activeBox.innerHTML = `<div class="title">🔄 زیرِ عمل</div><div class="content">👤 ${esc(pending[0].member)} — ${esc(pending[0].text)}</div>`;
+    } else {
+        activeBox.innerHTML = `<div class="content">کوئی کام موجود نہیں</div>`;
+    }
+
+    var box = $('ghrRecordList');
+    box.innerHTML = completed.length ? completed.map(x => {
+        var stText = x.status === 'done' ? '✅ حل' : (x.status === 'partial' ? '🟠 ادھورا' : '❌ نہیں');
+        return `<div class="list-item"><div><b>👤 ${esc(x.member)}</b> — ${esc(x.text)}<br><span style="font-size:10px;">${stText}</span></div></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+function updateGhrStatus(st) {
+    var list = ls(GHR_KEY, []);
+    var pending = list.filter(x => x.status === null);
+    if (pending.length > 0) {
+        pending[0].status = st;
+        lss(GHR_KEY, list);
+        renderGhr();
+    }
+}
+
+// ========== 4. ALERT MANAGER ==========
+function addCustomAlert() {
+    var text = $('alertText').value.trim();
+    var time = $('alertTime').value;
+    if (!text || !time) { alert('متن اور وقت لکھیں'); return; }
+    var list = ls(ALERT_KEY, []);
+    list.unshift({ id: Date.now(), text: text, time: time, timestamp: Date.now() });
+    lss(ALERT_KEY, list);
+    $('alertText').value = '';
+    $('alertTime').value = '';
+    renderAlerts();
+}
+
+function renderAlerts() {
+    var list = ls(ALERT_KEY, []);
+    var box = $('alertRecordList');
+    box.innerHTML = list.length ? list.map(x => {
+        return `<div class="list-item"><div><b>🔔 ${esc(x.text)}</b><br><span style="font-size:10px;">⏰ ${x.time}</span></div></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی الرٹ نہیں</div>';
+}
+
+// ========== 5. GHR KA SAMAN ==========
+function addSaman() {
+    var cat = $('samanCategory').value;
+    var name = $('samanName').value.trim();
+    var loc = $('samanLocation').value.trim();
+    if (!name || !loc) { alert('نام اور جگہ لکھیں'); return; }
+    var list = ls(SAMAN_KEY, []);
+    list.unshift({ id: Date.now(), category: cat, name: name, location: loc, timestamp: Date.now() });
+    lss(SAMAN_KEY, list);
+    $('samanName').value = '';
+    $('samanLocation').value = '';
+    renderSaman();
+}
+
+function renderSaman() {
+    var list = ls(SAMAN_KEY, []);
+    var box = $('samanRecordList');
+    box.innerHTML = list.length ? list.map(x => {
+        return `<div class="list-item"><div><b>📦 ${esc(x.name)}</b><br><span style="font-size:10px;">📍 ${esc(x.location)} (${esc(x.category)})</span></div></div>`;
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:10px;">کوئی سامان نہیں</div>';
+}
+
+// ========== INIT ==========
+function initManager() {
+    // Populate member dropdowns
+    populateMembers('compMember');
+    populateMembers('workMember');
+    populateMembers('ghrMember');
+
+    // Render all sections
+    renderComp();
+    renderWork();
+    renderGhr();
+    renderAlerts();
+    renderSaman();
+}
+
+document.addEventListener('DOMContentLoaded', initManager);
+</script>
+
