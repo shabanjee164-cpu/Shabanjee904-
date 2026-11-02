@@ -3,60 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>⚡ Smart Management & Life Tracker</title>
+<title>🏥 Smart Manager & Health Tracker</title>
 <style>
 :root{
---primary:#1e293b;--accent:#2563eb;--teal:#0d9488;
+--primary:#1e293b;
+--accent:#2563eb;
+--teal:#0d9488;
+--success:#10b981;
+--danger:#ef4444;
+--golden:#d97706;
 --safe-top:env(safe-area-inset-top,0px);
 --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
-body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:#334155}
+body{background:#f1f5f9;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:#334155}
 .app-shell{max-width:480px;margin:0 auto;height:100vh;height:-webkit-fill-available;display:flex;flex-direction:column;background:#f8fafc;position:relative;overflow:hidden}
 
-/* 1. HEADER: Left (Menu), Center (Fancy App Name), Right (Online/Offline) */
-.app-header{padding:calc(var(--safe-top) + 12px) 16px 14px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:50;border-bottom:2px solid #0d9488}
-
-/* Left Menu Button */
-.menu-btn{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.2s}
-.menu-btn:hover{background:rgba(255,255,255,.15)}
-.menu-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px}
-
-/* Center Fancy App Name */
-.brand{display:flex;align-items:center;gap:8px}
-.brand-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 10px rgba(13,148,136,.3)}
-.brand-title{font-size:16px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 4px rgba(0,0,0,0.2)}
-
-/* Right Online/Offline Status */
-.status-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.1);font-size:10px;font-weight:700;border:1px solid rgba(255,255,255,.15)}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;transition:all 0.3s}
+/* HEADER — App name SIRF YAHAN (1 baar) */
+.app-header{padding:calc(var(--safe-top) + 12px) 14px 12px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:50;border-bottom:3px solid #0d9488;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.menu-btn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;flex-shrink:0;transition:.2s}
+.menu-btn:active{background:rgba(255,255,255,.2);transform:scale(.95)}
+.menu-btn span{display:block;width:16px;height:2px;background:#fff;border-radius:2px}
+.brand{display:flex;align-items:center;gap:8px;flex:1;justify-content:center;min-width:0}
+.brand-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 4px 10px rgba(13,148,136,.35)}
+.brand-text{display:flex;flex-direction:column;align-items:center;min-width:0}
+.brand-title{font-size:13px;font-weight:900;letter-spacing:-.3px;white-space:nowrap;line-height:1.1;background:linear-gradient(135deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand-sub{font-size:8.5px;font-weight:700;color:#94a3b8;letter-spacing:.4px;margin-top:1px;white-space:nowrap}
+.status-pill{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:20px;background:rgba(255,255,255,.1);font-size:8px;font-weight:700;border:1px solid rgba(255,255,255,.15);flex-shrink:0}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981}
 .status-pill.offline .status-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
-.status-pill.offline{border-color:rgba(239,68,68,.3)}
 
-/* 2. MAIN CONTENT (Khali aur Saaf) */
-.main-content{flex:1;padding:20px 16px;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+/* MAIN — Dashboard iframe */
+.main-content{flex:1;overflow:hidden;position:relative}
+#dashFrame{width:100%;height:100%;border:none;display:block;background:#f8fafc}
 
-/* 3. BOTTOM NAV (Furan Kaam karne wale) */
-.bottom-nav{padding:10px 15px calc(var(--safe-bottom) + 10px);background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:sticky;bottom:0;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:8px;border-radius:12px;color:#94a3b8;font-family:inherit;transition:.2s;width:23%;text-decoration:none;}
-.nav-item:active{background:#f1f5f9}
-.nav-item.active{color:var(--teal)}
-.nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.nav-label{font-size:9.5px;font-weight:800}
+/* LOADING */
+.loading-overlay{position:absolute;inset:0;background:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10;transition:opacity .4s}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.spinner{width:44px;height:44px;border:4px solid #e2e8f0;border-top-color:#0d9488;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:12px;font-weight:700;color:#94a3b8}
 
-/* 4. SIDE MENU (Left Side Se Khulega) */
+/* BOTTOM NAV — Full size, space barabar */
+.bottom-nav{padding:10px 12px calc(var(--safe-bottom) + 10px);background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-shrink:0;position:sticky;bottom:0;z-index:50;box-shadow:0 -4px 12px rgba(0,0,0,.05)}
+.nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;cursor:pointer;padding:10px 4px;border-radius:12px;color:#94a3b8;font-family:inherit;transition:.2s;flex:1;text-decoration:none;min-width:0}
+.nav-item:active{background:#f1f5f9;transform:scale(.96)}
+.nav-item.active{color:#0d9488}
+.nav-icon{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.nav-label{font-size:10px;font-weight:800;white-space:nowrap}
+
+/* SIDE MENU */
 .side-menu{position:fixed;top:0;left:-320px;width:300px;height:100vh;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.15);transition:left .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;overflow-y:auto}
 .side-menu.open{left:0}
-.side-header{padding:16px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.side-header{padding:18px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center}
 .side-title{font-size:14px;font-weight:800}
-.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer}
 .side-list{padding:10px;flex:1;display:flex;flex-direction:column;gap:10px}
-.side-item{display:flex;align-items:center;justify-content:center;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:#334155;width:100%;text-align:center;font-family:inherit;text-decoration:none;transition:.2s}
-.side-item:hover{background:#eff6ff;color:var(--accent);border-color:#bfdbfe}
-.side-footer{padding:12px;border-top:1px solid #e2e8f0;text-align:center;color:#94a3b8;font-size:10px;font-weight:700}
-
-/* OVERLAY */
+.side-item{display:flex;align-items:center;justify-content:center;padding:13px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:#334155;width:100%;text-align:center;font-family:inherit;text-decoration:none;transition:.2s}
+.side-item:hover{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
+.side-item.coming-soon{opacity:.6;cursor:not-allowed;pointer-events:none;flex-direction:column;gap:2px}
+.side-item.coming-soon .sub{font-size:9px;color:#94a3b8;font-weight:600}
+.side-footer{padding:14px;border-top:1px solid #e2e8f0;text-align:center;color:#94a3b8;font-size:10px;font-weight:700}
 .menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:998;opacity:0;visibility:hidden;transition:.3s}
 .menu-overlay.active{opacity:1;visibility:visible}
 </style>
@@ -66,35 +74,34 @@ body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sa
 <div class="app-shell">
     <!-- HEADER -->
     <header class="app-header">
-        <!-- Left: Menu Button -->
         <button class="menu-btn" onclick="toggleMenu()">
             <span></span><span></span><span></span>
         </button>
-
-        <!-- Center: Fancy App Name -->
         <div class="brand">
-            <div class="brand-icon">⚡</div>
-            <div class="brand-title">Smart Tracker</div>
+            <div class="brand-icon">🏥</div>
+            <div class="brand-text">
+                <div class="brand-title">Smart Manager</div>
+                <div class="brand-sub">& Health Tracker</div>
+            </div>
         </div>
-
-        <!-- Right: Online/Offline -->
         <div class="status-pill" id="statusPill">
             <span class="status-dot"></span>
             <span id="statusText">آن لائن</span>
         </div>
     </header>
 
-    <!-- MAIN CONTENT (Khali) -->
+    <!-- MAIN — Dashboard iframe -->
     <main class="main-content">
-        <div style="text-align:center; color:#94a3b8; font-weight:700; font-size:14px;">
-            <p>خوش آمدید</p>
-            <p style="font-size:12px; margin-top:5px;">نیچے دیے گئے بٹنوں سے اپنا سیکشن کھولیں</p>
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <div class="loading-text">ڈیش بورڈ لوڈ ہو رہا ہے...</div>
         </div>
+        <iframe id="dashFrame" src="dashboard.html" onload="hideLoading()"></iframe>
     </main>
 
-    <!-- BOTTOM NAV (Furan Kaam Karega) -->
+    <!-- BOTTOM NAV -->
     <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-item">
+        <a href="index.html" class="nav-item active">
             <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span class="nav-label">ڈیش بورڈ</span>
         </a>
@@ -113,7 +120,7 @@ body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sa
     </nav>
 </div>
 
-<!-- SIDE MENU DRAWER (Left Side) -->
+<!-- SIDE MENU -->
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="side-menu" id="sideMenu">
     <div class="side-header">
@@ -121,50 +128,46 @@ body{background:#eef2f6;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sa
         <button class="side-close" onclick="toggleMenu()">✕</button>
     </div>
     <div class="side-list">
-        <!-- Jab side-menu.html ka code aayega, wo yahan show hoga -->
-        <div style="text-align:center; padding:20px; color:#94a3b8; font-size:12px; font-weight:700;">
-            سائیڈ مینو یہاں آئے گا<br>
-            (side-menu.html)
+        <a class="side-item" href="index.html"><span>🏠 ڈیش بورڈ</span></a>
+        <a class="side-item" href="entry.html"><span>➕ ڈیٹا انٹری</span></a>
+        <a class="side-item" href="history.html"><span>📜 ہسٹری</span></a>
+        <div class="side-item coming-soon">
+            <span>👥 مینیجر</span>
+            <span class="sub">⏳ Coming Soon</span>
         </div>
-        
-        <!-- Abhi ke liye ek button jisse wo page khul jaye -->
-        <a href="side-menu.html" class="side-item" style="background:#2563eb; color:#fff; border:none;">
-            کھولیں (Open Side Menu)
-        </a>
     </div>
-    <div class="side-footer">Smart Tracker v1.0</div>
+    <div class="side-footer">Smart Manager & Health Tracker v1.0</div>
 </div>
 
 <script>
-/* ONLINE / OFFLINE STATUS */
-function updateOnlineStatus() {
-    var pill = document.getElementById('statusPill');
-    var text = document.getElementById('statusText');
+// ========== ONLINE/OFFLINE ==========
+function updateOnline() {
+    var p = document.getElementById('statusPill');
+    var t = document.getElementById('statusText');
     if (navigator.onLine) {
-        pill.classList.remove('offline');
-        text.textContent = 'آن لائن';
+        p.classList.remove('offline');
+        t.textContent = 'آن لائن';
     } else {
-        pill.classList.add('offline');
-        text.textContent = 'آف لائن';
+        p.classList.add('offline');
+        t.textContent = 'آف لائن';
     }
 }
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
-updateOnlineStatus();
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+updateOnline();
 
-/* SIDE MENU TOGGLE */
+// ========== SIDE MENU ==========
 function toggleMenu() {
-    var menu = document.getElementById('sideMenu');
-    var overlay = document.getElementById('menuOverlay');
-    var isOpen = menu.classList.contains('open');
-    
-    if (isOpen) {
-        menu.classList.remove('open');
-        overlay.classList.remove('active');
-    } else {
-        menu.classList.add('open');
-        overlay.classList.add('active');
-    }
+    var m = document.getElementById('sideMenu');
+    var o = document.getElementById('menuOverlay');
+    m.classList.toggle('open');
+    o.classList.toggle('active');
+}
+
+// ========== LOADING HIDE ==========
+function hideLoading() {
+    var el = document.getElementById('loadingOverlay');
+    if (el) el.classList.add('hidden');
 }
 </script>
 </body>
