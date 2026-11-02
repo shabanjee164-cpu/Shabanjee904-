@@ -3,172 +3,402 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>🏥 Smart Manager & Health Tracker</title>
-<style>
-:root{
---primary:#1e293b;
---accent:#2563eb;
---teal:#0d9488;
---success:#10b981;
---danger:#ef4444;
---golden:#d97706;
---safe-top:env(safe-area-inset-top,0px);
---safe-bottom:env(safe-area-inset-bottom,0px);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{background:#f1f5f9;font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;direction:rtl;color:#334155}
-.app-shell{max-width:480px;margin:0 auto;height:100vh;height:-webkit-fill-available;display:flex;flex-direction:column;background:#f8fafc;position:relative;overflow:hidden}
-
-/* HEADER — App name SIRF YAHAN (1 baar) */
-.app-header{padding:calc(var(--safe-top) + 12px) 14px 12px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:50;border-bottom:3px solid #0d9488;box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.menu-btn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;flex-shrink:0;transition:.2s}
-.menu-btn:active{background:rgba(255,255,255,.2);transform:scale(.95)}
-.menu-btn span{display:block;width:16px;height:2px;background:#fff;border-radius:2px}
-.brand{display:flex;align-items:center;gap:8px;flex:1;justify-content:center;min-width:0}
-.brand-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0d9488,#0891b2,#2563eb);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 4px 10px rgba(13,148,136,.35)}
-.brand-text{display:flex;flex-direction:column;align-items:center;min-width:0}
-.brand-title{font-size:13px;font-weight:900;letter-spacing:-.3px;white-space:nowrap;line-height:1.1;background:linear-gradient(135deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.brand-sub{font-size:8.5px;font-weight:700;color:#94a3b8;letter-spacing:.4px;margin-top:1px;white-space:nowrap}
-.status-pill{display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:20px;background:rgba(255,255,255,.1);font-size:8px;font-weight:700;border:1px solid rgba(255,255,255,.15);flex-shrink:0}
-.status-dot{width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981}
-.status-pill.offline .status-dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
-
-/* MAIN — Dashboard iframe */
-.main-content{flex:1;overflow:hidden;position:relative}
-#dashFrame{width:100%;height:100%;border:none;display:block;background:#f8fafc}
-
-/* LOADING */
-.loading-overlay{position:absolute;inset:0;background:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10;transition:opacity .4s}
-.loading-overlay.hidden{opacity:0;pointer-events:none}
-.spinner{width:44px;height:44px;border:4px solid #e2e8f0;border-top-color:#0d9488;border-radius:50%;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:12px;font-weight:700;color:#94a3b8}
-
-/* BOTTOM NAV — Full size, space barabar */
-.bottom-nav{padding:10px 12px calc(var(--safe-bottom) + 10px);background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;gap:6px;flex-shrink:0;position:sticky;bottom:0;z-index:50;box-shadow:0 -4px 12px rgba(0,0,0,.05)}
-.nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;cursor:pointer;padding:10px 4px;border-radius:12px;color:#94a3b8;font-family:inherit;transition:.2s;flex:1;text-decoration:none;min-width:0}
-.nav-item:active{background:#f1f5f9;transform:scale(.96)}
-.nav-item.active{color:#0d9488}
-.nav-icon{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.nav-label{font-size:10px;font-weight:800;white-space:nowrap}
-
-/* SIDE MENU */
-.side-menu{position:fixed;top:0;left:-320px;width:300px;height:100vh;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.15);transition:left .3s cubic-bezier(.4,0,.2,1);z-index:999;display:flex;flex-direction:column;overflow-y:auto}
-.side-menu.open{left:0}
-.side-header{padding:18px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;display:flex;justify-content:space-between;align-items:center}
-.side-title{font-size:14px;font-weight:800}
-.side-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer}
-.side-list{padding:10px;flex:1;display:flex;flex-direction:column;gap:10px}
-.side-item{display:flex;align-items:center;justify-content:center;padding:13px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:#334155;width:100%;text-align:center;font-family:inherit;text-decoration:none;transition:.2s}
-.side-item:hover{background:#eff6ff;color:#2563eb;border-color:#bfdbfe}
-.side-item.coming-soon{opacity:.6;cursor:not-allowed;pointer-events:none;flex-direction:column;gap:2px}
-.side-item.coming-soon .sub{font-size:9px;color:#94a3b8;font-weight:600}
-.side-footer{padding:14px;border-top:1px solid #e2e8f0;text-align:center;color:#94a3b8;font-size:10px;font-weight:700}
-.menu-overlay{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:998;opacity:0;visibility:hidden;transition:.3s}
-.menu-overlay.active{opacity:1;visibility:visible}
-</style>
+<title>➕ ڈیٹا انٹری</title>
+<link rel="stylesheet" href="entry-style.css">
 </head>
 <body>
 
-<div class="app-shell">
-    <!-- HEADER -->
-    <header class="app-header">
-        <button class="menu-btn" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="brand">
-            <div class="brand-icon">🏥</div>
-            <div class="brand-text">
-                <div class="brand-title">Smart Manager</div>
-                <div class="brand-sub">& Health Tracker</div>
-            </div>
-        </div>
-        <div class="status-pill" id="statusPill">
-            <span class="status-dot"></span>
-            <span id="statusText">آن لائن</span>
-        </div>
-    </header>
-
-    <!-- MAIN — Dashboard iframe -->
-    <main class="main-content">
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="spinner"></div>
-            <div class="loading-text">ڈیش بورڈ لوڈ ہو رہا ہے...</div>
-        </div>
-        <iframe id="dashFrame" src="dashboard.html" onload="hideLoading()"></iframe>
-    </main>
-
-    <!-- BOTTOM NAV -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <span class="nav-label">ڈیش بورڈ</span>
-        </a>
-        <a href="entry.html" class="nav-item">
-            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-            <span class="nav-label">انٹری</span>
-        </a>
-        <a href="history.html" class="nav-item">
-            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span class="nav-label">ہسٹری</span>
-        </a>
-        <a href="manager.html" class="nav-item">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span class="nav-label">مینیجر</span>
-        </a>
-    </nav>
+<!-- APP NAME — SIRF YAHAN 1 BAAR -->
+<div class="app-page-header">
+    🏥 Smart Manager & Health Tracker
+    <div class="sub">Data Entry</div>
 </div>
 
-<!-- SIDE MENU -->
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-<div class="side-menu" id="sideMenu">
-    <div class="side-header">
-        <div class="side-title"><span>📑</span> کنٹرول پینل</div>
-        <button class="side-close" onclick="toggleMenu()">✕</button>
-    </div>
-    <div class="side-list">
-        <a class="side-item" href="index.html"><span>🏠 ڈیش بورڈ</span></a>
-        <a class="side-item" href="entry.html"><span>➕ ڈیٹا انٹری</span></a>
-        <a class="side-item" href="history.html"><span>📜 ہسٹری</span></a>
-        <div class="side-item coming-soon">
-            <span>👥 مینیجر</span>
-            <span class="sub">⏳ Coming Soon</span>
+<!-- NEWS PATTI (TOP) -->
+<div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ...</div></div>
+
+<!-- ALERT PATTI -->
+<div class="alert-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ...</span><button onclick="skipAlert()">❌</button></div>
+
+<!-- 1. DUTY MANAGER -->
+<div class="card" style="border-right-color:#7c3aed">
+    <div class="card-head">
+        <div class="card-title">👮 ڈیوٹی مینیجر</div>
+        <div class="card-btns">
+            <button onclick="toggleSettings('dutySettings')">⚙️</button>
+            <button onclick="toggleBody('dutyBody')">⬇️</button>
         </div>
     </div>
-    <div class="side-footer">Smart Manager & Health Tracker v1.0</div>
+    <div class="settings-panel" id="dutySettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="dutyBody">
+        <div class="form-row">
+            <input type="text" id="newMemName" placeholder="نام...">
+            <select id="newMemRank"><option value="Senior">🟢 سینئر</option><option value="Junior">🔵 جونیئر</option></select>
+            <button onclick="addMember()">➕</button>
+            <select id="editMemSelect" onchange="toggleEditDeleteBtns()"><option value="">-- ممبر --</option></select>
+            <button id="btnEdit" style="display:none;" onclick="editMember()">✏️</button>
+            <button id="btnDel" style="display:none;" onclick="deleteMember()">🗑️</button>
+        </div>
+        <label class="form-label">⚡ ڈیوٹی تفویض:</label>
+        <div class="form-row">
+            <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
+            <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
+            <button onclick="assignDuty()">✅</button>
+        </div>
+        <div class="duty-panel">
+            <div class="duty-panel-row"><span>🟢 سینئر: <span id="dashSenior">—</span></span><span>🔵 جونیئر: <span id="dashJunior">—</span></span></div>
+            <div class="duty-panel-timer">⏱️ <span id="dashTimer">00:00:00</span></div>
+        </div>
+        <button onclick="endAllDuty()" style="width:100%;padding:9px;background:#ef4444;color:#fff;border:none;border-radius:7px;font-weight:800;cursor:pointer;margin:8px 0;">⏹️ ڈیوٹی ختم</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+            <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#166534;text-align:center;margin-bottom:4px;">🟢 ایکٹو</div><select id="colActiveSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #86efac;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="activeDutyList" style="font-size:10px;"></div></div>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#1e40af;text-align:center;margin-bottom:4px;">✅ ڈیوٹی ہو</div><select id="colDoneSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #bfdbfe;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="doneDutyList" style="font-size:10px;"></div></div>
+            <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#991b1b;text-align:center;margin-bottom:4px;">🏖️ چھٹی</div><select id="colLeaveSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #fca5a5;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="onLeaveList" style="font-size:10px;"></div></div>
+        </div>
+        <label class="form-label">📋 مکمل ریکارڈ:</label>
+        <div class="list-box" id="memberDetailList"></div>
+    </div>
 </div>
 
-<script>
-// ========== ONLINE/OFFLINE ==========
-function updateOnline() {
-    var p = document.getElementById('statusPill');
-    var t = document.getElementById('statusText');
-    if (navigator.onLine) {
-        p.classList.remove('offline');
-        t.textContent = 'آن لائن';
-    } else {
-        p.classList.add('offline');
-        t.textContent = 'آف لائن';
-    }
-}
-window.addEventListener('online', updateOnline);
-window.addEventListener('offline', updateOnline);
-updateOnline();
+<!-- 2. TASK MANAGER -->
+<div class="card" style="border-right-color:#10b981">
+    <div class="card-head">
+        <div class="card-title">📋 ٹاسک مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('taskSettings')">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="taskSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="taskBody">
+        <div class="form-row">
+            <input type="text" id="newTaskName" placeholder="ٹاسک...">
+            <select id="newTaskType"><option value="Daily">روزانہ</option><option value="Occasional">کبھی کبھی</option></select>
+            <input type="number" id="newTaskPoints" placeholder="پوائنٹس" value="5">
+            <button onclick="addTask()">➕</button>
+        </div>
+        <div id="taskListContainer"></div>
+        <div class="form-row" style="margin-top:8px;">
+            <select id="editTaskSelect"><option value="">-- ٹاسک --</option></select>
+            <button onclick="editTask()">✏️</button>
+            <button onclick="deleteTask()">🗑️</button>
+        </div>
+    </div>
+</div>
 
-// ========== SIDE MENU ==========
-function toggleMenu() {
-    var m = document.getElementById('sideMenu');
-    var o = document.getElementById('menuOverlay');
-    m.classList.toggle('open');
-    o.classList.toggle('active');
-}
+<!-- 3. SKIP WORK MANAGER -->
+<div class="card" style="border-right-color:#f59e0b">
+    <div class="card-head">
+        <div class="card-title">⛔ اسکیپ ورک مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('skipSettings')">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="skipSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="skipBody">
+        <div class="form-row">
+            <select id="skipMemberFilter"><option value="all">تمام ممبران</option></select>
+            <select id="skipDayFilter"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        </div>
+        <div id="skipActiveMembers"></div>
+        <div id="skipRecordList"></div>
+    </div>
+</div>
 
-// ========== LOADING HIDE ==========
-function hideLoading() {
-    var el = document.getElementById('loadingOverlay');
-    if (el) el.classList.add('hidden');
-}
-</script>
+<!-- 4. NEWS & ALERT MANAGER -->
+<div class="card" style="border-right-color:#eab308">
+    <div class="card-head">
+        <div class="card-title">📰 نیوز اینڈ الرٹ مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('newsSettings')">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="newsSettings" style="min-width:260px;">
+        <div style="font-size:9px;font-weight:800;color:#7c3aed;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin-bottom:3px;">📌 بنیادی</div>
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+        <div style="font-size:9px;font-weight:800;color:#d97706;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📰 نیوز پٹی</div>
+        <button onclick="showMsg('News ON')">🟢 News ON</button>
+        <button onclick="showMsg('News OFF')">🔴 News OFF</button>
+        <button onclick="showMsg('Bell ON')">🔔 Bell ON</button>
+        <button onclick="showMsg('Volume')">🔊 Volume</button>
+        <button onclick="showMsg('Tone')">🎵 Tone</button>
+        <button onclick="showMsg('Upload')">📁 Upload</button>
+        <button onclick="showMsg('Loop')">🔁 Loop</button>
+        <button onclick="showMsg('Speed')">⏱️ Speed</button>
+        <button onclick="showMsg('Color')">🎨 Color</button>
+        <button onclick="showMsg('Size')">📏 Size</button>
+        <button onclick="showMsg('Anim')">✨ Anim</button>
+        <div style="font-size:9px;font-weight:800;color:#dc2626;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">🚨 الرٹ پٹی</div>
+        <button onclick="showMsg('Alert ON')">🟢 Alert ON</button>
+        <button onclick="showMsg('Alert OFF')">🔴 Alert OFF</button>
+        <button onclick="showMsg('Bell ON')">🔔 Bell ON</button>
+        <button onclick="showMsg('Volume')">🔊 Volume</button>
+        <button onclick="showMsg('Tone')">🎵 Tone</button>
+        <button onclick="showMsg('Upload')">📁 Upload</button>
+        <button onclick="showMsg('Custom Text')">✏️ Custom Text</button>
+        <button onclick="showMsg('Time')">⏰ Time</button>
+        <button onclick="showMsg('Repeat')">🔄 Repeat</button>
+        <button onclick="showMsg('Blink')">💥 Blink</button>
+        <button onclick="showMsg('Duration')">⏱️ Duration</button>
+        <button onclick="showMsg('Color')">🎨 Color</button>
+        <button onclick="showMsg('Size')">📏 Size</button>
+        <div style="font-size:9px;font-weight:800;color:#059669;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">🆕 نیوز سلاٹس</div>
+        <button onclick="showMsg('Add Slot')">➕ Add Slot</button>
+        <div style="font-size:9px;font-weight:800;color:#7c3aed;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📅 شیڈولنگ</div>
+        <button onclick="showMsg('Start Date')">📅 Start Date</button>
+        <button onclick="showMsg('End Date')">📅 End Date</button>
+        <button onclick="showMsg('Days')">📆 Days</button>
+        <div style="font-size:9px;font-weight:800;color:#2563eb;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📊 ڈیش بورڈ</div>
+        <button onclick="showMsg('News Show')">📊 News Show</button>
+        <button onclick="showMsg('News Hide')">📊 News Hide</button>
+        <button onclick="showMsg('Alert Show')">📊 Alert Show</button>
+        <button onclick="showMsg('Alert Hide')">📊 Alert Hide</button>
+        <div style="font-size:9px;font-weight:800;color:#334155;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">💾 ڈیٹا</div>
+        <button onclick="showMsg('Export')">📥 Export</button>
+        <button onclick="showMsg('Import')">📤 Import</button>
+        <button onclick="showMsg('Reset')">🔄 Reset</button>
+    </div>
+    <div id="newsBody">
+        <div class="form-row">
+            <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option><option value="complaint">⏰ Time</option></select>
+            <input type="text" id="newsContent" placeholder="متن...">
+            <button onclick="saveNews()">💾</button>
+        </div>
+        <div id="newsTimeRow" style="display:none;"><input type="time" id="newsTime" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;"></div>
+        <label class="form-label">📋 ریکارڈز:</label>
+        <div class="list-box" id="newsRecordList"></div>
+    </div>
+</div>
+
+<!-- 5. ALAMAT -->
+<div class="card" style="border-right-color:#0ea5e9">
+    <div class="card-head">
+        <div class="card-title">🩺 صحت اور علامات</div>
+        <div class="card-btns"><button onclick="toggleSettings('alamatSettings')">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="alamatSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="alamatBody">
+        <select id="alamatMember" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;"></select>
+        <div class="form-row">
+            <input type="text" id="alamatSymptomInput" placeholder="علامت...">
+            <button onclick="addAlamatSymptom()">➕</button>
+        </div>
+        <div class="list-box" id="alamatSymptomList"></div>
+    </div>
+</div>
+
+<!-- 6. DIET -->
+<div class="card" style="border-right-color:#059669">
+    <div class="card-head">
+        <div class="card-title">🍽️ ڈائٹ روٹین مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('dietSettings')">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="dietSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="dietBody">
+        <select id="dietMember" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;"></select>
+        <div class="form-row">
+            <input type="text" id="dietTimeInput" placeholder="وقت...">
+            <button onclick="addDietTime()">➕</button>
+        </div>
+        <label class="form-label">🍞 Category:</label>
+        <select id="dietCategory" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;">
+            <option value="daily">Daily</option>
+            <option value="kabhi">Kabhi Kabhi</option>
+            <option value="junk">Junk</option>
+        </select>
+        <div class="form-row">
+            <input type="text" id="dietItemName" placeholder="آٹم...">
+            <input type="number" id="dietItemQty" placeholder="Qty" value="1" style="max-width:70px;">
+            <button onclick="addDietItem()">💾</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+            <div class="list-box" id="dietDailyCollect" style="min-height:80px;"></div>
+            <div class="list-box" id="dietKabhiCollect" style="min-height:80px;"></div>
+            <div class="list-box" id="dietJunkCollect" style="min-height:80px;"></div>
+        </div>
+        <button onclick="saveDietRecord()" style="width:100%;padding:9px;background:#059669;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;margin-top:8px;">💾 محفوظ کریں</button>
+        <div class="list-box" id="dietItemList" style="margin-top:8px;"></div>
+    </div>
+</div>
+
+<!-- 7. RASHAN -->
+<div class="card" style="border-right-color:#d97706">
+    <div class="card-head">
+        <div class="card-title">🛒 راشن ایڈ مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('rashanSettings')">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="rashanSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+        <button onclick="showMsg('Budget Add')">💰 Budget Add</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="rashanBody">
+        <div class="form-row">
+            <input type="text" id="rashanItemName" placeholder="آٹم...">
+            <input type="number" id="rashanItemQty" placeholder="Qty" style="max-width:70px;">
+            <input type="number" id="rashanItemRate" placeholder="Rate" style="max-width:80px;">
+            <button onclick="addRashanItem()">💾</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:8px 0;">
+            <div class="list-box" id="rashanCol1" style="min-height:60px;"></div>
+            <div class="list-box" id="rashanCol2" style="min-height:60px;"></div>
+            <div class="list-box" id="rashanCol3" style="min-height:60px;"></div>
+        </div>
+        <button onclick="showMsg('Budget Add')" style="width:100%;padding:9px;background:#d97706;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;margin:6px 0;">💰 بجٹ شامل کریں</button>
+        <div class="list-box" id="rashanItemList"></div>
+    </div>
+</div>
+
+<!-- 8. GREEN BUS -->
+<div class="card" style="border-right-color:#65a30d">
+    <div class="card-head">
+        <div class="card-title">🚌 گرین بس انٹری مینیجر</div>
+        <div class="card-btns"><button onclick="toggleSettings('busSettings')">⚙️</button><button onclick="toggleBody('busBody')">⬇️</button></div>
+    </div>
+    <div class="settings-panel" id="busSettings">
+        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+        <button onclick="showMsg('All Select')">✅ All Select</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Password</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+        <button onclick="showMsg('Close')">⬇️ Close</button>
+    </div>
+    <div id="busBody">
+        <label class="form-label">🛣️ روٹ:</label>
+        <div class="form-row">
+            <input type="text" id="busRouteInput" placeholder="روٹ...">
+            <select id="busRouteSelect"><option value="">روٹ...</option></select>
+            <button onclick="addBusRoute()">➕</button>
+        </div>
+        <label class="form-label">📅 دن:</label>
+        <select id="busDaySelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;">
+            <option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option>
+            <option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option>
+        </select>
+        <label class="form-label">⏰ وقت:</label>
+        <div class="form-row">
+            <input type="time" id="busStartTime">
+            <input type="time" id="busEndTime">
+            <input type="number" id="busGap" placeholder="وقفہ" value="30">
+        </div>
+        <label class="form-label">📍 اسٹاپ:</label>
+        <div class="form-row">
+            <input type="text" id="busStopInput" placeholder="اسٹاپ...">
+            <select id="busStopSelect"><option value="">اسٹاپ...</option></select>
+            <button onclick="addBusStop()">➕</button>
+        </div>
+        <div class="list-box" id="busStopList"></div>
+    </div>
+</div>
+
+<!-- 9. RESULT -->
+<div class="card" style="border-right-color:#e11d48">
+    <div class="card-head">
+        <div class="card-title">🏆 ممبران فائنل رزلٹ</div>
+        <div class="card-btns"><button onclick="toggleBody('resultBody')">⬇️</button></div>
+    </div>
+    <div id="resultBody">
+        <div class="form-row">
+            <select id="resultMemberSelect"><option value="">ممبر...</option></select>
+            <input type="text" id="resultTextBox" placeholder="سزا / شاباش...">
+            <input type="number" id="resultPercentBox" placeholder="%" style="max-width:60px;" min="0" max="100">
+            <button onclick="addResult()">➕</button>
+        </div>
+        <div class="list-box" id="resultPendingList"></div>
+    </div>
+</div>
+
+<script src="entry-app.js"></script>
 </body>
 </html>
