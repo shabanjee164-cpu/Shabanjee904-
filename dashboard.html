@@ -11,6 +11,7 @@ body {
   background: #eef1f5;
   padding: 12px;
   color: #222;
+  padding-bottom: 80px;
 }
 .app {
   max-width: 900px;
@@ -29,7 +30,6 @@ body {
 .app-header h1 { font-size: 20px; }
 .app-header p { font-size: 13px; opacity: .85; margin-top: 4px; }
 
-/* نیوز/الرٹ بار */
 .news-bar {
   margin: 12px 14px 6px;
   background: #fffbea;
@@ -77,7 +77,6 @@ body {
   font-family: inherit;
 }
 
-/* سیکشن */
 .section {
   margin: 14px;
   border: 2px solid #888;
@@ -96,7 +95,6 @@ body {
 .section-title .icons { font-size: 14px; }
 .section-body { padding: 10px 12px; background: #fafbfc; }
 
-/* ہر سیکشن کا الگ رنگ */
 .sec-duty   .section-title { background: #1e6f9f; }
 .sec-task   .section-title { background: #2e8b57; }
 .sec-skip   .section-title { background: #b03a2e; }
@@ -376,6 +374,12 @@ table.small th { background: #eef3f8; }
   display: flex;
   border-top: 2px solid #444;
   background: #2c3e50;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 900px;
+  margin: 0 auto;
 }
 .bottom-nav a {
   flex: 1;
@@ -386,10 +390,30 @@ table.small th { background: #eef3f8; }
   padding: 12px 4px;
 }
 .bottom-nav a:hover { background: #34495e; }
+.bottom-nav a.active { background: #1e6f9f; }
+
+/* Inline Message — No popup */
+.inline-msg {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2e8b57;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  z-index: 9999;
+  display: none;
+  font-family: inherit;
+}
+.inline-msg.show { display: block; }
 
 @media (max-width: 600px) {
-  .three-cols, .summary-grid, .symptom-grid { grid-template-columns: 1fr 1fr; }
-  .btn-group-btns { grid-template-columns: 1fr; }
+  .three-cols, .summary-grid { grid-template-columns: 1fr; }
+  .symptom-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -401,411 +425,202 @@ table.small th { background: #eef3f8; }
     <p>Dashboard</p>
   </div>
 
-  <!-- NEWS BAR -->
   <div class="news-bar">
-    <div class="scroll-text">📰 آج چھٹی ہے &nbsp;•&nbsp; 📰 کل چھٹی ہے &nbsp;•&nbsp; 📰 نیوز 3 &nbsp;•&nbsp; 📰 یہ ایک طویل نیوز پٹی ہے جس میں ساری خبریں چلتی رہیں گی</div>
+    <div class="scroll-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div>
   </div>
 
-  <!-- ALERT BAR -->
-  <div class="alert-bar">
-    <span>🚨 فوری میٹنگ — 08:00 PM</span>
-    <button>❌</button>
+  <div class="alert-bar" id="alertBar">
+    <span id="alertMsg">🚨 اہم الرٹ...</span>
+    <button onclick="skipAlert()">❌</button>
   </div>
 
-  <!-- ========== آج کی ڈیوٹی ========== -->
+  <!-- DUTY -->
   <div class="section sec-duty">
-    <div class="section-title">
-      <span>👮 آج کی ڈیوٹی</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>👮 آج کی ڈیوٹی</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <div class="panel-box">
-        <div class="line">🟢 سینئر: علی &nbsp;&nbsp; 🔵 جونیئر: نمرہ</div>
-        <div class="line">⏱️ 01:25:30</div>
+        <div class="line">🟢 سینئر: <span id="dashSenior">—</span> &nbsp;&nbsp; 🔵 جونیئر: <span id="dashJunior">—</span></div>
+        <div class="line">⏱️ <span id="dashTimer">00:00:00</span></div>
       </div>
-
       <label>🏖️ چھٹی سبمٹ کریں:</label>
+      <div class="row"><select id="dashLeaveSelect"><option value="">ممبر منتخب کریں</option></select></div>
       <div class="row">
-        <select><option>ممبر منتخب کریں</option></select>
+        <input type="text" id="dashLeaveReason" placeholder="وجہ لکھیں...">
+        <button class="btn btn-save" onclick="submitDashLeave()">✅ سبمٹ</button>
       </div>
-      <div class="row">
-        <input type="text" placeholder="وجہ لکھیں...">
-        <button class="btn btn-save">✅ سبمٹ</button>
-      </div>
-
-      <div class="alarm-box">🚨 "شعبان چھٹی پر — وجہ: بیمار" &nbsp; <span style="font-size:11px;font-weight:normal;">(10 سیکنڈ بعد خود غائب)</span></div>
-
-      <div class="scroll-head">
-        <label>📋 چھٹی ریکارڈ:</label>
-      </div>
-      <div class="scroll-list">
-        <div class="record">
-          <div class="head">☐ 1️⃣ 👤 شعبان — "بیمار تھا"</div>
-          <div class="line">📅 24/10 09:30</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 2️⃣ 👤 علی — "گھر گیا"</div>
-          <div class="line">📅 23/10 14:15</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 3️⃣ 👤 نمرہ — "شادی"</div>
-          <div class="line">📅 22/10 11:00</div>
-        </div>
-      </div>
-
-      <div class="stats">📊 سٹیٹ: 👤 5 Members | 🏖️ 3 Leave | ✅ 2 On Duty</div>
+      <div class="alarm-box" id="dashAlarm" style="display:none;"></div>
+      <div class="scroll-head"><label>📋 چھٹی ریکارڈ:</label></div>
+      <div class="scroll-list" id="leaveRecordList"></div>
+      <div class="stats" id="dutyStats">📊 سٹیٹ: لوڈ...</div>
     </div>
   </div>
 
-  <!-- ========== ٹاسک ٹریکر ========== -->
+  <!-- TASK -->
   <div class="section sec-task">
-    <div class="section-title">
-      <span>📋 ٹاسک ٹریکر</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>📋 ٹاسک ٹریکر</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <label>👤 ممبر منتخب کریں:</label>
-      <div class="row">
-        <select><option>-- ممبر منتخب کریں --</option></select>
-      </div>
-
-      <div class="task-display">
+      <div class="row"><select id="taskMemberSelect" onchange="renderCurrentTask()"><option value="">-- ممبر منتخب کریں --</option></select></div>
+      <div class="task-display" id="taskCurrent">
         <div class="lbl">📌 موجودہ ٹاسک</div>
-        <div class="nm">کمرے کی صفائی</div>
-        <div class="pts">🏆 10 Points</div>
+        <div class="nm">پہلے ممبر منتخب کریں</div>
+        <div class="pts">0 Points</div>
       </div>
-
       <div class="btn-group-btns">
-        <button class="done">✅ ہو گیا</button>
-        <button class="notdone">❌ نہیں ہوا</button>
-        <button class="skip">⚪ چھوڑا</button>
+        <button class="done" onclick="submitTask('done')">✅ ہو گیا</button>
+        <button class="notdone" onclick="submitTask('notdone')">❌ نہیں ہوا</button>
+        <button class="skip" onclick="submitTask('skip')">⚪ چھوڑا</button>
       </div>
-
-      <div class="scroll-head">
-        <label>📜 ریکارڈ (scroll):</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="scroll-list">
-        <div class="record">
-          <div class="head">☐ 1️⃣ ✅ کمرہ صفائی</div>
-          <div class="line">+10 &nbsp; 📅 24/10</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 2️⃣ ⚪ حاضری</div>
-          <div class="line">+0 &nbsp; 📅 24/10</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 3️⃣ ❌ سیکیورٹی چیک</div>
-          <div class="line">+0 &nbsp; 📅 23/10</div>
-        </div>
-      </div>
-
-      <div class="stats">🏆 ٹوٹل: 10 Points &nbsp;|&nbsp; 📋 3 Tasks</div>
-      <div class="stats">📊 سٹیٹ: 👤 5 Members | 🏆 10 Points | 📋 3 Tasks</div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label></div>
+      <div class="scroll-list" id="taskHistoryList"></div>
+      <div class="stats">🏆 ٹوٹل: <span id="totalPoints">0</span> Points</div>
     </div>
   </div>
 
-  <!-- ========== چھوڑے ہوئے کام ========== -->
+  <!-- SKIP -->
   <div class="section sec-skip">
-    <div class="section-title">
-      <span>⛔ چھوڑے ہوئے کام</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>⛔ چھوڑے ہوئے کام</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <div class="three-cols">
         <div class="mini-col">
           <h4>🟢 سینئر</h4>
-          <div class="item">👤 علی</div>
-          <div class="item">⚠️ کمرہ صفائی</div>
-          <div class="item">⚠️ شاپنگ</div>
+          <div id="skipSeniorList">—</div>
         </div>
         <div class="mini-col">
           <h4>🔵 جونیئر</h4>
-          <div class="item">👤 نمرہ</div>
-          <div class="item">⚠️ حاضری</div>
+          <div id="skipJuniorList">—</div>
         </div>
         <div class="mini-col">
           <h4>📝 وجہ لکھیں</h4>
-          <select><option>ممبر</option></select>
-          <select><option>کام</option></select>
-          <input type="text" placeholder="وجہ..." style="width:100%;margin-top:4px;">
-          <button class="btn btn-save" style="width:100%;margin-top:4px;">✅</button>
+          <select id="skipMemberSelect"><option value="">ممبر</option></select>
+          <select id="skipTaskSelect"><option value="">کام</option></select>
+          <input type="text" id="skipReasonInput" placeholder="وجہ..." style="width:100%;margin-top:4px;">
+          <button class="btn btn-save" style="width:100%;margin-top:4px;" onclick="submitSkipReason()">✅ محفوظ</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== صحت اور علامات ========== -->
+  <!-- HEALTH -->
   <div class="section sec-health">
-    <div class="section-title">
-      <span>🩺 صحت اور علامات</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>🩺 صحت اور علامات</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <label>👤 ممبر منتخب کریں:</label>
-      <div class="row">
-        <select><option>-- ممبر --</option></select>
+      <div class="row"><select id="alamatMemberSel" onchange="renderAlamat()"><option value="">-- ممبر --</option></select></div>
+      <div class="panel-box" style="text-align:center;" id="alamatMemberInfo"><div style="font-size:13px;">—</div></div>
+      <div class="panel-box" style="text-align:center;" id="symptomStage">
+        <div style="font-size:11px; color:#666;">علامت 1 / 5</div>
+        <div style="font-size:17px; font-weight:bold;">—</div>
       </div>
-
-      <div class="panel-box" style="text-align:center;">
-        <div style="font-size:13px;">👤 علی (سینئر)</div>
-      </div>
-
-      <div class="panel-box" style="text-align:center;">
-        <div style="font-size:11px; color:#666;">علامت 1 / 3</div>
-        <div style="font-size:17px; font-weight:bold;">جلنا</div>
-      </div>
-
-      <div class="symptom-grid">
-        <button class="s-btn s1">1. ٹھیک ہے</button>
-        <button class="s-btn s2">2. نہیں ٹھیک</button>
-        <button class="s-btn s3">3. تھوڑا مسئلہ</button>
-        <button class="s-btn s4">4. کبھی کبھی</button>
-        <button class="s-btn s5">5. سیم پہلے</button>
-        <button class="s-btn s6">6. بہتر ہے</button>
-        <button class="s-btn s7">7. کبھی زیادہ</button>
-        <button class="s-btn s8">8. بہت زیادہ</button>
-        <button class="s-btn s9">9. مسئلہ زیادہ</button>
-        <button class="s-btn s10">10. بار بار</button>
-        <button class="s-btn s11">11. دیگر</button>
-      </div>
-
+      <div class="symptom-grid" id="symptomButtons"></div>
       <label>📝 تفصیل (اختیاری):</label>
       <div class="row">
-        <input type="text" placeholder="تفصیل لکھیں...">
+        <input type="text" id="alamatTafseel" placeholder="تفصیل...">
         <button class="btn">🎤</button>
-        <button class="btn btn-save">💾 محفوظ</button>
+        <button class="btn btn-save" onclick="saveAlamatTafseel()">💾 محفوظ</button>
       </div>
-
-      <div class="scroll-head">
-        <label>📜 ریکارڈ:</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="scroll-list">
-        <div class="record">
-          <div class="head">☐ 1️⃣ جلنا — 🔘 1. ٹھیک ہے</div>
-          <div class="line">📊 100% &nbsp; 📅 24/10</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 2️⃣ قبض — 🔘 3. تھوڑا مسئلہ</div>
-          <div class="line">📊 25% &nbsp; 📅 24/10</div>
-        </div>
-        <div class="record">
-          <div class="head">☐ 3️⃣ پیٹ درد — (کوئی نہیں)</div>
-          <div class="line">📊 0% &nbsp; 📅 24/10</div>
-        </div>
-      </div>
-
-      <div class="stats">📊 نتیجہ: ✅ بہتری: 60% | ⚠️ مسئلہ: 40% | 📊 60%</div>
-      <div class="stats">📊 سٹیٹ: 👤 5 Members | ✅ 3 Hazri | ❌ 2 Nahi | 📋 15</div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label></div>
+      <div class="scroll-list" id="alamatHistoryList"></div>
+      <div class="stats" id="alamatResult">📊 نتیجہ: —</div>
+      <div class="stats" id="alamatStats">📊 سٹیٹ: —</div>
     </div>
   </div>
 
-  <!-- ========== ڈائٹ روٹین ========== -->
+  <!-- DIET -->
   <div class="section sec-diet">
-    <div class="section-title">
-      <span>🍽️ ڈائٹ روٹین</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>🍽️ ڈائٹ روٹین</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <div class="panel-box" style="text-align:center;">
-        <div style="font-size:15px; font-weight:bold;">👤 علی (سینئر)</div>
+        <div style="font-size:15px; font-weight:bold;" id="dietMemberDisplay">👤 —</div>
       </div>
-
       <label>⏰ وقت:</label>
       <div class="row">
-        <select>
-          <option>01: نہار</option>
-          <option>02: ناشتہ</option>
-          <option>03: اسنیک</option>
-          <option>04: لنچ</option>
-          <option>05: اسنیک</option>
-          <option>06: ڈنر</option>
-          <option>07: رات</option>
+        <select id="dietTimeSelect">
+          <option value="01">01: نہار</option>
+          <option value="02">02: ناشتہ</option>
+          <option value="03">03: اسنیک</option>
+          <option value="04">04: لنچ</option>
+          <option value="05">05: اسنیک</option>
+          <option value="06">06: ڈنر</option>
+          <option value="07">07: رات</option>
         </select>
       </div>
-
       <div class="three-cols">
-        <div class="mini-col">
-          <h4>🍞 Daily</h4>
-          <div class="item">☐ روٹی [1▾]</div>
-          <div class="item">☐ سالن [1▾]</div>
-          <div class="item">☐ چائے [1▾]</div>
-          <div class="item">☐ پانی [1▾]</div>
-          <div class="item">☐ راتھا [1▾]</div>
-        </div>
-        <div class="mini-col">
-          <h4>🍽️ Kabhi</h4>
-          <div class="item">☐ دودھ [1▾]</div>
-          <div class="item">☐ شیک [1▾]</div>
-          <div class="item">☐ دہی [1▾]</div>
-          <div class="item">☐ جوس [1▾]</div>
-          <div class="item">☐ چاول [1▾]</div>
-        </div>
-        <div class="mini-col">
-          <h4>🍟 Junk</h4>
-          <div class="item">☐ کولڈ [1▾]</div>
-          <div class="item">☐ سموسہ [1▾]</div>
-          <div class="item">☐ پکوڑے [1▾]</div>
-          <div class="item">☐ نان [1▾]</div>
-          <div class="item">☐ ٹکی [1▾]</div>
-          <div class="item">☐ برگر [1▾]</div>
-        </div>
+        <div class="mini-col"><h4>🍞 Daily</h4><div id="dietDailyList"></div></div>
+        <div class="mini-col"><h4>🍽️ Kabhi</h4><div id="dietSometimesList"></div></div>
+        <div class="mini-col"><h4>🍟 Junk</h4><div id="dietJunkList"></div></div>
       </div>
-
       <label>📝 تفصیل:</label>
       <div class="row">
-        <input type="text" placeholder="تفصیل...">
+        <input type="text" id="dietTafseel" placeholder="تفصیل...">
         <button class="btn">🎤</button>
-        <button class="btn btn-save">💾 محفوظ</button>
+        <button class="btn btn-save" onclick="saveDietRecord()">💾 محفوظ</button>
       </div>
-
-      <div class="scroll-head">
-        <label>📜 ریکارڈ:</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="scroll-list">
-        <table class="small">
-          <tr><th>🍞 Daily</th><th>🍽️ Kabhi</th><th>🍟 Junk</th></tr>
-          <tr>
-            <td>⏰ 01: نہار<br>☐ 1️⃣ روٹی(2)<br>📅 24/10</td>
-            <td>⏰ 01: نہار<br>☐ 1️⃣ دودھ(1)<br>📅 24/10</td>
-            <td>⏰ 01: نہار<br>☐ 1️⃣ برگر(1)<br>📅 24/10</td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="stats">📊 سٹیٹ: 👤 5 Members | ✅ 3 Add | 📋 12 Records<br>📊 🍞 Daily: 5 | 🍽️ Kabhi: 4 | 🍟 Junk: 3</div>
-      <div class="stats">✅ بہتری: 65% | ⚠️ نقصان: 35% | 📊 ٹوٹل: 65%</div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label></div>
+      <div class="scroll-list" id="dietHistoryList"></div>
+      <div class="stats" id="dietStats">📊 سٹیٹ: —</div>
+      <div class="stats" id="dietResult">✅ بہتری: — | ⚠️ نقصان: — | 📊 ٹوٹل: —</div>
     </div>
   </div>
 
-  <!-- ========== راشن منیجر ========== -->
+  <!-- RASHAN -->
   <div class="section sec-ration">
-    <div class="section-title">
-      <span>🛒 راشن منیجر</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>🛒 راشن منیجر</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
-      <div class="scroll-head">
-        <label>📦 آٹمز (Entry سے):</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="scroll-list">
-        <div class="record"><div class="head">☐ 1️⃣ 📦 آٹا — Qty: 2 | Rate: 300 | Total: 600</div></div>
-        <div class="record"><div class="head">☐ 2️⃣ 📦 چاول — Qty: 1 | Rate: 500 | Total: 500</div></div>
-        <div class="record"><div class="head">☐ 3️⃣ 📦 دال — Qty: 3 | Rate: 200 | Total: 600</div></div>
-      </div>
-
+      <div class="scroll-head"><label>📦 آٹمز (Entry سے):</label><button class="btn btn-close" onclick="toggleRashanList()">⬇️ Close</button></div>
+      <div class="scroll-list" id="rashanItemsList"></div>
       <label>🧺 منتخب آٹمز (edit qty/rate):</label>
-      <div class="scroll-list">
-        <div class="record">
-          <div class="head">☑️ 1️⃣ 📦 آٹا</div>
-          <div class="line">[Qty: 2] [Rate: 300] Total: 600</div>
-        </div>
-        <div class="record">
-          <div class="head">☑️ 2️⃣ 📦 چاول</div>
-          <div class="line">[Qty: 1] [Rate: 500] Total: 500</div>
-        </div>
-      </div>
-      <div class="row" style="margin-top:6px;"><button class="btn btn-save">💾 Save</button></div>
-
-      <div class="stats">🧾 بل: 💰 1100 | 💵 8000 | ✅ 6900</div>
-
-      <div class="scroll-head">
-        <label>📜 ریکارڈ (alag box):</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="scroll-list">
-        <div class="record">
-          <div class="head">☐ 1️⃣</div>
-          <div class="line">📦 آٹا — Qty: 2 | Rate: 300 | Total: 600</div>
-          <div class="line">📦 چاول — Qty: 1 | Rate: 500 | Total: 500</div>
-          <div class="line">💰 کل بل: 1100 | 📅 24/10 09:30</div>
-        </div>
-      </div>
-
-      <div class="stats">📊 سٹیٹ: 📦 3 Items | 📋 2 Records | 💰 1850</div>
+      <div class="scroll-list" id="rashanSelectedList"></div>
+      <div class="row" style="margin-top:6px;"><button class="btn btn-save" onclick="saveRashanSelection()">💾 Save</button></div>
+      <div class="stats" id="rashanBill">🧾 بل: 💰 0 | 💵 0 | ✅ 0</div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label></div>
+      <div class="scroll-list" id="rashanHistoryList"></div>
+      <div class="stats" id="rashanStats">📊 سٹیٹ: —</div>
     </div>
   </div>
 
-  <!-- ========== گرین بس ========== -->
+  <!-- BUS -->
   <div class="section sec-bus">
-    <div class="section-title">
-      <span>🚌 گرین بس</span>
-      <span class="icons">⚙️ ⬇️</span>
-    </div>
+    <div class="section-title"><span>🚌 گرین بس</span><span class="icons">⚙️ ⬇️</span></div>
     <div class="section-body">
       <div class="bus-clock">
-        <div>
-          <div class="lbl">🕒 موجودہ وقت</div>
-          <div class="time">03:45:20 PM</div>
-        </div>
+        <div><div class="lbl">🕒 موجودہ وقت</div><div class="time" id="busClock">--:--:-- --</div></div>
         <div class="icon">⏰</div>
       </div>
-
       <label>1️⃣ روٹ:</label>
-      <div class="row"><select><option>Route 1 - Metro Line</option></select></div>
-
+      <div class="row"><select id="busRouteSelect"><option value="">روٹ...</option></select></div>
       <label>2️⃣ دن:</label>
-      <div class="row"><select><option>پیر</option></select></div>
-
+      <div class="row"><select id="busDaySelect">
+        <option value="">دن...</option>
+        <option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option>
+        <option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option>
+      </select></div>
       <label>3️⃣ اسٹاپ:</label>
-      <div class="row"><select><option>Central Station</option></select></div>
-
-      <div class="row"><button class="btn btn-save" style="flex:1;">🔍 ابھی ٹریک کریں</button></div>
-
-      <div class="bus-result">
-        <div class="row-line"><span>🕐 ٹائم رینج</span><span>06:00 AM - 10:30 PM</span></div>
-        <div class="row-line"><span>🚌 آنے والی بس</span><span>بس #2 | Central Station</span></div>
-        <div class="row-line"><span>⏰ اتنے بجے آئے گی</span><span>03:52 PM</span></div>
-        <div class="row-line"><span>📊 ایسٹیمیٹ ٹائم</span><span>03:48 PM تا 03:56 PM</span></div>
+      <div class="row"><select id="busStopSelect"><option value="">اسٹاپ...</option></select></div>
+      <div class="row"><button class="btn btn-save" style="flex:1;" onclick="busTrackNow()">🔍 ابھی ٹریک کریں</button></div>
+      <div class="bus-result" id="busResult" style="display:none;">
+        <div class="row-line"><span>🕐 ٹائم رینج</span><span id="busRange">--</span></div>
+        <div class="row-line"><span>🚌 آنے والی بس</span><span id="busNo">--</span></div>
+        <div class="row-line"><span>⏰ اتنے بجے آئے گی</span><span id="busArrival">--</span></div>
+        <div class="row-line"><span>📊 ایسٹیمیٹ ٹائم</span><span id="busEstimate">--</span></div>
         <div class="bus-timer">
           <div style="font-size:11px;">⏳ اتنے ٹائم میں بس آ رہی ہے</div>
-          <div class="big">00:06:42</div>
-          <div style="font-size:12px; margin-top:4px;">6 منٹ 42 سیکنڈ میں بس آ رہی ہے</div>
+          <div class="big" id="busCountdown">00:00:00</div>
+          <div style="font-size:12px; margin-top:4px;" id="busCountdownSub">--</div>
         </div>
       </div>
-
-      <div class="row" style="margin-top:8px;"><button class="btn btn-close" style="flex:1;">⬇️ Close</button></div>
     </div>
   </div>
 
-  <!-- ========== ممبران فائنل رزلٹ ========== -->
+  <!-- RESULT -->
   <div class="section sec-result">
-    <div class="section-title">
-      <span>🏆 ممبران فائنل رزلٹ</span>
-      <span class="icons">⬇️</span>
-    </div>
+    <div class="section-title"><span>🏆 ممبران فائنل رزلٹ</span><span class="icons">⬇️</span></div>
     <div class="section-body">
-      <div class="scroll-head">
-        <label>📜 ریکارڈ:</label>
-        <button class="btn btn-close">⬇️ Close</button>
-      </div>
-      <div class="result-list">
-        <div class="result-item">
-          <div class="name">👤 علی</div>
-          <div class="pts">🏆 25 Points</div>
-          <div class="bar-wrap"><div class="bar" style="width:80%; background:#2e8b57;"></div></div>
-          <div class="msg" style="background:#eafaf1; color:#145a32;">⭐ شاباش! آپ کی مزدوری ٹریٹ ہوئی 🎉 — 80%</div>
-        </div>
-        <div class="result-item">
-          <div class="name">👤 نمرہ</div>
-          <div class="pts">🏆 15 Points</div>
-          <div class="bar-wrap"><div class="bar" style="width:50%; background:#1e6f9f;"></div></div>
-          <div class="msg" style="background:#eaf2f8; color:#1b4f72;">✅ مزید محنت کریں، آپ کر سکتے ہیں 💪 — 50%</div>
-        </div>
-        <div class="result-item">
-          <div class="name">👤 شعبان</div>
-          <div class="pts">🏆 5 Points</div>
-          <div class="bar-wrap"><div class="bar" style="width:20%; background:#c0392b;"></div></div>
-          <div class="msg" style="background:#fdecea; color:#922b21;">⚠️ سزا ملے گی، کام بہت برا ہے ❌ — 20%</div>
-        </div>
-      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleResultList()">⬇️ Close</button></div>
+      <div class="result-list" id="resultList"></div>
     </div>
   </div>
 
-  <!-- ========== بوٹم نیویگیشن ========== -->
   <div class="bottom-nav">
     <a href="index.html">🏠 ڈیش</a>
     <a href="entry.html">➕ انٹری</a>
@@ -814,5 +629,505 @@ table.small th { background: #eef3f8; }
   </div>
 </div>
 
+<div class="inline-msg" id="inlineMsg"></div>
+
+<script>
+// ========== STORAGE KEYS ==========
+var DUTY_KEY = 'sec4_duty_manager_data_v4';
+var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
+var TASK_KEY = 'sec3_task_and_point_manager_data';
+var REC_KEY = 'sec12_task_records';
+var SKIP_KEY = 'sec4_duty_skipped_data';
+var NEWS_KEY = 'sec10_news_alerts_data';
+var ALAMAT_KEY = 'symptoms';
+var DIET_KEY = 'diets';
+var RASHAN_KEY = 'sec11_rashan_data_v2';
+var RASHAN_BUDGET_KEY = 'sec11_rashan_budget_v2';
+var BUS_ROUTES_KEY = 'sec21_green_bus_routes_v19';
+var BUS_DATA_KEY = 'sec21_green_bus_data_v19';
+var BUS_STOPS_KEY = 'bus_stops';
+
+// ========== UTILITIES ==========
+function $(id) { return document.getElementById(id); }
+function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
+function lss(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, '0'); }
+function fmtTimer(ms) { var s = Math.floor(ms/1000); return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60); }
+function todayStr() { var d = new Date(); return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear(); }
+function getMembers() { return ls(DUTY_KEY, []); }
+
+function showMsg(text, success) {
+    var el = $('inlineMsg');
+    el.textContent = text;
+    el.style.background = success ? '#2e8b57' : '#c0392b';
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 2500);
+}
+
+// ========== 1. DUTY ==========
+function updateDashDuty() {
+    var m = getMembers();
+    var s = m.find(function(x) { return x.onDuty && x.rank === 'Senior'; });
+    var j = m.find(function(x) { return x.onDuty && x.rank === 'Junior'; });
+    if ($('dashSenior')) $('dashSenior').textContent = s ? s.name : '—';
+    if ($('dashJunior')) $('dashJunior').textContent = j ? j.name : '—';
+    var active = s || j;
+    if (active && active.dutyStart && $('dashTimer')) $('dashTimer').textContent = fmtTimer(Date.now() - active.dutyStart);
+    else if ($('dashTimer')) $('dashTimer').textContent = '00:00:00';
+
+    var leave = m.filter(function(x) { return x.onLeave; }).length;
+    var onDuty = m.filter(function(x) { return x.onDuty; }).length;
+    if ($('dutyStats')) $('dutyStats').textContent = '📊 سٹیٹ: 👤 ' + m.length + ' Members | 🏖️ ' + leave + ' Leave | ✅ ' + onDuty + ' On Duty';
+}
+
+function populateLeaveDropdown() {
+    var sel = $('dashLeaveSelect');
+    if (!sel) return;
+    var m = getMembers();
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">ممبر منتخب کریں</option>';
+    m.filter(function(x) { return !x.onLeave; }).forEach(function(x) {
+        sel.innerHTML += '<option value="' + x.id + '">' + esc(x.name) + ' (' + x.rank + ')</option>';
+    });
+    if (cur) sel.value = cur;
+}
+
+function submitDashLeave() {
+    var id = $('dashLeaveSelect').value;
+    var reason = $('dashLeaveReason').value.trim();
+    if (!id || !reason) { showMsg('ممبر اور وجہ دونوں لکھیں'); return; }
+    var m = getMembers();
+    var t = m.find(function(x) { return String(x.id) === String(id); });
+    if (!t) return;
+    t.onLeave = true;
+    t.leaveCount = (t.leaveCount || 0) + 1;
+    var leaves = ls(LEAVE_KEY, []);
+    leaves.push({ name: t.name, rank: t.rank, reason: reason, date: todayStr(), time: pad(new Date().getHours())+':'+pad(new Date().getMinutes()) });
+    lss(LEAVE_KEY, leaves);
+    if (t.onDuty) {
+        t.onDuty = false;
+        t.dutyStart = null;
+        var pool = m.filter(function(x) { return x.rank === t.rank && !x.onLeave && !x.onDuty; });
+        if (pool.length) { pool.sort(function(a,b) { return (a.leaveCount||0) - (b.leaveCount||0); }); pool[0].onDuty = true; pool[0].dutyStart = Date.now(); }
+    }
+    lss(DUTY_KEY, m);
+    $('dashLeaveReason').value = '';
+    updateDashDuty();
+    populateLeaveDropdown();
+    renderLeaveRecords();
+    $('dashAlarm').style.display = 'block';
+    $('dashAlarm').textContent = '🚨 "' + t.name + ' چھٹی پر — وجہ: ' + reason + '"';
+    setTimeout(function() { $('dashAlarm').style.display = 'none'; }, 10000);
+    showMsg('✅ چھٹی محفوظ', true);
+}
+
+function renderLeaveRecords() {
+    var box = $('leaveRecordList');
+    if (!box) return;
+    var leaves = ls(LEAVE_KEY, []);
+    box.innerHTML = leaves.length ? leaves.slice(-10).reverse().map(function(x, i) {
+        return '<div class="record"><div class="head">☐ ' + (i+1) + '️⃣ 👤 ' + esc(x.name) + ' — "' + esc(x.reason) + '"</div><div class="line">📅 ' + (x.date || '') + ' ' + (x.time || '') + '</div></div>';
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 2. TASK ==========
+var currentTaskMember = '';
+var currentTaskIndex = 0;
+function getTasks() { return ls(TASK_KEY, []); }
+function getRecords() { return ls(REC_KEY, []); }
+
+function populateTaskMembers() {
+    var sel = $('taskMemberSelect');
+    if (!sel) return;
+    var m = getMembers();
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">-- ممبر منتخب کریں --</option>';
+    m.filter(function(x) { return !x.onLeave; }).forEach(function(x) {
+        sel.innerHTML += '<option value="' + esc(x.name) + '">' + esc(x.name) + '</option>';
+    });
+    if (cur) sel.value = cur;
+}
+
+function renderCurrentTask() {
+    currentTaskMember = $('taskMemberSelect').value;
+    currentTaskIndex = 0;
+    updateTaskDisplay();
+    renderTaskHistory();
+    renderTotalPoints();
+}
+
+function updateTaskDisplay() {
+    var el = $('taskCurrent');
+    if (!currentTaskMember) {
+        el.innerHTML = '<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">پہلے ممبر منتخب کریں</div><div class="pts">0 Points</div>';
+        return;
+    }
+    var tasks = getTasks();
+    var task = tasks[currentTaskIndex];
+    if (!task) {
+        el.innerHTML = '<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">🎉 تمام کام مکمل!</div><div class="pts">—</div>';
+        return;
+    }
+    el.innerHTML = '<div class="lbl">📌 موجودہ ٹاسک</div><div class="nm">' + esc(task.title) + '</div><div class="pts">🏆 ' + task.points + ' Points</div>';
+}
+
+function submitTask(status) {
+    if (!currentTaskMember) { showMsg('پہلے ممبر منتخب کریں'); return; }
+    var tasks = getTasks();
+    var task = tasks[currentTaskIndex];
+    if (!task) { showMsg('کوئی ٹاسک نہیں'); return; }
+    var recs = getRecords();
+    var points = (status === 'done') ? (parseInt(task.points, 10) || 0) : 0;
+    var d = new Date();
+    recs.unshift({ id: Date.now(), member: currentTaskMember, task: task.title, points: points, status: status, timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear(), timeStr: pad(d.getHours())+':'+pad(d.getMinutes()) });
+    if (recs.length > 500) recs = recs.slice(0, 500);
+    lss(REC_KEY, recs);
+    if (status === 'notdone') {
+        var sk = ls(SKIP_KEY, []);
+        sk.unshift({ id: Date.now(), member: currentTaskMember, task: task.title, reason: '', hasReason: false, timestamp: Date.now() });
+        lss(SKIP_KEY, sk);
+    }
+    currentTaskIndex++;
+    updateTaskDisplay();
+    renderTaskHistory();
+    renderTotalPoints();
+    renderSkip();
+    renderResult();
+    showMsg('✅ محفوظ', true);
+}
+
+function renderTaskHistory() {
+    var box = $('taskHistoryList');
+    if (!box) return;
+    if (!currentTaskMember) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">کوئی ریکارڈ نہیں</div>'; return; }
+    var r = getRecords().filter(function(x) { return x.member === currentTaskMember; });
+    box.innerHTML = r.length ? r.slice(0, 20).map(function(x, i) {
+        var lbl = x.status === 'done' ? '✅' : (x.status === 'notdone' ? '❌' : '⚪');
+        return '<div class="record"><div class="head">☐ ' + (i+1) + '️⃣ ' + lbl + ' ' + esc(x.task) + '</div><div class="line">+' + x.points + ' &nbsp; 📅 ' + x.dateStr + '</div></div>';
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+function renderTotalPoints() {
+    if (!currentTaskMember) { if($('totalPoints')) $('totalPoints').textContent = '0'; return; }
+    var r = getRecords().filter(function(x) { return x.member === currentTaskMember; });
+    var t = 0; r.forEach(function(x) { t += (x.points || 0); });
+    if ($('totalPoints')) $('totalPoints').textContent = t;
+}
+
+// ========== 3. SKIP ==========
+function renderSkip() {
+    var s = ls(SKIP_KEY, []);
+    var m = getMembers();
+    var senior = m.find(function(x) { return x.onDuty && x.rank === 'Senior'; });
+    var junior = m.find(function(x) { return x.onDuty && x.rank === 'Junior'; });
+    var sName = senior ? senior.name : '';
+    var jName = junior ? junior.name : '';
+
+    function renderItems(arr) {
+        if (!arr.length) return '<div style="color:#94a3b8;font-size:12px;">کوئی نہیں</div>';
+        return arr.map(function(x, i) {
+            if (x.hasReason) return '<div style="font-size:12px;padding:3px 0;color:#1e8449;">✅ ' + esc(x.reason) + '</div>';
+            return '<div style="font-size:12px;padding:3px 0;color:#c0392b;">⚠️ ' + esc(x.task) + '</div>';
+        }).join('');
+    }
+
+    if ($('skipSeniorList')) $('skipSeniorList').innerHTML = '<div style="font-size:12px;font-weight:bold;">👤 ' + esc(sName || '—') + '</div>' + renderItems(s.filter(function(x) { return x.member === sName; }));
+    if ($('skipJuniorList')) $('skipJuniorList').innerHTML = '<div style="font-size:12px;font-weight:bold;">👤 ' + esc(jName || '—') + '</div>' + renderItems(s.filter(function(x) { return x.member === jName; }));
+
+    var mSel = $('skipMemberSelect'), tSel = $('skipTaskSelect');
+    if (mSel) {
+        mSel.innerHTML = '<option value="">ممبر</option>';
+        m.filter(function(x) { return !x.onLeave; }).forEach(function(x) { mSel.innerHTML += '<option value="' + esc(x.name) + '">' + esc(x.name) + '</option>'; });
+    }
+    if (tSel) {
+        tSel.innerHTML = '<option value="">کام</option>';
+        s.filter(function(x) { return !x.hasReason; }).forEach(function(x) { tSel.innerHTML += '<option value="' + esc(x.task) + '">' + esc(x.task) + ' (' + esc(x.member) + ')</option>'; });
+    }
+}
+
+function submitSkipReason() {
+    var member = $('skipMemberSelect').value;
+    var task = $('skipTaskSelect').value;
+    var reason = $('skipReasonInput').value.trim();
+    if (!member || !task || !reason) { showMsg('ممبر، کام اور وجہ تینوں بھریں'); return; }
+    var sk = ls(SKIP_KEY, []);
+    var rec = sk.find(function(x) { return x.member === member && x.task === task && !x.hasReason; });
+    if (rec) {
+        rec.reason = reason;
+        rec.hasReason = true;
+        lss(SKIP_KEY, sk);
+        $('skipReasonInput').value = '';
+        renderSkip();
+        showMsg('✅ وجہ محفوظ', true);
+    } else showMsg('کوئی اسکیپ شدہ کام نہیں ملا');
+}
+
+// ========== 4. HEALTH ==========
+var ALAMAT_SYMPTOMS = ['جلنا','قبض','پیٹ درد','سر درد','ذائقہ خراب'];
+var ALAMAT_STATES = [
+    {text:'1. ٹھیک ہے', cls:'s1', positive:true},
+    {text:'2. نہیں ٹھیک', cls:'s2', positive:false},
+    {text:'3. تھوڑا مسئلہ', cls:'s3', positive:false},
+    {text:'4. کبھی کبھی', cls:'s4', positive:false},
+    {text:'5. سیم پہلے', cls:'s5', positive:false},
+    {text:'6. بہتر ہے', cls:'s6', positive:true},
+    {text:'7. کبھی زیادہ', cls:'s7', positive:false},
+    {text:'8. بہت زیادہ', cls:'s8', positive:false},
+    {text:'9. مسئلہ زیادہ', cls:'s9', positive:false},
+    {text:'10. بار بار', cls:'s10', positive:false},
+    {text:'11. دیگر', cls:'s11', positive:false}
+];
+var alamatIdx = 0;
+var alamatMember = '';
+
+function populateAlamatMembers() {
+    var sel = $('alamatMemberSel');
+    if (!sel) return;
+    var m = getMembers().filter(function(x) { return !x.onLeave; });
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">-- ممبر --</option>';
+    m.forEach(function(x) { sel.innerHTML += '<option value="' + esc(x.name) + '">' + esc(x.name) + '</option>'; });
+    if (cur) sel.value = cur;
+}
+
+function renderAlamat() {
+    alamatMember = $('alamatMemberSel').value;
+    alamatIdx = 0;
+    renderSymptomStage();
+}
+
+function renderSymptomStage() {
+    var stage = $('symptomStage');
+    var btns = $('symptomButtons');
+    if (!alamatMember) { stage.innerHTML = '<div style="font-size:14px;">پہلے ممبر منتخب کریں</div>'; btns.innerHTML = ''; return; }
+    if (alamatIdx >= ALAMAT_SYMPTOMS.length) { stage.innerHTML = '<div style="font-size:14px;">✅ تمام علامات مکمل</div>'; btns.innerHTML = ''; return; }
+    stage.innerHTML = '<div style="font-size:11px; color:#666;">علامت ' + (alamatIdx+1) + ' / ' + ALAMAT_SYMPTOMS.length + '</div><div style="font-size:17px; font-weight:bold;">' + ALAMAT_SYMPTOMS[alamatIdx] + '</div>';
+    btns.innerHTML = ALAMAT_STATES.map(function(s, i) {
+        return '<button class="s-btn ' + s.cls + '" onclick="selectSymptom(' + i + ')">' + esc(s.text) + '</button>';
+    }).join('');
+}
+
+function selectSymptom(idx) {
+    var s = ALAMAT_STATES[idx];
+    var all = ls(ALAMAT_KEY, []);
+    var d = new Date();
+    all.push({ id: Date.now(), member: alamatMember, symptom: ALAMAT_SYMPTOMS[alamatIdx], state: s.text, positive: s.positive, timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1) });
+    lss(ALAMAT_KEY, all);
+    alamatIdx++;
+    renderSymptomStage();
+    renderAlamatHistory();
+    showMsg('✅ محفوظ', true);
+}
+
+function saveAlamatTafseel() {
+    var t = $('alamatTafseel').value.trim();
+    if (!t) { showMsg('تفصیل لکھیں'); return; }
+    var all = ls(ALAMAT_KEY, []);
+    var d = new Date();
+    all.push({ id: Date.now(), member: alamatMember || '—', symptom: 'تفصیل', state: t, positive: false, timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1) });
+    lss(ALAMAT_KEY, all);
+    $('alamatTafseel').value = '';
+    renderAlamatHistory();
+    showMsg('✅ محفوظ', true);
+}
+
+function renderAlamatHistory() {
+    var box = $('alamatHistoryList');
+    if (!box) return;
+    var all = ls(ALAMAT_KEY, []).filter(function(x) { return x.member === alamatMember; });
+    box.innerHTML = all.length ? all.map(function(x, i) {
+        return '<div class="record"><div class="head">☐ ' + (i+1) + '️⃣ ' + esc(x.symptom) + ' — ' + esc(x.state) + '</div><div class="line">📅 ' + x.dateStr + '</div></div>';
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 5. DIET ==========
+var DIET_DAILY = ['روٹی','سالن','چائے','پانی','راتھا'];
+var DIET_SOMETIMES = ['دودھ','شیک','دہی','جوس','چاول'];
+var DIET_JUNK = ['کولڈ ڈرنک','سموسہ','پکوڑے','نان','ٹکی','برگر'];
+
+function renderDietLists() {
+    var dL = $('dietDailyList'), sL = $('dietSometimesList'), jL = $('dietJunkList');
+    if (!dL) return;
+    dL.innerHTML = DIET_DAILY.map(function(item, i) { return '<div class="item"><input type="checkbox" data-item="' + item + '" data-cat="daily"> ' + item + '</div>'; }).join('');
+    sL.innerHTML = DIET_SOMETIMES.map(function(item, i) { return '<div class="item"><input type="checkbox" data-item="' + item + '" data-cat="kabhi"> ' + item + '</div>'; }).join('');
+    jL.innerHTML = DIET_JUNK.map(function(item, i) { return '<div class="item"><input type="checkbox" data-item="' + item + '" data-cat="junk"> ' + item + '</div>'; }).join('');
+}
+
+function saveDietRecord() {
+    var items = [];
+    document.querySelectorAll('#dietDailyList input:checked').forEach(function(c) { items.push({ name: c.getAttribute('data-item'), cat: 'daily' }); });
+    document.querySelectorAll('#dietSometimesList input:checked').forEach(function(c) { items.push({ name: c.getAttribute('data-item'), cat: 'kabhi' }); });
+    document.querySelectorAll('#dietJunkList input:checked').forEach(function(c) { items.push({ name: c.getAttribute('data-item'), cat: 'junk' }); });
+    if (!items.length) { showMsg('کوئی آٹم منتخب نہیں'); return; }
+    var all = ls(DIET_KEY, []);
+    var time = $('dietTimeSelect').value;
+    var d = new Date();
+    all.push({ id: Date.now(), member: '—', time: time, items: items, tafseel: $('dietTafseel').value, timestamp: Date.now(), dateStr: pad(d.getDate())+'/'+pad(d.getMonth()+1) });
+    lss(DIET_KEY, all);
+    $('dietTafseel').value = '';
+    renderDietHistory();
+    showMsg('✅ محفوظ', true);
+}
+
+function renderDietHistory() {
+    var box = $('dietHistoryList');
+    if (!box) return;
+    var all = ls(DIET_KEY, []);
+    box.innerHTML = all.length ? all.slice(-10).reverse().map(function(x, i) {
+        var items = (x.items || []).map(function(y) { return y.name; }).join(', ');
+        return '<div class="record"><div class="head">☐ ' + (i+1) + '️⃣ ⏰ ' + x.time + '</div><div class="line">📋 ' + items + '</div><div class="line">📅 ' + x.dateStr + '</div></div>';
+    }).join('') : '<div style="text-align:center;color:#94a3b8;font-size:12px;padding:10px;">کوئی ریکارڈ نہیں</div>';
+}
+
+// ========== 6. RASHAN ==========
+function renderRashanItems() {
+    var box = $('rashanItemsList');
+    if (!box) return;
+    var items = ls(RASHAN_KEY, []);
+    if (!items.length) {
+        items = [
+            {id:'dal', name:'دال', rate:200, qty:1},
+            {id:'chawal', name:'چاول', rate:500, qty:1},
+            {id:'aata', name:'آٹا', rate:300, qty:1},
+            {id:'cheeni', name:'چینی', rate:150, qty:1},
+            {id:'ghee', name:'گھی', rate:600, qty:1},
+            {id:'tel', name:'تیل', rate:400, qty:1}
+        ];
+    }
+    box.innerHTML = items.map(function(x, i) {
+        return '<div class="record"><div class="head"><input type="checkbox" data-id="' + (x.id || i) + '" data-rate="' + x.rate + '"> 📦 ' + esc(x.name) + '</div><div class="line">Qty: ' + x.qty + ' | Rate: ' + x.rate + '</div></div>';
+    }).join('');
+    renderRashanBill();
+}
+
+function renderRashanBill() {
+    var total = 0;
+    document.querySelectorAll('#rashanItemsList input:checked').forEach(function(c) {
+        total += parseInt(c.getAttribute('data-rate'), 10) || 0;
+    });
+    var budget = ls(RASHAN_BUDGET_KEY, 8000);
+    var balance = budget - total;
+    if ($('rashanBill')) $('rashanBill').innerHTML = '🧾 بل: 💰 ' + total + ' | 💵 ' + budget + ' | ✅ ' + balance;
+}
+
+function saveRashanSelection() {
+    showMsg('✅ محفوظ', true);
+}
+
+function toggleRashanList() {
+    var el = $('rashanItemsList');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ========== 7. BUS ==========
+var busTimer = null;
+
+function updateBusClock() {
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    var ap = h >= 12 ? 'PM' : 'AM';
+    var dh = h % 12 || 12;
+    if ($('busClock')) $('busClock').textContent = pad(dh) + ':' + pad(m) + ':' + pad(s) + ' ' + ap;
+}
+
+function populateBusDropdowns() {
+    var routes = ls(BUS_ROUTES_KEY, []);
+    var stops = ls(BUS_STOPS_KEY, []);
+    var rSel = $('busRouteSelect'), sSel = $('busStopSelect');
+    if (rSel) { rSel.innerHTML = '<option value="">روٹ...</option>'; routes.forEach(function(x) { rSel.innerHTML += '<option value="' + esc(x) + '">' + esc(x) + '</option>'; }); }
+    if (sSel) { sSel.innerHTML = '<option value="">اسٹاپ...</option>'; stops.forEach(function(x) { sSel.innerHTML += '<option value="' + esc(x) + '">' + esc(x) + '</option>'; }); }
+}
+
+function busTrackNow() {
+    var route = $('busRouteSelect').value;
+    var day = $('busDaySelect').value;
+    var stop = $('busStopSelect').value;
+    if (!route || !day || !stop) { showMsg('روٹ، دن اور اسٹاپ منتخب کریں'); return; }
+    $('busResult').style.display = 'block';
+    var busNo = Math.floor(Math.random() * 12) + 1;
+    var gap = [8,12,15,18,22,25][Math.floor(Math.random() * 6)];
+    var totalSec = gap * 60;
+    $('busNo').textContent = 'بس #' + busNo + ' | ' + stop;
+    $('busRange').textContent = '06:00 AM - 10:30 PM';
+    $('busArrival').textContent = '03:52 PM';
+    $('busEstimate').textContent = '03:48 PM تا 03:56 PM';
+    if (busTimer) clearInterval(busTimer);
+    busTimer = setInterval(function() {
+        if (totalSec <= 0) { clearInterval(busTimer); return; }
+        totalSec--;
+        var h = Math.floor(totalSec/3600), m = Math.floor((totalSec%3600)/60), s = totalSec%60;
+        if ($('busCountdown')) $('busCountdown').textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+        if ($('busCountdownSub')) $('busCountdownSub').textContent = m + ' منٹ ' + s + ' سیکنڈ میں بس آ رہی ہے';
+    }, 1000);
+}
+
+// ========== 8. RESULT ==========
+function renderResult() {
+    var box = $('resultList');
+    if (!box) return;
+    var m = getMembers().filter(function(x) { return !x.onLeave; });
+    if (!m.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:15px;">کوئی ممبر نہیں</div>'; return; }
+    var recs = getRecords();
+    var scores = {};
+    m.forEach(function(x) { scores[x.name] = 0; });
+    recs.forEach(function(r) { if (scores[r.member] !== undefined) scores[r.member] += (r.points || 0); });
+    var sorted = m.slice().sort(function(a,b) { return (scores[b.name]||0) - (scores[a.name]||0); });
+    var maxPts = Math.max.apply(null, sorted.map(function(x) { return scores[x.name]||0; }).concat([1]));
+    box.innerHTML = sorted.map(function(x, i) {
+        var pts = scores[x.name] || 0;
+        var pct = Math.round((pts / maxPts) * 100);
+        var msg, color, bg;
+        if (pct >= 75) { msg = '⭐ شاباش! آپ کی مزدوری ٹریٹ ہوئی 🎉'; color = '#2e8b57'; bg = '#eafaf1'; }
+        else if (pct >= 40) { msg = '✅ مزید محنت کریں، آپ کر سکتے ہیں 💪'; color = '#1e6f9f'; bg = '#eaf2f8'; }
+        else { msg = '⚠️ سزا ملے گی، کام بہت برا ہے ❌'; color = '#c0392b'; bg = '#fdecea'; }
+        return '<div class="result-item"><div class="name">👤 ' + esc(x.name) + '</div><div class="pts">🏆 ' + pts + ' Points</div><div class="bar-wrap"><div class="bar" style="width:' + pct + '%;background:' + color + ';"></div></div><div class="msg" style="background:' + bg + ';color:' + color + ';">' + msg + ' — ' + pct + '%</div></div>';
+    }).join('');
+}
+
+function toggleResultList() {
+    var el = $('resultList');
+    el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+}
+
+// ========== 9. NEWS/ALERT ==========
+function renderNewsAlert() {
+    var items = ls(NEWS_KEY, []);
+    var news = items.filter(function(x) { return x.type === 'news'; });
+    var alerts = items.filter(function(x) { return x.type === 'alert'; });
+    if ($('newsBar')) $('newsBar').textContent = news.length ? '📰 ' + news.map(function(x) { return x.content; }).join(' • ') : '📰 کوئی نیوز نہیں';
+    if ($('alertBar')) {
+        if (alerts.length) {
+            $('alertBar').style.display = 'flex';
+            $('alertMsg').textContent = '🚨 ' + alerts[Math.floor(Math.random()*alerts.length)].content;
+        } else $('alertBar').style.display = 'none';
+    }
+}
+
+function skipAlert() {
+    var ab = $('alertBar');
+    if (ab) ab.style.display = 'none';
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', function() {
+    updateDashDuty();
+    populateLeaveDropdown();
+    renderLeaveRecords();
+    populateTaskMembers();
+    renderCurrentTask();
+    renderSkip();
+    populateAlamatMembers();
+    renderDietLists();
+    renderDietHistory();
+    renderRashanItems();
+    populateBusDropdowns();
+    renderResult();
+    renderNewsAlert();
+    updateBusClock();
+    setInterval(updateDashDuty, 1000);
+    setInterval(updateBusClock, 1000);
+});
+</script>
 </body>
 </html>
