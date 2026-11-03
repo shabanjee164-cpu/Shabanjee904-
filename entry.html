@@ -2,403 +2,792 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>➕ ڈیٹا انٹری</title>
-<link rel="stylesheet" href="entry-style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Manager — Entry</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Nastaliq Urdu', 'Segoe UI', Tahoma, sans-serif; background: #eef1f5; padding: 12px; padding-bottom: 80px; color: #222; }
+.app { max-width: 900px; margin: 0 auto; background: #fff; border: 2px solid #444; border-radius: 10px; overflow: hidden; }
+.app-header { background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; text-align: center; padding: 14px 10px; }
+.app-header h1 { font-size: 20px; }
+.app-header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+.section { margin: 14px; border: 2px solid #888; border-radius: 8px; overflow: hidden; }
+.section-title { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: bold; font-size: 15px; color: #fff; }
+.section-title .icons { display: flex; gap: 6px; }
+.section-title .icons button { background: rgba(255,255,255,.2); border: none; color: #fff; width: 26px; height: 26px; border-radius: 5px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.section-title .icons button:hover { background: rgba(255,255,255,.35); }
+.section-body { padding: 10px 12px; background: #fafbfc; }
+.sec-duty .section-title { background: #1e6f9f; }
+.sec-task .section-title { background: #2e8b57; }
+.sec-skip .section-title { background: #b03a2e; }
+.sec-news .section-title { background: #7d3c98; }
+.sec-health .section-title { background: #c0392b; }
+.sec-diet .section-title { background: #d68910; }
+.sec-ration .section-title { background: #117a65; }
+.sec-bus .section-title { background: #2c3e50; }
+.sec-result .section-title { background: #8e44ad; }
+label { font-size: 13px; display: block; margin: 6px 0 3px; }
+input, select, textarea { font-family: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 5px; background: #fff; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: #1e6f9f; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+.row input, .row select { flex: 1; min-width: 80px; }
+.btn { font-family: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid #888; border-radius: 5px; background: #f0f0f0; cursor: pointer; }
+.btn:hover { background: #e2e2e2; }
+.btn-add { background: #2e8b57; color: #fff; border-color: #2e8b57; }
+.btn-save { background: #1e6f9f; color: #fff; border-color: #1e6f9f; }
+.btn-end { background: #b03a2e; color: #fff; border-color: #b03a2e; }
+.btn-icon { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+.btn-close { background: #7f8c8d; color: #fff; border-color: #7f8c8d; font-size: 12px; padding: 4px 8px; }
+.settings-panel { display: none; padding: 8px; background: #2c3e50; border-bottom: 2px solid #1a252f; }
+.settings-panel.open { display: block; }
+.settings-panel button { display: block; width: 100%; padding: 6px 10px; margin-bottom: 3px; font-family: inherit; font-size: 11px; font-weight: bold; text-align: right; background: #34495e; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+.settings-panel button:hover { background: #4a6278; }
+.settings-panel button.del { color: #ff9999; }
+.panel-box { border: 1px solid #ccc; border-radius: 6px; padding: 8px; background: #fff; margin: 8px 0; }
+.panel-box .line { font-size: 13px; margin: 3px 0; }
+.three-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+.mini-col { border: 1px solid #ccc; border-radius: 6px; background: #fff; padding: 6px; font-size: 13px; }
+.mini-col h4 { font-size: 13px; margin-bottom: 5px; }
+.mini-col .item { margin: 2px 0; }
+.mini-col select { width: 100%; margin: 4px 0; }
+.scroll-list { max-height: 140px; overflow-y: auto; border: 1px solid #ccc; border-radius: 6px; background: #fff; padding: 6px; font-size: 13px; }
+.scroll-list .record { border-bottom: 1px dotted #ccc; padding: 5px 4px; }
+.scroll-list .record:last-child { border-bottom: none; }
+.record .head { font-weight: bold; margin-bottom: 2px; font-size: 12px; }
+.record .line { font-size: 11px; color: #555; margin: 1px 0; }
+.scroll-head { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 4px; }
+.scroll-head label { margin: 0; }
+.stats { font-size: 12px; background: #eef3f8; border: 1px solid #c5d3e0; border-radius: 5px; padding: 6px 8px; margin-top: 8px; }
+table.small { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.small th, table.small td { border: 1px solid #ccc; padding: 4px 5px; text-align: center; }
+table.small th { background: #eef3f8; }
+.bottom-nav { display: flex; border-top: 2px solid #444; background: #2c3e50; position: fixed; bottom: 0; left: 0; right: 0; max-width: 900px; margin: 0 auto; }
+.bottom-nav a { flex: 1; text-align: center; color: #fff; text-decoration: none; font-size: 13px; padding: 12px 4px; }
+.bottom-nav a:hover { background: #34495e; }
+.bottom-nav a.active { background: #1e6f9f; }
+.inline-msg { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #2e8b57; color: #fff; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,.2); z-index: 9999; display: none; font-family: inherit; }
+.inline-msg.show { display: block; }
+.news-bar { margin: 12px 14px 6px; background: #fffbea; border: 1px solid #f0d97a; border-right: 5px solid #e6b800; border-radius: 6px; padding: 8px 12px; font-size: 13px; color: #7a5a00; overflow: hidden; white-space: nowrap; }
+.news-bar .scroll-text { display: inline-block; animation: ticker 40s linear infinite; padding-right: 100%; }
+@keyframes ticker { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+.alert-bar { margin: 6px 14px 12px; background: #fdecea; border: 1px solid #f5b7b1; border-right: 5px solid #c0392b; border-radius: 6px; padding: 8px 12px; font-size: 13px; font-weight: bold; color: #922b21; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.alert-bar button { background: #c0392b; color: #fff; border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; font-family: inherit; }
+@media (max-width: 600px) { .three-cols { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
-<!-- APP NAME — SIRF YAHAN 1 BAAR -->
-<div class="app-page-header">
-    🏥 Smart Manager & Health Tracker
-    <div class="sub">Data Entry</div>
-</div>
+<div class="app">
+  <div class="app-header">
+    <h1>🏥 Smart Manager &amp; Health Tracker</h1>
+    <p>Data Entry</p>
+  </div>
 
-<!-- NEWS PATTI (TOP) -->
-<div class="news-bar"><div class="news-text" id="newsText">📰 لوڈ...</div></div>
+  <div class="news-bar"><div class="scroll-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div></div>
+  <div class="alert-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ...</span><button onclick="skipAlert()">❌</button></div>
 
-<!-- ALERT PATTI -->
-<div class="alert-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ...</span><button onclick="skipAlert()">❌</button></div>
-
-<!-- 1. DUTY MANAGER -->
-<div class="card" style="border-right-color:#7c3aed">
-    <div class="card-head">
-        <div class="card-title">👮 ڈیوٹی مینیجر</div>
-        <div class="card-btns">
-            <button onclick="toggleSettings('dutySettings')">⚙️</button>
-            <button onclick="toggleBody('dutyBody')">⬇️</button>
-        </div>
-    </div>
+  <!-- 1. DUTY -->
+  <div class="section sec-duty">
+    <div class="section-title"><span>👮 ڈیوٹی مینیجر</span><span class="icons"><button onclick="toggleSettings('dutySettings')">⚙️</button><button onclick="toggleBody('dutyBody')">⬇️</button></span></div>
     <div class="settings-panel" id="dutySettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="toggleSettings('dutySettings')">⬇️ Close Settings</button>
     </div>
-    <div id="dutyBody">
-        <div class="form-row">
-            <input type="text" id="newMemName" placeholder="نام...">
-            <select id="newMemRank"><option value="Senior">🟢 سینئر</option><option value="Junior">🔵 جونیئر</option></select>
-            <button onclick="addMember()">➕</button>
-            <select id="editMemSelect" onchange="toggleEditDeleteBtns()"><option value="">-- ممبر --</option></select>
-            <button id="btnEdit" style="display:none;" onclick="editMember()">✏️</button>
-            <button id="btnDel" style="display:none;" onclick="deleteMember()">🗑️</button>
-        </div>
-        <label class="form-label">⚡ ڈیوٹی تفویض:</label>
-        <div class="form-row">
-            <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
-            <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
-            <button onclick="assignDuty()">✅</button>
-        </div>
-        <div class="duty-panel">
-            <div class="duty-panel-row"><span>🟢 سینئر: <span id="dashSenior">—</span></span><span>🔵 جونیئر: <span id="dashJunior">—</span></span></div>
-            <div class="duty-panel-timer">⏱️ <span id="dashTimer">00:00:00</span></div>
-        </div>
-        <button onclick="endAllDuty()" style="width:100%;padding:9px;background:#ef4444;color:#fff;border:none;border-radius:7px;font-weight:800;cursor:pointer;margin:8px 0;">⏹️ ڈیوٹی ختم</button>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-            <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#166534;text-align:center;margin-bottom:4px;">🟢 ایکٹو</div><select id="colActiveSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #86efac;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="activeDutyList" style="font-size:10px;"></div></div>
-            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#1e40af;text-align:center;margin-bottom:4px;">✅ ڈیوٹی ہو</div><select id="colDoneSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #bfdbfe;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="doneDutyList" style="font-size:10px;"></div></div>
-            <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:800;color:#991b1b;text-align:center;margin-bottom:4px;">🏖️ چھٹی</div><select id="colLeaveSelect" onchange="renderDuty()" style="width:100%;padding:3px;border:1px solid #fca5a5;border-radius:4px;font-size:9px;margin-bottom:4px;"><option value="all">تمام</option></select><div id="onLeaveList" style="font-size:10px;"></div></div>
-        </div>
-        <label class="form-label">📋 مکمل ریکارڈ:</label>
-        <div class="list-box" id="memberDetailList"></div>
+    <div id="dutyBody" class="section-body">
+      <label>👤 نیا ممبر شامل کریں:</label>
+      <div class="row">
+        <input type="text" id="newMemName" placeholder="نام...">
+        <select id="newMemRank"><option value="Senior">🟢 سینئر</option><option value="Junior">🔵 جونیئر</option></select>
+        <button class="btn btn-add" onclick="addMember()">➕</button>
+        <select id="editMemSelect"><option value="">-- ممبر --</option></select>
+        <button class="btn" onclick="editMember()">✏️</button>
+        <button class="btn" onclick="deleteMember()">🗑️</button>
+      </div>
+      <label>⚡ ڈیوٹی تفویض:</label>
+      <div class="row">
+        <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
+        <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
+        <button class="btn btn-add" onclick="assignDuty()">✅</button>
+      </div>
+      <div class="panel-box">
+        <div class="line">🟢 سینئر: <span id="dashSenior">—</span> &nbsp; 🔵 جونیئر: <span id="dashJunior">—</span></div>
+        <div class="line">⏱️ <span id="dashTimer">00:00:00</span></div>
+      </div>
+      <div class="row"><button class="btn btn-end" style="flex:1;" onclick="endAllDuty()">⏹️ ڈیوٹی ختم</button></div>
+      <div class="three-cols">
+        <div class="mini-col"><h4>🟢 ایکٹو</h4><select onchange="renderDuty()"><option value="all">تمام</option></select><div id="activeDutyList" style="font-size:11px;"></div></div>
+        <div class="mini-col"><h4>✅ ڈیوٹی ہو</h4><select onchange="renderDuty()"><option value="all">تمام</option></select><div id="doneDutyList" style="font-size:11px;"></div></div>
+        <div class="mini-col"><h4>🏖️ چھٹی</h4><select onchange="renderDuty()"><option value="all">تمام</option></select><div id="onLeaveList" style="font-size:11px;"></div></div>
+      </div>
+      <div class="scroll-head"><label>📋 مکمل ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('memberDetailList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="memberDetailList"></div>
     </div>
-</div>
+  </div>
 
-<!-- 2. TASK MANAGER -->
-<div class="card" style="border-right-color:#10b981">
-    <div class="card-head">
-        <div class="card-title">📋 ٹاسک مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('taskSettings')">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></div>
-    </div>
+  <!-- 2. TASK -->
+  <div class="section sec-task">
+    <div class="section-title"><span>📋 ٹاسک مینیجر</span><span class="icons"><button onclick="toggleSettings('taskSettings')">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></span></div>
     <div class="settings-panel" id="taskSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="toggleSettings('taskSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="taskBody">
-        <div class="form-row">
-            <input type="text" id="newTaskName" placeholder="ٹاسک...">
-            <select id="newTaskType"><option value="Daily">روزانہ</option><option value="Occasional">کبھی کبھی</option></select>
-            <input type="number" id="newTaskPoints" placeholder="پوائنٹس" value="5">
-            <button onclick="addTask()">➕</button>
-        </div>
-        <div id="taskListContainer"></div>
-        <div class="form-row" style="margin-top:8px;">
-            <select id="editTaskSelect"><option value="">-- ٹاسک --</option></select>
-            <button onclick="editTask()">✏️</button>
-            <button onclick="deleteTask()">🗑️</button>
-        </div>
+    <div id="taskBody" class="section-body">
+      <label>📝 نیا ٹاسک:</label>
+      <div class="row">
+        <input type="text" id="newTaskName" placeholder="ٹاسک...">
+        <select id="newTaskType"><option value="Daily">روزانہ</option><option value="Occasional">کبھی کبھی</option></select>
+        <input type="number" id="newTaskPoints" placeholder="پوائنٹس" value="5">
+        <button class="btn btn-add" onclick="addTask()">➕</button>
+      </div>
+      <div class="scroll-head"><label>📋 ٹاسک لسٹ:</label><button class="btn btn-close" onclick="toggleClose('taskListContainer')">⬇️ Close</button></div>
+      <div class="scroll-list" id="taskListContainer"></div>
+      <div class="row" style="margin-top:8px;">
+        <select id="editTaskSelect"><option value="">-- ٹاسک --</option></select>
+        <button class="btn" onclick="editTask()">✏️</button>
+        <button class="btn" onclick="deleteTask()">🗑️</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- 3. SKIP WORK MANAGER -->
-<div class="card" style="border-right-color:#f59e0b">
-    <div class="card-head">
-        <div class="card-title">⛔ اسکیپ ورک مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('skipSettings')">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></div>
-    </div>
+  <!-- 3. SKIP -->
+  <div class="section sec-skip">
+    <div class="section-title"><span>⛔ اسکیپ ورک مینیجر</span><span class="icons"><button onclick="toggleSettings('skipSettings')">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></span></div>
     <div class="settings-panel" id="skipSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="toggleSettings('skipSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="skipBody">
-        <div class="form-row">
-            <select id="skipMemberFilter"><option value="all">تمام ممبران</option></select>
-            <select id="skipDayFilter"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
-        </div>
-        <div id="skipActiveMembers"></div>
-        <div id="skipRecordList"></div>
+    <div id="skipBody" class="section-body">
+      <div class="row">
+        <select id="skipMemberFilter"><option value="all">تمام ممبران</option></select>
+        <select id="skipDayFilter"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+      </div>
+      <div class="scroll-head"><label>📋 اسکیپ ٹاسک:</label><button class="btn btn-close" onclick="toggleClose('skipRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="skipRecordList"></div>
+      <div class="stats" id="skipStats"></div>
     </div>
-</div>
+  </div>
 
-<!-- 4. NEWS & ALERT MANAGER -->
-<div class="card" style="border-right-color:#eab308">
-    <div class="card-head">
-        <div class="card-title">📰 نیوز اینڈ الرٹ مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('newsSettings')">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></div>
+  <!-- 4. NEWS -->
+  <div class="section sec-news">
+    <div class="section-title"><span>📰 نیوز اینڈ الرٹ مینیجر</span><span class="icons"><button onclick="toggleSettings('newsSettings')">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="newsSettings" style="max-height: 400px; overflow-y: auto;">
+      <button onclick="showMsg('News ON')">🟢 News ON</button>
+      <button onclick="showMsg('News OFF')">🔴 News OFF</button>
+      <button onclick="showMsg('Alert ON')">🟢 Alert ON</button>
+      <button onclick="showMsg('Alert OFF')">🔴 Alert OFF</button>
+      <button onclick="showMsg('Bell')">🔔 Bell</button>
+      <button onclick="showMsg('Volume')">🔊 Volume</button>
+      <button onclick="showMsg('Tone')">🎵 Tone</button>
+      <button onclick="showMsg('Speed')">⏱️ Speed</button>
+      <button onclick="showMsg('Color')">🎨 Color</button>
+      <button onclick="showMsg('Size')">📏 Size</button>
+      <button onclick="showMsg('Blink')">💥 Blink</button>
+      <button onclick="showMsg('Upload')">📁 Upload</button>
+      <button onclick="showMsg('Export')">📥 Export</button>
+      <button onclick="showMsg('Import')">📤 Import</button>
+      <button onclick="toggleSettings('newsSettings')">⬇️ Close Settings</button>
     </div>
-    <div class="settings-panel" id="newsSettings" style="min-width:260px;">
-        <div style="font-size:9px;font-weight:800;color:#7c3aed;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin-bottom:3px;">📌 بنیادی</div>
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
-        <div style="font-size:9px;font-weight:800;color:#d97706;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📰 نیوز پٹی</div>
-        <button onclick="showMsg('News ON')">🟢 News ON</button>
-        <button onclick="showMsg('News OFF')">🔴 News OFF</button>
-        <button onclick="showMsg('Bell ON')">🔔 Bell ON</button>
-        <button onclick="showMsg('Volume')">🔊 Volume</button>
-        <button onclick="showMsg('Tone')">🎵 Tone</button>
-        <button onclick="showMsg('Upload')">📁 Upload</button>
-        <button onclick="showMsg('Loop')">🔁 Loop</button>
-        <button onclick="showMsg('Speed')">⏱️ Speed</button>
-        <button onclick="showMsg('Color')">🎨 Color</button>
-        <button onclick="showMsg('Size')">📏 Size</button>
-        <button onclick="showMsg('Anim')">✨ Anim</button>
-        <div style="font-size:9px;font-weight:800;color:#dc2626;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">🚨 الرٹ پٹی</div>
-        <button onclick="showMsg('Alert ON')">🟢 Alert ON</button>
-        <button onclick="showMsg('Alert OFF')">🔴 Alert OFF</button>
-        <button onclick="showMsg('Bell ON')">🔔 Bell ON</button>
-        <button onclick="showMsg('Volume')">🔊 Volume</button>
-        <button onclick="showMsg('Tone')">🎵 Tone</button>
-        <button onclick="showMsg('Upload')">📁 Upload</button>
-        <button onclick="showMsg('Custom Text')">✏️ Custom Text</button>
-        <button onclick="showMsg('Time')">⏰ Time</button>
-        <button onclick="showMsg('Repeat')">🔄 Repeat</button>
-        <button onclick="showMsg('Blink')">💥 Blink</button>
-        <button onclick="showMsg('Duration')">⏱️ Duration</button>
-        <button onclick="showMsg('Color')">🎨 Color</button>
-        <button onclick="showMsg('Size')">📏 Size</button>
-        <div style="font-size:9px;font-weight:800;color:#059669;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">🆕 نیوز سلاٹس</div>
-        <button onclick="showMsg('Add Slot')">➕ Add Slot</button>
-        <div style="font-size:9px;font-weight:800;color:#7c3aed;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📅 شیڈولنگ</div>
-        <button onclick="showMsg('Start Date')">📅 Start Date</button>
-        <button onclick="showMsg('End Date')">📅 End Date</button>
-        <button onclick="showMsg('Days')">📆 Days</button>
-        <div style="font-size:9px;font-weight:800;color:#2563eb;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">📊 ڈیش بورڈ</div>
-        <button onclick="showMsg('News Show')">📊 News Show</button>
-        <button onclick="showMsg('News Hide')">📊 News Hide</button>
-        <button onclick="showMsg('Alert Show')">📊 Alert Show</button>
-        <button onclick="showMsg('Alert Hide')">📊 Alert Hide</button>
-        <div style="font-size:9px;font-weight:800;color:#334155;padding:3px 4px;border-bottom:1px solid #e2e8f0;margin:4px 0 3px;">💾 ڈیٹا</div>
-        <button onclick="showMsg('Export')">📥 Export</button>
-        <button onclick="showMsg('Import')">📤 Import</button>
-        <button onclick="showMsg('Reset')">🔄 Reset</button>
+    <div id="newsBody" class="section-body">
+      <div class="row">
+        <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option><option value="complaint">⏰ Time</option></select>
+        <input type="text" id="newsContent" placeholder="متن...">
+        <button class="btn btn-save" onclick="saveNews()">💾</button>
+      </div>
+      <div class="scroll-head"><label>📋 ریکارڈز:</label><button class="btn btn-close" onclick="toggleClose('newsRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="newsRecordList"></div>
+      <div class="stats" id="newsStats"></div>
     </div>
-    <div id="newsBody">
-        <div class="form-row">
-            <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option><option value="complaint">⏰ Time</option></select>
-            <input type="text" id="newsContent" placeholder="متن...">
-            <button onclick="saveNews()">💾</button>
-        </div>
-        <div id="newsTimeRow" style="display:none;"><input type="time" id="newsTime" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;"></div>
-        <label class="form-label">📋 ریکارڈز:</label>
-        <div class="list-box" id="newsRecordList"></div>
-    </div>
-</div>
+  </div>
 
-<!-- 5. ALAMAT -->
-<div class="card" style="border-right-color:#0ea5e9">
-    <div class="card-head">
-        <div class="card-title">🩺 صحت اور علامات</div>
-        <div class="card-btns"><button onclick="toggleSettings('alamatSettings')">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></div>
-    </div>
+  <!-- 5. HEALTH -->
+  <div class="section sec-health">
+    <div class="section-title"><span>🩺 صحت اور علامات</span><span class="icons"><button onclick="toggleSettings('alamatSettings')">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></span></div>
     <div class="settings-panel" id="alamatSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="toggleSettings('alamatSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="alamatBody">
-        <select id="alamatMember" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;"></select>
-        <div class="form-row">
-            <input type="text" id="alamatSymptomInput" placeholder="علامت...">
-            <button onclick="addAlamatSymptom()">➕</button>
-        </div>
-        <div class="list-box" id="alamatSymptomList"></div>
+    <div id="alamatBody" class="section-body">
+      <label>👤 ممبر:</label>
+      <div class="row"><select id="alamatMember" onchange="renderAlamat()"><option value="">-- ممبر --</option></select></div>
+      <div class="row">
+        <input type="text" id="alamatSymptomInput" placeholder="علامت...">
+        <button class="btn btn-add" onclick="addAlamatSymptom()">➕</button>
+      </div>
+      <div class="scroll-head"><label>📋 علامات:</label><button class="btn btn-close" onclick="toggleClose('alamatSymptomList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="alamatSymptomList"></div>
+      <div class="stats" id="alamatStats"></div>
     </div>
-</div>
+  </div>
 
-<!-- 6. DIET -->
-<div class="card" style="border-right-color:#059669">
-    <div class="card-head">
-        <div class="card-title">🍽️ ڈائٹ روٹین مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('dietSettings')">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></div>
-    </div>
+  <!-- 6. DIET -->
+  <div class="section sec-diet">
+    <div class="section-title"><span>🍽️ ڈائٹ روٹین مینیجر</span><span class="icons"><button onclick="toggleSettings('dietSettings')">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></span></div>
     <div class="settings-panel" id="dietSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="toggleSettings('dietSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="dietBody">
-        <select id="dietMember" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;"></select>
-        <div class="form-row">
-            <input type="text" id="dietTimeInput" placeholder="وقت...">
-            <button onclick="addDietTime()">➕</button>
-        </div>
-        <label class="form-label">🍞 Category:</label>
-        <select id="dietCategory" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;">
-            <option value="daily">Daily</option>
-            <option value="kabhi">Kabhi Kabhi</option>
-            <option value="junk">Junk</option>
-        </select>
-        <div class="form-row">
-            <input type="text" id="dietItemName" placeholder="آٹم...">
-            <input type="number" id="dietItemQty" placeholder="Qty" value="1" style="max-width:70px;">
-            <button onclick="addDietItem()">💾</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-            <div class="list-box" id="dietDailyCollect" style="min-height:80px;"></div>
-            <div class="list-box" id="dietKabhiCollect" style="min-height:80px;"></div>
-            <div class="list-box" id="dietJunkCollect" style="min-height:80px;"></div>
-        </div>
-        <button onclick="saveDietRecord()" style="width:100%;padding:9px;background:#059669;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;margin-top:8px;">💾 محفوظ کریں</button>
-        <div class="list-box" id="dietItemList" style="margin-top:8px;"></div>
+    <div id="dietBody" class="section-body">
+      <label>👤 ممبر:</label>
+      <div class="row"><select id="dietMember" onchange="renderDiet()"><option value="">-- ممبر --</option></select></div>
+      <label>⏰ وقت:</label>
+      <div class="row"><input type="text" id="dietTimeInput" placeholder="وقت..."><button class="btn btn-save" onclick="addDietTime()">💾</button></div>
+      <label>🍞 Category:</label>
+      <div class="row"><select id="dietCategory"><option value="daily">Daily</option><option value="kabhi">Kabhi Kabhi</option><option value="junk">Junk</option></select></div>
+      <div class="row">
+        <input type="text" id="dietItemName" placeholder="آٹم...">
+        <input type="number" id="dietItemQty" placeholder="Qty" value="1" style="max-width:70px;">
+        <button class="btn btn-save" onclick="addDietItem()">💾</button>
+      </div>
+      <div class="scroll-head"><label>📋 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('dietItemList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="dietItemList"></div>
+      <div class="stats" id="dietStats"></div>
     </div>
-</div>
+  </div>
 
-<!-- 7. RASHAN -->
-<div class="card" style="border-right-color:#d97706">
-    <div class="card-head">
-        <div class="card-title">🛒 راشن ایڈ مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('rashanSettings')">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></div>
-    </div>
+  <!-- 7. RASHAN -->
+  <div class="section sec-ration">
+    <div class="section-title"><span>🛒 راشن ایڈ مینیجر</span><span class="icons"><button onclick="toggleSettings('rashanSettings')">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></span></div>
     <div class="settings-panel" id="rashanSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
-        <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
-        <button onclick="showMsg('Budget Add')">💰 Budget Add</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="showMsg('Dash Show')">📊 Dash Show</button>
+      <button onclick="showMsg('Dash Hide')">📊 Dash Hide</button>
+      <button onclick="showBudgetInput()">💰 Budget Add</button>
+      <button onclick="toggleSettings('rashanSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="rashanBody">
-        <div class="form-row">
-            <input type="text" id="rashanItemName" placeholder="آٹم...">
-            <input type="number" id="rashanItemQty" placeholder="Qty" style="max-width:70px;">
-            <input type="number" id="rashanItemRate" placeholder="Rate" style="max-width:80px;">
-            <button onclick="addRashanItem()">💾</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:8px 0;">
-            <div class="list-box" id="rashanCol1" style="min-height:60px;"></div>
-            <div class="list-box" id="rashanCol2" style="min-height:60px;"></div>
-            <div class="list-box" id="rashanCol3" style="min-height:60px;"></div>
-        </div>
-        <button onclick="showMsg('Budget Add')" style="width:100%;padding:9px;background:#d97706;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;margin:6px 0;">💰 بجٹ شامل کریں</button>
-        <div class="list-box" id="rashanItemList"></div>
+    <div id="rashanBody" class="section-body">
+      <label>📝 نیا آٹم:</label>
+      <div class="row">
+        <input type="text" id="rashanItemName" placeholder="آٹم...">
+        <input type="number" id="rashanItemQty" placeholder="Qty" style="max-width:70px;">
+        <input type="number" id="rashanItemRate" placeholder="Rate" style="max-width:80px;">
+        <button class="btn btn-save" onclick="addRashanItem()">💾</button>
+      </div>
+      <div class="row" id="budgetRow" style="display:none;">
+        <input type="number" id="rashanBudgetInput" placeholder="بجٹ...">
+        <button class="btn btn-save" onclick="saveRashanBudget()">💾 Save</button>
+      </div>
+      <div class="scroll-head"><label>📋 آٹم لسٹ:</label><button class="btn btn-close" onclick="toggleClose('rashanItemList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="rashanItemList"></div>
+      <div class="stats" id="rashanStats"></div>
     </div>
-</div>
+  </div>
 
-<!-- 8. GREEN BUS -->
-<div class="card" style="border-right-color:#65a30d">
-    <div class="card-head">
-        <div class="card-title">🚌 گرین بس انٹری مینیجر</div>
-        <div class="card-btns"><button onclick="toggleSettings('busSettings')">⚙️</button><button onclick="toggleBody('busBody')">⬇️</button></div>
-    </div>
+  <!-- 8. BUS -->
+  <div class="section sec-bus">
+    <div class="section-title"><span>🚌 گرین بس انٹری مینیجر</span><span class="icons"><button onclick="toggleSettings('busSettings')">⚙️</button><button onclick="toggleBody('busBody')">⬇️</button></span></div>
     <div class="settings-panel" id="busSettings">
-        <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
-        <button onclick="showMsg('All Select')">✅ All Select</button>
-        <button onclick="showMsg('Edit')">✏️ Edit</button>
-        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
-        <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
-        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
-        <button onclick="showMsg('Oper')">🔼 Oper</button>
-        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
-        <button onclick="showMsg('Password')">🔑 Password</button>
-        <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
-        <button onclick="showMsg('Close')">⬇️ Close</button>
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('busSettings')">⬇️ Close Settings</button>
     </div>
-    <div id="busBody">
-        <label class="form-label">🛣️ روٹ:</label>
-        <div class="form-row">
-            <input type="text" id="busRouteInput" placeholder="روٹ...">
-            <select id="busRouteSelect"><option value="">روٹ...</option></select>
-            <button onclick="addBusRoute()">➕</button>
-        </div>
-        <label class="form-label">📅 دن:</label>
-        <select id="busDaySelect" style="width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:6px;margin-bottom:8px;text-align:center;">
-            <option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option>
-            <option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option>
-        </select>
-        <label class="form-label">⏰ وقت:</label>
-        <div class="form-row">
-            <input type="time" id="busStartTime">
-            <input type="time" id="busEndTime">
-            <input type="number" id="busGap" placeholder="وقفہ" value="30">
-        </div>
-        <label class="form-label">📍 اسٹاپ:</label>
-        <div class="form-row">
-            <input type="text" id="busStopInput" placeholder="اسٹاپ...">
-            <select id="busStopSelect"><option value="">اسٹاپ...</option></select>
-            <button onclick="addBusStop()">➕</button>
-        </div>
-        <div class="list-box" id="busStopList"></div>
+    <div id="busBody" class="section-body">
+      <label>🛣️ روٹ:</label>
+      <div class="row">
+        <input type="text" id="busRouteInput" placeholder="نیا روٹ...">
+        <select id="busRouteSelect"><option value="">روٹ...</option></select>
+        <button class="btn btn-add" onclick="addBusRoute()">➕</button>
+      </div>
+      <label>📅 دن:</label>
+      <div class="row"><select id="busDaySelect"><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select></div>
+      <label>⏰ وقت:</label>
+      <div class="row">
+        <input type="time" id="busStartTime">
+        <input type="time" id="busEndTime">
+        <input type="number" id="busGap" placeholder="وقفہ" value="30">
+      </div>
+      <label>📍 اسٹاپ:</label>
+      <div class="row">
+        <input type="text" id="busStopInput" placeholder="اسٹاپ...">
+        <select id="busStopSelect"><option value="">اسٹاپ...</option></select>
+        <button class="btn btn-add" onclick="addBusStop()">➕</button>
+      </div>
+      <div class="scroll-head"><label>📋 اسٹاپ لسٹ:</label><button class="btn btn-close" onclick="toggleClose('busStopList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="busStopList"></div>
+      <div class="stats" id="busStats"></div>
     </div>
+  </div>
+
+  <!-- 9. RESULT -->
+  <div class="section sec-result">
+    <div class="section-title"><span>🏆 ممبران فائنل رزلٹ</span><span class="icons"><button onclick="toggleSettings('resultSettings')">⚙️</button><button onclick="toggleBody('resultBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="resultSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('resultSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="resultBody" class="section-body">
+      <div class="row">
+        <select id="resultMemberSelect"><option value="">ممبر...</option></select>
+        <input type="text" id="resultTextBox" placeholder="سزا/شاباش...">
+        <input type="number" id="resultPercentBox" placeholder="%" style="max-width:60px;" min="0" max="100">
+        <button class="btn btn-add" onclick="addResult()">➕</button>
+      </div>
+      <div class="scroll-head"><label>📋 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('resultRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="resultRecordList"></div>
+      <div class="stats" id="resultStats"></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html">🏠 ڈیش</a>
+    <a href="entry.html" class="active">➕ انٹری</a>
+    <a href="history.html">📜 ہسٹری</a>
+    <a href="manager.html">👥 مینیجر</a>
+  </div>
 </div>
 
-<!-- 9. RESULT -->
-<div class="card" style="border-right-color:#e11d48">
-    <div class="card-head">
-        <div class="card-title">🏆 ممبران فائنل رزلٹ</div>
-        <div class="card-btns"><button onclick="toggleBody('resultBody')">⬇️</button></div>
-    </div>
-    <div id="resultBody">
-        <div class="form-row">
-            <select id="resultMemberSelect"><option value="">ممبر...</option></select>
-            <input type="text" id="resultTextBox" placeholder="سزا / شاباش...">
-            <input type="number" id="resultPercentBox" placeholder="%" style="max-width:60px;" min="0" max="100">
-            <button onclick="addResult()">➕</button>
-        </div>
-        <div class="list-box" id="resultPendingList"></div>
-    </div>
-</div>
+<div class="inline-msg" id="inlineMsg"></div>
 
-<script src="entry-app.js"></script>
+<script>
+// ========== KEYS ==========
+var DUTY_KEY='sec4_duty_manager_data_v4';
+var TASK_KEY='sec3_task_and_point_manager_data';
+var SKIP_KEY='sec4_duty_skipped_data';
+var NEWS_KEY='sec10_news_alerts_data';
+var ALAMAT_KEY='symptoms';
+var DIET_KEY='diets';
+var RASHAN_KEY='sec11_rashan_data_v2';
+var RASHAN_BUDGET_KEY='sec11_rashan_budget_v2';
+var BUS_ROUTES_KEY='sec21_green_bus_routes_v19';
+var BUS_STOPS_KEY='bus_stops';
+var RESULT_KEY='member_result_data_v1';
+
+// ========== UTILS ==========
+function $(id){return document.getElementById(id);}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function pad(n){return String(n).padStart(2,'0');}
+function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60);}
+function getMembers(){return ls(DUTY_KEY,[]);}
+
+function showMsg(text, success){
+    var el=$('inlineMsg');
+    el.textContent=text;
+    el.style.background=success?'#2e8b57':'#c0392b';
+    el.classList.add('show');
+    setTimeout(function(){el.classList.remove('show');},2500);
+}
+
+function toggleSettings(id){ var el=$(id); if(el) el.classList.toggle('open'); }
+function toggleBody(id){ var el=$(id); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+function toggleClose(id){ var el=$(id); el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+
+// ========== 1. DUTY ==========
+function addMember(){
+    var name=$('newMemName').value.trim(), rank=$('newMemRank').value;
+    if(!name){showMsg('نام لکھیں');return;}
+    var m=getMembers();
+    if(m.some(function(x){return x.name.toLowerCase()===name.toLowerCase();})){showMsg('ممبر موجود ہے');return;}
+    m.push({id:Date.now(),name:name,rank:rank,onDuty:false,onLeave:false,dutyCount:0,dutyStart:null});
+    lss(DUTY_KEY,m);
+    $('newMemName').value='';
+    renderDuty();
+    showMsg('✅ شامل', true);
+}
+function editMember(){
+    var id=$('editMemSelect').value;
+    if(!id){showMsg('ممبر منتخب کریں');return;}
+    var m=getMembers();
+    var mem=m.find(function(x){return String(x.id)===String(id);});
+    if(!mem)return;
+    var nn=prompt('نیا نام:',mem.name);
+    if(nn&&nn.trim()){mem.name=nn.trim();lss(DUTY_KEY,m);renderDuty();showMsg('✅ اپڈیٹ',true);}
+}
+function deleteMember(){
+    var id=$('editMemSelect').value;
+    if(!id){showMsg('ممبر منتخب کریں');return;}
+    if(!confirm('ڈیلیٹ؟'))return;
+    lss(DUTY_KEY,getMembers().filter(function(x){return String(x.id)!==String(id);}));
+    renderDuty();
+    showMsg('✅ ڈیلیٹ',true);
+}
+function assignDuty(){
+    var sid=$('assignSenior').value, jid=$('assignJunior').value;
+    if(!sid&&!jid){showMsg('ممبر منتخب کریں');return;}
+    var m=getMembers(), now=Date.now(), changed=false;
+    [sid,jid].forEach(function(id){
+        if(!id)return;
+        var t=m.find(function(x){return String(x.id)===id;});
+        if(!t)return;
+        if(t.onDuty){showMsg(t.name+' پہلے سے ڈیوٹی پر');return;}
+        t.onDuty=true; t.onLeave=false; t.dutyCount++; t.dutyStart=now; changed=true;
+    });
+    if(changed){lss(DUTY_KEY,m);renderDuty();showMsg('✅ تفویض',true);}
+}
+function endAllDuty(){
+    var m=getMembers(), active=m.filter(function(x){return x.onDuty;});
+    if(!active.length){showMsg('کوئی ڈیوٹی پر نہیں');return;}
+    active.forEach(function(x){x.onDuty=false;x.dutyStart=null;x.dutyEndedAt=Date.now();});
+    lss(DUTY_KEY,m);
+    renderDuty();
+    showMsg('✅ ڈیوٹی ختم',true);
+}
+function renderDuty(){
+    var m=getMembers();
+    var eSel=$('editMemSelect');
+    var cur=eSel.value;
+    eSel.innerHTML='<option value="">-- ممبر --</option>';
+    m.forEach(function(x){eSel.innerHTML+='<option value="'+x.id+'">'+x.name+'</option>';});
+    if(cur)eSel.value=cur;
+    var sSel=$('assignSenior'), jSel=$('assignJunior');
+    sSel.innerHTML='<option value="">🟢 سینئر...</option>';
+    jSel.innerHTML='<option value="">🔵 جونیئر...</option>';
+    m.filter(function(x){return !x.onLeave&&!x.onDuty;}).forEach(function(x){
+        if(x.rank==='Senior')sSel.innerHTML+='<option value="'+x.id+'">'+x.name+'</option>';
+        if(x.rank==='Junior')jSel.innerHTML+='<option value="'+x.id+'">'+x.name+'</option>';
+    });
+    var active=m.filter(function(x){return x.onDuty;});
+    $('activeDutyList').innerHTML=active.length?active.map(function(x){return '👤 '+esc(x.name);}).join('<br>'):'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    var done=m.filter(function(x){return !x.onDuty&&!x.onLeave&&x.dutyEndedAt;});
+    $('doneDutyList').innerHTML=done.length?done.map(function(x){return '👤 '+esc(x.name);}).join('<br>'):'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    var leave=m.filter(function(x){return x.onLeave;});
+    $('onLeaveList').innerHTML=leave.length?leave.map(function(x){return '👤 '+esc(x.name);}).join('<br>'):'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    var senior=m.find(function(x){return x.onDuty&&x.rank==='Senior';});
+    var junior=m.find(function(x){return x.onDuty&&x.rank==='Junior';});
+    $('dashSenior').textContent=senior?senior.name:'—';
+    $('dashJunior').textContent=junior?junior.name:'—';
+    var activeMem=senior||junior;
+    if(activeMem&&activeMem.dutyStart){$('dashTimer').textContent=fmtTimer(Date.now()-activeMem.dutyStart);}else{$('dashTimer').textContent='00:00:00';}
+    $('memberDetailList').innerHTML=m.length?m.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ 👤 '+esc(x.name)+' ('+x.rank+')</div><div class="line">ڈیوٹی: '+(x.dutyCount||0)+' | چھٹی: '+(x.onLeave?'ہاں':'نہیں')+'</div></div>';}).join(''):'<div style="color:#94a3b8;text-align:center;">کوئی نہیں</div>';
+    populateOtherDropdowns(m);
+}
+function populateOtherDropdowns(m){
+    ['alamatMember','dietMember','resultMemberSelect'].forEach(function(id){
+        var sel=$(id);
+        if(!sel)return;
+        var cur=sel.value;
+        sel.innerHTML='<option value="">-- ممبر --</option>';
+        m.forEach(function(x){sel.innerHTML+='<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>';});
+        if(cur)sel.value=cur;
+    });
+}
+
+// ========== 2. TASK ==========
+function getTasks(){return ls(TASK_KEY,[]);}
+function addTask(){
+    var name=$('newTaskName').value.trim(), type=$('newTaskType').value, pts=parseInt($('newTaskPoints').value,10)||5;
+    if(!name){showMsg('ٹاسک کا نام لکھیں');return;}
+    var t=getTasks();
+    t.unshift({id:Date.now(),title:name,type:type,points:pts});
+    lss(TASK_KEY,t);
+    $('newTaskName').value='';
+    renderTasks();
+    showMsg('✅ شامل',true);
+}
+function renderTasks(){
+    var t=getTasks();
+    var html='';
+    var daily=t.filter(function(x){return x.type==='Daily';});
+    var occ=t.filter(function(x){return x.type==='Occasional';});
+    if(daily.length){html+='<div class="head" style="background:#e8f5e9;padding:4px;">🟢 روزانہ:</div>';html+=daily.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ '+esc(x.title)+'</div><div class="line">🏆 '+x.points+'</div></div>';}).join('');}
+    if(occ.length){html+='<div class="head" style="background:#e3f2fd;padding:4px;">🔵 کبھی کبھی:</div>';html+=occ.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ '+esc(x.title)+'</div><div class="line">🏆 '+x.points+'</div></div>';}).join('');}
+    $('taskListContainer').innerHTML=html||'<div style="text-align:center;color:#94a3b8;">کوئی ٹاسک نہیں</div>';
+    var eSel=$('editTaskSelect');
+    var cur=eSel.value;
+    eSel.innerHTML='<option value="">-- ٹاسک --</option>';
+    t.forEach(function(x){eSel.innerHTML+='<option value="'+x.id+'">'+x.title+'</option>';});
+    if(cur)eSel.value=cur;
+}
+function editTask(){
+    var id=$('editTaskSelect').value;
+    if(!id){showMsg('ٹاسک منتخب کریں');return;}
+    var t=getTasks();
+    var task=t.find(function(x){return String(x.id)===String(id);});
+    if(!task)return;
+    var nn=prompt('نیا نام:',task.title);
+    if(nn&&nn.trim()){task.title=nn.trim();lss(TASK_KEY,t);renderTasks();showMsg('✅ اپڈیٹ',true);}
+}
+function deleteTask(){
+    var id=$('editTaskSelect').value;
+    if(!id){showMsg('ٹاسک منتخب کریں');return;}
+    if(!confirm('ڈیلیٹ؟'))return;
+    lss(TASK_KEY,getTasks().filter(function(x){return String(x.id)!==String(id);}));
+    renderTasks();
+    showMsg('✅ ڈیلیٹ',true);
+}
+
+// ========== 3. SKIP ==========
+function renderSkipSection(){
+    var sk=ls(SKIP_KEY,[]);
+    var m=getMembers();
+    var memberFilter=$('skipMemberFilter').value;
+    var grouped={};
+    sk.forEach(function(x){
+        if(memberFilter!=='all'&&x.member!==memberFilter)return;
+        if(!grouped[x.member])grouped[x.member]=[];
+        grouped[x.member].push(x);
+    });
+    var html='';
+    Object.keys(grouped).forEach(function(member){
+        html+='<div style="background:#f0f0f0;padding:4px;font-weight:bold;margin-top:4px;">👤 '+esc(member)+'</div>';
+        grouped[member].forEach(function(x,i){
+            html+='<div class="record"><div class="head">'+ (i+1) +'️⃣ '+esc(x.task)+'</div><div class="line">'+(x.hasReason?'✅ '+esc(x.reason):'⏳ وجہ نہیں دی')+'</div></div>';
+        });
+    });
+    $('skipRecordList').innerHTML=html||'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var total=sk.length, done=sk.filter(function(x){return x.hasReason;}).length;
+    $('skipStats').textContent='📊 سٹیٹ: '+total+' Total | ✅ '+done+' Done | ⏳ '+(total-done)+' Pending';
+    var mSel=$('skipMemberFilter');
+    if(mSel&&mSel.options.length<=1){m.forEach(function(x){mSel.innerHTML+='<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>';});}
+}
+
+// ========== 4. NEWS ==========
+function saveNews(){
+    var type=$('newsType').value, content=$('newsContent').value.trim();
+    if(!content){showMsg('متن لکھیں');return;}
+    var items=ls(NEWS_KEY,[]);
+    var d=new Date();
+    items.unshift({id:Date.now(),type:type,content:content,timestamp:Date.now(),enabled:true,dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())});
+    lss(NEWS_KEY,items);
+    $('newsContent').value='';
+    renderNews();
+    showMsg('✅ محفوظ',true);
+}
+function renderNews(){
+    var items=ls(NEWS_KEY,[]);
+    var icons={news:'📰',alert:'🚨',complaint:'⏰'};
+    $('newsRecordList').innerHTML=items.length?items.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ '+(icons[x.type]||'')+' '+esc(x.content)+'</div><div class="line">'+(x.dateStr||'')+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var news=items.filter(function(x){return x.type==='news';}).length;
+    var alerts=items.filter(function(x){return x.type==='alert';}).length;
+    var times=items.filter(function(x){return x.type==='complaint';}).length;
+    $('newsStats').textContent='📊 سٹیٹ: 📰 '+news+' News | 🚨 '+alerts+' Alert | ⏰ '+times+' Time';
+    var newsBar=$('newsBar');
+    var newsList=items.filter(function(x){return x.type==='news';});
+    if(newsBar)newsBar.textContent=newsList.length?'📰 '+newsList.map(function(x){return x.content;}).join(' • '):'📰 کوئی نیوز نہیں';
+    var alertList=items.filter(function(x){return x.type==='alert';});
+    if(alertList.length){$('alertBar').style.display='flex';$('alertMsg').textContent='🚨 '+alertList[0].content;}else{$('alertBar').style.display='none';}
+}
+function skipAlert(){var ab=$('alertBar');if(ab)ab.style.display='none';}
+
+// ========== 5. ALAMAT ==========
+function addAlamatSymptom(){
+    var member=$('alamatMember').value, sym=$('alamatSymptomInput').value.trim();
+    if(!member||!sym){showMsg('ممبر اور علامت لکھیں');return;}
+    var all=ls(ALAMAT_KEY,[]);
+    var d=new Date();
+    all.push({id:Date.now(),member:member,symptom:sym,state:'1. ٹھیک ہے',positive:true,timestamp:Date.now(),dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)});
+    lss(ALAMAT_KEY,all);
+    $('alamatSymptomInput').value='';
+    renderAlamat();
+    showMsg('✅ شامل',true);
+}
+function renderAlamat(){
+    var member=$('alamatMember').value;
+    var all=ls(ALAMAT_KEY,[]).filter(function(x){return x.member===member;});
+    $('alamatSymptomList').innerHTML=all.length?all.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ '+esc(x.symptom)+'</div><div class="line">'+esc(x.state)+' | '+(x.dateStr||'')+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('alamatStats').textContent='📊 ٹوٹل: '+all.length+' علامات';
+}
+
+// ========== 6. DIET ==========
+function addDietTime(){
+    var member=$('dietMember').value, time=$('dietTimeInput').value.trim();
+    if(!member||!time){showMsg('ممبر اور وقت لکھیں');return;}
+    var all=ls(DIET_KEY,[]);
+    all.unshift({id:Date.now(),member:member,time:time,category:'time',timestamp:Date.now()});
+    lss(DIET_KEY,all);
+    $('dietTimeInput').value='';
+    renderDiet();
+    showMsg('✅ شامل',true);
+}
+function addDietItem(){
+    var member=$('dietMember').value, cat=$('dietCategory').value, name=$('dietItemName').value.trim(), qty=parseInt($('dietItemQty').value,10)||1;
+    if(!member||!name){showMsg('ممبر اور آٹم لکھیں');return;}
+    var all=ls(DIET_KEY,[]);
+    all.unshift({id:Date.now(),member:member,category:cat,items:[{name:name,qty:qty}],timestamp:Date.now()});
+    lss(DIET_KEY,all);
+    $('dietItemName').value='';
+    renderDiet();
+    showMsg('✅ شامل',true);
+}
+function renderDiet(){
+    var member=$('dietMember').value;
+    var all=ls(DIET_KEY,[]).filter(function(x){return x.member===member;});
+    $('dietItemList').innerHTML=all.length?all.map(function(x,i){var items=(x.items||[]).map(function(y){return y.name+'('+y.qty+')';}).join(', ');return '<div class="record"><div class="head">'+ (i+1) +'️⃣ '+x.category+'</div><div class="line">'+items+' '+(x.time||'')+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('dietStats').textContent='📊 ٹوٹل: '+all.length+' ریکارڈ';
+}
+
+// ========== 7. RASHAN ==========
+function addRashanItem(){
+    var name=$('rashanItemName').value.trim(), qty=parseInt($('rashanItemQty').value,10)||1, rate=parseInt($('rashanItemRate').value,10)||0;
+    if(!name||rate<=0){showMsg('نام اور ریٹ لکھیں');return;}
+    var items=ls(RASHAN_KEY,[]);
+    items.unshift({id:Date.now(),name:name,qty:qty,rate:rate,timestamp:Date.now()});
+    lss(RASHAN_KEY,items);
+    $('rashanItemName').value=''; $('rashanItemQty').value=''; $('rashanItemRate').value='';
+    renderRashan();
+    showMsg('✅ شامل',true);
+}
+function renderRashan(){
+    var all=ls(RASHAN_KEY,[]);
+    $('rashanItemList').innerHTML=all.length?all.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ 📦 '+esc(x.name)+'</div><div class="line">Qty: '+x.qty+' | Rate: '+x.rate+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی آٹم نہیں</div>';
+    var budget=ls(RASHAN_BUDGET_KEY,0);
+    var total=all.reduce(function(s,x){return s+x.qty*x.rate;},0);
+    $('rashanStats').textContent='📊 سٹیٹ: 📦 '+all.length+' Items | 💰 '+total+' | 💵 '+budget;
+}
+function showBudgetInput(){var r=$('budgetRow'); r.style.display = r.style.display === 'none' ? 'flex' : 'none';}
+function saveRashanBudget(){
+    var v=parseFloat($('rashanBudgetInput').value);
+    if(isNaN(v)||v<0){showMsg('بجٹ درست درج کریں');return;}
+    lss(RASHAN_BUDGET_KEY,v);
+    $('rashanBudgetInput').value='';
+    renderRashan();
+    showMsg('✅ بجٹ محفوظ',true);
+}
+
+// ========== 8. BUS ==========
+function addBusRoute(){
+    var name=$('busRouteInput').value.trim();
+    if(!name){showMsg('روٹ کا نام لکھیں');return;}
+    var routes=ls(BUS_ROUTES_KEY,[]);
+    if(routes.indexOf(name)!==-1){showMsg('روٹ موجود ہے');return;}
+    routes.push(name);
+    lss(BUS_ROUTES_KEY,routes);
+    $('busRouteInput').value='';
+    renderBusRoutes();
+    showMsg('✅ روٹ شامل',true);
+}
+function renderBusRoutes(){
+    var routes=ls(BUS_ROUTES_KEY,[]);
+    var sel=$('busRouteSelect');
+    if(sel){sel.innerHTML='<option value="">روٹ...</option>';routes.forEach(function(x){sel.innerHTML+='<option value="'+x+'">'+x+'</option>';});}
+}
+function addBusStop(){
+    var stop=$('busStopInput').value.trim();
+    if(!stop){showMsg('اسٹاپ کا نام لکھیں');return;}
+    var stops=ls(BUS_STOPS_KEY,[]);
+    if(stops.indexOf(stop)!==-1){showMsg('اسٹاپ موجود ہے');return;}
+    stops.push(stop);
+    lss(BUS_STOPS_KEY,stops);
+    $('busStopInput').value='';
+    renderBusStops();
+    showMsg('✅ اسٹاپ شامل',true);
+}
+function renderBusStops(){
+    var stops=ls(BUS_STOPS_KEY,[]);
+    $('busStopList').innerHTML=stops.length?stops.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ 🛑 '+esc(x)+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی اسٹاپ نہیں</div>';
+    var sel=$('busStopSelect');
+    if(sel){sel.innerHTML='<option value="">اسٹاپ...</option>';stops.forEach(function(x){sel.innerHTML+='<option value="'+x+'">'+x+'</option>';});}
+    $('busStats').textContent='📊 سٹیٹ: 🛣️ '+ls(BUS_ROUTES_KEY,[]).length+' Routes | 📍 '+stops.length+' Stops';
+}
+
+// ========== 9. RESULT ==========
+function addResult(){
+    var member=$('resultMemberSelect').value, text=$('resultTextBox').value.trim(), pct=parseInt($('resultPercentBox').value,10)||0;
+    if(!member||!text){showMsg('ممبر اور متن لکھیں');return;}
+    var all=ls(RESULT_KEY,[]);
+    var d=new Date();
+    all.unshift({id:Date.now(),member:member,text:text,percent:pct,timestamp:Date.now(),dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()});
+    lss(RESULT_KEY,all);
+    $('resultTextBox').value='';
+    $('resultPercentBox').value='';
+    renderResult();
+    showMsg('✅ شامل',true);
+}
+function renderResult(){
+    var all=ls(RESULT_KEY,[]);
+    $('resultRecordList').innerHTML=all.length?all.map(function(x,i){return '<div class="record"><div class="head">'+ (i+1) +'️⃣ 👤 '+esc(x.member)+'</div><div class="line">'+esc(x.text)+' — '+x.percent+'%</div><div class="line">'+x.dateStr+'</div></div>';}).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('resultStats').textContent='📊 ٹوٹل: '+all.length+' ریکارڈ';
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', function(){
+    renderDuty();
+    renderTasks();
+    renderSkipSection();
+    renderNews();
+    renderAlamat();
+    renderDiet();
+    renderRashan();
+    renderBusRoutes();
+    renderBusStops();
+    renderResult();
+    setInterval(function(){
+        var m=getMembers();
+        var active=m.find(function(x){return x.onDuty&&x.dutyStart;});
+        if(active&&$('dashTimer')){$('dashTimer').textContent=fmtTimer(Date.now()-active.dutyStart);}
+    },1000);
+});
+</script>
 </body>
 </html>
