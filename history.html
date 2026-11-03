@@ -3,542 +3,603 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>History - Records</title>
+<title>Smart Manager — History</title>
 <style>
-:root{--primary:#1e293b;--accent:#2563eb;--success:#10b981;--danger:#ef4444;--golden:#d97706;--bg:#eef2f6;--card:#fff;--border:#e2e8f0;--text:#334155;}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:system-ui,sans-serif;padding:12px;direction:rtl;color:var(--text);display:flex;justify-content:center;padding-bottom:80px;}
-.container{width:100%;max-width:600px;display:flex;flex-direction:column;gap:14px;}
-
-/* Card Base */
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:0 4px 12px rgba(0,0,0,.05);position:relative;overflow:hidden;}
-.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed #f1f5f9;}
-.card-title{font-size:15px;font-weight:800;color:var(--primary);display:flex;align-items:center;gap:6px;}
-.card-btns{display:flex;gap:6px;}
-.card-btns button{background:#f8fafc;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
-.card-btns button:hover{background:#e2e8f0;}
-
-/* Hidden Settings */
-.settings-panel{display:none;position:absolute;top:50px;left:10px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.15);z-index:100;min-width:160px;}
-.settings-panel.open{display:block;}
-.settings-panel button{display:block;width:100%;padding:8px;font-size:11px;font-weight:700;border:none;border-radius:6px;cursor:pointer;text-align:right;margin-bottom:4px;background:#f8fafc;color:#334155;font-family:inherit;}
-.settings-panel button:hover{background:#e2e8f0;}
-.settings-panel button.del{color:var(--danger);}
-
-/* Filter Row */
-.filter-row{display:flex;gap:6px;margin-bottom:10px;align-items:center;background:#f8fafc;padding:8px;border-radius:8px;border:1px solid #e2e8f0;flex-wrap:wrap;}
-.filter-row select{flex:1;padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-weight:700;outline:none;min-width:80px;}
-.filter-row button{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer;}
-.filter-row button.green{background:#f0fdf4;color:#16a34a;border-color:#86efac;}
-.filter-row button.orange{background:#fff7ed;color:#ea580c;border-color:#fdba74;}
-
-/* List */
-.list-box{max-height:300px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:8px;padding:6px;background:#fafafa;}
-.list-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;margin-bottom:6px;font-size:12px;font-weight:700;}
-.list-item .name{font-size:14px;font-weight:900;color:var(--primary);margin-bottom:4px;}
-.list-item .detail{font-size:11px;color:#475569;margin-bottom:2px;}
-.list-item .date{font-size:10px;color:#94a3b8;margin-top:4px;}
-
-/* Percentage Box */
-.percent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;}
-.p-box{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px;text-align:center;}
-.p-box .lbl{font-size:10px;font-weight:700;color:#64748b;margin-bottom:2px;}
-.p-box .val{font-size:16px;font-weight:900;}
-.p-box.good .val{color:var(--success);}
-.p-box.junk .val{color:var(--danger);}
-.p-box.total .val{color:var(--golden);}
-
-/* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;padding:10px;z-index:1000;}
-.nav-item{text-decoration:none;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:800;padding:5px;width:23%;}
-.nav-item.active{color:var(--accent);}
-.nav-icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Nastaliq Urdu', 'Segoe UI', Tahoma, sans-serif; background: #eef1f5; padding: 12px; padding-bottom: 80px; color: #222; }
+.app { max-width: 900px; margin: 0 auto; background: #fff; border: 2px solid #444; border-radius: 10px; overflow: hidden; }
+.app-header { background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; text-align: center; padding: 14px 10px; }
+.app-header h1 { font-size: 20px; }
+.app-header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+.section { margin: 14px; border: 2px solid #888; border-radius: 8px; overflow: hidden; }
+.section-title { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: bold; font-size: 15px; color: #fff; }
+.section-title .icons { display: flex; gap: 6px; }
+.section-title .icons button { background: rgba(255,255,255,.2); border: none; color: #fff; width: 26px; height: 26px; border-radius: 5px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.section-title .icons button:hover { background: rgba(255,255,255,.35); }
+.section-body { padding: 10px 12px; background: #fafbfc; }
+.sec-duty   .section-title { background: #1e6f9f; }
+.sec-task   .section-title { background: #2e8b57; }
+.sec-skip   .section-title { background: #b03a2e; }
+.sec-news   .section-title { background: #7d3c98; }
+.sec-health .section-title { background: #c0392b; }
+.sec-diet   .section-title { background: #d68910; }
+.sec-ration .section-title { background: #117a65; }
+.sec-bus    .section-title { background: #2c3e50; }
+.sec-result .section-title { background: #8e44ad; }
+label { font-size: 13px; display: block; margin: 6px 0 3px; }
+input, select, textarea { font-family: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid #bbb; border-radius: 5px; background: #fff; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: #1e6f9f; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+.row input, .row select { flex: 1; min-width: 80px; }
+.btn { font-family: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid #888; border-radius: 5px; background: #f0f0f0; cursor: pointer; }
+.btn:hover { background: #e2e2e2; }
+.btn-icon { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+.btn-close { background: #7f8c8d; color: #fff; border-color: #7f8c8d; font-size: 12px; padding: 4px 8px; }
+.settings-panel { display: none; padding: 8px; background: #2c3e50; border-bottom: 2px solid #1a252f; max-height: 400px; overflow-y: auto; }
+.settings-panel.open { display: block; }
+.settings-panel button { display: block; width: 100%; padding: 6px 10px; margin-bottom: 3px; font-family: inherit; font-size: 11px; font-weight: bold; text-align: right; background: #34495e; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+.settings-panel button:hover { background: #4a6278; }
+.settings-panel button.del { color: #ff9999; }
+.scroll-list { max-height: 160px; overflow-y: auto; border: 1px solid #ccc; border-radius: 6px; background: #fff; padding: 6px; font-size: 13px; }
+.scroll-list .record { border-bottom: 1px dotted #ccc; padding: 5px 4px; }
+.scroll-list .record:last-child { border-bottom: none; }
+.record .head { font-weight: bold; margin-bottom: 2px; font-size: 12px; }
+.record .line { font-size: 11px; color: #555; margin: 1px 0; }
+.scroll-head { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 4px; }
+.scroll-head label { margin: 0; }
+.stats { font-size: 12px; background: #eef3f8; border: 1px solid #c5d3e0; border-radius: 5px; padding: 6px 8px; margin-top: 8px; }
+.three-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 8px 0; }
+.mini-col { border: 1px solid #ccc; border-radius: 6px; background: #fff; padding: 6px; font-size: 13px; }
+.mini-col h4 { font-size: 13px; margin-bottom: 5px; }
+.mini-col select { width: 100%; margin: 4px 0; }
+table.small { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.small th, table.small td { border: 1px solid #ccc; padding: 4px 5px; text-align: center; }
+table.small th { background: #eef3f8; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; text-align: center; }
+.summary-grid .box { border: 1px solid #ccc; border-radius: 6px; padding: 8px; background: #fff; font-size: 12px; }
+.summary-grid .box .big { font-size: 16px; font-weight: bold; margin: 3px 0; }
+.bottom-nav { display: flex; border-top: 2px solid #444; background: #2c3e50; position: fixed; bottom: 0; left: 0; right: 0; max-width: 900px; margin: 0 auto; }
+.bottom-nav a { flex: 1; text-align: center; color: #fff; text-decoration: none; font-size: 13px; padding: 12px 4px; }
+.bottom-nav a:hover { background: #34495e; }
+.bottom-nav a.active { background: #8e44ad; }
+.inline-msg { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: #2e8b57; color: #fff; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,.2); z-index: 9999; display: none; font-family: inherit; }
+.inline-msg.show { display: block; }
+@media (max-width: 600px) { .three-cols, .summary-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app">
+  <div class="app-header">
+    <h1>🏥 Smart Manager &amp; Health Tracker</h1>
+    <p>History</p>
+  </div>
 
-    <!-- 1. DUTY HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">👮 ڈیوٹی ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('dutySettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dutyBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="dutySettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="dutyBody">
-            <div class="filter-row">
-                <select id="dutyFilterMember"><option value="all">تمام ممبران</option></select>
-                <select id="dutyFilterTime"><option value="all">تمام وقت</option><option value="today">آج</option><option value="week">7 دن</option><option value="month">30 دن</option></select>
-                <button onclick="copyDutyHistory()">📋</button>
-                <button class="green" onclick="shareDutyHistory()">📱</button>
-            </div>
-            <div class="list-box" id="dutyHistoryList"></div>
-        </div>
+  <!-- 1. DUTY HISTORY -->
+  <div class="section sec-duty">
+    <div class="section-title"><span>👮 ڈیوٹی ہسٹری</span><span class="icons"><button onclick="toggleSettings('dutySettings')">⚙️</button><button onclick="toggleBody('dutyBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="dutySettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('dutySettings')">⬇️ Close Settings</button>
     </div>
-
-    <!-- 2. TASK HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">📋 ٹاسک ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('taskSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="taskSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="taskBody">
-            <div class="filter-row">
-                <select id="taskFilterMember"><option value="all">تمام ممبران</option></select>
-                <select id="taskFilterTime"><option value="all">تمام وقت</option><option value="today">آج</option><option value="week">7 دن</option><option value="month">30 دن</option></select>
-                <button onclick="copyTaskHistory()">📋</button>
-                <button class="green" onclick="shareTaskHistory()">📱</button>
-            </div>
-            <div class="list-box" id="taskHistoryList"></div>
-        </div>
+    <div id="dutyBody" class="section-body">
+      <div class="row">
+        <select id="dutyFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="dutyFilterTime"><option value="all">تمام وقت</option><option value="today">آج</option><option value="week">7 دن</option><option value="month">30 دن</option></select>
+        <select id="dutyFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('duty')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('duty')">📱</button>
+      </div>
+      <div class="three-cols">
+        <div class="mini-col"><h4>🟢 ایکٹو</h4><select><option>تمام</option></select><div id="dutyActiveList" style="font-size:11px;"></div></div>
+        <div class="mini-col"><h4>✅ ڈیوٹی ہو</h4><select><option>تمام</option></select><div id="dutyDoneList" style="font-size:11px;"></div></div>
+        <div class="mini-col"><h4>🏖️ چھٹی</h4><select><option>تمام</option></select><div id="dutyLeaveList" style="font-size:11px;"></div></div>
+      </div>
+      <div class="scroll-head"><label>📋 مکمل ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('dutyRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="dutyRecordList"></div>
+      <div class="stats" id="dutyStats"></div>
     </div>
+  </div>
 
-    <!-- 3. SKIP HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">⛔ اسکیپ ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('skipSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="skipSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="skipBody">
-            <div class="filter-row">
-                <select id="skipFilterMember"><option value="all">تمام ممبران</option></select>
-                <select id="skipFilterTime"><option value="all">تمام وقت</option><option value="today">آج</option><option value="week">7 دن</option><option value="month">30 دن</option></select>
-                <button onclick="copySkipHistory()">📋</button>
-                <button class="green" onclick="shareSkipHistory()">📱</button>
-            </div>
-            <div class="list-box" id="skipHistoryList"></div>
-        </div>
+  <!-- 2. TASK HISTORY -->
+  <div class="section sec-task">
+    <div class="section-title"><span>📋 ٹاسک ہسٹری</span><span class="icons"><button onclick="toggleSettings('taskSettings')">⚙️</button><button onclick="toggleBody('taskBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="taskSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('taskSettings')">⬇️ Close Settings</button>
     </div>
-
-    <!-- 4. NEWS & ALERT HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">📰 نیوز اور الرٹ ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('newsSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="newsSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="newsBody">
-            <div class="filter-row">
-                <select id="newsFilterType"><option value="all">تمام</option><option value="news">📰 News</option><option value="alert">🚨 Alert</option><option value="complaint">⏰ Time</option></select>
-                <button onclick="copyNewsHistory()">📋</button>
-                <button class="green" onclick="shareNewsHistory()">📱</button>
-            </div>
-            <div class="list-box" id="newsHistoryList"></div>
-        </div>
+    <div id="taskBody" class="section-body">
+      <div class="row">
+        <select id="taskFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="taskFilterTime"><option value="all">تمام وقت</option><option value="today">آج</option><option value="week">7 دن</option><option value="month">30 دن</option></select>
+        <select id="taskFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('task')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('task')">📱</button>
+      </div>
+      <div class="stats" id="taskSummary">👤 علی — 🏆 25 Points | 📋 5 Tasks</div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('taskRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="taskRecordList"></div>
+      <div class="stats" id="taskStats"></div>
     </div>
+  </div>
 
-    <!-- 5. ALAMAT HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">🩺 علامات ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('alamatSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="alamatSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="alamatBody">
-            <div class="filter-row">
-                <select id="alamatFilterMember"><option value="all">تمام ممبران</option></select>
-                <button onclick="copyAlamatHistory()">📋</button>
-                <button class="green" onclick="shareAlamatHistory()">📱</button>
-            </div>
-            <div class="list-box" id="alamatHistoryList"></div>
-            <div class="percent-grid">
-                <div class="p-box good"><div class="lbl">✅ بہتر</div><div class="val" id="alamatPctGood">0%</div></div>
-                <div class="p-box junk"><div class="lbl">⚠️ مسئلہ</div><div class="val" id="alamatPctBad">0%</div></div>
-                <div class="p-box total"><div class="lbl">📊 ٹوٹل</div><div class="val" id="alamatPctTotal">0%</div></div>
-            </div>
-        </div>
+  <!-- 3. SKIP HISTORY -->
+  <div class="section sec-skip">
+    <div class="section-title"><span>⛔ اسکیپ کام ہسٹری</span><span class="icons"><button onclick="toggleSettings('skipSettings')">⚙️</button><button onclick="toggleBody('skipBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="skipSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('skipSettings')">⬇️ Close Settings</button>
     </div>
-
-    <!-- 6. DIET HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">🍽️ ڈائٹ ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('dietSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="dietSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="dietBody">
-            <div class="filter-row">
-                <select id="dietFilterMember"><option value="all">تمام ممبران</option></select>
-                <button onclick="copyDietHistory()">📋</button>
-                <button class="green" onclick="shareDietHistory()">📱</button>
-            </div>
-            <div class="list-box" id="dietHistoryList"></div>
-            <div class="percent-grid">
-                <div class="p-box good"><div class="lbl">✅ اچھی</div><div class="val" id="dietPctGood">0%</div></div>
-                <div class="p-box junk"><div class="lbl">⚠️ جنک</div><div class="val" id="dietPctJunk">0%</div></div>
-                <div class="p-box total"><div class="lbl">📊 ٹوٹل</div><div class="val" id="dietPctTotal">0%</div></div>
-            </div>
-        </div>
+    <div id="skipBody" class="section-body">
+      <div class="row">
+        <select id="skipFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="skipFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('skip')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('skip')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📋 ورک ڈیٹیل:</label><button class="btn btn-close" onclick="toggleClose('skipRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="skipRecordList"></div>
+      <div class="stats" id="skipStats"></div>
     </div>
+  </div>
 
-    <!-- 7. RASHAN HISTORY -->
-    <div class="card">
-        <div class="card-head"><div class="card-title">🛒 راشن ہسٹری</div><div class="card-btns"><button onclick="toggleSettings('rashanSettings')" style="opacity:0.1;">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></div></div>
-        <div class="settings-panel" id="rashanSettings"><button onclick="alert('ایڈٹ')">✏️ Edit</button><button class="del" onclick="alert('ڈیلیٹ')">🗑️ Delete</button><button class="del" onclick="alert('صاف')">🧹 Clear</button></div>
-        <div id="rashanBody">
-            <div class="filter-row">
-                <select id="rashanFilterMember"><option value="all">تمام ممبران</option></select>
-                <button onclick="copyRashanHistory()">📋</button>
-                <button class="green" onclick="shareRashanHistory()">📱</button>
-            </div>
-            <div class="list-box" id="rashanHistoryList"></div>
-        </div>
+  <!-- 4. NEWS HISTORY -->
+  <div class="section sec-news">
+    <div class="section-title"><span>📰 نیوز اینڈ الرٹ ہسٹری</span><span class="icons"><button onclick="toggleSettings('newsSettings')">⚙️</button><button onclick="toggleBody('newsBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="newsSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('newsSettings')">⬇️ Close Settings</button>
     </div>
+    <div id="newsBody" class="section-body">
+      <div class="row">
+        <select id="newsFilterType"><option value="all">تمام</option><option value="news">📰 News</option><option value="alert">🚨 Alert</option><option value="complaint">⏰ Time</option></select>
+        <select id="newsFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('news')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('news')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('newsRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="newsRecordList"></div>
+      <div class="stats" id="newsStats"></div>
+    </div>
+  </div>
 
+  <!-- 5. ALAMAT HISTORY -->
+  <div class="section sec-health">
+    <div class="section-title"><span>🩺 علامات ہسٹری</span><span class="icons"><button onclick="toggleSettings('alamatSettings')">⚙️</button><button onclick="toggleBody('alamatBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="alamatSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('alamatSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="alamatBody" class="section-body">
+      <div class="row">
+        <select id="alamatFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="alamatFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('alamat')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('alamat')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('alamatRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="alamatRecordList"></div>
+      <div class="stats" id="alamatStats"></div>
+      <div class="summary-grid">
+        <div class="box">✅ بہتر<div class="big" id="alamatPctGood">0%</div></div>
+        <div class="box">⚠️ مسئلہ<div class="big" id="alamatPctBad">0%</div></div>
+        <div class="box">📊 ٹوٹل<div class="big" id="alamatPctTotal">0%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. DIET HISTORY -->
+  <div class="section sec-diet">
+    <div class="section-title"><span>🍽️ ڈائٹ ہسٹری</span><span class="icons"><button onclick="toggleSettings('dietSettings')">⚙️</button><button onclick="toggleBody('dietBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="dietSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('dietSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="dietBody" class="section-body">
+      <div class="row">
+        <select id="dietFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="dietFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('diet')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('diet')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('dietRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="dietRecordList"></div>
+      <div class="stats" id="dietStats"></div>
+      <div class="summary-grid">
+        <div class="box">✅ اچھی<div class="big" id="dietPctGood">0%</div></div>
+        <div class="box">⚠️ جنک<div class="big" id="dietPctJunk">0%</div></div>
+        <div class="box">📊 ٹوٹل<div class="big" id="dietPctTotal">0%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. RASHAN HISTORY -->
+  <div class="section sec-ration">
+    <div class="section-title"><span>🛒 راشن ہسٹری</span><span class="icons"><button onclick="toggleSettings('rashanSettings')">⚙️</button><button onclick="toggleBody('rashanBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="rashanSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('rashanSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="rashanBody" class="section-body">
+      <div class="row">
+        <select id="rashanFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('rashan')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('rashan')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('rashanRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="rashanRecordList"></div>
+      <div class="stats" id="rashanStats"></div>
+    </div>
+  </div>
+
+  <!-- 8. BUS HISTORY -->
+  <div class="section sec-bus">
+    <div class="section-title"><span>🚌 گرین بس ہسٹری</span><span class="icons"><button onclick="toggleSettings('busSettings')">⚙️</button><button onclick="toggleBody('busBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="busSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('busSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="busBody" class="section-body">
+      <div class="row">
+        <select id="busFilterRoute"><option value="all">تمام روٹس</option></select>
+        <select id="busFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('bus')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('bus')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('busRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="busRecordList"></div>
+      <div class="stats" id="busStats"></div>
+    </div>
+  </div>
+
+  <!-- 9. RESULT HISTORY -->
+  <div class="section sec-result">
+    <div class="section-title"><span>🏆 ممبران رزلٹ ہسٹری</span><span class="icons"><button onclick="toggleSettings('resultSettings')">⚙️</button><button onclick="toggleBody('resultBody')">⬇️</button></span></div>
+    <div class="settings-panel" id="resultSettings">
+      <button onclick="showMsg('Select Mode')">☑️ Select Mode</button>
+      <button onclick="showMsg('All Select')">✅ All Select</button>
+      <button onclick="showMsg('Edit')">✏️ Edit</button>
+      <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+      <button class="del" onclick="showMsg('Delete All')">❌ Delete All</button>
+      <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+      <button onclick="showMsg('Oper')">🔼 Oper</button>
+      <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+      <button onclick="showMsg('Password')">🔑 Password</button>
+      <button onclick="showMsg('Dark Mode')">🌙 Dark Mode</button>
+      <button onclick="toggleSettings('resultSettings')">⬇️ Close Settings</button>
+    </div>
+    <div id="resultBody" class="section-body">
+      <div class="row">
+        <select id="resultFilterMember"><option value="all">تمام ممبران</option></select>
+        <select id="resultFilterDay"><option value="all">تمام دن</option><option value="Mon">پیر</option><option value="Tue">منگل</option><option value="Wed">بدھ</option><option value="Thu">جمعرات</option><option value="Fri">جمعہ</option><option value="Sat">ہفتہ</option><option value="Sun">اتوار</option></select>
+        <button class="btn btn-icon" onclick="copyHistory('result')">📋</button>
+        <button class="btn btn-icon" onclick="shareHistory('result')">📱</button>
+      </div>
+      <div class="scroll-head"><label>📜 ریکارڈ:</label><button class="btn btn-close" onclick="toggleClose('resultRecordList')">⬇️ Close</button></div>
+      <div class="scroll-list" id="resultRecordList"></div>
+      <div class="stats" id="resultStats"></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html">🏠 ڈیش</a>
+    <a href="entry.html">➕ انٹری</a>
+    <a href="history.html" class="active">📜 ہسٹری</a>
+    <a href="manager.html">👥 مینیجر</a>
+  </div>
 </div>
 
-<!-- Bottom Nav -->
-<nav class="bottom-nav">
-    <a href="dashboard.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>ڈیش بورڈ</a>
-    <a href="entry.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>انٹری</a>
-    <a href="history.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ہسٹری</a>
-    <a href="manager.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>مینیجر</a>
-</nav>
+<div class="inline-msg" id="inlineMsg"></div>
 
-<!-- SCRIPT PART YAHAN AAYEGA -->
-</body>
-</html>
 <script>
-// ========== STORAGE KEYS ==========
-var DUTY_KEY = 'sec4_duty_manager_data_v4';
-var DUTY_HIST_KEY = 'sec4_duty_history_data_v4';
-var LEAVE_KEY = 'sec4_duty_leaves_data_v4';
-var TASK_KEY = 'sec12_task_records';
-var SKIP_KEY = 'sec4_duty_skipped_data';
-var NEWS_KEY = 'sec10_news_alerts_data';
-var ALAMAT_KEY = 'symptoms';
-var DIET_KEY = 'diets';
-var RASHAN_ITEMS_KEY = 'sec11_rashan_data_v2';
+var DUTY_KEY='sec4_duty_manager_data_v4';
+var LEAVE_KEY='sec4_duty_leaves_data_v4';
+var TASK_KEY='sec3_task_and_point_manager_data';
+var REC_KEY='sec12_task_records';
+var SKIP_KEY='sec4_duty_skipped_data';
+var NEWS_KEY='sec10_news_alerts_data';
+var ALAMAT_KEY='symptoms';
+var DIET_KEY='diets';
+var RASHAN_KEY='sec11_rashan_data_v2';
+var BUS_ROUTES_KEY='sec21_green_bus_routes_v19';
+var RESULT_KEY='member_result_data_v1';
 
-// ========== UTILITIES ==========
-function $(id) { return document.getElementById(id); }
-function ls(key, def) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
-function lss(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
-function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
-function pad(n) { return String(n).padStart(2, '0'); }
-function toggleSettings(id) { var el = $(id); if(el) el.classList.toggle('open'); }
-function toggleBody(id) {
-    var b = $(id);
-    var btn = b.previousElementSibling.querySelector('.card-btns button:last-child');
-    if (b.style.display === 'none') { b.style.display = 'block'; if(btn) btn.textContent = '⬇️'; }
-    else { b.style.display = 'none'; if(btn) btn.textContent = '⬆️'; }
+function $(id){return document.getElementById(id);}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+function pad(n){return String(n).padStart(2,'0');}
+function getMembers(){return ls(DUTY_KEY,[]);}
+function showMsg(text, success){
+    var el=$('inlineMsg');
+    el.textContent=text;
+    el.style.background=success?'#2e8b57':'#c0392b';
+    el.classList.add('show');
+    setTimeout(function(){el.classList.remove('show');},2500);
 }
-function copyText(txt) {
-    navigator.clipboard.writeText(txt).then(function() { alert('✅ کاپی'); });
-}
-function shareWA(txt) {
-    window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
-}
+function toggleSettings(id){var el=$(id);if(el)el.classList.toggle('open');}
+function toggleBody(id){var el=$(id);el.style.display=el.style.display==='none'?'block':'none';}
+function toggleClose(id){var el=$(id);el.style.display=el.style.display==='none'?'block':'none';}
 
-// Date Filter (Today, 7 Days, 30 Days)
-function checkTimeFilter(ts, filter) {
-    if (filter === 'all') return true;
-    var now = new Date();
-    var d = new Date(ts);
-    if (filter === 'today') return d.toDateString() === now.toDateString();
-    if (filter === 'week') { var diff = (now - d) / 86400000; return diff >= 0 && diff <= 7; }
-    if (filter === 'month') { var diff = (now - d) / 86400000; return diff >= 0 && diff <= 30; }
+function checkTimeFilter(ts, filter){
+    if(filter==='all')return true;
+    var now=new Date(), d=new Date(ts);
+    if(filter==='today')return d.toDateString()===now.toDateString();
+    if(filter==='week'){var diff=(now-d)/86400000;return diff>=0&&diff<=7;}
+    if(filter==='month'){var diff=(now-d)/86400000;return diff>=0&&diff<=30;}
     return true;
 }
-
-// ========== 1. DUTY HISTORY ==========
-function renderDutyHistory() {
-    var member = $('dutyFilterMember').value;
-    var timeF = $('dutyFilterTime').value;
-    var leaves = ls(LEAVE_KEY, []); // Chhuttiyan
-    var hist = ls(DUTY_HIST_KEY, []); // Purani duties
-    
-    // Combine both for history
-    var all = leaves.map(l => ({
-        name: l.name, rank: l.rank, reason: l.reason,
-        timestamp: new Date(l.date).getTime() || Date.now(),
-        type: 'leave'
-    })).concat(hist.map(h => ({
-        name: h.name, rank: h.rank, reason: h.reason,
-        timestamp: Date.now(), // Purani hist me timestamp nahi hota, isliye abhi ka dal rahe hain
-        type: h.reason === 'auto' ? 'auto' : 'manual'
-    })));
-
-    var filtered = all.filter(x => {
-        if (member !== 'all' && x.name !== member) return false;
-        return checkTimeFilter(x.timestamp, timeF);
-    });
-
-    var box = $('dutyHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; return; }
-
-    box.innerHTML = filtered.map(x => {
-        var d = new Date(x.timestamp);
-        var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        var typeText = x.type === 'leave' ? '🏖️ چھٹی' : (x.type === 'auto' ? '⚡ آٹو ڈیوٹی' : '✋ مینوئل ڈیوٹی');
-        
-        return `<div class="list-item">
-            <div class="name">👤 ${esc(x.name)} (${x.rank})</div>
-            <div class="detail">${typeText} ${x.reason ? ' — ' + esc(x.reason) : ''}</div>
-            <div class="date">📅 ${ds}</div>
-        </div>`;
-    }).join('');
+function checkDayFilter(ts, filter){
+    if(filter==='all')return true;
+    var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    return days[new Date(ts).getDay()]===filter;
 }
-
-function copyDutyHistory() {
-    var items = ls(LEAVE_KEY, []);
-    var text = "👮 Duty History:\n";
-    items.forEach(x => { text += "• " + x.name + " — " + x.reason + "\n"; });
-    copyText(text);
-}
-
-function shareDutyHistory() {
-    var items = ls(LEAVE_KEY, []);
-    var text = "👮 Duty History:\n";
-    items.forEach(x => { text += "• " + x.name + " — " + x.reason + "\n"; });
-    shareWA(text);
-}
-
-// ========== 2. TASK HISTORY ==========
-function renderTaskHistory() {
-    var member = $('taskFilterMember').value;
-    var timeF = $('taskFilterTime').value;
-    var recs = ls(TASK_KEY, []);
-    
-    var filtered = recs.filter(x => {
-        if (member !== 'all' && x.member !== member) return false;
-        return checkTimeFilter(x.timestamp, timeF);
-    });
-
-    var box = $('taskHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; return; }
-
-    box.innerHTML = filtered.map(x => {
-        var d = new Date(x.timestamp);
-        var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        var stText = x.status === 'done' ? '✅ ہو گیا' : (x.status === 'notdone' ? '❌ نہیں ہوا' : '⚪ چھوڑا');
-        
-        return `<div class="list-item">
-            <div class="name">👤 ${esc(x.member)}</div>
-            <div class="detail">📌 ${esc(x.task)} — ${stText} (${x.points} Points)</div>
-            <div class="date">📅 ${ds}</div>
-        </div>`;
-    }).join('');
-}
-
-function copyTaskHistory() {
-    var items = ls(TASK_KEY, []);
-    var text = "📋 Task History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.task + " (" + x.status + ")\n"; });
-    copyText(text);
-}
-
-function shareTaskHistory() {
-    var items = ls(TASK_KEY, []);
-    var text = "📋 Task History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.task + "\n"; });
-    shareWA(text);
-}
-
-// ========== 3. SKIP HISTORY ==========
-function renderSkipHistory() {
-    var member = $('skipFilterMember').value;
-    var timeF = $('skipFilterTime').value;
-    var items = ls(SKIP_KEY, []);
-    
-    var filtered = items.filter(x => {
-        if (member !== 'all' && x.member !== member) return false;
-        return checkTimeFilter(x.timestamp, timeF);
-    });
-
-    var box = $('skipHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; return; }
-
-    box.innerHTML = filtered.map(x => {
-        var d = new Date(x.timestamp);
-        var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        var rText = x.hasReason ? '✅ وجہ: ' + esc(x.reason) : '⏳ وجہ نہیں دی';
-        
-        return `<div class="list-item">
-            <div class="name">👤 ${esc(x.member)}</div>
-            <div class="detail">📌 ${esc(x.task)}</div>
-            <div class="detail">${rText}</div>
-            <div class="date">📅 ${ds}</div>
-        </div>`;
-    }).join('');
-}
-
-function copySkipHistory() {
-    var items = ls(SKIP_KEY, []);
-    var text = "⛔ Skip History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.task + " (" + (x.reason||'وجہ نہیں') + ")\n"; });
-    copyText(text);
-}
-
-function shareSkipHistory() {
-    var items = ls(SKIP_KEY, []);
-    var text = "⛔ Skip History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.task + "\n"; });
-    shareWA(text);
-}
-
-// ========== 4. NEWS & ALERT HISTORY ==========
-function renderNewsHistory() {
-    var type = $('newsFilterType').value;
-    var items = ls(NEWS_KEY, []);
-    
-    var filtered = (type === 'all') ? items : items.filter(x => x.type === type);
-
-    var box = $('newsHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; return; }
-
-    box.innerHTML = filtered.map(x => {
-        var d = new Date(x.timestamp);
-        var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        var icons = { news: '📰', alert: '🚨', complaint: '⏰' };
-        
-        return `<div class="list-item">
-            <div class="name">${icons[x.type]||''} ${esc(x.content)}</div>
-            <div class="date">📅 ${ds}</div>
-        </div>`;
-    }).join('');
-}
-
-function copyNewsHistory() {
-    var items = ls(NEWS_KEY, []);
-    var text = "📰 News & Alert History:\n";
-    items.forEach(x => { text += "• " + x.content + "\n"; });
-    copyText(text);
-}
-
-function shareNewsHistory() {
-    var items = ls(NEWS_KEY, []);
-    var text = "📰 News & Alert History:\n";
-    items.forEach(x => { text += "• " + x.content + "\n"; });
-    shareWA(text);
-}
-
-// ========== 5. ALAMAT HISTORY ==========
-function renderAlamatHistory() {
-    var member = $('alamatFilterMember').value;
-    var items = ls(ALAMAT_KEY, []);
-    
-    var filtered = (member === 'all') ? items : items.filter(x => x.member === member);
-
-    var box = $('alamatHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; } 
-    else {
-        box.innerHTML = filtered.map(x => {
-            var d = new Date(x.timestamp);
-            var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-            return `<div class="list-item">
-                <div class="name">👤 ${esc(x.member)}</div>
-                <div class="detail">🔍 ${esc(x.symptom)} — ${esc(x.state)}</div>
-                <div class="date">📅 ${ds}</div>
-            </div>`;
-        }).join('');
-    }
-
-    // Percentages
-    var total = filtered.length;
-    var good = filtered.filter(x => x.positive).length;
-    var bad = total - good;
-    
-    $('alamatPctGood').textContent = total ? Math.round((good/total)*100) + '%' : '0%';
-    $('alamatPctBad').textContent = total ? Math.round((bad/total)*100) + '%' : '0%';
-    $('alamatPctTotal').textContent = total ? Math.round((good/total)*100) + '%' : '0%';
-}
-
-function copyAlamatHistory() {
-    var items = ls(ALAMAT_KEY, []);
-    var text = "🩺 Alamat History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.symptom + " (" + x.state + ")\n"; });
-    copyText(text);
-}
-
-function shareAlamatHistory() {
-    var items = ls(ALAMAT_KEY, []);
-    var text = "🩺 Alamat History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.symptom + "\n"; });
-    shareWA(text);
-}
-
-// ========== 6. DIET HISTORY ==========
-function renderDietHistory() {
-    var member = $('dietFilterMember').value;
-    var items = ls(DIET_KEY, []);
-    
-    var filtered = (member === 'all') ? items : items.filter(x => x.member === member);
-
-    var box = $('dietHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; } 
-    else {
-        box.innerHTML = filtered.map(x => {
-            var d = new Date(x.timestamp);
-            var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-            return `<div class="list-item">
-                <div class="name">👤 ${esc(x.member)}</div>
-                <div class="detail">⏰ ${esc(x.time)}</div>
-                <div class="date">📅 ${ds}</div>
-            </div>`;
-        }).join('');
-    }
-
-    // Percentages (Dummy logic for now)
-    var total = filtered.length;
-    $('dietPctGood').textContent = total ? '80%' : '0%';
-    $('dietPctJunk').textContent = total ? '20%' : '0%';
-    $('dietPctTotal').textContent = total ? '80%' : '0%';
-}
-
-function copyDietHistory() {
-    var items = ls(DIET_KEY, []);
-    var text = "🍽️ Diet History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.time + "\n"; });
-    copyText(text);
-}
-
-function shareDietHistory() {
-    var items = ls(DIET_KEY, []);
-    var text = "🍽️ Diet History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.time + "\n"; });
-    shareWA(text);
-}
-
-// ========== 7. RASHAN HISTORY ==========
-function renderRashanHistory() {
-    var member = $('rashanFilterMember').value;
-    var items = ls(RASHAN_ITEMS_KEY, []);
-    
-    var filtered = (member === 'all') ? items : items.filter(x => x.member === member);
-
-    var box = $('rashanHistoryList');
-    if (!filtered.length) { box.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11px;padding:15px;">کوئی ریکارڈ نہیں</div>'; return; }
-
-    box.innerHTML = filtered.map(x => {
-        var d = new Date(x.timestamp);
-        var ds = pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-        return `<div class="list-item">
-            <div class="name">👤 ${esc(x.member)}</div>
-            <div class="detail">📦 ${esc(x.name)} — Qty: ${x.qty} | Rate: ${x.rate}</div>
-            <div class="date">📅 ${ds}</div>
-        </div>`;
-    }).join('');
-}
-
-function copyRashanHistory() {
-    var items = ls(RASHAN_ITEMS_KEY, []);
-    var text = "🛒 Rashan History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.name + " (" + x.qty + "x" + x.rate + ")\n"; });
-    copyText(text);
-}
-
-function shareRashanHistory() {
-    var items = ls(RASHAN_ITEMS_KEY, []);
-    var text = "🛒 Rashan History:\n";
-    items.forEach(x => { text += "• " + x.member + " — " + x.name + "\n"; });
-    shareWA(text);
-}
-
-// ========== POPULATE MEMBER DROPDOWNS ==========
-function populateMemberFilters() {
-    var members = ls(DUTY_KEY, []);
-    var ids = ['dutyFilterMember', 'taskFilterMember', 'skipFilterMember', 'alamatFilterMember', 'dietFilterMember', 'rashanFilterMember'];
-    
-    ids.forEach(function(id) {
-        var sel = $(id);
-        if (!sel) return;
-        sel.innerHTML = '<option value="all">تمام ممبران</option>';
-        members.forEach(x => {
-            sel.innerHTML += `<option value="${x.name}">${x.name}</option>`;
-        });
+function populateMemberFilters(){
+    var m=getMembers();
+    var ids=['dutyFilterMember','taskFilterMember','skipFilterMember','alamatFilterMember','dietFilterMember','resultFilterMember'];
+    ids.forEach(function(id){
+        var sel=$(id);
+        if(!sel)return;
+        sel.innerHTML='<option value="all">تمام ممبران</option>';
+        m.forEach(function(x){sel.innerHTML+='<option value="'+esc(x.name)+'">'+esc(x.name)+'</option>';});
     });
 }
 
-// ========== INIT ==========
-function initHistory() {
+// 1. DUTY
+function renderDutyHistory(){
+    var member=$('dutyFilterMember').value;
+    var timeF=$('dutyFilterTime').value;
+    var dayF=$('dutyFilterDay').value;
+    var leaves=ls(LEAVE_KEY,[]);
+    var hist=ls(DUTY_KEY,[]);
+    var all=[];
+    leaves.forEach(function(l){all.push({name:l.name,rank:l.rank,reason:l.reason,type:'leave',timestamp:new Date(l.date).getTime()||Date.now()});});
+    hist.forEach(function(h){if(h.dutyStart)all.push({name:h.name,rank:h.rank,reason:'آٹو ڈیوٹی',type:'duty',timestamp:h.dutyStart});});
+    var filtered=all.filter(function(x){
+        if(member!=='all'&&x.name!==member)return false;
+        if(!checkTimeFilter(x.timestamp,timeF))return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    var m=getMembers();
+    var active=m.filter(function(x){return x.onDuty;});
+    var leave=m.filter(function(x){return x.onLeave;});
+    $('dutyActiveList').innerHTML=active.length?active.map(function(x){return '👤 '+esc(x.name);}).join('<br>'):'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    $('dutyDoneList').innerHTML=filtered.filter(function(x){return x.type==='duty';}).length?'<span style="color:#2e8b57;">✅ موجود</span>':'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    $('dutyLeaveList').innerHTML=leave.length?leave.map(function(x){return '👤 '+esc(x.name);}).join('<br>'):'<div style="color:#94a3b8;">کوئی نہیں</div>';
+    $('dutyRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        var d=new Date(x.timestamp);
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 👤 '+esc(x.name)+' ('+x.rank+')</div><div class="line">'+(x.type==='leave'?'🏖️ چھٹی — '+esc(x.reason):'🟢 ڈیوٹی')+'</div><div class="line">📅 '+pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('dutyStats').textContent='📊 سٹیٹ: 👤 '+m.length+' Members | ✅ '+active.length+' On Duty | 🏖️ '+leave.length+' Leave';
+}
+
+// 2. TASK
+function renderTaskHistory(){
+    var member=$('taskFilterMember').value;
+    var timeF=$('taskFilterTime').value;
+    var dayF=$('taskFilterDay').value;
+    var recs=ls(REC_KEY,[]);
+    var filtered=recs.filter(function(x){
+        if(member!=='all'&&x.member!==member)return false;
+        if(!checkTimeFilter(x.timestamp,timeF))return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    $('taskRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        var lbl=x.status==='done'?'✅':(x.status==='notdone'?'❌':'⚪');
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 👤 '+esc(x.member)+'</div><div class="line">'+lbl+' '+esc(x.task)+' | 🏆 '+x.points+' | 📅 '+x.dateStr+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var totalPts=filtered.reduce(function(s,x){return s+(x.points||0);},0);
+    $('taskSummary').textContent='👤 '+(member==='all'?'تمام':member)+' — 🏆 '+totalPts+' Points | 📋 '+filtered.length+' Tasks';
+    $('taskStats').textContent='📊 ٹوٹل: '+filtered.length+' Records | '+totalPts+' Points';
+}
+
+// 3. SKIP
+function renderSkipHistory(){
+    var member=$('skipFilterMember').value;
+    var dayF=$('skipFilterDay').value;
+    var sk=ls(SKIP_KEY,[]);
+    var filtered=sk.filter(function(x){
+        if(member!=='all'&&x.member!==member)return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    $('skipRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 👤 '+esc(x.member)+'</div><div class="line">📌 '+esc(x.task)+'</div><div class="line">'+(x.hasReason?'✅ '+esc(x.reason):'⏳ وجہ نہیں دی')+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var done=filtered.filter(function(x){return x.hasReason;}).length;
+    $('skipStats').textContent='📊 سٹیٹ: '+filtered.length+' Total | ✅ '+done+' Done | ⏳ '+(filtered.length-done)+' Pending';
+}
+
+// 4. NEWS
+function renderNewsHistory(){
+    var type=$('newsFilterType').value;
+    var dayF=$('newsFilterDay').value;
+    var items=ls(NEWS_KEY,[]);
+    var filtered=items.filter(function(x){
+        if(type!=='all'&&x.type!==type)return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    var icons={news:'📰',alert:'🚨',complaint:'⏰'};
+    $('newsRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ '+(icons[x.type]||'')+' '+esc(x.content)+'</div><div class="line">'+(x.dateStr||'')+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var news=filtered.filter(function(x){return x.type==='news';}).length;
+    var alerts=filtered.filter(function(x){return x.type==='alert';}).length;
+    var times=filtered.filter(function(x){return x.type==='complaint';}).length;
+    $('newsStats').textContent='📊 ٹوٹل: 📰 '+news+' News | 🚨 '+alerts+' Alert | ⏰ '+times+' Time';
+}
+
+// 5. ALAMAT
+function renderAlamatHistory(){
+    var member=$('alamatFilterMember').value;
+    var dayF=$('alamatFilterDay').value;
+    var all=ls(ALAMAT_KEY,[]);
+    var filtered=all.filter(function(x){
+        if(member!=='all'&&x.member!==member)return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    $('alamatRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 👤 '+esc(x.member)+'</div><div class="line">'+esc(x.symptom)+' — '+esc(x.state)+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var total=filtered.length, good=filtered.filter(function(x){return x.positive;}).length;
+    $('alamatPctGood').textContent=total?Math.round((good/total)*100)+'%':'0%';
+    $('alamatPctBad').textContent=total?Math.round(((total-good)/total)*100)+'%':'0%';
+    $('alamatPctTotal').textContent=total?Math.round((good/total)*100)+'%':'0%';
+    $('alamatStats').textContent='📊 سٹیٹ: '+total+' Total | ✅ '+good+' بہتر';
+}
+
+// 6. DIET
+function renderDietHistory(){
+    var member=$('dietFilterMember').value;
+    var dayF=$('dietFilterDay').value;
+    var all=ls(DIET_KEY,[]);
+    var filtered=all.filter(function(x){
+        if(member!=='all'&&x.member!==member)return false;
+        if(!checkDayFilter(x.timestamp,dayF))return false;
+        return true;
+    });
+    $('dietRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        var items=(x.items||[]).map(function(y){return y.name;}).join(', ');
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ '+esc(x.member)+' — '+x.category+'</div><div class="line">'+items+' '+(x.time||'')+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('dietPctGood').textContent=filtered.length?'80%':'0%';
+    $('dietPctJunk').textContent=filtered.length?'20%':'0%';
+    $('dietPctTotal').textContent=filtered.length?'80%':'0%';
+    $('dietStats').textContent='📊 ٹوٹل: '+filtered.length+' Records';
+}
+
+// 7. RASHAN
+function renderRashanHistory(){
+    var dayF=$('rashanFilterDay').value;
+    var items=ls(RASHAN_KEY,[]);
+    var filtered=items.filter(function(x){return checkDayFilter(x.timestamp,dayF);});
+    $('rashanRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 📦 '+esc(x.name)+'</div><div class="line">Qty: '+x.qty+' | Rate: '+x.rate+' | Total: '+(x.qty*x.rate)+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    var total=filtered.reduce(function(s,x){return s+(x.qty*x.rate);},0);
+    $('rashanStats').textContent='📊 سٹیٹ: '+filtered.length+' Items | 💰 Total: '+total;
+}
+
+// 8. BUS
+function renderBusHistory(){
+    var route=$('busFilterRoute').value;
+    var dayF=$('busFilterDay').value;
+    var routes=ls(BUS_ROUTES_KEY,[]);
+    var rSel=$('busFilterRoute');
+    if(rSel.options.length<=1){routes.forEach(function(r){rSel.innerHTML+='<option value="'+esc(r)+'">'+esc(r)+'</option>';});}
+    var items=ls(RESULT_KEY,[]); // placeholder — bus actual tracking nahi
+    $('busRecordList').innerHTML='<div style="text-align:center;color:#94a3b8;padding:10px;">ٹریک ریکارڈ ڈیش بورڈ سے آئیں گے</div>';
+    $('busStats').textContent='📊 سٹیٹ: 🛣️ '+routes.length+' Routes | 📅 '+dayF;
+}
+
+// 9. RESULT
+function renderResultHistory(){
+    var member=$('resultFilterMember').value;
+    var dayF=$('resultFilterDay').value;
+    var all=ls(RESULT_KEY,[]);
+    var filtered=all.filter(function(x){
+        if(member!=='all'&&x.member!==member)return false;
+        return true;
+    });
+    $('resultRecordList').innerHTML=filtered.length?filtered.slice(0,20).map(function(x,i){
+        return '<div class="record"><div class="head">☐ '+(i+1)+'️⃣ 👤 '+esc(x.member)+'</div><div class="line">'+esc(x.text)+' — '+x.percent+'%</div><div class="line">'+x.dateStr+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;">کوئی ریکارڈ نہیں</div>';
+    $('resultStats').textContent='📊 سٹیٹ: '+filtered.length+' Records';
+}
+
+// COPY/SHARE
+function copyHistory(type){
+    var data = {duty:ls(LEAVE_KEY,[]),task:ls(REC_KEY,[]),skip:ls(SKIP_KEY,[]),news:ls(NEWS_KEY,[]),alamat:ls(ALAMAT_KEY,[]),diet:ls(DIET_KEY,[]),rashan:ls(RASHAN_KEY,[]),bus:[],result:ls(RESULT_KEY,[])};
+    var txt=JSON.stringify(data[type]||[], null, 2);
+    if(navigator.clipboard) navigator.clipboard.writeText(txt).then(function(){showMsg('✅ کاپی',true);});
+    else showMsg('❌ کاپی نہیں ہو سکا');
+}
+function shareHistory(type){
+    var data = {duty:ls(LEAVE_KEY,[]),task:ls(REC_KEY,[]),skip:ls(SKIP_KEY,[]),news:ls(NEWS_KEY,[]),alamat:ls(ALAMAT_KEY,[]),diet:ls(DIET_KEY,[]),rashan:ls(RASHAN_KEY,[]),bus:[],result:ls(RESULT_KEY,[])};
+    var txt=JSON.stringify(data[type]||[], null, 2);
+    if(navigator.share) navigator.share({title:type+' History',text:txt}).catch(function(){});
+    else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', function(){
     populateMemberFilters();
-    
     renderDutyHistory();
     renderTaskHistory();
     renderSkipHistory();
@@ -546,19 +607,9 @@ function initHistory() {
     renderAlamatHistory();
     renderDietHistory();
     renderRashanHistory();
-    
-    // Event Listeners
-    $('dutyFilterMember').addEventListener('change', renderDutyHistory);
-    $('dutyFilterTime').addEventListener('change', renderDutyHistory);
-    $('taskFilterMember').addEventListener('change', renderTaskHistory);
-    $('taskFilterTime').addEventListener('change', renderTaskHistory);
-    $('skipFilterMember').addEventListener('change', renderSkipHistory);
-    $('skipFilterTime').addEventListener('change', renderSkipHistory);
-    $('newsFilterType').addEventListener('change', renderNewsHistory);
-    $('alamatFilterMember').addEventListener('change', renderAlamatHistory);
-    $('dietFilterMember').addEventListener('change', renderDietHistory);
-    $('rashanFilterMember').addEventListener('change', renderRashanHistory);
-}
-
-document.addEventListener('DOMContentLoaded', initHistory);
+    renderBusHistory();
+    renderResultHistory();
+});
 </script>
+</body>
+</html>
