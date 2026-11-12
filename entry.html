@@ -3,238 +3,346 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Manager — Entry</title>
+<title>News/Alert Section</title>
 <style>
 :root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--golden:#d97706;--success:#10b981;--bg:#f8fafc;--border:#e2e8f0;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;padding-bottom:20px;color:#334155;direction:rtl}
-.container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:14px 8px;border-radius:10px;font-size:16px;font-weight:bold;border-bottom:4px solid var(--accent)}
+body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
+.container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 
-/* SECTION CARD */
-.section-card{background:#fff;padding:16px;border-radius:12px;border:2px solid #cbd5e1;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:12px}
-.section-header{font-weight:bold;color:var(--primary);font-size:15px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #e2e8f0;padding-bottom:10px}
-.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit}
-
-/* SETTINGS PANEL */
-.settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:10px;grid-template-columns:repeat(2,1fr);gap:6px}
-.settings-panel.open{display:grid}
-.settings-panel button{padding:8px;font-size:11px;font-weight:bold;border-radius:6px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit;text-align:right}
-.settings-panel button:hover{background:#e2e8f0}
-.settings-panel button.del{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-panel button.active-mode{background:#10b981;color:#fff;border-color:#10b981}
-
-/* EK LINE ROW */
+.section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
+.section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
 .compact-row{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:nowrap;overflow-x:auto;padding:2px}
 .compact-row input,.compact-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;min-width:0;flex:1 1 auto}
-.compact-row input{flex:2 1 80px}
-.compact-row .btn{padding:7px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:12px;flex:0 0 auto}
-.btn-add{background:var(--success);color:#fff}
-.btn-edit{background:#dbeafe;color:#1e40af}
-.btn-del{background:#fee2e2;color:#991b1b}
-
-/* ASSIGN ROW */
-.assign-row{display:flex;gap:6px;align-items:center;justify-content:center}
-.assign-row select{padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;text-align:center;font-family:inherit;outline:none;flex:1;max-width:180px}
-.assign-row .btn{padding:8px 14px;background:var(--success);color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:13px}
-
-/* DARK DUTY PANEL */
-.duty-panel{
-  background:linear-gradient(135deg,#1e293b,#0f172a);
-  border:2px solid var(--golden);
-  border-radius:14px;
-  padding:16px;
-  color:#fff;
-  box-shadow:0 8px 24px rgba(0,0,0,.3);
-}
-.duty-panel-title{text-align:center;font-size:14px;font-weight:bold;color:#fbbf24;margin-bottom:12px;letter-spacing:1px}
-.duty-members{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.duty-member-box{
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:10px;
-  padding:12px 8px;
-  text-align:center;
-}
-.duty-member-box .role{font-size:11px;color:#94a3b8;margin-bottom:4px;font-weight:600}
-.duty-member-box .name{font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.3)}
-.duty-member-box.senior{border-color:#60a5fa}
-.duty-member-box.junior{border-color:#34d399}
-.duty-timer{
-  text-align:center;
-  font-size:28px;
-  font-weight:900;
-  color:#fbbf24;
-  background:rgba(0,0,0,.4);
-  padding:10px;
-  border-radius:10px;
-  letter-spacing:3px;
-  text-shadow:0 0 20px rgba(251,191,36,.6);
-  margin-bottom:12px;
-}
-.duty-end-btn{
-  display:block;
-  width:100%;
-  padding:12px;
-  background:linear-gradient(135deg,#dc2626,#991b1b);
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-  font-family:inherit;
-  box-shadow:0 4px 12px rgba(220,38,38,.4);
-  transition:.2s;
-  letter-spacing:1px;
-}
-.duty-end-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(220,38,38,.6)}
-.duty-end-btn:active{transform:translateY(1px)}
-
-/* 3-COLUMN RECORD */
-.scroll-head{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
-.btn-close{background:#64748b;color:#fff;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:bold;cursor:pointer;font-family:inherit}
-.record-3cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.rec-col{
-  background:#f8fafc;
-  border:1px solid #e2e8f0;
-  border-radius:8px;
-  padding:6px;
-  max-height:220px;
-  overflow-y:auto;
-  font-size:11px;
-}
-.rec-col.active-col{background:#f0fdf4;border-color:#86efac}
-.rec-col.done-col{background:#eff6ff;border-color:#bfdbfe}
-.rec-col.leave-col{background:#fef2f2;border-color:#fca5a5}
-.rec-col h4{font-size:10px;margin-bottom:5px;text-align:center;color:#475569;padding-bottom:4px;border-bottom:1px dashed #cbd5e1}
-.rec-item{padding:5px 3px;border-bottom:1px dotted #e2e8f0;text-align:center}
-.rec-item:last-child{border-bottom:none}
-.rec-item .n{font-size:11px;font-weight:bold;color:#0f172a}
-.rec-item .d{font-size:9px;color:#64748b;margin-top:2px}
-.rec-item .s-active{color:#059669;font-weight:bold}
-.rec-item .s-done{color:#2563eb;font-size:9px}
-.rec-item .s-leave{color:#dc2626;font-weight:bold}
-
-/* STATE PATTI */
-.state-patti{display:flex;justify-content:space-around;align-items:center;gap:4px;padding:8px 6px;border-radius:8px;margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0}
-.state-item{flex:1;text-align:center;padding:4px 2px;border-radius:5px;font-size:10px;font-weight:800}
-.state-item .val{font-size:13px;font-weight:900;display:block;margin-top:2px}
+.compact-row .btn{padding:7px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:11px;flex:0 0 auto;background:var(--success);color:#fff}
+.btn-save{background:var(--accent)!important;color:#fff!important}
+.scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.scroll-head span{font-size:11px;font-weight:bold;color:#475569}
+.btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
+.scroll-list{max-height:160px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
+.scroll-list .record{padding:6px;border-bottom:1px dotted #e2e8f0}
+.scroll-list .record:last-child{border-bottom:none}
+.record .line{font-size:10px;color:#64748b;margin-top:2px}
+.state-patti{display:flex;justify-content:space-around;align-items:center;gap:4px;padding:6px 4px;border-radius:6px;margin-top:6px;background:#f8fafc;border:1px solid #e2e8f0}
+.state-item{flex:1;text-align:center;padding:3px 2px;border-radius:4px;font-size:9px;font-weight:800}
+.state-item .val{font-size:12px;font-weight:900;display:block;margin-top:1px}
 .state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
 .state-item:nth-child(2){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
 .state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
-
-/* INLINE MSG */
 .inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:9999;display:none;font-family:inherit}
 .inline-msg.show{display:block}
 
-/* DARK MODE */
-.dark-mode{background:#0f172a!important;color:#e2e8f0!important}
-.dark-mode .section-card{background:#1e293b;border-color:#334155}
-.dark-mode .section-header{color:#e2e8f0;border-color:#334155}
-.dark-mode .compact-row input,.dark-mode .compact-row select,.dark-mode .assign-row select{background:#0f172a;color:#e2e8f0;border-color:#334155}
-.dark-mode .rec-col{background:#1e293b;border-color:#334155}
-.dark-mode .rec-col.active-col{background:#134e4a;border-color:#10b981}
-.dark-mode .rec-col.done-col{background:#1e3a8a;border-color:#3b82f6}
-.dark-mode .rec-col.leave-col{background:#7f1d1d;border-color:#ef4444}
-.dark-mode .rec-item .n{color:#f1f5f9}
-
-@media(max-width:480px){
-  .duty-members{grid-template-columns:1fr}
-  .record-3cols{grid-template-columns:1fr}
-}
+/* NS SETTINGS */
+.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:99999;overflow-y:auto}
+.ns-overlay.active{display:block}
+.ns-box{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
+.ns-head{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.ns-head button{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;font-family:inherit}
+.ns-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ns-old{background:#2c3e50;border:1px solid #1a252f;border-radius:10px;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:4px}
+.ns-old button{padding:7px 3px;font-size:9px;font-weight:bold;border-radius:5px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit;text-align:center}
+.ns-old button.del{color:#ff9999}
+.ns-toggle-new{background:#eff6ff;border:2px solid #bfdbfe;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:inherit;width:100%;text-align:right;color:#1e40af;font-weight:800;font-size:13px;margin-bottom:4px}
+.ns-toggle-new:active{background:#dbeafe}
+.ns-sub{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;margin-bottom:6px}
+.ns-sub-h{background:#f8fafc;padding:10px 12px;font-size:12px;font-weight:800;color:#1e293b;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:inherit;width:100%;text-align:right;border:none}
+.ns-sub-h:active{background:#e2e8f0}
+.ns-sub-h .arrow{font-size:11px;color:#64748b}
+.ns-sub-body{padding:10px 12px;display:none}
+.ns-sub.open .ns-sub-body{display:block}
+.ns-inp{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:#fff;font-weight:600;margin-top:4px}
+.ns-lbl{font-size:11px;font-weight:700;color:#64748b;display:block;margin-top:8px;margin-bottom:2px}
+.ns-timerow{display:flex;gap:5px;align-items:center;margin-top:4px}
+.ns-timerow input,.ns-timerow select{padding:8px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-weight:700;text-align:center;font-family:inherit;outline:none}
+.ns-timerow input{width:52px}
+.ns-timerow select{width:66px}
+.ns-radio-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.ns-radio{flex:1;min-width:55px;padding:7px 4px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:7px;cursor:pointer;font-size:10px;font-weight:700;color:#64748b;font-family:inherit;text-align:center}
+.ns-radio.active{background:#eff6ff;border-color:#2563eb;color:#2563eb;font-weight:800}
+.ns-tog{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dotted #e2e8f0;font-size:11.5px;font-weight:700;color:#334155}
+.ns-tog:last-child{border-bottom:none}
+.ns-sw{position:relative;width:42px;height:24px;flex-shrink:0}
+.ns-sw input{opacity:0;width:0;height:0}
+.ns-sw span{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:24px;transition:.25s}
+.ns-sw span:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s}
+.ns-sw input:checked + span{background:#10b981}
+.ns-sw input:checked + span:before{transform:translateX(18px)}
+.ns-check-item{display:flex;align-items:center;gap:5px;padding:7px 8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:5px}
+.ns-check-item.dis{opacity:.45}
+.ns-check-item .num{font-size:10px;font-weight:800;color:#94a3b8;width:16px}
+.ns-check-item .nm{flex:1;font-size:11px;font-weight:700;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ns-check-item .tbtn{padding:3px 7px;border-radius:5px;font-size:10px;font-weight:800;border:none;cursor:pointer;font-family:inherit;flex-shrink:0}
+.ns-check-item .tbtn.alert{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.ns-check-item .tbtn.news{background:#ecfdf5;color:#059669;border:1px solid #a7f3d0}
+.ns-check-item .abtn{padding:3px 6px;border:none;border-radius:5px;font-size:10px;cursor:pointer;font-family:inherit;flex-shrink:0}
+.ns-check-item .abtn.edit{background:#dbeafe;color:#1e40af}
+.ns-check-item .abtn.del{background:#fee2e2;color:#991b1b}
+.ns-sw-sm{position:relative;width:32px;height:18px;flex-shrink:0}
+.ns-sw-sm input{opacity:0;width:0;height:0}
+.ns-sw-sm span{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:18px;transition:.25s}
+.ns-sw-sm span:before{content:"";position:absolute;height:14px;width:14px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.25s}
+.ns-sw-sm input:checked + span{background:#10b981}
+.ns-sw-sm input:checked + span:before{transform:translateX(14px)}
+.ns-add-btn{width:100%;padding:8px;background:#ecfdf5;color:#059669;border:1.5px dashed #a7f3d0;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:6px}
+.ns-limit-row{display:flex;align-items:center;gap:6px;padding:7px 8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:5px}
+.ns-limit-row .nm{flex:1;font-size:11px;font-weight:700;color:#334155}
+.ns-limit-row input{width:60px;padding:5px 8px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-weight:700;text-align:center;font-family:inherit;outline:none}
+.ns-limit-row select{padding:5px;border:1px solid #cbd5e1;border-radius:6px;font-size:10px;font-weight:700;font-family:inherit}
+.ns-limit-row .unit{font-size:10px;color:#64748b;font-weight:700;min-width:40px;text-align:right}
+.ns-speed-row{display:flex;gap:3px;margin-top:4px}
+.ns-speed-btn{flex:1;padding:8px 2px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:7px;cursor:pointer;font-size:16px;font-family:inherit;color:#94a3b8}
+.ns-speed-btn.active{background:#eff6ff;border-color:#2563eb;color:#2563eb}
+.ns-slider{width:100%;height:6px;accent-color:#2563eb;margin-top:6px}
+.ns-audio{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;margin-top:6px}
+.ns-audio-h{font-size:11px;font-weight:800;color:#334155;margin-bottom:6px}
+.ns-audio-row{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.ns-audio-row button{padding:6px 10px;border:none;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit}
+.ns-audio-row .upload{background:#2563eb;color:#fff}
+.ns-audio-row .play{background:#10b981;color:#fff}
+.ns-audio-row .del{background:#fee2e2;color:#991b1b}
+.ns-audio-name{font-size:10px;color:#059669;font-weight:700;flex:1;min-width:100px}
+.ns-test-btn{width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:5px}
+.ns-test-btn.reset{background:#fffbeb;color:#d97706;border-color:#fde68a}
+.ns-auto{font-size:10px;color:#059669;font-weight:700;text-align:center;margin-top:8px}
+.ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:12px;display:flex;gap:8px}
+.ns-foot button{flex:1;padding:12px;border:none;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}
+.ns-foot .close{background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0}
+.ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999999;align-items:center;justify-content:center;padding:16px}
+.ns-modal.active{display:flex}
+.ns-modal-box{background:#fff;border-radius:12px;max-width:360px;width:100%}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0}
+.ns-modal-b{padding:14px}
+.ns-modal-b input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none}
+.ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
+.ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="app-header">🏥 Smart Manager & Health Tracker</div>
 
-  <!-- SECTION 1: DUTY MANAGER -->
+  <!-- SECTION 4: NEWS -->
   <div class="section-card">
     <div class="section-header">
-      <span>👮 ڈیوٹی مینیجر (Member Add)</span>
-      <button onclick="toggleSettings('dutySettings')">⚙️</button>
+      <span>📰 نیوز اینڈ الرٹ مینیجر</span>
+      <button onclick="openNS()">⚙️</button>
     </div>
-
-    <div class="settings-panel" id="dutySettings">
-      <button onclick="toggleSelectMode('duty')" id="dutySelBtn">☑️ Select Mode</button>
-      <button onclick="allSelect('duty')">✅ All Select</button>
-      <button onclick="editSelected('duty')">✏️ Edit</button>
-      <button class="del" onclick="deleteSelected('duty')">🗑️ Delete</button>
-      <button class="del" onclick="deleteAllSelected('duty')">❌ Delete All</button>
-      <button class="del" onclick="clearRecord('duty')">🧹 Clear</button>
-      <button onclick="moveOrder('duty',-1)">🔼 Oper</button>
-      <button onclick="moveOrder('duty',1)">🔽 Nichy</button>
-      <button onclick="setPassword('duty')">🔑 Password</button>
-      <button onclick="toggleDark('duty')" id="dutyDarkBtn">🌙 Dark Mode</button>
-      <button onclick="dashShow('duty')">📊 Dash Show</button>
-      <button onclick="dashHide('duty')">📊 Dash Hide</button>
-      <button onclick="toggleSettings('dutySettings')">⬇️ Close</button>
-    </div>
-
-    <!-- Member Add + Edit/Delete (EK LINE) -->
     <div class="compact-row">
-      <input type="text" id="newMemName" placeholder="نام...">
-      <select id="newMemRank">
-        <option value="Senior">🟢</option>
-        <option value="Junior">🔵</option>
-      </select>
-      <button class="btn btn-add" onclick="addMember()">➕</button>
-      <select id="editMemSelect"><option value="">ممبر</option></select>
-      <button class="btn btn-edit" onclick="editMember()">✏️</button>
-      <button class="btn btn-del" onclick="deleteMember()">🗑️</button>
+      <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option></select>
+      <input type="text" id="newsContent" placeholder="متن...">
+      <button class="btn btn-save" onclick="saveNews()">💾</button>
     </div>
-
-    <!-- Duty Assign -->
-    <div class="assign-row">
-      <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
-      <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
-      <button onclick="assignDuty()">✅</button>
-    </div>
-
-    <!-- DARK PANEL -->
-    <div class="duty-panel">
-      <div class="duty-panel-title">⏱️ آج کی ڈیوٹی</div>
-      <div class="duty-members">
-        <div class="duty-member-box senior">
-          <div class="role">🟢 سینئر</div>
-          <div class="name" id="dashSenior">—</div>
-        </div>
-        <div class="duty-member-box junior">
-          <div class="role">🔵 جونیئر</div>
-          <div class="name" id="dashJunior">—</div>
-        </div>
-      </div>
-      <div class="duty-timer" id="dashTimer">00:00:00</div>
-      <button class="duty-end-btn" onclick="endAllDuty()">⏹️ ڈیوٹی ختم کریں</button>
-    </div>
-
-    <!-- Record 3-Column -->
-    <div class="scroll-head">
-      <span style="font-size:12px;font-weight:bold;color:#475569;">📋 مکمل ریکارڈ:</span>
-      <button class="btn-close" onclick="toggleClose('record3Cols')">⬇️ Close</button>
-    </div>
-    <div class="record-3cols" id="record3Cols">
-      <div class="rec-col active-col">
-        <h4>🟢 ایکٹو</h4>
-        <div id="colActiveList"></div>
-      </div>
-      <div class="rec-col done-col">
-        <h4>✅ ڈیوٹی ہو</h4>
-        <div id="colDoneList"></div>
-      </div>
-      <div class="rec-col leave-col">
-        <h4>🏖️ چھٹی</h4>
-        <div id="colLeaveList"></div>
-      </div>
-    </div>
-
-    <!-- State -->
+    <div class="scroll-head"><span>📋 ریکارڈ:</span><button class="btn-close" onclick="toggleClose('newsRecordList')">⬇️ Close</button></div>
+    <div class="scroll-list" id="newsRecordList"></div>
     <div class="state-patti">
-      <div class="state-item">👤 Members<span class="val" id="dutyMembers">0</span></div>
-      <div class="state-item">🟢 Active<span class="val" id="dutyActive">0</span></div>
-      <div class="state-item">🏖️ Leave<span class="val" id="dutyLeave">0</span></div>
+      <div class="state-item">📰 News<span class="val" id="newsCount">0</span></div>
+      <div class="state-item">🚨 Alert<span class="val" id="alertCount">0</span></div>
+      <div class="state-item">📋 Total<span class="val" id="newsTotal">0</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NS SETTINGS OVERLAY -->
+<div class="ns-overlay" id="nsOverlay">
+  <div class="ns-box">
+    <div class="ns-head">
+      <span>⚙️ نیوز / الرٹ سیٹنگز</span>
+      <button onclick="closeNS()">✕</button>
+    </div>
+    <div class="ns-body">
+
+      <!-- Old 13 -->
+      <div class="ns-old">
+        <button onclick="showMsg('Select Mode')">☑️ Select</button>
+        <button onclick="showMsg('All Select')">✅ All</button>
+        <button onclick="showMsg('Edit')">✏️ Edit</button>
+        <button class="del" onclick="showMsg('Delete')">🗑️ Delete</button>
+        <button class="del" onclick="showMsg('Delete All')">❌ Del All</button>
+        <button class="del" onclick="showMsg('Clear')">🧹 Clear</button>
+        <button onclick="showMsg('Oper')">🔼 Oper</button>
+        <button onclick="showMsg('Nichy')">🔽 Nichy</button>
+        <button onclick="showMsg('Password')">🔑 Pass</button>
+        <button onclick="showMsg('Dark Mode')">🌙 Dark</button>
+        <button onclick="showMsg('Dash Show')">📊 Show</button>
+        <button onclick="showMsg('Dash Hide')">📊 Hide</button>
+        <button onclick="closeNS()">⬇️ Close</button>
+      </div>
+
+      <!-- New toggle -->
+      <button class="ns-toggle-new" onclick="nsToggleAll()" id="nsNewToggle">⚙️ نئی سیٹنگز (7) <span id="nsArrow">▼</span></button>
+      <div id="nsNewWrap" style="display:none;">
+
+        <!-- 1. TIME -->
+        <div class="ns-sub" data-sub="1">
+          <button class="ns-sub-h" onclick="nsToggleSub(1)">⏰ وقت اور تعدد <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <label class="ns-lbl">چیک کب چلے؟</label>
+            <div class="ns-timerow">
+              <input type="number" id="nsHour" min="1" max="12" value="10" onchange="nsSave()">
+              <span>:</span>
+              <input type="number" id="nsMin" min="0" max="59" value="00" onchange="nsSave()">
+              <select id="nsAmPm" onchange="nsSave()"><option value="AM">AM</option><option value="PM" selected>PM</option></select>
+            </div>
+            <label class="ns-lbl">کتنی بار؟</label>
+            <div class="ns-radio-row" id="nsFreqRow">
+              <button class="ns-radio" data-freq="once" onclick="nsSetFreq('once')">ایک</button>
+              <button class="ns-radio" data-freq="twice" onclick="nsSetFreq('twice')">دو</button>
+              <button class="ns-radio active" data-freq="manual" onclick="nsSetFreq('manual')">دستی</button>
+            </div>
+            <div class="ns-tog">
+              <span>App کھلنے پر catch-up</span>
+              <label class="ns-sw"><input type="checkbox" id="nsCatchup" checked onchange="nsSave()"><span></span></label>
+            </div>
+            <div class="ns-tog">
+              <span>Sequential (ایک → اگلا)</span>
+              <label class="ns-sw"><input type="checkbox" id="nsSeq" checked onchange="nsSave()"><span></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. NOTIF -->
+        <div class="ns-sub" data-sub="2">
+          <button class="ns-sub-h" onclick="nsToggleSub(2)">🔔 اطلاعات <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <div class="ns-tog"><span>براؤزر نوٹیفکیشن</span><label class="ns-sw"><input type="checkbox" id="nsNotif" onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>آواز (پہلی بار)</span><label class="ns-sw"><input type="checkbox" id="nsVoiceFirst" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>وائبریٹ</span><label class="ns-sw"><input type="checkbox" id="nsVib" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>وائس بولے</span><label class="ns-sw"><input type="checkbox" id="nsSpeak" checked onchange="nsSave()"><span></span></label></div>
+            <label class="ns-lbl">آواز کتنی بار؟ (1-20)</label>
+            <input type="number" id="nsSoundCount" min="1" max="20" value="3" class="ns-inp" onchange="nsSave()">
+            <label class="ns-lbl">🔊 والیوم — <span id="nsVolShow">70%</span></label>
+            <input type="range" id="nsVolume" min="0" max="100" value="70" class="ns-slider" oninput="document.getElementById('nsVolShow').textContent=this.value+'%';nsSave()">
+            <button class="ns-test-btn" onclick="nsTestSound()">▶️ آواز ٹیسٹ</button>
+            <div class="ns-audio">
+              <div class="ns-audio-h">📰 News آواز</div>
+              <div class="ns-audio-row">
+                <input type="file" id="nsAudioNews" accept="audio/*" style="display:none;" onchange="nsUploadAudio('news',event)">
+                <button class="upload" onclick="document.getElementById('nsAudioNews').click()">📁 اپلوڈ</button>
+                <span class="ns-audio-name" id="nsNewsAudioName">ڈیفالٹ بیپ</span>
+                <button class="play" onclick="nsPlayAudio('news')">▶️</button>
+                <button class="del" onclick="nsDelAudio('news')">🗑️</button>
+              </div>
+            </div>
+            <div class="ns-audio">
+              <div class="ns-audio-h">🚨 Alert آواز</div>
+              <div class="ns-audio-row">
+                <input type="file" id="nsAudioAlert" accept="audio/*" style="display:none;" onchange="nsUploadAudio('alert',event)">
+                <button class="upload" onclick="document.getElementById('nsAudioAlert').click()">📁 اپلوڈ</button>
+                <span class="ns-audio-name" id="nsAlertAudioName">ڈیفالٹ بیپ</span>
+                <button class="play" onclick="nsPlayAudio('alert')">▶️</button>
+                <button class="del" onclick="nsDelAudio('alert')">🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. CHECK LIST -->
+        <div class="ns-sub" data-sub="3">
+          <button class="ns-sub-h" onclick="nsToggleSub(3)">📋 چیک لسٹ (<span id="nsCheckCount">10</span>) <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <button class="ns-add-btn" onclick="nsAddCheck()">➕ نیا شامل</button>
+            <div id="nsCheckList"></div>
+            <div class="ns-tog"><span>🔁 Loop (چکر)</span><label class="ns-sw"><input type="checkbox" id="nsLoop" onchange="nsSave()"><span></span></label></div>
+            <label class="ns-lbl">⏱️ وقفہ (سیکنڈ)</label>
+            <input type="number" id="nsLoopDelay" min="0" max="60" value="2" class="ns-inp" onchange="nsSave()">
+            <div class="ns-tog"><span>🌫️ Blur (skip دھندلا)</span><label class="ns-sw"><input type="checkbox" id="nsBlur" checked onchange="nsSave()"><span></span></label></div>
+          </div>
+        </div>
+
+        <!-- 4. LIMITS -->
+        <div class="ns-sub" data-sub="4">
+          <button class="ns-sub-h" onclick="nsToggleSub(4)">🎯 حدود (10) <span class="arrow">▶</span></button>
+          <div class="ns-sub-body" id="nsLimitsList"></div>
+        </div>
+
+        <!-- 5. PATTY -->
+        <div class="ns-sub" data-sub="5">
+          <button class="ns-sub-h" onclick="nsToggleSub(5)">📰 پٹی کنٹرول <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <label class="ns-lbl">📰 News پٹی</label>
+            <div class="ns-tog"><span>چالو</span><label class="ns-sw"><input type="checkbox" id="nsNewsOn" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-speed-row" id="nsNewsSpeed">
+              <button class="ns-speed-btn" data-sp="1" onclick="nsSetSpeed('news',1)">🐌</button>
+              <button class="ns-speed-btn" data-sp="2" onclick="nsSetSpeed('news',2)">🐢</button>
+              <button class="ns-speed-btn active" data-sp="3" onclick="nsSetSpeed('news',3)">🚶</button>
+              <button class="ns-speed-btn" data-sp="4" onclick="nsSetSpeed('news',4)">🐇</button>
+              <button class="ns-speed-btn" data-sp="5" onclick="nsSetSpeed('news',5)">⚡</button>
+            </div>
+            <div class="ns-radio-row" id="nsNewsMode">
+              <button class="ns-radio active" data-mode="auto" onclick="nsSetMode('news','auto')">خودکار</button>
+              <button class="ns-radio" data-mode="manual" onclick="nsSetMode('news','manual')">دستی</button>
+            </div>
+            <label class="ns-lbl">وقفہ (سیکنڈ)</label>
+            <input type="number" id="nsNewsDelay" min="0" max="60" value="2" class="ns-inp" onchange="nsSave()">
+
+            <label class="ns-lbl" style="margin-top:12px;">🚨 Alert پٹی</label>
+            <div class="ns-tog"><span>چالو</span><label class="ns-sw"><input type="checkbox" id="nsAlertOn" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-speed-row" id="nsAlertSpeed">
+              <button class="ns-speed-btn" data-sp="1" onclick="nsSetSpeed('alert',1)">🐌</button>
+              <button class="ns-speed-btn" data-sp="2" onclick="nsSetSpeed('alert',2)">🐢</button>
+              <button class="ns-speed-btn active" data-sp="3" onclick="nsSetSpeed('alert',3)">🚶</button>
+              <button class="ns-speed-btn" data-sp="4" onclick="nsSetSpeed('alert',4)">🐇</button>
+              <button class="ns-speed-btn" data-sp="5" onclick="nsSetSpeed('alert',5)">⚡</button>
+            </div>
+            <div class="ns-radio-row" id="nsAlertMode">
+              <button class="ns-radio active" data-mode="auto" onclick="nsSetMode('alert','auto')">خودکار</button>
+              <button class="ns-radio" data-mode="manual" onclick="nsSetMode('alert','manual')">دستی</button>
+            </div>
+            <label class="ns-lbl">وقفہ (سیکنڈ)</label>
+            <input type="number" id="nsAlertDelay" min="0" max="60" value="2" class="ns-inp" onchange="nsSave()">
+
+            <label class="ns-lbl">⏭️ Sequential وقفہ (سیکنڈ)</label>
+            <input type="number" id="nsSeqDelay" min="0" max="60" value="3" class="ns-inp" onchange="nsSave()">
+          </div>
+        </div>
+
+        <!-- 6. BEHAVIOR -->
+        <div class="ns-sub" data-sub="6">
+          <button class="ns-sub-h" onclick="nsToggleSub(6)">🎯 رویہ <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <div class="ns-tog"><span>پرانا alert خود ہٹ جائے</span><label class="ns-sw"><input type="checkbox" id="nsAutoClear" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>Skip کے بعد دوبارہ نہ آئے</span><label class="ns-sw"><input type="checkbox" id="nsSkipPerm" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>ہسٹری میں محفوظ</span><label class="ns-sw"><input type="checkbox" id="nsSaveHist" checked onchange="nsSave()"><span></span></label></div>
+            <div class="ns-tog"><span>لوکل فائل upload چیک</span><label class="ns-sw"><input type="checkbox" id="nsFileCheck" onchange="nsSave()"><span></span></label></div>
+          </div>
+        </div>
+
+        <!-- 7. TEST -->
+        <div class="ns-sub" data-sub="7">
+          <button class="ns-sub-h" onclick="nsToggleSub(7)">🧪 ٹیسٹ <span class="arrow">▶</span></button>
+          <div class="ns-sub-body">
+            <button class="ns-test-btn" onclick="nsRunNow()">▶️ ابھی چیک چلائیں</button>
+            <button class="ns-test-btn" onclick="nsTestSound()">🔊 آواز ٹیسٹ</button>
+            <button class="ns-test-btn" onclick="nsTestVib()">📳 وائبریٹ ٹیسٹ</button>
+            <button class="ns-test-btn reset" onclick="nsReset()">↺ ڈیفالٹ پر واپس</button>
+          </div>
+        </div>
+
+        <div class="ns-auto">💾 خودکار محفوظ</div>
+      </div>
+    </div>
+    <div class="ns-foot">
+      <button class="close" onclick="closeNS()">✕ بند</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="ns-modal" id="nsModal">
+  <div class="ns-modal-box">
+    <div class="ns-modal-h">✏️ آئٹم تبدیل کریں</div>
+    <div class="ns-modal-b">
+      <input type="text" id="nsModalName" placeholder="نام...">
+      <div class="ns-radio-row" style="margin-top:10px;">
+        <button class="ns-radio" data-t="alert" onclick="nsModalType('alert')">🚨 Alert</button>
+        <button class="ns-radio" data-t="news" onclick="nsModalType('news')">📰 News</button>
+      </div>
+    </div>
+    <div class="ns-modal-f">
+      <button onclick="nsModalClose()" style="background:#e2e8f0;color:#64748b;">✕ بند</button>
+      <button onclick="nsModalSave()" style="background:#16a34a;color:#fff;">💾 محفوظ</button>
     </div>
   </div>
 </div>
@@ -242,245 +350,372 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 <div class="inline-msg" id="inlineMsg"></div>
 
 <script>
-var DUTY_KEY='sec4_duty_manager_data_v4';
+/* ============ SHARED ============ */
 function $(id){return document.getElementById(id);}
-function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 function pad(n){return String(n).padStart(2,'0');}
-function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60);}
-function getMembers(){return ls(DUTY_KEY,[]);}
-function showMsg(t,s){var el=$('inlineMsg');el.textContent=t;el.style.background=s?'#2e8b57':'#c0392b';el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
-function toggleSettings(id){var el=$(id);if(el)el.classList.toggle('open');}
 function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none';}
+function showMsg(t,s){var el=$('inlineMsg');if(!el)return;el.textContent=t;el.style.background=s===false?'#c0392b':'#2e8b57';el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
 
-var selectedRecords={duty:{}};
-var selectMode={duty:false};
-var darkMode={duty:false};
+/* ============ NEWS RECORDS ============ */
+var NEWS_KEY='sec10_news_alerts_data';
 
-// ========== SETTINGS ==========
-function toggleSelectMode(section){
-  selectMode[section]=!selectMode[section];
-  var btn=$(section+'SelBtn');
-  if(btn){btn.textContent=selectMode[section]?'✅ Select Mode ON':'☑️ Select Mode';btn.classList.toggle('active-mode',selectMode[section]);}
-  showMsg(selectMode[section]?'✅ Select Mode ON':'☑️ Select Mode OFF',true);
-  renderDuty();
+function saveNews(){
+  var type=$('newsType').value;
+  var content=$('newsContent').value.trim();
+  if(!content){showMsg('متن لکھیں',false);return;}
+  var items=lsGet(NEWS_KEY,[]);
+  var d=new Date();
+  items.unshift({
+    id:Date.now(),
+    type:type,
+    content:content,
+    timestamp:Date.now(),
+    dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())
+  });
+  lsSet(NEWS_KEY,items);
+  $('newsContent').value='';
+  renderNews();
+  showMsg('✅ محفوظ',true);
 }
-function selectRecord(section,id){
-  if(!selectedRecords[section])selectedRecords[section]={};
-  selectedRecords[section][id]=!selectedRecords[section][id];
-  renderDuty();
+
+function renderNews(){
+  var items=lsGet(NEWS_KEY,[]);
+  var news=items.filter(function(x){return x.type==='news';});
+  var alerts=items.filter(function(x){return x.type==='alert';});
+  var box=$('newsRecordList');
+  if(box){
+    box.innerHTML=items.length?items.map(function(x,i){
+      var icon=x.type==='news'?'📰':'🚨';
+      return '<div class="record"><b>'+(i+1)+'️⃣ '+icon+' '+esc(x.content)+'</b><div class="line">📅 '+(x.dateStr||'')+'</div></div>';
+    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:8px;">کوئی ریکارڈ نہیں</div>';
+  }
+  if($('newsCount'))$('newsCount').textContent=news.length;
+  if($('alertCount'))$('alertCount').textContent=alerts.length;
+  if($('newsTotal'))$('newsTotal').textContent=items.length;
 }
-function allSelect(section){
-  getMembers().forEach(function(x){selectedRecords.duty[x.id]=true;});
-  showMsg('✅ All Select',true);
-  renderDuty();
+
+/* ============ NS SETTINGS ============ */
+var NS_KEY='ns_settings_v3';
+var NS_AUDIO_KEY='ns_audio_v1';
+var NS_DEFAULT_CHECKS=[
+  {id:1,name:"زیادہ چھٹیاں",type:"alert",enabled:true,limit:3,unit:"دن"},
+  {id:2,name:"کم پوائنٹس",type:"alert",enabled:true,limit:10,unit:"پوائنٹس"},
+  {id:3,name:"Skip نہیں کیے",type:"alert",enabled:true,limit:3,unit:"گنتی"},
+  {id:4,name:"حاضری نہیں",type:"alert",enabled:true,limit:1,unit:"دن"},
+  {id:5,name:"راشن نہیں",type:"alert",enabled:true,limit:1,unit:"دن"},
+  {id:6,name:"ڈیوٹی ٹھیک نہیں",type:"alert",enabled:true,limit:30,unit:"منٹ"},
+  {id:7,name:"بجٹ ختم",type:"alert",enabled:true,limit:80,unit:"%"},
+  {id:8,name:"شکایات",type:"alert",enabled:true,limit:1,unit:"گنتی"},
+  {id:9,name:"6 دن کام",type:"news",enabled:true,limit:6,unit:"دن"},
+  {id:10,name:"اچھی ڈیوٹی",type:"news",enabled:true,limit:6,unit:"دن"}
+];
+var nsChecks=[],nsFreq='manual',nsSpeed={news:3,alert:3},nsMode={news:'auto',alert:'auto'};
+var nsEditIdx=-1,nsModalType_='alert';
+var nsAudio={news:null,alert:null};
+
+function nsLoad(){
+  try{
+    var s=lsGet(NS_KEY,null);
+    if(s){
+      if(s.hour)$('nsHour').value=s.hour;
+      if(s.min!==undefined)$('nsMin').value=s.min;
+      if(s.ampm)$('nsAmPm').value=s.ampm;
+      nsFreq=s.freq||'manual';
+      if(s.catchup!==undefined)$('nsCatchup').checked=s.catchup;
+      if(s.seq!==undefined)$('nsSeq').checked=s.seq;
+      if(s.notif!==undefined)$('nsNotif').checked=s.notif;
+      if(s.voiceFirst!==undefined)$('nsVoiceFirst').checked=s.voiceFirst;
+      if(s.vib!==undefined)$('nsVib').checked=s.vib;
+      if(s.speak!==undefined)$('nsSpeak').checked=s.speak;
+      if(s.soundCount)$('nsSoundCount').value=s.soundCount;
+      if(s.volume!==undefined){$('nsVolume').value=s.volume;$('nsVolShow').textContent=s.volume+'%';}
+      if(s.loop!==undefined)$('nsLoop').checked=s.loop;
+      if(s.loopDelay!==undefined)$('nsLoopDelay').value=s.loopDelay;
+      if(s.blur!==undefined)$('nsBlur').checked=s.blur;
+      if(s.newsOn!==undefined)$('nsNewsOn').checked=s.newsOn;
+      if(s.alertOn!==undefined)$('nsAlertOn').checked=s.alertOn;
+      if(s.newsDelay!==undefined)$('nsNewsDelay').value=s.newsDelay;
+      if(s.alertDelay!==undefined)$('nsAlertDelay').value=s.alertDelay;
+      if(s.seqDelay!==undefined)$('nsSeqDelay').value=s.seqDelay;
+      if(s.autoClear!==undefined)$('nsAutoClear').checked=s.autoClear;
+      if(s.skipPerm!==undefined)$('nsSkipPerm').checked=s.skipPerm;
+      if(s.saveHist!==undefined)$('nsSaveHist').checked=s.saveHist;
+      if(s.fileCheck!==undefined)$('nsFileCheck').checked=s.fileCheck;
+      nsChecks=s.checks||JSON.parse(JSON.stringify(NS_DEFAULT_CHECKS));
+      nsSpeed=s.speed||{news:3,alert:3};
+      nsMode=s.mode||{news:'auto',alert:'auto'};
+    } else {
+      nsChecks=JSON.parse(JSON.stringify(NS_DEFAULT_CHECKS));
+    }
+  }catch(e){nsChecks=JSON.parse(JSON.stringify(NS_DEFAULT_CHECKS));}
+  nsAudio=lsGet(NS_AUDIO_KEY,{news:null,alert:null});
+  nsRefreshAudioUI();
 }
-function editSelected(section){
-  var ids=Object.keys(selectedRecords[section]||{}).filter(function(k){return selectedRecords[section][k];});
-  if(!ids.length){showMsg('پہلے ریکارڈ select کریں');return;}
-  var m=getMembers();
-  var t=m.find(function(x){return String(x.id)===ids[0];});
-  if(!t)return;
-  var nn=prompt('نیا نام:',t.name);
-  if(nn&&nn.trim()){
-    t.name=nn.trim();
-    var nr=prompt('Rank (Senior/Junior):',t.rank);
-    if(nr==='Senior'||nr==='Junior')t.rank=nr;
-    lss(DUTY_KEY,m);
-    selectedRecords.duty={};
-    renderDuty();
-    showMsg('✅ اپڈیٹ',true);
+
+function openNS(){
+  nsLoad();
+  nsRenderChecks();
+  nsRenderLimits();
+  nsSetFreq(nsFreq);
+  nsApplySpeedMode('news');
+  nsApplySpeedMode('alert');
+  $('nsOverlay').classList.add('active');
+}
+function closeNS(){$('nsOverlay').classList.remove('active');}
+
+function nsToggleAll(){
+  var w=$('nsNewWrap'),a=$('nsArrow');
+  if(w.style.display==='none'){w.style.display='block';a.textContent='▲';}
+  else {w.style.display='none';a.textContent='▼';}
+}
+
+function nsToggleSub(n){
+  document.querySelectorAll('.ns-sub').forEach(function(el){
+    if(el.getAttribute('data-sub')==String(n)){
+      el.classList.toggle('open');
+      var ar=el.querySelector('.arrow');
+      ar.textContent=el.classList.contains('open')?'▼':'▶';
+    } else {
+      el.classList.remove('open');
+      var ar2=el.querySelector('.arrow');
+      if(ar2)ar2.textContent='▶';
+    }
+  });
+}
+
+function nsRenderChecks(){
+  var box=$('nsCheckList');
+  var h='';
+  nsChecks.forEach(function(c,i){
+    h+='<div class="ns-check-item '+(c.enabled?'':'dis')+'">';
+    h+='<label class="ns-sw-sm"><input type="checkbox" '+(c.enabled?'checked':'')+' onchange="nsToggleCheck('+i+')"><span></span></label>';
+    h+='<span class="num">'+(i+1)+'</span>';
+    h+='<span class="nm">'+esc(c.name)+'</span>';
+    h+='<button class="tbtn '+(c.type==='alert'?'alert':'news')+'" onclick="nsToggleType('+i+')">'+(c.type==='alert'?'🚨':'📰')+'</button>';
+    h+='<button class="abtn edit" onclick="nsEditCheck('+i+')">✏️</button>';
+    h+='<button class="abtn del" onclick="nsDelCheck('+i+')">🗑️</button>';
+    h+='</div>';
+  });
+  box.innerHTML=h;
+  $('nsCheckCount').textContent=nsChecks.length;
+}
+
+function nsRenderLimits(){
+  var box=$('nsLimitsList');
+  var h='';
+  nsChecks.forEach(function(c,i){
+    h+='<div class="ns-limit-row">';
+    h+='<span class="nm">'+(i+1)+'. '+esc(c.name)+'</span>';
+    h+='<input type="number" value="'+(c.limit||0)+'" onchange="nsUpdateLimit('+i+',this.value)">';
+    if(c.name==='ڈیوٹی ٹھیک نہیں'){
+      h+='<select onchange="nsUpdateUnit('+i+',this.value)">';
+      h+='<option value="منٹ" '+(c.unit==='منٹ'?'selected':'')+'>منٹ</option>';
+      h+='<option value="گھنٹہ" '+(c.unit==='گھنٹہ'?'selected':'')+'>گھنٹہ</option>';
+      h+='</select>';
+    } else {
+      h+='<span class="unit">'+esc(c.unit||'')+'</span>';
+    }
+    h+='</div>';
+  });
+  box.innerHTML=h;
+}
+
+function nsUpdateLimit(i,v){
+  nsChecks[i].limit=parseInt(v)||0;
+  nsSave();
+}
+function nsUpdateUnit(i,v){
+  nsChecks[i].unit=v;
+  nsSave();
+}
+
+function nsToggleCheck(i){nsChecks[i].enabled=!nsChecks[i].enabled;nsRenderChecks();nsSave();}
+function nsToggleType(i){nsChecks[i].type=nsChecks[i].type==='alert'?'news':'alert';nsRenderChecks();nsSave();}
+function nsDelCheck(i){
+  if(!confirm('ڈیلیٹ؟'))return;
+  nsChecks.splice(i,1);nsRenderChecks();nsRenderLimits();nsSave();
+}
+function nsAddCheck(){
+  nsChecks.push({id:Date.now(),name:"نیا آئٹم",type:"alert",enabled:true,limit:1,unit:"گنتی"});
+  nsRenderChecks();nsRenderLimits();nsSave();
+}
+function nsEditCheck(i){
+  nsEditIdx=i;
+  $('nsModalName').value=nsChecks[i].name;
+  nsModalType_=nsChecks[i].type;
+  document.querySelectorAll('#nsModal .ns-radio').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-t')===nsModalType_);});
+  $('nsModal').classList.add('active');
+}
+function nsModalType(t){
+  nsModalType_=t;
+  document.querySelectorAll('#nsModal .ns-radio').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-t')===t);});
+}
+function nsModalSave(){
+  if(nsEditIdx<0)return;
+  nsChecks[nsEditIdx].name=$('nsModalName').value.trim()||"بغیر نام";
+  nsChecks[nsEditIdx].type=nsModalType_;
+  nsEditIdx=-1;
+  $('nsModal').classList.remove('active');
+  nsRenderChecks();nsRenderLimits();nsSave();
+}
+function nsModalClose(){nsEditIdx=-1;$('nsModal').classList.remove('active');}
+
+function nsSetFreq(f){
+  nsFreq=f;
+  document.querySelectorAll('#nsFreqRow .ns-radio').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-freq')===f);});
+  nsSave();
+}
+function nsSetSpeed(target,sp){
+  nsSpeed[target]=sp;
+  nsApplySpeedMode(target);
+  nsSave();
+}
+function nsSetMode(target,m){
+  nsMode[target]=m;
+  nsApplySpeedMode(target);
+  nsSave();
+}
+function nsApplySpeedMode(target){
+  var spWrap=target==='news'?$('nsNewsSpeed'):$('nsAlertSpeed');
+  var mdWrap=target==='news'?$('nsNewsMode'):$('nsAlertMode');
+  if(spWrap)spWrap.querySelectorAll('.ns-speed-btn').forEach(function(b){b.classList.toggle('active',parseInt(b.getAttribute('data-sp'))===nsSpeed[target]);});
+  if(mdWrap)mdWrap.querySelectorAll('.ns-radio').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')===nsMode[target]);});
+}
+
+/* ============ AUDIO ============ */
+function nsRefreshAudioUI(){
+  if(nsAudio.news){
+    $('nsNewsAudioName').textContent=nsAudio.news.name||'اپلوڈ شدہ';
+  } else {
+    $('nsNewsAudioName').textContent='ڈیفالٹ بیپ';
+  }
+  if(nsAudio.alert){
+    $('nsAlertAudioName').textContent=nsAudio.alert.name||'اپلوڈ شدہ';
+  } else {
+    $('nsAlertAudioName').textContent='ڈیفالٹ بیپ';
   }
 }
-function deleteSelected(section){
-  var ids=Object.keys(selectedRecords[section]||{}).filter(function(k){return selectedRecords[section][k];});
-  if(!ids.length){showMsg('پہلے ریکارڈ select کریں');return;}
-  lss(DUTY_KEY,getMembers().filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  selectedRecords.duty={};
-  showMsg('✅ '+ids.length+' delete',true);
-  renderDuty();
+function nsUploadAudio(target,e){
+  var f=e.target.files[0];
+  if(!f){return;}
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    nsAudio[target]={name:f.name,data:ev.target.result};
+    lsSet(NS_AUDIO_KEY,nsAudio);
+    nsRefreshAudioUI();
+    showMsg('✅ آواز اپلوڈ',true);
+  };
+  reader.readAsDataURL(f);
 }
-function deleteAllSelected(section){
-  lss(DUTY_KEY,[]);
-  selectedRecords.duty={};
-  showMsg('❌ Delete All',true);
-  renderDuty();
-}
-function clearRecord(section){
-  lss(DUTY_KEY,[]);
-  selectedRecords.duty={};
-  showMsg('🧹 Clear',true);
-  renderDuty();
-}
-function moveOrder(section,dir){
-  var ids=Object.keys(selectedRecords[section]||{}).filter(function(k){return selectedRecords[section][k];});
-  if(!ids.length){showMsg('پہلے ریکارڈ select کریں');return;}
-  var m=getMembers();
-  var id=ids[0];
-  var idx=m.findIndex(function(x){return String(x.id)===id;});
-  if(idx===-1)return;
-  var ni=idx+dir;
-  if(ni<0||ni>=m.length)return;
-  var tmp=m[idx];m[idx]=m[ni];m[ni]=tmp;
-  lss(DUTY_KEY,m);
-  selectedRecords.duty={};
-  renderDuty();
-  showMsg(dir===-1?'🔼 Oper':'🔽 Nichy',true);
-}
-function setPassword(section){
-  var p=prompt('پاس ورڈ سیٹ کریں (خالی = ہٹائیں):');
-  if(p===null)return;
-  lss('duty_pwd',{pwd:p});
-  showMsg(p?'✅ پاس ورڈ سیٹ':'✅ ہٹا دیا',true);
-}
-function toggleDark(section){
-  darkMode[section]=!darkMode[section];
-  var btn=$('dutyDarkBtn');
-  if(btn)btn.classList.toggle('active-mode',darkMode[section]);
-  document.body.classList.toggle('dark-mode',darkMode[section]);
-  showMsg(darkMode[section]?'🌙 Dark Mode ON':'☀️ Light Mode',true);
-}
-function dashShow(section){lss('duty_dash_show',true);showMsg('📊 Dash Show ON',true);}
-function dashHide(section){lss('duty_dash_show',false);showMsg('📊 Dash Hide OFF',true);}
-
-// ========== MEMBER FUNCTIONS ==========
-function addMember(){
-  var name=$('newMemName').value.trim();
-  var rank=$('newMemRank').value;
-  if(!name){showMsg('نام لکھیں');return;}
-  var m=getMembers();
-  if(m.some(function(x){return x.name.toLowerCase()===name.toLowerCase();})){showMsg('ممبر موجود ہے');return;}
-  m.push({id:Date.now(),name:name,rank:rank,onDuty:false,onLeave:false,dutyCount:0,dutyStart:null,dutyEndedAt:null});
-  lss(DUTY_KEY,m);
-  $('newMemName').value='';
-  renderDuty();
-  showMsg('✅ شامل',true);
-}
-function editMember(){
-  var id=$('editMemSelect').value;
-  if(!id){showMsg('ممبر منتخب کریں');return;}
-  var m=getMembers();
-  var mem=m.find(function(x){return String(x.id)===String(id);});
-  if(!mem)return;
-  var nn=prompt('نیا نام:',mem.name);
-  if(nn&&nn.trim()){
-    mem.name=nn.trim();
-    var nr=prompt('Rank (Senior/Junior):',mem.rank);
-    if(nr==='Senior'||nr==='Junior')mem.rank=nr;
-    lss(DUTY_KEY,m);
-    renderDuty();
-    showMsg('✅ اپڈیٹ',true);
+function nsPlayAudio(target){
+  var a=nsAudio[target];
+  if(!a||!a.data){
+    nsBeep();
+    return;
   }
+  try{
+    var audio=new Audio(a.data);
+    audio.volume=parseInt($('nsVolume').value)/100;
+    audio.play();
+  }catch(e){nsBeep();}
 }
-function deleteMember(){
-  var id=$('editMemSelect').value;
-  if(!id){showMsg('ممبر منتخب کریں');return;}
-  if(!confirm('ڈیلیٹ کریں؟'))return;
-  lss(DUTY_KEY,getMembers().filter(function(x){return String(x.id)!==String(id);}));
-  renderDuty();
+function nsDelAudio(target){
+  if(!nsAudio[target])return;
+  if(!confirm('آواز ڈیلیٹ؟'))return;
+  nsAudio[target]=null;
+  lsSet(NS_AUDIO_KEY,nsAudio);
+  nsRefreshAudioUI();
   showMsg('✅ ڈیلیٹ',true);
 }
-function assignDuty(){
-  var sid=$('assignSenior').value;
-  var jid=$('assignJunior').value;
-  if(!sid&&!jid){showMsg('ممبر منتخب کریں');return;}
-  var m=getMembers(),now=Date.now(),changed=false;
-  [sid,jid].forEach(function(id){
-    if(!id)return;
-    var t=m.find(function(x){return String(x.id)===id;});
-    if(!t)return;
-    if(t.onDuty){showMsg(t.name+' پہلے سے ڈیوٹی پر');return;}
-    t.onDuty=true;t.onLeave=false;t.dutyCount++;t.dutyStart=now;t.dutyEndedAt=null;
-    changed=true;
-  });
-  if(changed){
-    lss(DUTY_KEY,m);
-    renderDuty();
-    showMsg('✅ تفویض',true);
-  }
-}
-function endAllDuty(){
-  var m=getMembers();
-  var active=m.filter(function(x){return x.onDuty;});
-  if(!active.length){showMsg('کوئی ڈیوٹی پر نہیں');return;}
-  active.forEach(function(x){x.onDuty=false;x.dutyStart=null;x.dutyEndedAt=Date.now();});
-  lss(DUTY_KEY,m);
-  renderDuty();
-  showMsg('✅ ڈیوٹی ختم',true);
+function nsBeep(){
+  try{
+    var vol=parseInt($('nsVolume').value)/100;
+    var ctx=new (window.AudioContext||window.webkitAudioContext)();
+    var o=ctx.createOscillator();
+    var g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=800;
+    g.gain.value=vol;
+    o.start();
+    setTimeout(function(){o.stop();},300);
+  }catch(e){}
 }
 
-// ========== RENDER ==========
-function populateDropdowns(){
-  var m=getMembers();
-  var eSel=$('editMemSelect');
-  if(eSel){
-    var cur=eSel.value;
-    eSel.innerHTML='<option value="">ممبر</option>';
-    m.forEach(function(x){eSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>';});
-    if(cur)eSel.value=cur;
-  }
-  var sSel=$('assignSenior'),jSel=$('assignJunior');
-  if(sSel&&jSel){
-    sSel.innerHTML='<option value="">🟢 سینئر...</option>';
-    jSel.innerHTML='<option value="">🔵 جونیئر...</option>';
-    m.filter(function(x){return !x.onLeave&&!x.onDuty;}).forEach(function(x){
-      if(x.rank==='Senior')sSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>';
-      if(x.rank==='Junior')jSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>';
-    });
-  }
+/* ============ SAVE ============ */
+function nsSave(){
+  var s={
+    hour:parseInt($('nsHour').value)||10,
+    min:$('nsMin').value||'00',
+    ampm:$('nsAmPm').value,
+    freq:nsFreq,
+    catchup:$('nsCatchup').checked,
+    seq:$('nsSeq').checked,
+    notif:$('nsNotif').checked,
+    voiceFirst:$('nsVoiceFirst').checked,
+    vib:$('nsVib').checked,
+    speak:$('nsSpeak').checked,
+    soundCount:$('nsSoundCount').value,
+    volume:parseInt($('nsVolume').value),
+    loop:$('nsLoop').checked,
+    loopDelay:$('nsLoopDelay').value,
+    blur:$('nsBlur').checked,
+    newsOn:$('nsNewsOn').checked,
+    alertOn:$('nsAlertOn').checked,
+    newsDelay:$('nsNewsDelay').value,
+    alertDelay:$('nsAlertDelay').value,
+    seqDelay:$('nsSeqDelay').value,
+    autoClear:$('nsAutoClear').checked,
+    skipPerm:$('nsSkipPerm').checked,
+    saveHist:$('nsSaveHist').checked,
+    fileCheck:$('nsFileCheck').checked,
+    checks:nsChecks,
+    speed:nsSpeed,
+    mode:nsMode,
+    savedAt:Date.now()
+  };
+  lsSet(NS_KEY,s);
 }
 
-function renderDuty(){
-  var m=getMembers();
-  populateDropdowns();
-
-  var active=m.filter(function(x){return x.onDuty;});
-  var done=m.filter(function(x){return !x.onDuty&&!x.onLeave&&x.dutyEndedAt;});
-  var leave=m.filter(function(x){return x.onLeave;});
-
-  // Panel
-  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior';});
-  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior';});
-  if($('dashSenior'))$('dashSenior').textContent=s?s.name:'—';
-  if($('dashJunior'))$('dashJunior').textContent=j?j.name:'—';
-  var activeMem=s||j;
-  if(activeMem&&activeMem.dutyStart&&$('dashTimer'))$('dashTimer').textContent=fmtTimer(Date.now()-activeMem.dutyStart);
-  else if($('dashTimer'))$('dashTimer').textContent='00:00:00';
-
-  // 3-Column Render
-  if($('colActiveList')){
-    $('colActiveList').innerHTML=active.length?active.map(function(x,i){
-      var chk=selectMode.duty?'<input type="checkbox" onchange="selectRecord(\'duty\','+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d">('+x.rank+')</div><div class="d s-active">🟢 ایکٹو</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:8px;">کوئی نہیں</div>';
-  }
-  if($('colDoneList')){
-    $('colDoneList').innerHTML=done.length?done.map(function(x,i){
-      var chk=selectMode.duty?'<input type="checkbox" onchange="selectRecord(\'duty\','+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d">('+x.rank+')</div><div class="d s-done">✅ مکمل</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:8px;">کوئی نہیں</div>';
-  }
-  if($('colLeaveList')){
-    $('colLeaveList').innerHTML=leave.length?leave.map(function(x,i){
-      var chk=selectMode.duty?'<input type="checkbox" onchange="selectRecord(\'duty\','+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d">('+x.rank+')</div><div class="d s-leave">🏖️ چھٹی</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:8px;">کوئی نہیں</div>';
-  }
-
-  // State
-  if($('dutyMembers'))$('dutyMembers').textContent=m.length;
-  if($('dutyActive'))$('dutyActive').textContent=active.length;
-  if($('dutyLeave'))$('dutyLeave').textContent=leave.length;
+/* ============ TEST ============ */
+function nsTestSound(){
+  var target=$('nsAudioNews').files&&$('nsAudioNews').files[0]?'news':'news';
+  nsPlayAudio(target);
+  showMsg('🔊 آواز ٹیسٹ',true);
+}
+function nsTestVib(){
+  if(navigator.vibrate){navigator.vibrate([200,100,200]);showMsg('📳 وائبریٹ',true);}
+  else showMsg('❌ وائبریٹ نہیں',false);
+}
+function nsRunNow(){
+  showMsg('▶️ چیک چل رہا ہے...',true);
+  if($('nsVib').checked&&navigator.vibrate)navigator.vibrate(200);
+  setTimeout(function(){
+    var en=nsChecks.filter(function(c){return c.enabled;});
+    var a=en.filter(function(c){return c.type==='alert';}).length;
+    var n=en.filter(function(c){return c.type==='news';}).length;
+    showMsg('✅ '+a+' Alert، '+n+' News',true);
+  },600);
+}
+function nsReset(){
+  if(!confirm('ڈیفالٹ پر واپس؟'))return;
+  nsChecks=JSON.parse(JSON.stringify(NS_DEFAULT_CHECKS));
+  nsFreq='manual';nsSpeed={news:3,alert:3};nsMode={news:'auto',alert:'auto'};
+  try{localStorage.removeItem(NS_KEY);}catch(e){}
+  nsLoad();
+  nsRenderChecks();
+  nsRenderLimits();
+  nsSetFreq('manual');
+  nsApplySpeedMode('news');
+  nsApplySpeedMode('alert');
+  showMsg('↺ ڈیفالٹ',true);
 }
 
+/* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded',function(){
-  renderDuty();
-  setInterval(function(){
-    var m=getMembers();
-    var active=m.find(function(x){return x.onDuty&&x.dutyStart;});
-    if(active&&$('dashTimer'))$('dashTimer').textContent=fmtTimer(Date.now()-active.dutyStart);
-  },1000);
+  renderNews();
 });
 </script>
 </body>
