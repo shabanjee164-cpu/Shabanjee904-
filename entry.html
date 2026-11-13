@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+use<!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -1147,6 +1147,1054 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 
 setInterval(autoCleanup,3600000);
+  <!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Duty Manager</title>
+<style>
+:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
+.container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
+.section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.compact-row{display:flex;gap:4px;align-items:center;padding:2px;flex-wrap:nowrap;overflow-x:auto}
+.compact-row input,.compact-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;min-width:0;flex:1}
+.compact-row input{flex:2 1 80px}
+.compact-row .btn{padding:7px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:11px;flex:0 0 auto}
+.btn-add{background:var(--success);color:#fff}
+.btn-edit{background:#dbeafe;color:#1e40af}
+.btn-del{background:#fee2e2;color:#991b1b}
+.assign-row{display:flex;gap:6px;align-items:center}
+.assign-row select{padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;text-align:center;font-family:inherit;outline:none;flex:1}
+.assign-row .btn{padding:8px 14px;background:var(--success);color:#fff;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:13px}
+
+/* DUTY PANEL */
+.duty-panel{background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--golden);border-radius:12px;padding:12px;color:#fff;position:relative}
+.duty-panel-title{text-align:center;font-size:12px;font-weight:800;color:#fbbf24;margin-bottom:10px}
+.duty-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.duty-col{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 6px;text-align:center;position:relative}
+.duty-col.senior{border-right:3px solid #60a5fa}
+.duty-col.junior{border-left:3px solid #34d399}
+.duty-col .role{font-size:10px;color:#94a3b8;margin-bottom:3px;font-weight:700}
+.duty-col .name{font-size:14px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:6px}
+.duty-col .end-btn{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;width:100%}
+.duty-col .end-btn:active{transform:scale(.96)}
+.duty-col .end-btn:disabled{background:#64748b;opacity:.5;cursor:not-allowed}
+.duty-col .time-corner{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.4);color:#fbbf24;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit;border:none}
+.duty-col .time-corner:active{transform:scale(.94)}
+
+.big-timer{text-align:center;font-size:28px;font-weight:900;color:#fbbf24;background:rgba(0,0,0,.4);padding:12px;border-radius:10px;letter-spacing:3px;text-shadow:0 0 15px rgba(251,191,36,.6);border:2px solid #fbbf24}
+.big-timer.senior-only{border-color:#60a5fa;color:#60a5fa;text-shadow:0 0 15px rgba(96,165,250,.6)}
+.big-timer.junior-on{border-color:#34d399;color:#34d399;text-shadow:0 0 15px rgba(52,211,153,.6)}
+.big-timer.stopped{color:#94a3b8;border-color:#475569;text-shadow:none}
+
+/* COLUMNS */
+.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.col-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:6px;min-height:80px;max-height:400px;overflow-y:auto}
+.col-box.active-col{background:#f0fdf4;border-color:#86efac}
+.col-box.low-col{background:#fef2f2;border-color:#fca5a5}
+.col-box h4{font-size:10.5px;text-align:center;color:#475569;padding-bottom:4px;border-bottom:1px dashed #cbd5e1;margin-bottom:4px;position:sticky;top:0;background:inherit;font-weight:800}
+.col-item{padding:6px 4px;border-bottom:1px dotted #e2e8f0}
+.col-item:last-child{border-bottom:none}
+.col-item .hdr{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.col-item .chk{width:14px;height:14px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.col-item .nm{font-size:11px;font-weight:800;color:#0f172a;flex:1}
+.col-item .rk{font-size:9px;color:#64748b;font-weight:600}
+.col-item .line{font-size:10px;font-weight:700;margin-top:2px;display:flex;gap:3px;flex-wrap:wrap}
+.col-item .line .tag{background:#f1f5f9;padding:1px 5px;border-radius:3px}
+.col-item .line .tag.red{background:#fee2e2;color:#991b1b}
+.col-item .line .tag.green{background:#d1fae5;color:#059669}
+.col-item .line .tag.blue{background:#dbeafe;color:#1e40af}
+.col-item .msg{font-size:9.5px;font-weight:700;color:#059669;margin-top:4px;padding:3px 5px;background:#ecfdf5;border-radius:4px;border-right:2px solid #10b981}
+.col-item .msg.red{color:#991b1b;background:#fef2f2;border-right-color:#ef4444}
+.col-item .msg.blue{color:#1e40af;background:#eff6ff;border-right-color:#2563eb}
+.col-item .msg.amber{color:#92400e;background:#fffbeb;border-right-color:#f59e0b}
+
+/* LEAVE RECORD */
+.leave-record-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px;max-height:200px;overflow-y:auto}
+.leave-record-box .lrec{padding:6px;border-bottom:1px dotted #fde68a}
+.leave-record-box .lrec:last-child{border-bottom:none}
+.leave-record-box .lrec .lname{font-size:11px;font-weight:800;color:#92400e}
+.leave-record-box .lrec .ldetail{font-size:9.5px;color:#78350f;margin-top:2px}
+.leave-record-box .lrec .lmsg{font-size:9.5px;font-weight:700;color:#92400e;margin-top:3px;padding:3px 5px;background:#fef3c7;border-radius:4px}
+
+/* HISTORY */
+.history-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:6px;max-height:300px;overflow-y:auto}
+.history-box .hrec{padding:6px 4px;border-bottom:1px dotted #e2e8f0}
+.history-box .hrec:last-child{border-bottom:none}
+.history-box .hrec .hdr{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.history-box .hrec .chk{width:14px;height:14px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.history-box .hrec .nm{font-size:11px;font-weight:800;color:#0f172a;flex:1}
+.history-box .hrec .rk{font-size:9px;color:#64748b}
+.history-box .hrec .line{font-size:10px;margin-top:2px;display:flex;gap:3px;flex-wrap:wrap}
+.history-box .hrec .line .tag{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-weight:700}
+.history-box .hrec .line .tag.blue{background:#dbeafe;color:#1e40af}
+.history-box .hrec .line .tag.green{background:#d1fae5;color:#059669}
+.history-box .hrec .line .tag.amber{background:#fef3c7;color:#92400e}
+.history-box .hrec .msg{font-size:9.5px;font-weight:700;color:#475569;margin-top:4px;padding:3px 5px;background:#f1f5f9;border-radius:4px}
+
+/* STATE */
+.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
+.state-item{flex:1;text-align:center;padding:6px 2px;border-radius:4px;font-size:10px;font-weight:800}
+.state-item .val{font-size:16px;font-weight:900;display:block;margin-top:1px}
+.state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
+.state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
+.state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
+
+/* HEAD */
+.scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.scroll-head span{font-size:11px;font-weight:bold;color:#475569}
+.btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
+
+/* SETTINGS */
+.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
+.ns-overlay.active{display:block}
+.ns-box{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
+.ns-head{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800}
+.ns-head button{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;font-family:inherit}
+.ns-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ns-old{background:#2c3e50;border-radius:10px;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.ns-old button{padding:8px 3px;font-size:9px;font-weight:bold;border-radius:5px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit}
+.ns-old button.del{color:#ff9999}
+.ns-old button.active{background:#10b981;border-color:#10b981}
+.ns-total{background:#2c3e50;border-radius:10px;padding:12px;margin-top:8px}
+.ns-total-title{color:#fbbf24;font-size:12px;font-weight:800;text-align:center;margin-bottom:8px}
+.ns-total-row{display:flex;gap:4px;align-items:center;justify-content:center}
+.ns-total-row input{padding:8px;border:1px solid #34495e;background:#34495e;color:#fff;border-radius:5px;text-align:center;width:60px;font-family:inherit;font-weight:800}
+.ns-total-row select{padding:8px;border:1px solid #34495e;background:#34495e;color:#fff;border-radius:5px;font-family:inherit;font-weight:800}
+.ns-total-row span{color:#fff;font-weight:800}
+.ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:12px;display:flex;gap:8px}
+.ns-foot button{flex:1;padding:12px;border:none;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;background:#f1f5f9;color:#64748b}
+
+/* MODAL */
+.ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.ns-modal.active{display:flex}
+.ns-modal-box{background:#fff;border-radius:12px;max-width:340px;width:100%}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0}
+.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600}
+.ns-modal-b input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-top:8px}
+.ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
+.ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+
+/* MSG */
+.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
+.inline-msg.show{display:block}
+.inline-msg.error{background:#c0392b}
+
+/* DARK */
+body.dark{background:#0f172a;color:#e2e8f0}
+body.dark .section-card{background:#1e293b;border-color:#334155}
+body.dark .col-box{background:#0f172a;border-color:#334155}
+body.dark .col-item .nm{color:#f1f5f9}
+body.dark .history-box{background:#0f172a;border-color:#334155}
+body.dark .history-box .hrec .nm{color:#f1f5f9}
+body.dark .leave-record-box{background:#422006;border-color:#78350f}
+
+@media(max-width:480px){.two-cols{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="section-card">
+    <div class="section-header">
+      <span>👮 ڈیوٹی مینیجر</span>
+      <button onclick="openSettings()">⚙️</button>
+    </div>
+
+    <!-- MEMBER ROW -->
+    <div class="compact-row">
+      <input type="text" id="newMemName" placeholder="نام...">
+      <select id="newMemRank"><option value="Senior">🟢</option><option value="Junior">🔵</option></select>
+      <button class="btn btn-add" onclick="addMember()">➕</button>
+      <select id="editMemSelect" onchange="onMemSelect()"><option value="">ممبر</option></select>
+      <button class="btn btn-edit" id="editMemBtn" onclick="editMember()" style="display:none">✏️</button>
+      <button class="btn btn-del" id="delMemBtn" onclick="deleteMember()" style="display:none">🗑️</button>
+    </div>
+
+    <!-- ASSIGN ROW -->
+    <div class="assign-row">
+      <select id="assignSenior"><option value="">🟢 سینئر...</option></select>
+      <select id="assignJunior"><option value="">🔵 جونیئر...</option></select>
+      <button class="btn" onclick="assignDuty()">✅</button>
+    </div>
+
+    <!-- DUTY PANEL -->
+    <div class="duty-panel">
+      <div class="duty-panel-title">⏱️ آج کی ڈیوٹی</div>
+      <div class="duty-cols">
+        <div class="duty-col senior">
+          <div class="role">🟢 سینئر</div>
+          <div class="name" id="dashSenior">—</div>
+          <button class="end-btn" id="endSeniorBtn" onclick="endDuty('Senior')" disabled>⏹️ ختم</button>
+        </div>
+        <div class="duty-col junior">
+          <button class="time-corner" id="juniorTimeBtn" onclick="changeJuniorTime()">🕐 12:00</button>
+          <div class="role">🔵 جونیئر</div>
+          <div class="name" id="dashJunior">—</div>
+          <button class="end-btn" id="endJuniorBtn" onclick="endDuty('Junior')" disabled>⏹️ ختم</button>
+        </div>
+      </div>
+      <div class="big-timer stopped" id="bigTimer">00:00:00</div>
+    </div>
+
+    <!-- 2 COLUMNS -->
+    <div class="two-cols">
+      <div class="col-box active-col">
+        <h4>✅ ڈیوٹی پوری ہوئی</h4>
+        <div id="col1List"></div>
+      </div>
+      <div class="col-box low-col">
+        <h4>🔴 کم ڈیوٹی والے</h4>
+        <div id="col2List"></div>
+      </div>
+    </div>
+
+    <!-- STATE -->
+    <div class="state-patti" id="statePatti">
+      <div class="state-item">🟢 ڈیوٹی کی<span class="val" id="stateDuty">0</span></div>
+      <div class="state-item">🔴 کم ڈیوٹی<span class="val" id="stateLow">0</span></div>
+      <div class="state-item">🏖️ چھٹی لی<span class="val" id="stateLeave">0</span></div>
+    </div>
+
+    <!-- LEAVE RECORD -->
+    <div class="scroll-head">
+      <span>🏖️ چھٹی ریکارڈ:</span>
+      <button class="btn-close" onclick="toggleClose('leaveRecordBox')">⬇️ Close</button>
+    </div>
+    <div class="leave-record-box" id="leaveRecordBox"></div>
+
+    <!-- HISTORY -->
+    <div class="scroll-head">
+      <span>📜 مکمل ہسٹری:</span>
+      <button class="btn-close" onclick="toggleClose('historyBox')">⬇️ Close</button>
+    </div>
+    <div class="history-box" id="historyBox"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="ns-overlay" id="nsOverlay">
+  <div class="ns-box">
+    <div class="ns-head">
+      <span>⚙️ ڈیوٹی سیٹنگز</span>
+      <button onclick="closeSettings()">✕</button>
+    </div>
+    <div class="ns-body">
+      <div class="ns-old">
+        <button onclick="toggleSelectMode()" id="selModeBtn">☑️ Select</button>
+        <button onclick="allSelect()">✅ All</button>
+        <button onclick="editSelected()">✏️ Edit</button>
+        <button class="del" onclick="deleteSelected()">🗑️ Delete</button>
+        <button class="del" onclick="deleteAll()">❌ Del All</button>
+        <button class="del" onclick="clearAll()">🧹 Clear</button>
+        <button onclick="moveUp()">🔼 Oper</button>
+        <button onclick="moveDown()">🔽 Nichy</button>
+        <button onclick="setPassword()">🔑 Pass</button>
+        <button onclick="toggleDark()" id="darkBtn">🌙 Dark</button>
+      </div>
+
+      <div class="ns-total">
+        <div class="ns-total-title">📊 ٹوٹل اپڈیٹ وقت</div>
+        <div class="ns-total-row">
+          <input type="number" id="totalHour" min="1" max="12" value="12" onchange="saveTotalTime()">
+          <span>:</span>
+          <input type="number" id="totalMin" min="0" max="59" value="00" onchange="saveTotalTime()">
+          <select id="totalAmPm" onchange="saveTotalTime()"><option value="AM">AM</option><option value="PM" selected>PM</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="ns-foot"><button onclick="closeSettings()">✕ بند</button></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="ns-modal" id="nsModal">
+  <div class="ns-modal-box">
+    <div class="ns-modal-h" id="modalTitle">تصدیق</div>
+    <div class="ns-modal-b" id="modalBody">—</div>
+    <div class="ns-modal-f">
+      <button onclick="modalClose()" style="background:#e2e8f0;color:#64748b">✕ بند</button>
+      <button onclick="modalConfirm()" style="background:#dc2626;color:#fff">✓ ہاں</button>
+    </div>
+  </div>
+</div>
+
+<div class="inline-msg" id="inlineMsg"></div>
+
+<script>
+/* ============ UTILS ============ */
+function $(id){return document.getElementById(id)}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function pad(n){return String(n).padStart(2,'0')}
+function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60)}
+function fmtHourMin(ms){var s=Math.floor(ms/1000);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h+':'+pad(m)}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function dateStrAgo(n){var d=new Date(Date.now()-n*86400000);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
+function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
+
+/* ============ KEYS ============ */
+var DUTY_KEY='sec4_duty_manager_data_v4';
+var LEAVE_KEY='sec4_duty_leaves_data_v4';
+var DUTY_LOG_KEY='sec4_duty_logs_v1';
+var REC_KEY='sec12_task_records';
+var TASK_KEY='sec3_task_and_point_manager_data';
+var DS_KEY='duty_settings_v2';
+var TOTAL_SNAPSHOT_KEY='duty_total_snapshot_v1';
+var JUNIOR_TIME_KEY='duty_junior_time_v1';
+
+/* ============ STATE ============ */
+var selectMode=false,selectedIds={};
+var _modalCb=null;
+var currentTimerStart=null,timerInterval=null,timerRunning=false;
+
+/* ============ SETTINGS ============ */
+var DEF_SETTINGS={totalHour:12,totalMin:0,totalAmPm:'PM'};
+var settings={};
+
+function loadSettings(){
+  var s=lsGet(DS_KEY,null);
+  settings=s?Object.assign({},DEF_SETTINGS,s):Object.assign({},DEF_SETTINGS);
+}
+function saveTotalTime(){
+  settings.totalHour=parseInt($('totalHour').value)||12;
+  settings.totalMin=parseInt($('totalMin').value)||0;
+  settings.totalAmPm=$('totalAmPm').value;
+  lsSet(DS_KEY,settings);
+  showMsg('✅ ٹوٹل وقت محفوظ');
+}
+function fillSettingsUI(){
+  $('totalHour').value=settings.totalHour;
+  $('totalMin').value=pad(settings.totalMin);
+  $('totalAmPm').value=settings.totalAmPm;
+}
+
+/* ============ JUNIOR TIME ============ */
+function getJuniorTime(){
+  var t=lsGet(JUNIOR_TIME_KEY,{hour:12,min:0});
+  return t;
+}
+function updateJuniorTimeBtn(){
+  var t=getJuniorTime();
+  $('juniorTimeBtn').textContent='🕐 '+pad(t.hour)+':'+pad(t.min);
+}
+function changeJuniorTime(){
+  var t=getJuniorTime();
+  var h=prompt('جونیئر تبدیل ہونے کا وقت (گھنٹہ 0-23):',t.hour);
+  if(h===null)return;
+  h=parseInt(h);if(isNaN(h)||h<0||h>23)return;
+  var m=prompt('منٹ (0-59):',t.min);
+  if(m===null)return;
+  m=parseInt(m);if(isNaN(m)||m<0||m>59)return;
+  lsSet(JUNIOR_TIME_KEY,{hour:h,min:m});
+  updateJuniorTimeBtn();
+  showMsg('✅ جونیئر وقت: '+pad(h)+':'+pad(m));
+}
+
+/* ============ MEMBERS ============ */
+function getMembers(){return lsGet(DUTY_KEY,[])}
+function setMembers(m){lsSet(DUTY_KEY,m)}
+function getLeaves(){return lsGet(LEAVE_KEY,[])}
+function getDutyLogs(){return lsGet(DUTY_LOG_KEY,[])}
+
+function addMember(){
+  var name=$('newMemName').value.trim();
+  var rank=$('newMemRank').value;
+  if(!name){showMsg('نام لکھیں',true);return}
+  var m=getMembers();
+  if(m.some(function(x){return x.name.toLowerCase()===name.toLowerCase()&&!x.deleted})){showMsg('ممبر موجود ہے',true);return}
+  m.push({id:Date.now(),name:name,rank:rank,onDuty:false,onLeave:false,dutyCount:0,leaveCount:0,dutyStart:null,dutyEndedAt:null,createdAt:Date.now(),deleted:false});
+  setMembers(m);
+  $('newMemName').value='';
+  renderAll();
+  showMsg('✅ شامل');
+}
+
+function onMemSelect(){
+  var v=$('editMemSelect').value;
+  $('editMemBtn').style.display=v?'inline-block':'none';
+  $('delMemBtn').style.display=v?'inline-block':'none';
+}
+
+function editMember(){
+  var id=$('editMemSelect').value;
+  if(!id){showMsg('ممبر منتخب کریں',true);return}
+  var m=getMembers();
+  var mem=m.find(function(x){return String(x.id)===String(id)});
+  if(!mem)return;
+  var nn=prompt('نیا نام:',mem.name);
+  if(nn===null)return;
+  if(nn.trim()){
+    mem.name=nn.trim();
+    var nr=prompt('رینک (Senior/Junior):',mem.rank);
+    if(nr==='Senior'||nr==='Junior')mem.rank=nr;
+    setMembers(m);
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+function deleteMember(){
+  var id=$('editMemSelect').value;
+  if(!id){showMsg('ممبر منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ','ممبر ڈیلیٹ کریں؟',function(){
+    var m=getMembers();
+    var mem=m.find(function(x){return String(x.id)===String(id)});
+    if(mem){mem.deleted=true;mem.deletedAt=Date.now();mem.onDuty=false;mem.onLeave=false;mem.dutyStart=null}
+    setMembers(m);
+    renderAll();
+    showMsg('✅ ڈیلیٹ');
+  });
+}
+
+/* ============ LEAVE SYNC (from Dashboard) ============ */
+function syncLeavesFromDashboard(){
+  var leaves=getLeaves();
+  var today=todayStr();
+  var m=getMembers();
+  var changed=false;
+  m.forEach(function(mem){
+    if(mem.deleted)return;
+    var todayLeaves=leaves.filter(function(l){
+      return l.name===mem.name && (l.date===today || (l.timestamp && l.timestamp>=todayTs()));
+    });
+    // With reason = excused, without = unexcused
+    var hasExcused=todayLeaves.some(function(l){return l.reason && l.reason.trim()});
+    if(hasExcused && !mem.onLeave){
+      mem.onLeave=true;
+      mem.onDuty=false;
+      mem.dutyStart=null;
+      mem.leaveCount=(mem.leaveCount||0)+1;
+      mem.currentLeaveReason=todayLeaves.find(function(l){return l.reason&&l.reason.trim()}).reason;
+      mem.leaveStart=todayLeaves[0].timestamp||Date.now();
+      changed=true;
+    }
+  });
+  if(changed)setMembers(m);
+}
+
+/* ============ TASK COMPLETION CHECK ============ */
+function isTaskComplete(memberName){
+  // Check if all today's task records for this member are 'done'
+  var recs=lsGet(REC_KEY,[]);
+  var today=todayStr();
+  var todayRecs=recs.filter(function(r){
+    return r.member===memberName && (
+      r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0
+    );
+  });
+  if(!todayRecs.length)return false;
+  return todayRecs.every(function(r){return r.status==='done'});
+}
+
+function getTaskPoints(memberName){
+  var recs=lsGet(REC_KEY,[]);
+  var total=0;
+  recs.forEach(function(r){
+    if(r.member===memberName && r.status==='done'){total+=(r.points||0)}
+  });
+  return total;
+}
+
+/* ============ 3 DAYS ABSENT CHECK ============ */
+function is3DaysAbsent(member){
+  if(member.onDuty||member.onLeave)return false;
+  var created=member.createdAt||0;
+  if(created > Date.now()-3*86400000)return false;
+  var leaves=getLeaves();
+  var logs=getDutyLogs();
+  for(var i=1;i<=3;i++){
+    var date=dateStrAgo(i);
+    var hasDuty=logs.some(function(l){return l.memberName===member.name && l.date===date});
+    if(hasDuty)return false;
+    var dayLeaves=leaves.filter(function(l){return l.name===member.name && l.date===date});
+    var hasExcused=dayLeaves.some(function(l){return l.reason&&l.reason.trim()});
+    if(hasExcused)return false;
+  }
+  return true;
+}
+
+/* ============ ASSIGN DUTY ============ */
+function assignDuty(){
+  var sid=$('assignSenior').value;
+  var jid=$('assignJunior').value;
+  if(!sid&&!jid){showMsg('ممبر منتخب کریں',true);return}
+  if(sid&&jid&&sid===jid){showMsg('ایک ہی ممبر دونوں جگہ نہیں',true);return}
+  var m=getMembers();
+  var now=Date.now();
+  var changed=false;
+  [sid,jid].forEach(function(id){
+    if(!id)return;
+    var t=m.find(function(x){return String(x.id)===id});
+    if(!t)return;
+    if(t.onDuty){showMsg(t.name+' پہلے سے ڈیوٹی پر',true);return}
+    if(t.onLeave){showMsg(t.name+' چھٹی پر ہے',true);return}
+    t.onDuty=true;
+    t.onLeave=false;
+    t.dutyCount=(t.dutyCount||0)+1;
+    t.dutyStart=now;
+    t.dutyEndedAt=null;
+    changed=true;
+  });
+  if(changed){
+    setMembers(m);
+    // Start shared timer if not running
+    if(!timerRunning){
+      currentTimerStart=now;
+      timerRunning=true;
+    }
+    renderAll();
+    showMsg('✅ تفویض');
+  }
+}
+
+/* ============ END DUTY (⏹️) ============ */
+function endDuty(rank){
+  var m=getMembers();
+  var active=m.find(function(x){return x.onDuty && x.rank===rank && !x.deleted});
+  if(!active){showMsg('کوئی ڈیوٹی پر نہیں',true);return}
+  // First press: mark as "adhu'ri" (incomplete) if task not done
+  // Second press: remove from duty
+  var taskDone=isTaskComplete(active.name);
+  if(!taskDone && !active.partialMarked){
+    active.partialMarked=true;
+    setMembers(m);
+    renderAll();
+    showMsg('⚠️ ادھوری — دوبارہ دبائیں');
+    return;
+  }
+  // End the duty
+  var now=Date.now();
+  var duration=active.dutyStart?now-active.dutyStart:0;
+  // Log it
+  var logs=getDutyLogs();
+  logs.unshift({
+    id:Date.now(),
+    memberName:active.name,
+    rank:active.rank,
+    date:todayStr(),
+    startTime:active.dutyStart,
+    endTime:now,
+    durationMs:duration,
+    status:taskDone?'done':'partial'
+  });
+  lsSet(DUTY_LOG_KEY,logs);
+  active.onDuty=false;
+  active.dutyStart=null;
+  active.dutyEndedAt=now;
+  active.partialMarked=false;
+  setMembers(m);
+  // Check if anyone else still on duty
+  var stillActive=m.some(function(x){return x.onDuty && !x.deleted});
+  if(!stillActive){
+    timerRunning=false;
+    currentTimerStart=null;
+  }
+  renderAll();
+  showMsg(taskDone?'✅ ڈیوٹی مکمل':'❌ ادھوری');
+}
+
+/* ============ JUNIOR AUTO-CHANGE ============ */
+function checkJuniorAutoChange(){
+  var jt=getJuniorTime();
+  var now=new Date();
+  var today=todayStr();
+  var lastChange=lsGet('duty_junior_last_change','');
+  if(now.getHours()===jt.hour && now.getMinutes()===jt.min && lastChange!==today){
+    lsSet('duty_junior_last_change',today);
+    var m=getMembers();
+    var junior=m.find(function(x){return x.onDuty && x.rank==='Junior' && !x.deleted});
+    if(junior){
+      var taskDone=isTaskComplete(junior.name);
+      var duration=junior.dutyStart?Date.now()-junior.dutyStart:0;
+      var logs=getDutyLogs();
+      logs.unshift({
+        id:Date.now(),
+        memberName:junior.name,
+        rank:'Junior',
+        date:today,
+        startTime:junior.dutyStart,
+        endTime:Date.now(),
+        durationMs:duration,
+        status:taskDone?'done':'partial'
+      });
+      lsSet(DUTY_LOG_KEY,logs);
+      junior.onDuty=false;
+      junior.dutyStart=null;
+      junior.dutyEndedAt=Date.now();
+      // Auto assign next junior
+      var nextJunior=findNextMember('Junior',m);
+      if(nextJunior){
+        nextJunior.onDuty=true;
+        nextJunior.dutyCount=(nextJunior.dutyCount||0)+1;
+        nextJunior.dutyStart=Date.now();
+        if(!timerRunning){
+          currentTimerStart=Date.now();
+          timerRunning=true;
+        }
+      }
+      setMembers(m);
+      renderAll();
+      showMsg('🔄 جونیئر تبدیل ہو گیا');
+    }
+  }
+}
+
+/* ============ FIND NEXT MEMBER ============ */
+function findNextMember(rank, members){
+  // Sort: lowest points first, then highest leaves, then list order
+  var candidates=members.filter(function(x){
+    return !x.deleted && !x.onDuty && !x.onLeave && x.rank===rank;
+  });
+  if(!candidates.length)return null;
+  // Exclude those on leave with reason
+  var leaves=getLeaves();
+  var today=todayStr();
+  candidates=candidates.filter(function(c){
+    var todayLeave=leaves.some(function(l){
+      return l.name===c.name && l.date===today && l.reason && l.reason.trim();
+    });
+    return !todayLeave;
+  });
+  if(!candidates.length)return null;
+  candidates.sort(function(a,b){
+    var pa=getTaskPoints(a.name), pb=getTaskPoints(b.name);
+    if(pa!==pb)return pa-pb; // lower points first
+    var la=a.leaveCount||0, lb=b.leaveCount||0;
+    if(la!==lb)return lb-la; // higher leaves first
+    return (a.createdAt||0)-(b.createdAt||0);
+  });
+  return candidates[0];
+}
+
+/* ============ TIMER UPDATE ============ */
+function updateTimer(){
+  var m=getMembers();
+  var senior=m.find(function(x){return x.onDuty && x.rank==='Senior' && !x.deleted});
+  var junior=m.find(function(x){return x.onDuty && x.rank==='Junior' && !x.deleted});
+  var bigTimer=$('bigTimer');
+  if(timerRunning && currentTimerStart){
+    bigTimer.textContent=fmtTimer(Date.now()-currentTimerStart);
+    bigTimer.classList.remove('stopped');
+    if(junior){
+      bigTimer.classList.add('junior-on');
+      bigTimer.classList.remove('senior-only');
+    } else if(senior){
+      bigTimer.classList.add('senior-only');
+      bigTimer.classList.remove('junior-on');
+    } else {
+      bigTimer.classList.remove('junior-on','senior-only');
+    }
+  } else {
+    bigTimer.textContent='00:00:00';
+    bigTimer.classList.add('stopped');
+    bigTimer.classList.remove('junior-on','senior-only');
+  }
+}
+
+/* ============ RENDER ============ */
+function renderAll(){
+  syncLeavesFromDashboard();
+  var m=getMembers().filter(function(x){return !x.deleted});
+  renderDropdowns(m);
+  renderDutyPanel(m);
+  renderCol1(m);
+  renderCol2(m);
+  renderState(m);
+  renderLeaveRecord();
+  renderHistory(m);
+  updateTimer();
+}
+
+function renderDropdowns(m){
+  var eSel=$('editMemSelect');
+  if(eSel){
+    var cur=eSel.value;
+    eSel.innerHTML='<option value="">ممبر</option>';
+    m.forEach(function(x){eSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>'});
+    if(cur)eSel.value=cur;
+    onMemSelect();
+  }
+  var sSel=$('assignSenior'),jSel=$('assignJunior');
+  if(sSel&&jSel){
+    sSel.innerHTML='<option value="">🟢 سینئر...</option>';
+    jSel.innerHTML='<option value="">🔵 جونیئر...</option>';
+    m.filter(function(x){return !x.onLeave&&!x.onDuty}).forEach(function(x){
+      if(x.rank==='Senior')sSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>';
+      if(x.rank==='Junior')jSel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+'</option>';
+    });
+  }
+}
+
+function renderDutyPanel(m){
+  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior'});
+  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior'});
+  $('dashSenior').textContent=s?s.name:'—';
+  $('dashJunior').textContent=j?j.name:'—';
+  $('endSeniorBtn').disabled=!s;
+  $('endJuniorBtn').disabled=!j;
+}
+
+function getMemberTimeStats(name){
+  var logs=getDutyLogs();
+  var today=todayStr();
+  var yesterday=dateStrAgo(1);
+  var todayMs=0,yMs=0,totalMs=0;
+  logs.forEach(function(l){
+    if(l.memberName===name){
+      totalMs+=l.durationMs||0;
+      if(l.date===today)todayMs+=l.durationMs||0;
+      if(l.date===yesterday)yMs+=l.durationMs||0;
+    }
+  });
+  return {today:todayMs,yesterday:yMs,total:totalMs};
+}
+
+function renderCol1(m){
+  // Members whose task is complete (today) OR who were on duty and ended with 'done'
+  var logs=getDutyLogs();
+  var today=todayStr();
+  // Get today's completed logs
+  var todayLogs=logs.filter(function(l){return l.date===today && l.status==='done'});
+  // Also include currently on-duty with task complete
+  var onDutyComplete=m.filter(function(x){
+    return x.onDuty && isTaskComplete(x.name);
+  });
+  // Build unique member list
+  var seen={};
+  var items=[];
+  onDutyComplete.forEach(function(mem){
+    if(seen[mem.name])return;
+    seen[mem.name]=true;
+    items.push({name:mem.name,rank:mem.rank,memberObj:mem,onDuty:true});
+  });
+  todayLogs.forEach(function(l){
+    if(seen[l.memberName])return;
+    seen[l.memberName]=true;
+    var mem=m.find(function(x){return x.name===l.memberName});
+    items.push({name:l.memberName,rank:l.rank,memberObj:mem,onDuty:false});
+  });
+
+  // Sort by timer (most time first) — today's time
+  items.forEach(function(it){
+    var stats=getMemberTimeStats(it.name);
+    it.stats=stats;
+    it.points=getTaskPoints(it.name);
+  });
+  items.sort(function(a,b){return b.stats.today-a.stats.today});
+
+  var box=$('col1List');
+  if(!items.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:10px;padding:8px">کوئی نہیں</div>';
+    return;
+  }
+  box.innerHTML=items.map(function(it,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['c1_'+it.name]?'checked':'')+' onchange="toggleSel(\'c1_'+it.name+'\')">':'';
+    var mem=it.memberObj;
+    var dutyCount=mem?mem.dutyCount||0:0;
+    var msg=it.onDuty?'📢 اس ممبر نے ڈیوٹی جاری رکھی ہے':'📢 اس ممبر نے آج ڈیوٹی پوری کر لی';
+    return '<div class="col-item">'
+      +'<div class="hdr">'+chk+'<span class="nm">'+(i+1)+'️⃣ '+esc(it.name)+'</span><span class="rk">('+it.rank+')</span></div>'
+      +'<div class="line"><span class="tag green">🕐 آج: '+fmtHourMin(it.stats.today)+'</span><span class="tag">🕐 کل: '+fmtHourMin(it.stats.yesterday)+'</span></div>'
+      +'<div class="line"><span class="tag blue">🏆 ڈیوٹی: '+dutyCount+'</span><span class="tag amber">⭐ پوائنٹس: '+it.points+'</span></div>'
+      +'<div class="msg">'+msg+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderCol2(m){
+  // Members with low points AND low duty AND high leaves
+  // OR 3 days absent
+  var items=[];
+  m.forEach(function(mem){
+    if(mem.onDuty)return;
+    var pts=getTaskPoints(mem.name);
+    var duty=mem.dutyCount||0;
+    var leaves=mem.leaveCount||0;
+    // Low points (< 10), Low duty (< 2), High leaves (>= 2)
+    var lowPoints=pts<10;
+    var lowDuty=duty<2;
+    var highLeaves=leaves>=2;
+    var threeDays=is3DaysAbsent(mem);
+    if((lowPoints&&lowDuty&&highLeaves)||threeDays){
+      items.push({name:mem.name,rank:mem.rank,memberObj:mem,points:pts,duty:duty,leaves:leaves,stats:getMemberTimeStats(mem.name),threeDays:threeDays});
+    }
+  });
+  // Sort by worst first (lowest points, then most leaves, then least duty)
+  items.sort(function(a,b){
+    if(a.points!==b.points)return a.points-b.points;
+    if(a.leaves!==b.leaves)return b.leaves-a.leaves;
+    return a.duty-b.duty;
+  });
+  var box=$('col2List');
+  if(!items.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:10px;padding:8px">کوئی نہیں</div>';
+    return;
+  }
+  box.innerHTML=items.map(function(it,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['c2_'+it.name]?'checked':'')+' onchange="toggleSel(\'c2_'+it.name+'\')">':'';
+    var msg=it.threeDays?'📢 اس ممبر نے 3 دن سے ڈیوٹی نہیں کی':'📢 اس ممبر کی ڈیوٹی کم، چھٹیاں زیادہ اور پوائنٹس بھی کم ہیں';
+    var msgCls=it.threeDays?'red':'red';
+    return '<div class="col-item">'
+      +'<div class="hdr">'+chk+'<span class="nm">'+(i+1)+'️⃣ '+esc(it.name)+'</span><span class="rk">('+it.rank+')</span></div>'
+      +'<div class="line"><span class="tag red">🏆 ڈیوٹی: '+it.duty+'</span><span class="tag amber">🏖️ چھٹیاں: '+it.leaves+'</span><span class="tag red">⭐ پوائنٹس: '+it.points+'</span></div>'
+      +'<div class="msg '+msgCls+'">'+msg+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderState(m){
+  var logs=getDutyLogs();
+  var today=todayStr();
+  var todayLogs=logs.filter(function(l){return l.date===today});
+  var membersWithDuty=new Set();
+  todayLogs.forEach(function(l){membersWithDuty.add(l.memberName)});
+  // Include currently on duty
+  m.forEach(function(x){if(x.onDuty)membersWithDuty.add(x.name)});
+
+  var leaves=getLeaves();
+  var todayLeaves=leaves.filter(function(l){return l.date===today && l.reason && l.reason.trim()});
+  var leavesWithExcuse=new Set();
+  todayLeaves.forEach(function(l){leavesWithExcuse.add(l.name)});
+
+  var lowDutyCount=parseInt($('stateLow').textContent)||0;
+  // Recalculate low duty from col2
+  var c2Items=$('col2List').querySelectorAll('.col-item');
+  var lowCount=c2Items.length;
+  // Count from render — need to recalculate
+  // Simpler: count based on rendered items
+  var lowCountFinal=0;
+  m.forEach(function(mem){
+    if(mem.onDuty)return;
+    var pts=getTaskPoints(mem.name);
+    var duty=mem.dutyCount||0;
+    var lc=mem.leaveCount||0;
+    if((pts<10&&duty<2&&lc>=2)||is3DaysAbsent(mem))lowCountFinal++;
+  });
+
+  $('stateDuty').textContent=membersWithDuty.size;
+  $('stateLow').textContent=lowCountFinal;
+  $('stateLeave').textContent=leavesWithExcuse.size;
+}
+
+function renderLeaveRecord(){
+  var leaves=getLeaves();
+  var today=todayStr();
+  var recent=leaves.filter(function(l){
+    return l.date===today || (l.timestamp && l.timestamp>=Date.now()-7*86400000);
+  }).sort(function(a,b){return (b.timestamp||0)-(a.timestamp||0)}).slice(0,10);
+
+  var box=$('leaveRecordBox');
+  if(!recent.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:10px;padding:8px">کوئی چھٹی نہیں</div>';
+    return;
+  }
+  box.innerHTML=recent.map(function(l){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['lv_'+l.id]?'checked':'')+' onchange="toggleSel(\'lv_'+l.id+'\')">':'';
+    var reason=l.reason&&l.reason.trim()?l.reason:'وجہ نہیں دی';
+    var dur=l.duration||1;
+    var msg=l.reason&&l.reason.trim()?'📢 اس ممبر نے آج چھٹی لی ہے — '+esc(l.reason):'📢 اس ممبر نے بغیر وجہ غیر حاضری دی';
+    return '<div class="lrec">'
+      +'<div style="display:flex;align-items:center;gap:4px;">'+chk+'<span class="lname">👤 '+esc(l.name)+' ('+l.rank+')</span></div>'
+      +'<div class="ldetail">📌 '+esc(reason)+' · ⏱️ '+dur+' دن · 📅 '+esc(l.date||'')+' '+esc(l.time||'')+'</div>'
+      +'<div class="lmsg">'+msg+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderHistory(m){
+  var logs=getDutyLogs();
+  var box=$('historyBox');
+  if(!m.length){
+    box.innerHTML='<div style="text-align:center;color:#94a3b8;font-size:10px;padding:8px">کوئی ممبر نہیں</div>';
+    return;
+  }
+  box.innerHTML=m.map(function(mem,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['h_'+mem.id]?'checked':'')+' onchange="toggleSel(\'h_'+mem.id+'\')">':'';
+    var stats=getMemberTimeStats(mem.name);
+    var pts=getTaskPoints(mem.name);
+    var state=mem.onDuty?'🟢 ایکٹو':(mem.onLeave?'🏖️ چھٹی':'✅ مکمل');
+    var msg='📢 اس ممبر نے کل '+ (mem.dutyCount||0) +' بار ڈیوٹی کی، '+ (mem.leaveCount||0) +' بار چھٹی لی اور '+ pts +' پوائنٹس ہیں';
+    return '<div class="hrec">'
+      +'<div class="hdr">'+chk+'<span class="nm">'+(i+1)+'️⃣ '+esc(mem.name)+'</span><span class="rk">('+mem.rank+')</span></div>'
+      +'<div class="line"><span class="tag">🕐 آج: '+fmtHourMin(stats.today)+'</span><span class="tag">کل: '+fmtHourMin(stats.yesterday)+'</span><span class="tag blue">ٹوٹل: '+fmtHourMin(stats.total)+'</span></div>'
+      +'<div class="line"><span class="tag blue">🏆 '+mem.dutyCount+'</span><span class="tag amber">🏖️ '+mem.leaveCount+'</span><span class="tag green">⭐ '+pts+'</span></div>'
+      +'<div class="line"><span class="tag">📊 '+state+'</span></div>'
+      +'<div class="msg">'+msg+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+/* ============ SELECT MODE ============ */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  $('selModeBtn').classList.toggle('active',selectMode);
+  if(!selectMode)selectedIds={};
+  renderAll();
+  showMsg(selectMode?'✅ Select ON':'☑️ OFF');
+}
+function toggleSel(key){selectedIds[key]=!selectedIds[key];renderAll()}
+function allSelect(){
+  if(!selectMode){showMsg('پہلے Select Mode',true);return}
+  var m=getMembers().filter(function(x){return !x.deleted});
+  m.forEach(function(x){
+    selectedIds['c1_'+x.name]=true;
+    selectedIds['c2_'+x.name]=true;
+    selectedIds['h_'+x.id]=true;
+  });
+  var leaves=getLeaves();
+  leaves.slice(0,10).forEach(function(l){if(l.id)selectedIds['lv_'+l.id]=true});
+  renderAll();
+  showMsg('✅ سب');
+}
+
+/* ============ EDIT/DELETE/MOVE ============ */
+function editSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]&&k.indexOf('h_')===0});
+  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
+  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
+  var id=ids[0].replace('h_','');
+  var m=getMembers();
+  var mem=m.find(function(x){return String(x.id)===id});
+  if(!mem)return;
+  var nn=prompt('نیا نام:',mem.name);
+  if(nn&&nn.trim()){
+    mem.name=nn.trim();
+    var nr=prompt('رینک:',mem.rank);
+    if(nr==='Senior'||nr==='Junior')mem.rank=nr;
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+function deleteSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
+  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ',ids.length+' آئٹم ڈیلیٹ کریں؟',function(){
+    var m=getMembers();
+    m.forEach(function(x){
+      if(selectedIds['h_'+x.id]){x.deleted=true;x.deletedAt=Date.now();x.onDuty=false;x.onLeave=false;x.dutyStart=null}
+    });
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ ڈیلیٹ');
+  });
+}
+
+function deleteAll(){
+  showConfirm('سب ڈیلیٹ','تمام ممبر ڈیلیٹ کریں؟',function(){
+    var m=getMembers();
+    m.forEach(function(x){x.deleted=true;x.deletedAt=Date.now();x.onDuty=false;x.onLeave=false;x.dutyStart=null});
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ سب ڈیلیٹ');
+  });
+}
+
+function clearAll(){
+  showConfirm('مستقل صاف','تمام ڈیٹا مستقل حذف؟',function(){
+    setMembers([]);
+    lsSet(DUTY_LOG_KEY,[]);
+    selectedIds={};
+    renderAll();
+    showMsg('🧹 صاف');
+  });
+}
+
+function moveUp(){
+  var id=Object.keys(selectedIds).find(function(k){return selectedIds[k]&&k.indexOf('h_')===0});
+  if(!id){showMsg('منتخب کریں',true);return}
+  var m=getMembers();
+  var idx=m.findIndex(function(x){return String(x.id)===id.replace('h_','')});
+  if(idx<=0)return;
+  var t=m[idx];m[idx]=m[idx-1];m[idx-1]=t;
+  setMembers(m);selectedIds={};renderAll();
+  showMsg('🔼');
+}
+
+function moveDown(){
+  var id=Object.keys(selectedIds).find(function(k){return selectedIds[k]&&k.indexOf('h_')===0});
+  if(!id){showMsg('منتخب کریں',true);return}
+  var m=getMembers();
+  var idx=m.findIndex(function(x){return String(x.id)===id.replace('h_','')});
+  if(idx===-1||idx>=m.length-1)return;
+  var t=m[idx];m[idx]=m[idx+1];m[idx+1]=t;
+  setMembers(m);selectedIds={};renderAll();
+  showMsg('🔽');
+}
+
+function setPassword(){
+  var p=prompt('نیا پاس ورڈ (خالی=ہٹائیں):');
+  if(p===null)return;
+  if(p){localStorage.setItem('duty_pwd',p);showMsg('✅ پاس ورڈ')}
+  else{localStorage.removeItem('duty_pwd');showMsg('✅ ہٹا')}
+}
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  var on=document.body.classList.contains('dark');
+  $('darkBtn').classList.toggle('active',on);
+  lsSet('duty_dark',on);
+}
+
+/* ============ SETTINGS ============ */
+function openSettings(){
+  if(localStorage.getItem('duty_pwd')){
+    var p=prompt('🔑 پاس ورڈ:');
+    if(p!==localStorage.getItem('duty_pwd')){showMsg('❌ غلط',true);return}
+  }
+  loadSettings();
+  fillSettingsUI();
+  $('nsOverlay').classList.add('active');
+}
+function closeSettings(){$('nsOverlay').classList.remove('active')}
+
+/* ============ MODAL ============ */
+function showConfirm(title,body,cb){
+  $('modalTitle').textContent=title;
+  $('modalBody').textContent=body;
+  _modalCb=cb;
+  $('nsModal').classList.add('active');
+}
+function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
+function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
+
+/* ============ TIMER LOOP ============ */
+setInterval(function(){
+  updateTimer();
+  checkJuniorAutoChange();
+},1000);
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded',function(){
+  if(lsGet('duty_dark',false)){document.body.classList.add('dark');$('darkBtn').classList.add('active')}
+  loadSettings();
+  updateJuniorTimeBtn();
+  syncLeavesFromDashboard();
+  // Restore timer state
+  var m=getMembers();
+  var anyActive=m.some(function(x){return x.onDuty&&!x.deleted});
+  if(anyActive){
+    var activeMem=m.find(function(x){return x.onDuty&&x.dutyStart});
+    if(activeMem){
+      currentTimerStart=activeMem.dutyStart;
+      timerRunning=true;
+    }
+  }
+  renderAll();
+});
 </script>
 </body>
-</html>
+</htmal/>
