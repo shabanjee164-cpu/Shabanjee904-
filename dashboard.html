@@ -2,203 +2,170 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Manager — Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard — Duty Section</title>
 <style>
-:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--golden:#d97706;--success:#10b981;--bg:#f8fafc;--border:#e2e8f0;}
+:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;padding-bottom:20px;color:#334155;direction:rtl}
+body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
-.app-header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;text-align:center;padding:12px 8px;border-radius:10px;font-size:15px;font-weight:bold;border-bottom:3px solid var(--accent)}
-
-/* NEWS TICKER */
-.ticker-bar{background:#fffbeb;border:1px solid #fde68a;color:var(--golden);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap}
-.ticker-text{display:inline-block;animation:customTickerRight 35s linear infinite;padding-right:100%}
-@keyframes customTickerRight{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-/* ALERT TICKER */
-.alert-ticker-bar{background:#fef2f2;border:1px solid #fecaca;color:var(--danger);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;transition:all .3s}
-.alert-ticker-bar.blink{animation:fastBlink 0.8s infinite alternate}
-@keyframes fastBlink{0%{opacity:1}100%{opacity:.35;background-color:#ef4444;color:white}}
-.alert-skip-btn{background:var(--danger);color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit}
-
-/* SECTION CARD — THIN */
 .section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
 .section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
-.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.section-header .hdr-left{display:flex;align-items:center;gap:6px}
+.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:22px;height:22px;border-radius:5px;cursor:pointer;font-size:10px;font-family:inherit;color:#64748b;opacity:.6}
+.section-header button:hover{opacity:1}
 
-/* SETTINGS — 5 buttons */
-.settings-panel{display:none;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:6px;grid-template-columns:repeat(2,1fr);gap:4px}
-.settings-panel.open{display:grid}
-.settings-panel button{padding:6px 4px;font-size:10px;font-weight:bold;border-radius:5px;border:1px solid #cbd5e1;background:#fff;color:#334155;cursor:pointer;font-family:inherit;text-align:center}
-.settings-panel button:hover{background:#e2e8f0}
-.settings-panel button.del{color:#ef4444;border-color:#fca5a5;background:#fef2f2}
-.settings-panel button.active-mode{background:#10b981;color:#fff;border-color:#10b981}
-
-/* DARK DUTY PANEL */
-.duty-panel{
-  background:linear-gradient(135deg,#1e293b,#0f172a);
-  border:1.5px solid var(--golden);
-  border-radius:10px;
-  padding:10px;
-  color:#fff;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
-}
-.duty-panel-title{text-align:center;font-size:11px;font-weight:bold;color:#fbbf24;margin-bottom:8px;letter-spacing:.5px}
-
-/* COLUMN LAYOUT — Senior LEFT, Junior RIGHT */
-.duty-cols{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:8px;
-}
-.duty-col{
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:8px;
-  padding:8px 6px;
-  text-align:center;
-}
+/* DUTY PANEL */
+.duty-panel{background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--golden);border-radius:12px;padding:12px;color:#fff}
+.duty-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.duty-col{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 6px;text-align:center;position:relative}
 .duty-col.senior{border-right:3px solid #60a5fa}
 .duty-col.junior{border-left:3px solid #34d399}
-.duty-col .role{font-size:10px;color:#94a3b8;margin-bottom:3px;font-weight:600}
-.duty-col .name{font-size:15px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.duty-col .role{font-size:10px;color:#94a3b8;margin-bottom:3px;font-weight:700}
+.duty-col .name{font-size:14px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:6px}
+.duty-col .end-btn{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;width:100%}
+.duty-col .end-btn:active{transform:scale(.96)}
+.duty-col .end-btn:disabled{background:#64748b;opacity:.5;cursor:not-allowed}
+.duty-col .leave-tag{position:absolute;top:6px;left:6px;background:#dc2626;color:#fff;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800}
+.big-timer{text-align:center;font-size:26px;font-weight:900;color:#fbbf24;background:rgba(0,0,0,.4);padding:10px;border-radius:10px;letter-spacing:3px;text-shadow:0 0 15px rgba(251,191,36,.6);border:2px solid #fbbf24}
+.big-timer.senior-only{border-color:#60a5fa;color:#60a5fa;text-shadow:0 0 15px rgba(96,165,250,.6)}
+.big-timer.junior-on{border-color:#34d399;color:#34d399;text-shadow:0 0 15px rgba(52,211,153,.6)}
+.big-timer.stopped{color:#94a3b8;border-color:#475569;text-shadow:none}
 
-/* TIMER */
-.duty-timer{
-  text-align:center;
-  font-size:20px;
-  font-weight:900;
-  color:#fbbf24;
-  background:rgba(0,0,0,.4);
-  padding:6px;
-  border-radius:8px;
-  letter-spacing:2px;
-  text-shadow:0 0 15px rgba(251,191,36,.5);
-}
+/* LEAVE SUBMIT WPS */
+.leave-submit-wps{background:#dcfce7;border:1px solid #86efac;border-radius:10px;padding:8px;display:flex;gap:4px;align-items:center;flex-wrap:nowrap;overflow-x:auto}
+.leave-submit-wps select,.leave-submit-wps input{padding:7px 6px;border:1px solid #86efac;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;background:#fff;min-width:0}
+.leave-submit-wps select{flex:1;max-width:90px}
+.leave-submit-wps input.reason{flex:2 1 100px}
+.leave-submit-wps input.dur{flex:0 0 50px;max-width:50px}
+.leave-submit-wps button{flex:0 0 auto;padding:7px 10px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:12px}
 
-/* LEAVE FORM — ek line */
-.leave-form{background:#fffbe6;border:1px solid #ffe58f;padding:8px;border-radius:8px}
-.leave-form label{font-size:11px;font-weight:bold;color:#854d0e;display:block;margin-bottom:5px}
-.leave-row{display:flex;gap:4px;align-items:center}
-.leave-row select,.leave-row input{flex:1;padding:7px;border:1px solid #cbd5e1;border-radius:5px;font-size:11px;text-align:center;font-family:inherit;outline:none;min-width:0}
-.leave-row .save-btn{background:var(--golden);color:#fff;padding:7px 12px;border:none;border-radius:5px;font-size:12px;font-weight:bold;cursor:pointer;font-family:inherit;flex:0 0 auto}
+/* LEAVE RECORD WPS */
+.leave-record-wps{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;padding:4px}
+.wps-bubble{background:#dcfce7;border-radius:10px 10px 4px 10px;padding:8px 10px;position:relative;margin-right:auto;margin-left:0;max-width:92%;box-shadow:0 1px 2px rgba(0,0,0,.08);border:1px solid #86efac}
+.wps-bubble::after{content:"";position:absolute;bottom:0;left:-6px;width:0;height:0;border:6px solid transparent;border-left-color:#dcfce7;border-bottom:0}
+.wps-bubble .nm{font-size:11px;font-weight:800;color:#14532d;margin-bottom:3px}
+.wps-bubble .reason{font-size:10.5px;color:#166534;font-weight:700;margin-bottom:3px}
+.wps-bubble .meta{font-size:9.5px;color:#4d7c0f;font-weight:600;display:flex;gap:6px;flex-wrap:wrap}
+.wps-bubble .chk{position:absolute;top:6px;right:6px;width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
+.wps-empty{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:700}
 
-/* RECORD 3-COLUMN SCROLL */
-.scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+/* STATE */
+.state-patti{display:flex;justify-content:space-around;gap:4px;padding:8px 4px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;margin-top:6px}
+.state-item{flex:1;text-align:center;padding:6px 2px;border-radius:4px;font-size:10px;font-weight:800}
+.state-item .val{font-size:16px;font-weight:900;display:block;margin-top:1px}
+.state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
+.state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
+.state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
+
+/* HEAD */
+.scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
 .scroll-head span{font-size:11px;font-weight:bold;color:#475569}
 .btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
 
-.record-3cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;max-height:160px}
-.rec-col{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px;overflow-y:auto;font-size:10px}
-.rec-col.active-col{background:#f0fdf4;border-color:#86efac}
-.rec-col.done-col{background:#eff6ff;border-color:#bfdbfe}
-.rec-col.leave-col{background:#fef2f2;border-color:#fca5a5}
-.rec-col h4{font-size:10px;margin-bottom:4px;text-align:center;color:#475569;padding-bottom:3px;border-bottom:1px dashed #cbd5e1;position:sticky;top:0;background:inherit}
-.rec-item{padding:4px 2px;border-bottom:1px dotted #e2e8f0;text-align:center}
-.rec-item:last-child{border-bottom:none}
-.rec-item .n{font-size:10px;font-weight:bold;color:#0f172a}
-.rec-item .d{font-size:9px;color:#64748b;margin-top:1px}
+/* SETTINGS OVERLAY */
+.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.ns-overlay.active{display:flex}
+.ns-box{background:#2c3e50;border-radius:12px;max-width:320px;width:100%;padding:10px}
+.ns-box-title{color:#fbbf24;font-size:12px;font-weight:800;text-align:center;margin-bottom:8px}
+.ns-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.ns-grid button{padding:10px 4px;font-size:10px;font-weight:bold;border-radius:6px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit}
+.ns-grid button.active{background:#10b981;border-color:#10b981}
+.ns-grid button.del{color:#ff9999}
+.ns-grid button.full{grid-column:span 2}
+.ns-close{margin-top:8px;width:100%;padding:8px;background:#1a252f;border:1px solid #34495e;color:#fff;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:11px}
 
-/* STATE PATTI */
-.state-patti{display:flex;justify-content:space-around;align-items:center;gap:4px;padding:6px 4px;border-radius:6px;margin-top:6px;background:#f8fafc;border:1px solid #e2e8f0}
-.state-item{flex:1;text-align:center;padding:3px 2px;border-radius:4px;font-size:9px;font-weight:800}
-.state-item .val{font-size:12px;font-weight:900;display:block;margin-top:1px}
-.state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
-.state-item:nth-child(2){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
-.state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
-
-/* INLINE MSG */
-.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:9999;display:none;font-family:inherit}
+/* MSG */
+.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
 .inline-msg.show{display:block}
+.inline-msg.error{background:#c0392b}
 
-@media(max-width:480px){
-  .record-3cols{grid-template-columns:1fr;max-height:none}
-  .rec-col{max-height:120px}
-}
+/* MODAL */
+.ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.ns-modal.active{display:flex}
+.ns-modal-box{background:#fff;border-radius:12px;max-width:320px;width:100%}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0;text-align:center}
+.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600;text-align:center}
+.ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
+.ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="app-header">🏥 Smart Manager & Health Tracker</div>
-
-  <!-- NEWS TICKER -->
-  <div class="ticker-bar"><div class="ticker-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div></div>
-
-  <!-- ALERT TICKER -->
-  <div class="alert-ticker-bar" id="alertBar">
-    <span id="alertMsg">🚨 اہم الرٹ...</span>
-    <button class="alert-skip-btn" onclick="skipAlert()">اسکیپ ❌</button>
-  </div>
-
-  <!-- DUTY SECTION -->
-  <div class="section-card">
+  <div class="section-card" id="dutySectionCard">
     <div class="section-header">
-      <span>👮 آج کی ڈیوٹی</span>
-      <button onclick="toggleSettings('dutySettings')">⚙️</button>
+      <div class="hdr-left"><span>👮 آج کی ڈیوٹی</span></div>
+      <button onclick="openSettings()" title="سیٹنگز">⚙</button>
     </div>
 
-    <div class="settings-panel" id="dutySettings">
-      <button onclick="toggleSelectMode()" id="dutySelBtn">☑️ Select Mode</button>
-      <button onclick="editSelected()">✏️ Edit</button>
-      <button class="del" onclick="deleteSelected()">🗑️ Delete</button>
-      <button class="del" onclick="clearRecord()">🧹 Clear</button>
-      <button onclick="toggleSettings('dutySettings')">⬇️ Close</button>
-    </div>
-
-    <!-- DARK PANEL -->
+    <!-- DUTY PANEL -->
     <div class="duty-panel">
-      <div class="duty-panel-title">⏱️ آج کی ڈیوٹی</div>
       <div class="duty-cols">
         <div class="duty-col senior">
           <div class="role">🟢 سینئر</div>
           <div class="name" id="dashSenior">—</div>
+          <button class="end-btn" id="endSeniorBtn" onclick="endDuty('Senior')" disabled>⏹️ ختم</button>
         </div>
         <div class="duty-col junior">
           <div class="role">🔵 جونیئر</div>
           <div class="name" id="dashJunior">—</div>
+          <button class="end-btn" id="endJuniorBtn" onclick="endDuty('Junior')" disabled>⏹️ ختم</button>
         </div>
       </div>
-      <div class="duty-timer" id="dashTimer">00:00:00</div>
+      <div class="big-timer stopped" id="bigTimer">00:00:00</div>
     </div>
 
-    <!-- LEAVE FORM -->
-    <div class="leave-form">
-      <label>🏖️ چھٹی سبمٹ کریں:</label>
-      <div class="leave-row">
-        <select id="dashLeaveSelect"><option value="">ممبر</option></select>
-        <input type="text" id="dashLeaveReason" placeholder="وجہ...">
-        <button class="save-btn" onclick="submitDashLeave()">✅</button>
-      </div>
-    </div>
-
-    <!-- RECORD 3-COLUMN -->
+    <!-- LEAVE SUBMIT WPS -->
     <div class="scroll-head">
-      <span>📋 چھٹی ریکارڈ</span>
-      <button class="btn-close" onclick="toggleClose('record3Cols')">⬇️ Close</button>
+      <span>🏖️ چھٹی دیں:</span>
     </div>
-    <div class="record-3cols" id="record3Cols">
-      <div class="rec-col active-col">
-        <h4>🟢 ایکٹو</h4>
-        <div id="colActiveList"></div>
-      </div>
-      <div class="rec-col done-col">
-        <h4>✅ ڈیوٹی ہو</h4>
-        <div id="colDoneList"></div>
-      </div>
-      <div class="rec-col leave-col">
-        <h4>🏖️ چھٹی</h4>
-        <div id="colLeaveList"></div>
-      </div>
+    <div class="leave-submit-wps" id="leaveSubmitRow">
+      <select id="leaveMember"><option value="">ممبر...</option></select>
+      <input type="text" id="leaveReason" class="reason" placeholder="وجہ...">
+      <input type="number" id="leaveDuration" class="dur" placeholder="دن" value="1" min="1">
+      <button onclick="submitLeave()">✅</button>
     </div>
+
+    <!-- LEAVE RECORD WPS -->
+    <div class="scroll-head">
+      <span>📋 چھٹی ریکارڈ:</span>
+      <button class="btn-close" onclick="toggleClose('leaveRecordBox')">⬇️ Close</button>
+    </div>
+    <div class="leave-record-wps" id="leaveRecordBox"></div>
 
     <!-- STATE -->
     <div class="state-patti">
-      <div class="state-item">👤 Members<span class="val" id="dutyMembers">0</span></div>
-      <div class="state-item">🏖️ Leave<span class="val" id="dutyLeave">0</span></div>
-      <div class="state-item">✅ On Duty<span class="val" id="dutyOn">0</span></div>
+      <div class="state-item">👤 Members<span class="val" id="stateMembers">0</span></div>
+      <div class="state-item">🟢 Active<span class="val" id="stateActive">0</span></div>
+      <div class="state-item">🏖️ Leave<span class="val" id="stateLeave">0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS OVERLAY -->
+<div class="ns-overlay" id="nsOverlay">
+  <div class="ns-box">
+    <div class="ns-box-title">⚙️ چھٹی سیٹنگز</div>
+    <div class="ns-grid">
+      <button onclick="toggleSelectMode()" id="selModeBtn">☑️ Select</button>
+      <button onclick="editSelected()">✏️ Edit</button>
+      <button class="del" onclick="deleteSelected()">🗑️ Delete</button>
+      <button class="del" onclick="clearAll()">🧹 Clear</button>
+      <button class="full" onclick="closeSection()">⬇️ Close Section</button>
+    </div>
+    <button class="ns-close" onclick="closeSettings()">✕ بند</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="ns-modal" id="nsModal">
+  <div class="ns-modal-box">
+    <div class="ns-modal-h" id="modalTitle">تصدیق</div>
+    <div class="ns-modal-b" id="modalBody">—</div>
+    <div class="ns-modal-f">
+      <button onclick="modalClose()" style="background:#e2e8f0;color:#64748b">✕ بند</button>
+      <button onclick="modalConfirm()" style="background:#dc2626;color:#fff">✓ ہاں</button>
     </div>
   </div>
 </div>
@@ -206,193 +173,367 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 <div class="inline-msg" id="inlineMsg"></div>
 
 <script>
+/* ============ UTILS ============ */
+function $(id){return document.getElementById(id)}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function pad(n){return String(n).padStart(2,'0')}
+function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60)}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'flex':'none'}
+function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
+
+/* ============ KEYS ============ */
 var DUTY_KEY='sec4_duty_manager_data_v4';
 var LEAVE_KEY='sec4_duty_leaves_data_v4';
-var NEWS_KEY='sec10_news_alerts_data';
+var REC_KEY='sec12_task_records';
+var TASK_KEY='sec3_task_and_point_manager_data';
+var HIST_LOG_KEY='duty_history_logs_v1';
 
-function $(id){return document.getElementById(id);}
-function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
-function pad(n){return String(n).padStart(2,'0');}
-function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60);}
-function todayStr(){var d=new Date();return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();}
-function getMembers(){return ls(DUTY_KEY,[]);}
-function showMsg(t,s){var el=$('inlineMsg');el.textContent=t;el.style.background=s?'#2e8b57':'#c0392b';el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2500);}
-function toggleSettings(id){var el=$(id);if(el)el.classList.toggle('open');}
-function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none';}
+/* ============ STATE ============ */
+var selectMode=false,selectedIds={};
+var _modalCb=null;
+var currentTimerStart=null,timerRunning=false;
+var sectionClosed=false;
 
-var selectedRecords={};
-var selectMode=false;
+/* ============ GETTERS ============ */
+function getMembers(){return lsGet(DUTY_KEY,[])}
+function setMembers(m){lsSet(DUTY_KEY,m)}
+function getLeaves(){return lsGet(LEAVE_KEY,[])}
+function setLeaves(l){lsSet(LEAVE_KEY,l)}
+function getHistLogs(){return lsGet(HIST_LOG_KEY,[])}
 
-// ========== SETTINGS ==========
-function toggleSelectMode(){
-  selectMode=!selectMode;
-  var btn=$('dutySelBtn');
-  if(btn){btn.textContent=selectMode?'✅ Select Mode ON':'☑️ Select Mode';btn.classList.toggle('active-mode',selectMode);}
-  showMsg(selectMode?'✅ Select Mode ON':'☑️ OFF',true);
-  renderDuty();
-}
-function selectRecord(id){
-  selectedRecords[id]=!selectedRecords[id];
-}
-function editSelected(){
-  var ids=Object.keys(selectedRecords).filter(function(k){return selectedRecords[k];});
-  if(!ids.length){showMsg('پہلے ریکارڈ select کریں');return;}
-  showMsg('✏️ Edit: '+ids.length+' record(s)',true);
-}
-function deleteSelected(){
-  var ids=Object.keys(selectedRecords).filter(function(k){return selectedRecords[k];});
-  if(!ids.length){showMsg('پہلے ریکارڈ select کریں');return;}
-  lss(LEAVE_KEY,ls(LEAVE_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1;}));
-  selectedRecords={};
-  showMsg('✅ '+ids.length+' delete',true);
-  renderDuty();
-}
-function clearRecord(){
-  lss(LEAVE_KEY,[]);
-  selectedRecords={};
-  showMsg('🧹 Clear',true);
-  renderDuty();
-}
-
-// ========== DUTY ==========
-function updateDashDuty(){
-  var m=getMembers();
-  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior';});
-  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior';});
-  if($('dashSenior'))$('dashSenior').textContent=s?s.name:'—';
-  if($('dashJunior'))$('dashJunior').textContent=j?j.name:'—';
-  var active=s||j;
-  if(active&&active.dutyStart&&$('dashTimer'))$('dashTimer').textContent=fmtTimer(Date.now()-active.dutyStart);
-  else if($('dashTimer'))$('dashTimer').textContent='00:00:00';
-  if($('dutyMembers'))$('dutyMembers').textContent=m.length;
-  if($('dutyLeave'))$('dutyLeave').textContent=m.filter(function(x){return x.onLeave;}).length;
-  if($('dutyOn'))$('dutyOn').textContent=m.filter(function(x){return x.onDuty;}).length;
-}
-
-function populateLeaveDropdown(){
-  var sel=$('dashLeaveSelect');
+/* ============ LEAVE SUBMIT ============ */
+function populateLeaveMembers(){
+  var sel=$('leaveMember');
   if(!sel)return;
-  var m=getMembers();
   var cur=sel.value;
-  sel.innerHTML='<option value="">ممبر</option>';
-  m.filter(function(x){return !x.onLeave;}).forEach(function(x){
+  var m=getMembers().filter(function(x){return !x.deleted && !x.onLeave && !x.onDuty});
+  sel.innerHTML='<option value="">ممبر...</option>';
+  m.forEach(function(x){
     sel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+' ('+x.rank+')</option>';
   });
   if(cur)sel.value=cur;
 }
 
-function submitDashLeave(){
-  var id=$('dashLeaveSelect').value;
-  var reason=$('dashLeaveReason').value.trim();
-  if(!id||!reason){showMsg('ممبر اور وجہ دونوں لکھیں');return;}
+function submitLeave(){
+  var memberId=$('leaveMember').value;
+  var reason=$('leaveReason').value.trim();
+  var duration=parseInt($('leaveDuration').value)||1;
+  if(!memberId){showMsg('ممبر منتخب کریں',true);return}
+  if(!reason){showMsg('وجہ لکھیں',true);return}
+  if(duration<1||duration>30){showMsg('مدت 1-30 دن',true);return}
   var m=getMembers();
-  var t=m.find(function(x){return String(x.id)===String(id);});
-  if(!t)return;
-  t.onLeave=true;
-  t.leaveCount=(t.leaveCount||0)+1;
-  var leaves=ls(LEAVE_KEY,[]);
-  leaves.push({id:Date.now(),name:t.name,rank:t.rank,reason:reason,date:todayStr(),time:pad(new Date().getHours())+':'+pad(new Date().getMinutes()),timestamp:Date.now()});
-  lss(LEAVE_KEY,leaves);
-  if(t.onDuty){
-    t.onDuty=false;t.dutyStart=null;t.dutyEndedAt=Date.now();
-    var pool=m.filter(function(x){return x.rank===t.rank&&!x.onLeave&&!x.onDuty;});
-    if(pool.length){
-      pool.sort(function(a,b){return (a.leaveCount||0)-(b.leaveCount||0);});
-      pool[0].onDuty=true;pool[0].dutyStart=Date.now();
-    }
-  }
-  lss(DUTY_KEY,m);
-  $('dashLeaveReason').value='';
-  updateDashDuty();
-  populateLeaveDropdown();
-  renderDuty();
-  showMsg('✅ چھٹی محفوظ',true);
+  var mem=m.find(function(x){return String(x.id)===memberId});
+  if(!mem){showMsg('ممبر نہیں ملا',true);return}
+  if(mem.onLeave){showMsg('پہلے سے چھٹی پر',true);return}
+  
+  var leaves=getLeaves();
+  var d=new Date();
+  var leaveRecord={
+    id:Date.now(),
+    name:mem.name,
+    rank:mem.rank,
+    reason:reason,
+    duration:duration,
+    date:todayStr(),
+    time:pad(d.getHours())+':'+pad(d.getMinutes()),
+    timestamp:Date.now()
+  };
+  leaves.unshift(leaveRecord);
+  setLeaves(leaves);
+  
+  // Mark member as onLeave
+  mem.onLeave=true;
+  mem.onDuty=false;
+  mem.dutyStart=null;
+  mem.leaveCount=(mem.leaveCount||0)+1;
+  mem.currentLeaveReason=reason;
+  mem.leaveStart=Date.now();
+  setMembers(m);
+  
+  // Clear form
+  $('leaveMember').value='';
+  $('leaveReason').value='';
+  $('leaveDuration').value='1';
+  
+  renderAll();
+  showMsg('✅ چھٹی دی گئی');
 }
 
-function renderDuty(){
-  var m=getMembers();
-  populateLeaveDropdown();
-
-  var active=m.filter(function(x){return x.onDuty;});
-  var done=m.filter(function(x){return !x.onDuty&&!x.onLeave&&x.dutyEndedAt;});
-  var leaves=ls(LEAVE_KEY,[]);
-
-  if($('colActiveList')){
-    $('colActiveList').innerHTML=active.length?active.map(function(x,i){
-      var chk=selectMode?'<input type="checkbox" onchange="selectRecord('+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d">'+x.rank+'</div><div class="d" style="color:#059669;">🟢 ایکٹو</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:6px;font-size:9px;">کوئی نہیں</div>';
-  }
-
-  if($('colDoneList')){
-    $('colDoneList').innerHTML=done.length?done.map(function(x,i){
-      var chk=selectMode?'<input type="checkbox" onchange="selectRecord('+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d">'+x.rank+'</div><div class="d" style="color:#2563eb;">✅ مکمل</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:6px;font-size:9px;">کوئی نہیں</div>';
-  }
-
-  if($('colLeaveList')){
-    $('colLeaveList').innerHTML=leaves.length?leaves.slice(-15).reverse().map(function(x,i){
-      var chk=selectMode?'<input type="checkbox" onchange="selectRecord('+x.id+')"> ':'';
-      return '<div class="rec-item">'+chk+'<div class="n">'+(i+1)+'️⃣ '+esc(x.name)+'</div><div class="d" style="color:#dc2626;">🏖️ '+esc(x.reason)+'</div></div>';
-    }).join(''):'<div style="text-align:center;color:#94a3b8;padding:6px;font-size:9px;">کوئی نہیں</div>';
-  }
-
-  updateDashDuty();
+/* ============ DUTY END ============ */
+function areAllDailyComplete(memberName){
+  var tasks=lsGet(TASK_KEY,[]);
+  var dailyTasks=tasks.filter(function(t){return t.type==='Daily'});
+  if(!dailyTasks.length)return false;
+  var recs=lsGet(REC_KEY,[]);
+  var today=todayStr();
+  var todayRecs=recs.filter(function(r){
+    if(r.member!==memberName)return false;
+    if(r.date===today)return true;
+    if(r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0)return true;
+    return false;
+  });
+  var doneTitles={};
+  todayRecs.forEach(function(r){if(r.status==='done')doneTitles[r.task]=true});
+  return dailyTasks.every(function(t){return doneTitles[t.title]});
 }
 
-// ========== NEWS/ALERT ==========
-var newsIndex=0,newsTimer=null;
+function getTaskPoints(memberName){
+  var recs=lsGet(REC_KEY,[]);
+  var total=0;
+  recs.forEach(function(r){if(r.member===memberName && r.status==='done'){total+=(r.points||0)}});
+  return total;
+}
 
-function renderNewsAlert(){
-  var items=ls(NEWS_KEY,[]);
-  var news=items.filter(function(x){return x.type==='news';});
-  var alerts=items.filter(function(x){return x.type==='alert';});
+function endDuty(rank){
+  var m=getMembers();
+  var active=m.find(function(x){return x.onDuty && x.rank===rank && !x.deleted});
+  if(!active){showMsg('کوئی ڈیوٹی پر نہیں',true);return}
+  var taskDone=areAllDailyComplete(active.name);
+  if(!taskDone && !active.partialMarked){
+    active.partialMarked=true;
+    setMembers(m);
+    renderAll();
+    showMsg('⚠️ ادھوری — دوبارہ دبائیں');
+    return;
+  }
+  var now=Date.now();
+  var duration=active.dutyStart?now-active.dutyStart:0;
+  var pts=getTaskPoints(active.name);
+  
+  // Add to history log if complete
+  if(taskDone){
+    var hist=getHistLogs();
+    var today=todayStr();
+    var d=new Date();
+    hist.unshift({
+      id:Date.now(),
+      memberName:active.name,
+      rank:active.rank,
+      status:'done',
+      points:pts,
+      taskCount:countTodayTasks(active.name),
+      timestamp:Date.now(),
+      date:today,
+      dateOnly:pad(d.getDate())+'/'+pad(d.getMonth()+1)
+    });
+    hist=hist.filter(function(h){return h.timestamp>=Date.now()-7*86400000});
+    lsSet(HIST_LOG_KEY,hist);
+  } else {
+    var hist2=getHistLogs();
+    var d2=new Date();
+    hist2.unshift({
+      id:Date.now(),
+      memberName:active.name,
+      rank:active.rank,
+      status:'partial',
+      points:0,
+      taskCount:0,
+      timestamp:Date.now(),
+      date:todayStr(),
+      dateOnly:pad(d2.getDate())+'/'+pad(d2.getMonth()+1)
+    });
+    hist2=hist2.filter(function(h){return h.timestamp>=Date.now()-7*86400000});
+    lsSet(HIST_LOG_KEY,hist2);
+  }
+  
+  active.onDuty=false;
+  active.dutyStart=null;
+  active.dutyEndedAt=now;
+  active.partialMarked=false;
+  setMembers(m);
+  
+  var stillActive=m.some(function(x){return x.onDuty && !x.deleted});
+  if(!stillActive){timerRunning=false;currentTimerStart=null}
+  
+  renderAll();
+  showMsg(taskDone?'✅ ڈیوٹی مکمل':'❌ ادھوری');
+}
 
-  if($('newsBar')){
-    if(news.length){
-      newsIndex=0;
-      if(newsTimer)clearInterval(newsTimer);
-      function showNews(){
-        var n=news[newsIndex%news.length];
-        $('newsBar').textContent='📰 '+n.content;
-        $('newsBar').style.animation='none';
-        void $('newsBar').offsetWidth;
-        $('newsBar').style.animation='customTickerRight 35s linear infinite';
-        newsIndex++;
+function countTodayTasks(memberName){
+  var recs=lsGet(REC_KEY,[]);
+  var today=todayStr();
+  return recs.filter(function(r){
+    if(r.member!==memberName||r.status!=='done')return false;
+    if(r.date===today)return true;
+    if(r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0)return true;
+    return false;
+  }).length;
+}
+
+/* ============ TIMER ============ */
+function updateTimer(){
+  var m=getMembers();
+  var senior=m.find(function(x){return x.onDuty && x.rank==='Senior' && !x.deleted});
+  var junior=m.find(function(x){return x.onDuty && x.rank==='Junior' && !x.deleted});
+  var bigTimer=$('bigTimer');
+  if(!bigTimer)return;
+  if(timerRunning && currentTimerStart){
+    bigTimer.textContent=fmtTimer(Date.now()-currentTimerStart);
+    bigTimer.classList.remove('stopped');
+    if(junior){bigTimer.classList.add('junior-on');bigTimer.classList.remove('senior-only')}
+    else if(senior){bigTimer.classList.add('senior-only');bigTimer.classList.remove('junior-on')}
+    else{bigTimer.classList.remove('junior-on','senior-only')}
+  } else {
+    bigTimer.textContent='00:00:00';
+    bigTimer.classList.add('stopped');
+    bigTimer.classList.remove('junior-on','senior-only');
+  }
+}
+
+/* ============ RENDER ============ */
+function renderAll(){
+  var m=getMembers().filter(function(x){return !x.deleted});
+  populateLeaveMembers();
+  renderDutyPanel(m);
+  renderLeaveRecord();
+  renderState(m);
+  updateTimer();
+}
+
+function renderDutyPanel(m){
+  var s=m.find(function(x){return x.onDuty&&x.rank==='Senior'});
+  var j=m.find(function(x){return x.onDuty&&x.rank==='Junior'});
+  $('dashSenior').textContent=s?s.name:'—';
+  $('dashJunior').textContent=j?j.name:'—';
+  $('endSeniorBtn').disabled=!s;
+  $('endJuniorBtn').disabled=!j;
+}
+
+function renderLeaveRecord(){
+  var leaves=getLeaves();
+  var today=todayStr();
+  var recent=leaves.filter(function(l){
+    return l.date===today || (l.timestamp && l.timestamp>=Date.now()-7*86400000);
+  }).sort(function(a,b){return (b.timestamp||0)-(a.timestamp||0)}).slice(0,10);
+  
+  var box=$('leaveRecordBox');
+  if(!recent.length){
+    box.innerHTML='<div class="wps-empty">📭 کوئی چھٹی نہیں</div>';
+    return;
+  }
+  box.innerHTML=recent.map(function(l){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['lv_'+l.id]?'checked':'')+' onchange="toggleSel(\'lv_'+l.id+'\')">':'';
+    var d=new Date(l.timestamp||Date.now());
+    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    return '<div class="wps-bubble">'
+      +chk
+      +'<div class="nm">👤 '+esc(l.name)+' ('+l.rank+')</div>'
+      +'<div class="reason">🏖️ '+esc(l.reason||'—')+'</div>'
+      +'<div class="meta"><span>⏱️ '+(l.duration||1)+' دن</span><span>📅 '+dateStr+'</span></div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderState(m){
+  var active=m.filter(function(x){return x.onDuty}).length;
+  var leave=m.filter(function(x){return x.onLeave}).length;
+  $('stateMembers').textContent=m.length;
+  $('stateActive').textContent=active;
+  $('stateLeave').textContent=leave;
+}
+
+/* ============ SELECT MODE ============ */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  $('selModeBtn').classList.toggle('active',selectMode);
+  if(!selectMode)selectedIds={};
+  renderAll();
+  showMsg(selectMode?'✅ Select ON':'☑️ OFF');
+}
+function toggleSel(key){selectedIds[key]=!selectedIds[key];renderAll()}
+
+/* ============ EDIT/DELETE ============ */
+function editSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]&&k.indexOf('lv_')===0});
+  if(!ids.length){showMsg('چھٹی منتخب کریں',true);return}
+  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
+  var id=ids[0].replace('lv_','');
+  var leaves=getLeaves();
+  var idx=leaves.findIndex(function(l){return String(l.id)===id});
+  if(idx===-1)return;
+  var nr=prompt('نیا وجہ:',leaves[idx].reason);
+  if(nr&&nr.trim()){
+    leaves[idx].reason=nr.trim();
+    setLeaves(leaves);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+function deleteSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]&&k.indexOf('lv_')===0}).map(function(k){return k.replace('lv_','')});
+  if(!ids.length){showMsg('چھٹی منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ',ids.length+' چھٹی ڈیلیٹ کریں؟',function(){
+    var leaves=getLeaves().filter(function(l){return ids.indexOf(String(l.id))===-1});
+    setLeaves(leaves);
+    // Also unmark onLeave if no other leave for that member
+    var m=getMembers();
+    m.forEach(function(mem){
+      var stillOnLeave=leaves.some(function(l){
+        return l.name===mem.name && (l.date===todayStr()||(l.timestamp && l.timestamp>=todayTs()))
+      });
+      if(!stillOnLeave && mem.onLeave){
+        mem.onLeave=false;
+        mem.currentLeaveReason=null;
+        mem.leaveStart=null;
       }
-      showNews();
-      newsTimer=setInterval(showNews,40000);
-    } else {
-      $('newsBar').textContent='📰 کوئی نیوز نہیں';
-    }
-  }
-
-  if($('alertBar')){
-    if(alerts.length){
-      $('alertBar').style.display='flex';
-      $('alertBar').classList.add('blink');
-      $('alertMsg').textContent='🚨 '+alerts[Math.floor(Math.random()*alerts.length)].content;
-    } else {
-      $('alertBar').style.display='none';
-    }
-  }
+    });
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ ڈیلیٹ');
+  });
 }
 
-function skipAlert(){
-  var ab=$('alertBar');
-  if(ab){ab.style.display='none';ab.classList.remove('blink');}
+function clearAll(){
+  showConfirm('صاف','تمام چھٹی ریکارڈ صاف کریں؟',function(){
+    setLeaves([]);
+    var m=getMembers();
+    m.forEach(function(mem){mem.onLeave=false;mem.currentLeaveReason=null;mem.leaveStart=null});
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('🧹 صاف');
+  });
 }
 
-// ========== INIT ==========
+/* ============ SETTINGS ============ */
+function openSettings(){$('nsOverlay').classList.add('active')}
+function closeSettings(){$('nsOverlay').classList.remove('active')}
+function closeSection(){
+  closeSettings();
+  sectionClosed=true;
+  $('dutySectionCard').style.display='none';
+  showMsg('✅ سیکشن بند');
+}
+
+/* ============ MODAL ============ */
+function showConfirm(title,body,cb){
+  $('modalTitle').textContent=title;
+  $('modalBody').textContent=body;
+  _modalCb=cb;
+  $('nsModal').classList.add('active');
+}
+function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
+function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
+
+/* ============ TIMER LOOP ============ */
+setInterval(updateTimer,1000);
+
+/* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded',function(){
-  updateDashDuty();
-  populateLeaveDropdown();
-  renderDuty();
-  renderNewsAlert();
-  setInterval(updateDashDuty,1000);
+  var m=getMembers();
+  var anyActive=m.some(function(x){return x.onDuty&&!x.deleted});
+  if(anyActive){
+    var activeMem=m.find(function(x){return x.onDuty&&x.dutyStart});
+    if(activeMem){currentTimerStart=activeMem.dutyStart;timerRunning=true}
+  }
+  renderAll();
 });
 </script>
 </body>
