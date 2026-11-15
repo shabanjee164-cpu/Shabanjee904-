@@ -10,7 +10,6 @@
 body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;padding-bottom:20px;color:#334155;direction:rtl}
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 
-/* TICKER */
 .ticker-wrap{background:#fff;border:2px solid var(--golden);border-radius:10px;padding:10px 12px;overflow:hidden;position:relative;min-height:52px;display:flex;align-items:center;gap:8px}
 .ticker-wrap.news{border-color:#059669;background:#f0fdf4}
 .ticker-wrap.alert{border-color:#dc2626;background:#fef2f2}
@@ -20,18 +19,14 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .ticker-badge.alert{background:#dc2626;color:#fff}
 .ticker-content{flex:1;overflow:hidden;position:relative;height:24px}
 .ticker-item{position:absolute;white-space:nowrap;font-weight:800;font-size:13px;line-height:24px}
-.ticker-item.moving{animation:tickerMove var(--dur,15s) linear infinite}
+.ticker-item.moving{animation:tickerMove var(--dur,18s) linear infinite}
 @keyframes tickerMove{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 .ticker-empty{text-align:center;color:#94a3b8;font-size:12px;font-weight:700;flex:1}
 
-/* SECTION */
 .section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
 .section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
 .section-header .hdr-left{display:flex;align-items:center;gap:6px}
-.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:22px;height:22px;border-radius:5px;cursor:pointer;font-size:10px;font-family:inherit;color:#64748b;opacity:.5}
-.section-header button:hover{opacity:1}
 
-/* DUTY PANEL */
 .duty-panel{background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--golden);border-radius:12px;padding:12px;color:#fff}
 .duty-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .duty-col{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 6px;text-align:center;position:relative}
@@ -47,7 +42,6 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .big-timer.junior-on{border-color:#34d399;color:#34d399;text-shadow:0 0 15px rgba(52,211,153,.6)}
 .big-timer.stopped{color:#94a3b8;border-color:#475569;text-shadow:none}
 
-/* LEAVE SUBMIT */
 .leave-submit{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:6px;display:flex;gap:4px;align-items:center;flex-wrap:nowrap;overflow-x:auto}
 .leave-submit select,.leave-submit input{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;background:#fff;min-width:0}
 .leave-submit select{flex:1;max-width:100px}
@@ -55,18 +49,15 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .leave-submit input.dur{flex:0 0 50px;max-width:50px}
 .leave-submit button{flex:0 0 auto;padding:7px 10px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:12px}
 
-/* LEAVE LIST */
 .leave-list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
 .leave-item{padding:7px 6px;border-bottom:1px dotted #e2e8f0;display:flex;align-items:flex-start;gap:6px}
 .leave-item:last-child{border-bottom:none}
-.leave-item .chk{width:15px;height:15px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;margin-top:2px}
 .leave-item .body{flex:1;min-width:0}
 .leave-item .nm{font-size:11px;font-weight:800;color:#0f172a;margin-bottom:2px}
 .leave-item .reason{font-size:10px;color:#dc2626;font-weight:700;margin-bottom:2px}
 .leave-item .meta{font-size:9.5px;color:#64748b;font-weight:600}
 .leave-empty{text-align:center;color:#94a3b8;font-size:11px;padding:12px;font-weight:700}
 
-/* TASK TRACKER */
 .task-member-sel{display:flex;gap:4px;align-items:center}
 .task-member-sel select{flex:1;padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;text-align:center;font-family:inherit;outline:none;background:#fff;font-weight:700}
 .task-display{background:#eafaf1;border:2px solid #82e0aa;border-radius:8px;padding:12px;text-align:center}
@@ -86,7 +77,6 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .task-hist-item .lbl{font-size:11px;font-weight:800;color:#0f172a}
 .task-hist-item .meta{font-size:9.5px;color:#64748b;margin-top:2px}
 
-/* STATE */
 .state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
 .state-item{flex:1;text-align:center;padding:4px 2px;border-radius:4px;font-size:9.5px;font-weight:800}
 .state-item .val{font-size:14px;font-weight:900;display:block;margin-top:1px}
@@ -94,12 +84,10 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
 .state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
 
-/* HEAD */
 .scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
 .scroll-head span{font-size:11px;font-weight:bold;color:#475569}
 .btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
 
-/* MSG */
 .inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
 .inline-msg.show{display:block}
 .inline-msg.error{background:#c0392b}
@@ -109,7 +97,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 
 <div class="container">
 
-  <!-- TICKER -->
+  <!-- 1. TICKER -->
   <div class="ticker-wrap hidden" id="tickerWrap">
     <span class="ticker-badge news" id="tickerBadge">📰</span>
     <div class="ticker-content">
@@ -118,7 +106,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
     </div>
   </div>
 
-  <!-- DUTY SECTION -->
+  <!-- 2. DUTY SECTION -->
   <div class="section-card">
     <div class="section-header">
       <div class="hdr-left"><span>👮 آج کی ڈیوٹی</span></div>
@@ -140,7 +128,6 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
       <div class="big-timer stopped" id="bigTimer">00:00:00</div>
     </div>
 
-    <!-- LEAVE SUBMIT -->
     <div class="scroll-head"><span>🏖️ چھٹی دیں:</span></div>
     <div class="leave-submit">
       <select id="leaveMember"><option value="">ممبر...</option></select>
@@ -149,14 +136,12 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
       <button onclick="submitLeave()">✅</button>
     </div>
 
-    <!-- LEAVE RECORD -->
     <div class="scroll-head">
       <span>📋 چھٹی ریکارڈ:</span>
       <button class="btn-close" onclick="toggleClose('leaveRecordBox')">⬇️ Close</button>
     </div>
     <div class="leave-list" id="leaveRecordBox"></div>
 
-    <!-- STATE -->
     <div class="state-patti">
       <div class="state-item">👤 Members<span class="val" id="stateMembers">0</span></div>
       <div class="state-item">🟢 Active<span class="val" id="stateActive">0</span></div>
@@ -164,7 +149,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
     </div>
   </div>
 
-  <!-- TASK TRACKER -->
+  <!-- 3. TASK TRACKER -->
   <div class="section-card">
     <div class="section-header">
       <div class="hdr-left"><span>📋 ٹاسک ٹریکر</span></div>
@@ -217,7 +202,6 @@ function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
 function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
 function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
 
-/* ============ KEYS ============ */
 var DUTY_KEY='sec4_duty_manager_data_v4';
 var LEAVE_KEY='sec4_duty_leaves_data_v4';
 var DUTY_LOG_KEY='sec4_duty_logs_v1';
@@ -225,18 +209,15 @@ var REC_KEY='sec12_task_records';
 var TASK_KEY='sec3_task_and_point_manager_data';
 var NEWS_KEY='sec10_news_alerts_data';
 
-/* ============ STATE ============ */
 var currentTimerStart=null,timerRunning=false;
 var currentTaskMember='',currentTaskIndex=0,taskQueue=[];
 
-/* ============ HELPERS ============ */
 function getMembers(){return lsGet(DUTY_KEY,[]).filter(function(x){return !x.deleted})}
 function setMembers(m){lsSet(DUTY_KEY,m)}
 function getLeaves(){return lsGet(LEAVE_KEY,[])}
 function setLeaves(l){lsSet(LEAVE_KEY,l)}
 function getLogs(){return lsGet(DUTY_LOG_KEY,[])}
 
-/* ============ POPULATE ============ */
 function populateLeaveMembers(){
   var sel=$('leaveMember');if(!sel)return;
   var cur=sel.value;
@@ -258,14 +239,12 @@ function populateTaskMembers(){
   if(cur)sel.value=cur;
 }
 
-/* ============ LEAVE SUBMIT ============ */
 function submitLeave(){
   var memberId=$('leaveMember').value;
   var reason=$('leaveReason').value.trim();
   var duration=parseInt($('leaveDuration').value)||1;
   if(!memberId){showMsg('ممبر منتخب کریں',true);return}
   if(!reason){showMsg('وجہ لکھیں',true);return}
-  var m=getMembers();
   var allM=lsGet(DUTY_KEY,[]);
   var mem=allM.find(function(x){return String(x.id)===memberId});
   if(!mem){showMsg('ممبر نہیں ملا',true);return}
@@ -288,7 +267,6 @@ function submitLeave(){
   showMsg('✅ چھٹی دی گئی');
 }
 
-/* ============ DUTY END ============ */
 function areAllDailyComplete(memberName){
   var tasks=lsGet(TASK_KEY,[]);
   var dailyTasks=tasks.filter(function(t){return t.type==='Daily'});
@@ -332,7 +310,6 @@ function endDuty(rank){
   showMsg(taskDone?'✅ ڈیوٹی مکمل':'❌ ادھوری');
 }
 
-/* ============ TIMER ============ */
 function updateTimer(){
   var m=getMembers();
   var senior=m.find(function(x){return x.onDuty && x.rank==='Senior'});
@@ -351,7 +328,6 @@ function updateTimer(){
   }
 }
 
-/* ============ RENDER ============ */
 function renderAll(){
   var m=getMembers();
   populateLeaveMembers();
@@ -398,11 +374,9 @@ function renderState(m){
   $('stateLeave').textContent=m.filter(function(x){return x.onLeave}).length;
 }
 
-/* ============ TASK TRACKER ============ */
 function onTaskMemberChange(){
   currentTaskMember=$('taskMemberSelect').value;
-  if(!currentTaskMember){taskQueue=[];currentTaskIndex=0;updateTaskDisplay();return}
-  // Build queue — today's tasks not yet done by this member
+  if(!currentTaskMember){taskQueue=[];currentTaskIndex=0;updateTaskDisplay();renderTaskHistory();return}
   var tasks=lsGet(TASK_KEY,[]);
   var recs=lsGet(REC_KEY,[]);
   var today=todayStr();
@@ -413,13 +387,13 @@ function onTaskMemberChange(){
     if(r.date===today || (r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0))todayDone[r.task]=true;
   });
   taskQueue=tasks.filter(function(t){return !todayDone[t.title]});
-  // Sort Daily first, then Occasional
   taskQueue.sort(function(a,b){
     if(a.type===b.type)return 0;
     return a.type==='Daily'?-1:1;
   });
   currentTaskIndex=0;
   updateTaskDisplay();
+  renderTaskHistory();
 }
 
 function updateTaskDisplay(){
@@ -503,8 +477,8 @@ function renderTaskHistory(){
   $('taskTotalCount').textContent=myRecs.length;
 }
 
-/* ============ TICKER (News/Alert) ============ */
-var tickerRunning=false,tickerQueue=[],tickerIdx=0,tickerTimer=null,tickerHistory=[];
+/* ============ TICKER ============ */
+var tickerRunning=false,tickerQueue=[],tickerIdx=0,tickerTimer=null;
 
 function loadTicker(){
   var items=lsGet(NEWS_KEY,[]);
@@ -513,8 +487,13 @@ function loadTicker(){
     if(x.deleted)return false;
     return x.date===today || (x.dateStr && x.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0);
   });
-  if(!tickerQueue.length)return;
-  tickerIdx=0;tickerHistory=[];
+  if(!tickerQueue.length){
+    $('tickerWrap').classList.remove('hidden');
+    $('tickerEmpty').style.display='block';
+    $('tickerEmpty').textContent='آج کوئی پیغام نہیں';
+    return;
+  }
+  tickerIdx=0;
   startTicker();
 }
 
@@ -529,7 +508,6 @@ function showTickerNext(){
   if(!tickerRunning)return;
   if(tickerIdx>=tickerQueue.length){stopTicker();return}
   var item=tickerQueue[tickerIdx];
-  tickerHistory.push(tickerIdx);
   tickerIdx++;
   var wrap=$('tickerWrap'),badge=$('tickerBadge'),textEl=$('tickerItem'),empty=$('tickerEmpty');
   wrap.classList.remove('news','alert');
@@ -541,7 +519,7 @@ function showTickerNext(){
   textEl.style.setProperty('--dur','18s');
   textEl.classList.remove('moving');void textEl.offsetWidth;
   textEl.classList.add('moving');
-  tickerTimer=setTimeout(showTickerNext,18000+2000);
+  tickerTimer=setTimeout(showTickerNext,20000);
 }
 
 function stopTicker(){
@@ -549,24 +527,18 @@ function stopTicker(){
   $('tickerItem').classList.remove('moving');
   $('tickerEmpty').style.display='block';
   $('tickerItem').style.display='none';
-  $('tickerWrap').classList.add('hidden');
 }
 
-/* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded',function(){
-  // Restore timer
   var m=lsGet(DUTY_KEY,[]);
   var activeMem=m.find(function(x){return x.onDuty&&x.dutyStart&&!x.deleted});
   if(activeMem){currentTimerStart=activeMem.dutyStart;timerRunning=true}
   renderAll();
-  // Start ticker
   setTimeout(loadTicker,1000);
 });
 
-// Timer + refresh
 setInterval(function(){
   updateTimer();
-  // Refresh all every 5 sec if visible
   if(document.visibilityState==='visible'){renderAll()}
 },1000);
 </script>
