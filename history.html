@@ -3,76 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>News/Alert — History</title>
+<title>Member Duty History</title>
 <style>
-:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--bg:#f8fafc}
+:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
-
-/* SECTION */
 .section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
 .section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
 .section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
 
-/* FILTERS */
-.filter-area{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px}
-.filter-row{display:flex;gap:4px;align-items:center}
-.filter-row select{padding:7px 8px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-family:inherit;outline:none;background:#fff;flex:1;min-width:0;text-align:center;font-weight:700;color:#334155}
-.filter-reset{background:#fee2e2;color:#991b1b;border:none;padding:7px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0}
-.filter-reset:active{transform:scale(.96)}
+/* FILTER */
+.filter-row{display:flex;gap:4px}
+.filter-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-family:inherit;outline:none;flex:1;text-align:center;font-weight:700;background:#fff}
 
-/* SCROLL */
-.scroll-head{display:flex;justify-content:space-between;align-items:center}
-.scroll-head span{font-size:11px;font-weight:bold;color:#475569}
-.btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
-.scroll-list{max-height:320px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
-.record{padding:8px;border-bottom:1px dotted #e2e8f0;display:flex;align-items:flex-start;gap:6px;border-right:3px solid transparent}
-.record:last-child{border-bottom:none}
-.record.sel{background:#eff6ff;border-right-color:var(--accent)}
-.record.news{border-right-color:#10b981;background:#f0fdf4}
-.record.alert{border-right-color:#dc2626;background:#fef2f2}
-.record.sel.news,.record.sel.alert{background:#eff6ff}
-.record.deleted{opacity:.6;background:#fef2f2;border-right-color:#991b1b}
-.record.skipped .txt{text-decoration:line-through;color:#94a3b8}
-.record .chk{width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:var(--accent);margin-top:3px}
-.record .body{flex:1;min-width:0}
-.record .txt{font-weight:700;font-size:11.5px;color:#0f172a;word-break:break-word}
-.record .meta{font-size:9px;color:#64748b;margin-top:3px;display:flex;flex-wrap:wrap;gap:4px}
-.record .meta span{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-weight:700}
-.record .meta .auto-tag{background:#dbeafe;color:#1e40af}
-.record .meta .manual-tag{background:#fef3c7;color:#92400e}
-.record .meta .del-tag{background:#fee2e2;color:#991b1b}
+/* SHARE/COPY ROW */
+.action-row{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-top:4px}
+.action-row span{font-size:11px;font-weight:bold;color:#475569}
+.action-btns{display:flex;gap:3px}
+.action-btns button{border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit}
+.btn-share{background:#dbeafe;color:#1e40af}
+.btn-copy{background:#fef3c7;color:#92400e}
+.btn-close{background:#64748b;color:#fff}
+
+/* RECORD */
+.record-list{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
+.member-block{padding:8px 6px;border-bottom:2px solid #cbd5e1;margin-bottom:4px}
+.member-block:last-child{border-bottom:none;margin-bottom:0}
+.member-hdr{display:flex;align-items:center;gap:4px;margin-bottom:6px;background:#eff6ff;padding:5px 6px;border-radius:5px}
+.member-hdr .chk{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.member-hdr .nm{font-size:12px;font-weight:800;color:#1e40af;flex:1}
+.member-hdr .rk{font-size:9.5px;color:#64748b;font-weight:700}
+.event-item{padding:5px 8px;margin-bottom:3px;border-radius:5px;display:flex;align-items:flex-start;gap:4px;background:#fff;border-right:3px solid #94a3b8}
+.event-item .chk{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin-top:2px}
+.event-item .body{flex:1;min-width:0}
+.event-item .txt{font-size:10.5px;font-weight:700;color:#0f172a}
+.event-item .extra{font-size:9.5px;color:#64748b;margin-top:2px}
+.event-item .dt{font-size:9px;color:#94a3b8;margin-top:2px;font-weight:600}
+/* Event colors */
+.event-item.ev-done{border-right-color:#10b981;background:#f0fdf4}
+.event-item.ev-partial{border-right-color:#dc2626;background:#fef2f2}
+.event-item.ev-leave{border-right-color:#d97706;background:#fffbeb}
+.event-item.ev-active{border-right-color:#2563eb;background:#eff6ff}
+.event-item.ev-new{border-right-color:#8b5cf6;background:#f5f3ff}
+.event-item.ev-change{border-right-color:#6b7280;background:#f9fafb}
+.record-empty{text-align:center;color:#94a3b8;padding:16px;font-size:11px;font-weight:700}
 
 /* STATE */
-.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
-.state-item{flex:1;text-align:center;padding:4px 2px;border-radius:4px;font-size:9px;font-weight:800}
-.state-item .val{font-size:13px;font-weight:900;display:block;margin-top:1px}
+.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0;margin-top:6px}
+.state-item{flex:1;text-align:center;padding:4px 2px;border-radius:4px;font-size:9.5px;font-weight:800}
+.state-item .val{font-size:14px;font-weight:900;display:block;margin-top:1px}
 .state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
 .state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
-.state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
+.state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
 
-/* EMPTY */
-.empty-box{text-align:center;color:#94a3b8;padding:20px 10px;font-size:11px;font-weight:700}
-.empty-box .icon{font-size:32px;display:block;margin-bottom:8px;opacity:.5}
-
-/* MSG */
-.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
-.inline-msg.show{display:block}
-.inline-msg.error{background:#c0392b}
-
-/* DARK */
-body.dark{background:#0f172a;color:#e2e8f0}
-body.dark .section-card{background:#1e293b;border-color:#334155}
-body.dark .scroll-list{background:#0f172a;color:#e2e8f0}
-body.dark .record .txt{color:#f1f5f9}
-body.dark .record .meta{color:#94a3b8}
-body.dark .filter-area{background:#0f172a;border-color:#334155}
-body.dark .filter-row select{background:#1e293b;color:#e2e8f0;border-color:#334155}
-body.dark .record .meta span{background:#334155}
-body.dark .state-patti{background:#0f172a;border-color:#334155}
-
-/* OVERLAY */
+/* SETTINGS */
 .ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
 .ns-overlay.active{display:block}
 .ns-box{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
@@ -83,31 +68,38 @@ body.dark .state-patti{background:#0f172a;border-color:#334155}
 .ns-old button{padding:8px 3px;font-size:9px;font-weight:bold;border-radius:5px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit}
 .ns-old button.del{color:#ff9999}
 .ns-old button.active{background:#10b981;border-color:#10b981}
-.ns-toggle-new{background:#eff6ff;border:2px solid #bfdbfe;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:inherit;width:100%;text-align:right;color:#1e40af;font-weight:800;font-size:13px}
-.ns-sub{background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;margin-bottom:6px}
-.ns-sub-h{background:#f8fafc;padding:10px 12px;font-size:12px;font-weight:800;color:#1e293b;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:inherit;width:100%;text-align:right;border:none}
-.ns-sub-body{padding:10px 12px;display:none}
-.ns-sub.open .ns-sub-body{display:block}
-.ns-lbl{font-size:11px;font-weight:700;color:#64748b;display:block;margin:8px 0 4px}
-.ns-inp{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:#fff;font-weight:600;margin-bottom:6px}
-.ns-btn{width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:5px}
-.ns-btn.success{background:#ecfdf5;color:#059669;border-color:#a7f3d0}
-.ns-btn.danger{background:#fef2f2;color:#dc2626;border-color:#fecaca}
-.ns-btn.warning{background:#fffbeb;color:#d97706;border-color:#fde68a}
-.ns-stat-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:6px;text-align:center;font-size:11px;font-weight:700}
-.ns-stat-box .big{font-size:20px;font-weight:900;color:#2563eb;display:block;margin-bottom:2px}
 .ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:12px;display:flex;gap:8px}
 .ns-foot button{flex:1;padding:12px;border:none;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;background:#f1f5f9;color:#64748b}
 
-/* CONFIRM MODAL */
+/* MODAL */
 .ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
 .ns-modal.active{display:flex}
 .ns-modal-box{background:#fff;border-radius:12px;max-width:340px;width:100%}
-.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0}
-.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600}
-.ns-modal-b input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-top:8px}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0;text-align:center}
+.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600;text-align:center}
+.ns-modal-b input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-top:8px;text-align:center;font-weight:800}
 .ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
 .ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+
+/* MSG */
+.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
+.inline-msg.show{display:block}
+.inline-msg.error{background:#c0392b}
+
+/* DARK */
+body.dark{background:#0f172a;color:#e2e8f0}
+body.dark .section-card{background:#1e293b;border-color:#334155}
+body.dark .record-list{background:#0f172a}
+body.dark .member-hdr{background:#1e3a5f}
+body.dark .member-hdr .nm{color:#60a5fa}
+body.dark .event-item{background:#1e293b;border-right-color:#475569}
+body.dark .event-item .txt{color:#f1f5f9}
+body.dark .event-item.ev-done{background:#064e3b}
+body.dark .event-item.ev-partial{background:#7f1d1d}
+body.dark .event-item.ev-leave{background:#78350f}
+body.dark .event-item.ev-active{background:#1e3a8a}
+body.dark .event-item.ev-new{background:#4c1d95}
+body.dark .event-item.ev-change{background:#334155}
 </style>
 </head>
 <body>
@@ -115,59 +107,54 @@ body.dark .state-patti{background:#0f172a;border-color:#334155}
 <div class="container">
   <div class="section-card">
     <div class="section-header">
-      <span>📰 نیوز/الرٹ ہسٹری</span>
+      <span>👤 ممبر ڈیوٹی ہسٹری</span>
       <button onclick="openSettings()">⚙️</button>
     </div>
 
-    <!-- FILTERS -->
-    <div class="filter-area">
-      <div class="filter-row">
-        <select id="filterDate" onchange="renderList()">
-          <option value="today">📅 آج</option>
-          <option value="yesterday">📅 کل</option>
-          <option value="7days">📅 7 دن</option>
-          <option value="30days">📅 30 دن</option>
-          <option value="all">📅 سب</option>
-          <option value="deleted">🗑️ ڈیلیٹ شدہ</option>
-        </select>
-        <select id="filterType" onchange="renderList()">
-          <option value="all">📰 سب</option>
-          <option value="news">📰 News</option>
-          <option value="alert">🚨 Alert</option>
-        </select>
-        <select id="filterMember" onchange="renderList()">
-          <option value="all">👤 سب ممبران</option>
-        </select>
-      </div>
-      <button class="filter-reset" onclick="resetFilters()">🔄 ری سیٹ</button>
+    <!-- FILTER -->
+    <div class="filter-row">
+      <select id="filterMember" onchange="renderHistory()">
+        <option value="all">👤 تمام ممبران</option>
+      </select>
+      <select id="filterDate" onchange="renderHistory()">
+        <option value="all">📅 تمام دن</option>
+        <option value="today">📅 آج</option>
+        <option value="yesterday">📅 کل</option>
+        <option value="7days">📅 7 دن</option>
+        <option value="30days">📅 30 دن</option>
+      </select>
     </div>
 
-    <!-- LIST -->
-    <div class="scroll-head">
-      <span>📋 ریکارڈ (<span id="recCount">0</span>):</span>
-      <button class="btn-close" onclick="toggleClose('recordList')">⬇️ Close</button>
+    <!-- SHARE / COPY -->
+    <div class="action-row">
+      <span>📋 ریکارڈ: <span id="recCount">0</span></span>
+      <div class="action-btns">
+        <button class="btn-share" onclick="shareRecords()">📤 Share</button>
+        <button class="btn-copy" onclick="copyRecords()">📋 Copy</button>
+        <button class="btn-close" onclick="toggleClose('historyList')">⬇️</button>
+      </div>
     </div>
-    <div class="scroll-list" id="recordList"></div>
+
+    <!-- RECORD LIST -->
+    <div class="record-list" id="historyList"></div>
 
     <!-- STATE -->
     <div class="state-patti">
-      <div class="state-item">📰 News<span class="val" id="stateNews">0</span></div>
-      <div class="state-item">🚨 Alert<span class="val" id="stateAlert">0</span></div>
-      <div class="state-item">📋 Total<span class="val" id="stateTotal">0</span></div>
+      <div class="state-item">👤 Members<span class="val" id="stateMembers">0</span></div>
+      <div class="state-item">✅ Done<span class="val" id="stateDone">0</span></div>
+      <div class="state-item">🏖️ Leave<span class="val" id="stateLeave">0</span></div>
     </div>
   </div>
 </div>
 
-<!-- SETTINGS OVERLAY -->
+<!-- SETTINGS -->
 <div class="ns-overlay" id="nsOverlay">
   <div class="ns-box">
     <div class="ns-head">
-      <span>⚙️ ہسٹری سیٹنگز</span>
+      <span>⚙️ سیٹنگز</span>
       <button onclick="closeSettings()">✕</button>
     </div>
     <div class="ns-body">
-
-      <!-- 13 BUTTONS -->
       <div class="ns-old">
         <button onclick="toggleSelectMode()" id="selModeBtn">☑️ Select</button>
         <button onclick="allSelect()">✅ All</button>
@@ -179,86 +166,20 @@ body.dark .state-patti{background:#0f172a;border-color:#334155}
         <button onclick="moveDown()">🔽 Nichy</button>
         <button onclick="setPassword()">🔑 Pass</button>
         <button onclick="toggleDark()" id="darkBtn">🌙 Dark</button>
-        <button onclick="restoreSelected()">♻️ Restore</button>
-        <button onclick="permanentDelete()">🗑️ Perm Del</button>
-        <button onclick="closeSettings()">⬇️ Close</button>
-      </div>
-
-      <button class="ns-toggle-new" onclick="toggleAdvanced()">⚙️ مزید آپشنز <span id="advArrow">▼</span></button>
-      <div id="advWrap" style="display:none">
-
-        <!-- REPORT -->
-        <div class="ns-sub" data-sub="1">
-          <button class="ns-sub-h" onclick="toggleSub(1)">📊 رپورٹ <span class="arrow">▶</span></button>
-          <div class="ns-sub-body">
-            <div class="ns-stat-box">
-              <span class="big" id="reportTotal">0</span>
-              کل ریکارڈز
-            </div>
-            <div class="ns-stat-box">
-              آج: <span id="reportToday" style="color:#2563eb">0</span> |
-              کل: <span id="reportYesterday" style="color:#059669">0</span> |
-              ہفتہ: <span id="reportWeek" style="color:#d97706">0</span>
-            </div>
-            <button class="ns-btn success" onclick="downloadReport('today')">📈 آج کی رپورٹ</button>
-            <button class="ns-btn success" onclick="downloadReport('week')">📈 ہفتے کی رپورٹ</button>
-            <button class="ns-btn success" onclick="downloadReport('month')">📈 مہینے کی رپورٹ</button>
-            <button class="ns-btn success" onclick="downloadReport('all')">📈 مکمل رپورٹ</button>
-          </div>
-        </div>
-
-        <!-- SEARCH -->
-        <div class="ns-sub" data-sub="2">
-          <button class="ns-sub-h" onclick="toggleSub(2)">🔍 تلاش <span class="arrow">▶</span></button>
-          <div class="ns-sub-body">
-            <input type="text" id="searchBox" class="ns-inp" placeholder="متن تلاش کریں..." oninput="doSearch(this.value)">
-            <div id="searchResults" style="font-size:11px;color:#64748b;font-weight:700;padding:4px"></div>
-            <button class="ns-btn warning" onclick="clearSearch()">🔄 تلاش صاف</button>
-          </div>
-        </div>
-
-        <!-- RECYCLE -->
-        <div class="ns-sub" data-sub="3">
-          <button class="ns-sub-h" onclick="toggleSub(3)">🗑️ ری سائیکل بن <span class="arrow">▶</span></button>
-          <div class="ns-sub-body">
-            <div class="ns-stat-box">
-              <span class="big" id="recycleCount" style="color:#dc2626">0</span>
-              ڈیلیٹ شدہ ریکارڈ
-            </div>
-            <button class="ns-btn success" onclick="restoreAll()">♻️ سب بحال کریں</button>
-            <button class="ns-btn danger" onclick="emptyRecycle()">🗑️ بن خالی کریں (مستقل)</button>
-          </div>
-        </div>
-
-        <!-- EXPORT -->
-        <div class="ns-sub" data-sub="4">
-          <button class="ns-sub-h" onclick="toggleSub(4)">💾 ایکسپورٹ <span class="arrow">▶</span></button>
-          <div class="ns-sub-body">
-            <button class="ns-btn" onclick="exportData('json')">📄 JSON</button>
-            <button class="ns-btn" onclick="exportData('csv')">📊 CSV</button>
-            <button class="ns-btn" onclick="exportData('txt')">📝 TXT</button>
-          </div>
-        </div>
-
-        <!-- STATS -->
-        <div class="ns-sub" data-sub="5">
-          <button class="ns-sub-h" onclick="toggleSub(5)">📈 اعداد و شمار <span class="arrow">▶</span></button>
-          <div class="ns-sub-body" id="statsBody"></div>
-        </div>
       </div>
     </div>
     <div class="ns-foot"><button onclick="closeSettings()">✕ بند</button></div>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- MODAL -->
 <div class="ns-modal" id="nsModal">
   <div class="ns-modal-box">
     <div class="ns-modal-h" id="modalTitle">تصدیق</div>
     <div class="ns-modal-b" id="modalBody">—</div>
     <div class="ns-modal-f">
       <button onclick="modalClose()" style="background:#e2e8f0;color:#64748b">✕ بند</button>
-      <button onclick="modalConfirm()" id="modalConfirmBtn" style="background:#dc2626;color:#fff">✓ ہاں</button>
+      <button onclick="modalConfirm()" style="background:#dc2626;color:#fff">✓ ہاں</button>
     </div>
   </div>
 </div>
@@ -266,467 +187,274 @@ body.dark .state-patti{background:#0f172a;border-color:#334155}
 <div class="inline-msg" id="inlineMsg"></div>
 
 <script>
-/* ============ UTILS ============ */
 function $(id){return document.getElementById(id)}
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function pad(n){return String(n).padStart(2,'0')}
+function fmtHourMin(ms){var s=Math.floor(ms/1000);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h+':'+pad(m)}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function yesterdayStr(){var d=new Date(Date.now()-86400000);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
 function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
-function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function dateStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
 
 /* ============ KEYS ============ */
-var NEWS_KEY='sec10_news_alerts_data';
-var NS_KEY='ns_settings_v7';
 var DUTY_KEY='sec4_duty_manager_data_v4';
+var LEAVE_KEY='sec4_duty_leaves_data_v4';
+var DUTY_LOG_KEY='sec4_duty_logs_v1';
+var HIST_RECORDS='duty_history_records_v1';
+var DS_KEY='duty_history_settings_v1';
 
 /* ============ STATE ============ */
 var selectMode=false,selectedIds={};
-var searchQuery='';
+var _modalCb=null;
+var historyRecords=[];
 
-/* ============ RENDER ============ */
-function populateMembers(){
-  var sel=$('filterMember');if(!sel)return;
-  var cur=sel.value;
-  var mem=lsGet(DUTY_KEY,[]);
-  sel.innerHTML='<option value="all">👤 سب ممبران</option>';
-  mem.forEach(function(m){sel.innerHTML+='<option value="'+esc(m.name)+'">'+esc(m.name)+'</option>'});
-  if(cur)sel.value=cur;
+/* ============ BUILD RECORDS ============ */
+function buildHistoryRecords(){
+  var records=[];
+
+  // 1. Duty logs (new, active, done, partial, change)
+  var logs=lsGet(DUTY_LOG_KEY,[]);
+  logs.forEach(function(l){
+    var d=new Date(l.endTime||l.startTime||Date.now());
+    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    var txt,evClass,extra;
+    if(l.status==='done'){
+      txt='✅ اس ممبر نے آج ڈیوٹی پوری کی';
+      evClass='ev-done';
+      var pts=getTaskPoints(l.memberName);
+      extra='⭐ '+pts+' پوائنٹس';
+    } else if(l.status==='partial'){
+      txt='❌ اس ممبر نے آج ڈیوٹی پوری نہیں کی';
+      evClass='ev-partial';
+      extra='';
+    } else if(l.status==='active'){
+      txt='🟢 ڈیوٹی جاری ہے';
+      evClass='ev-active';
+      extra='';
+    } else if(l.status==='new'){
+      txt='🆕 ڈیوٹی تفویض کی گئی';
+      evClass='ev-new';
+      extra='';
+    } else {
+      txt='⚪ ڈیوٹی ختم';
+      evClass='ev-change';
+      extra='';
+    }
+    records.push({
+      id:'log_'+l.id,
+      type:'log',
+      memberName:l.memberName,
+      rank:l.rank,
+      text:txt,
+      extra:extra,
+      dateStr:dateStr,
+      timestamp:l.endTime||l.startTime||Date.now(),
+      evClass:evClass,
+      original:l,
+      source:'duty_log'
+    });
+  });
+
+  // 2. Leaves
+  var leaves=lsGet(LEAVE_KEY,[]);
+  leaves.forEach(function(lv){
+    var d=new Date(lv.timestamp||Date.now());
+    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    records.push({
+      id:'leave_'+lv.id,
+      type:'leave',
+      memberName:lv.name,
+      rank:lv.rank,
+      text:'🏖️ اس ممبر نے آج چھٹی کی ہے',
+      extra:'📝 وجہ: '+esc(lv.reason||'—')+' · ⏱️ '+(lv.duration||1)+' دن',
+      dateStr:dateStr,
+      timestamp:lv.timestamp||Date.now(),
+      evClass:'ev-leave',
+      original:lv,
+      source:'leave'
+    });
+  });
+
+  // 3. History events (junior change, senior return)
+  var histEvents=lsGet('duty_history_events_v1',[]);
+  histEvents.forEach(function(ev){
+    var d=new Date(ev.timestamp||Date.now());
+    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    records.push({
+      id:'ev_'+ev.id,
+      type:'event',
+      memberName:ev.memberName,
+      rank:ev.rank||'',
+      text:ev.text,
+      extra:ev.extra||'',
+      dateStr:dateStr,
+      timestamp:ev.timestamp||Date.now(),
+      evClass:'ev-change',
+      original:ev,
+      source:'event'
+    });
+  });
+
+  // Sort by timestamp desc
+  records.sort(function(a,b){return b.timestamp-a.timestamp});
+  return records;
 }
 
-function getFilteredRecords(){
-  var all=lsGet(NEWS_KEY,[]);
-  var filterDate=$('filterDate').value;
-  var filterType=$('filterType').value;
-  var filterMember=$('filterMember').value;
-  var now=new Date();
+function getTaskPoints(memberName){
+  var recs=lsGet('sec12_task_records',[]);
+  var total=0;
+  recs.forEach(function(r){if(r.member===memberName && r.status==='done'){total+=(r.points||0)}});
+  return total;
+}
+
+/* ============ RENDER ============ */
+function renderHistory(){
+  var all=buildHistoryRecords();
+  historyRecords=all;
+
+  // Filter
+  var fMember=$('filterMember').value;
+  var fDate=$('filterDate').value;
   var today=todayStr();
-  var yesterdayDate=new Date(now.getTime()-86400000);
-  var yesterday=dateStr(yesterdayDate);
+  var yesterday=yesterdayStr();
   var weekAgo=Date.now()-7*86400000;
   var monthAgo=Date.now()-30*86400000;
 
-  var items=all.filter(function(x){
-    // Date filter
-    if(filterDate==='deleted'){
-      if(!x.deleted)return false;
-    } else {
-      if(x.deleted)return false;
-      if(filterDate==='today'&&x.date!==today)return false;
-      if(filterDate==='yesterday'&&x.date!==yesterday)return false;
-      if(filterDate==='7days'&&x.timestamp<weekAgo)return false;
-      if(filterDate==='30days'&&x.timestamp<monthAgo)return false;
+  var filtered=all.filter(function(r){
+    if(fMember!=='all' && r.memberName!==fMember)return false;
+    if(fDate==='today' && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))!==0)return false;
+    if(fDate==='yesterday'){
+      var yd=new Date(Date.now()-86400000);
+      if(r.dateStr.indexOf(pad(yd.getDate())+'/'+pad(yd.getMonth()+1))!==0)return false;
     }
-    // Type filter
-    if(filterType!=='all'&&x.type!==filterType)return false;
-    // Member filter (matches text)
-    if(filterMember!=='all'){
-      if(x.content.indexOf(filterMember)===-1)return false;
-    }
-    // Search
-    if(searchQuery&&x.content.toLowerCase().indexOf(searchQuery.toLowerCase())===-1)return false;
+    if(fDate==='7days' && r.timestamp<weekAgo)return false;
+    if(fDate==='30days' && r.timestamp<monthAgo)return false;
     return true;
   });
-  return items;
-}
 
-function renderList(){
-  var items=getFilteredRecords();
-  var box=$('recordList');
-  if(!items.length){
-    box.innerHTML='<div class="empty-box"><span class="icon">📭</span>کوئی ریکارڈ نہیں</div>';
-  } else {
-    box.innerHTML=items.map(function(x,i){
-      var icon=x.type==='news'?'📰':'🚨';
-      var cls=x.type==='news'?'news':'alert';
-      var selCls=selectedIds[x.id]?' sel':'';
-      var delCls=x.deleted?' deleted':'';
-      var skipCls=x.skipped?' skipped':'';
-      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[x.id]?'checked':'')+' onchange="toggleSelect('+x.id+')">':'';
-      var autoTag=x.auto?'<span class="auto-tag">خودکار</span>':'<span class="manual-tag">دستی</span>';
-      var delTag=x.deleted?'<span class="del-tag">🗑️ ڈیلیٹ</span>':'';
-      var skipTag=x.skipped?'<span class="del-tag">❌ Skip</span>':'';
-      return '<div class="record '+cls+selCls+delCls+skipCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta"><span>📅 '+(x.dateStr||'')+'</span>'+autoTag+delTag+skipTag+'</div></div></div>';
+  // Group by member
+  var grouped={};
+  filtered.forEach(function(r){
+    if(!grouped[r.memberName])grouped[r.memberName]={name:r.memberName,rank:r.rank,events:[]};
+    grouped[r.memberName].events.push(r);
+  });
+
+  // Sort groups by total events count desc or member order
+  var groupArr=Object.keys(grouped).map(function(k){return grouped[k]});
+
+  var box=$('historyList');
+  if(!groupArr.length){
+    box.innerHTML='<div class="record-empty">📭 کوئی ریکارڈ نہیں</div>';
+    $('recCount').textContent=0;
+    renderState(filtered,groupArr);
+    return;
+  }
+
+  box.innerHTML=groupArr.map(function(g,gi){
+    var memberChk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['member_'+g.name]?'checked':'')+' onchange="toggleSel(\'member_'+g.name+'\')">':'';
+    var eventsHtml=g.events.map(function(ev,ei){
+      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[ev.id]?'checked':'')+' onchange="toggleSel(\''+ev.id+'\')">':'';
+      return '<div class="event-item '+ev.evClass+'">'+chk+'<div class="body">'
+        +'<div class="txt">'+ev.text+'</div>'
+        +(ev.extra?'<div class="extra">'+ev.extra+'</div>':'')
+        +'<div class="dt">📅 '+ev.dateStr+'</div>'
+        +'</div></div>';
     }).join('');
-  }
-  $('recCount').textContent=items.length;
+    return '<div class="member-block">'
+      +'<div class="member-hdr">'+memberChk+'<span class="nm">'+(gi+1)+'️⃣ 👤 '+esc(g.name)+'</span><span class="rk">('+(g.rank||'')+')</span></div>'
+      +eventsHtml
+      +'</div>';
+  }).join('');
 
-  // State
-  var newsN=items.filter(function(x){return x.type==='news'}).length;
-  var alertN=items.filter(function(x){return x.type==='alert'}).length;
-  $('stateNews').textContent=newsN;
-  $('stateAlert').textContent=alertN;
-  $('stateTotal').textContent=items.length;
+  $('recCount').textContent=filtered.length;
+  renderState(filtered,groupArr);
+  populateMemberFilter(all);
+}
 
-  // Recycle count
-  var all=lsGet(NEWS_KEY,[]);
-  var deletedCount=all.filter(function(x){return x.deleted}).length;
-  if($('recycleCount'))$('recycleCount').textContent=deletedCount;
+function renderState(filtered,groups){
+  $('stateMembers').textContent=groups.length;
+  $('stateDone').textContent=filtered.filter(function(r){
+    return r.text.indexOf('✅')!==-1;
+  }).length;
+  $('stateLeave').textContent=filtered.filter(function(r){
+    return r.text.indexOf('🏖️')!==-1;
+  }).length;
+}
 
-  // Reports
-  var today=todayStr();
-  var yesterdayDate=new Date(Date.now()-86400000);
-  var yesterday=dateStr(yesterdayDate);
+function populateMemberFilter(all){
+  var sel=$('filterMember');
+  var cur=sel.value;
+  var members={};
+  all.forEach(function(r){members[r.memberName]=r.rank});
+  sel.innerHTML='<option value="all">👤 تمام ممبران</option>';
+  Object.keys(members).forEach(function(name){
+    sel.innerHTML+='<option value="'+esc(name)+'">'+esc(name)+' ('+members[name]+')</option>';
+  });
+  if(cur)sel.value=cur;
+}
+
+/* ============ SHARE / COPY ============ */
+function getCurrentFiltered(){
+  var fMember=$('filterMember').value;
+  var fDate=$('filterDate').value;
   var weekAgo=Date.now()-7*86400000;
-  var active=all.filter(function(x){return !x.deleted});
-  if($('reportTotal'))$('reportTotal').textContent=active.length;
-  if($('reportToday'))$('reportToday').textContent=active.filter(function(x){return x.date===today}).length;
-  if($('reportYesterday'))$('reportYesterday').textContent=active.filter(function(x){return x.date===yesterday}).length;
-  if($('reportWeek'))$('reportWeek').textContent=active.filter(function(x){return x.timestamp>=weekAgo}).length;
-
-  // Stats
-  renderStats();
-}
-
-function renderStats(){
-  var body=$('statsBody');if(!body)return;
-  var all=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted});
-  var autoCount=all.filter(function(x){return x.auto}).length;
-  var manualCount=all.filter(function(x){return !x.auto}).length;
-  var skippedCount=all.filter(function(x){return x.skipped}).length;
-  // Unique members from content
-  var mem=lsGet(DUTY_KEY,[]);
-  var memberStats={};
-  mem.forEach(function(m){
-    var cnt=all.filter(function(x){return x.content.indexOf(m.name)!==-1}).length;
-    if(cnt>0)memberStats[m.name]=cnt;
-  });
-  var html='<div class="ns-stat-box">خودکار: <b>'+autoCount+'</b> | دستی: <b>'+manualCount+'</b> | Skip: <b>'+skippedCount+'</b></div>';
-  if(Object.keys(memberStats).length){
-    html+='<div style="font-size:11px;font-weight:800;color:#475569;margin:8px 0 4px">ممبران کے مطابق:</div>';
-    Object.keys(memberStats).sort(function(a,b){return memberStats[b]-memberStats[a]}).forEach(function(name){
-      html+='<div class="ns-limit-row"><label>'+esc(name)+'</label><span class="unit">'+memberStats[name]+'</span></div>';
-    });
-  }
-  body.innerHTML=html;
-}
-
-/* ============ FILTER ============ */
-function resetFilters(){
-  $('filterDate').value='today';
-  $('filterType').value='all';
-  $('filterMember').value='all';
-  searchQuery='';
-  if($('searchBox'))$('searchBox').value='';
-  selectedIds={};
-  renderList();
-  showMsg('🔄 فلٹر ری سیٹ');
-}
-
-function doSearch(q){
-  searchQuery=q.trim();
-  var items=getFilteredRecords();
-  $('searchResults').textContent=items.length+' ریکارڈ ملے';
-  renderList();
-}
-
-function clearSearch(){
-  searchQuery='';
-  if($('searchBox'))$('searchBox').value='';
-  $('searchResults').textContent='';
-  renderList();
-}
-
-/* ============ SELECT MODE ============ */
-function toggleSelectMode(){
-  selectMode=!selectMode;
-  $('selModeBtn').classList.toggle('active',selectMode);
-  if(!selectMode)selectedIds={};
-  renderList();
-  showMsg(selectMode?'✅ Select ON':'☑️ Select OFF');
-}
-
-function toggleSelect(id){
-  selectedIds[id]=!selectedIds[id];
-  renderList();
-}
-
-function allSelect(){
-  if(!selectMode){showMsg('پہلے Select Mode آن کریں',true);return}
-  var items=getFilteredRecords();
-  items.forEach(function(x){selectedIds[x.id]=true});
-  renderList();
-  showMsg('✅ سب منتخب');
-}
-
-function getSelectedIds(){
-  return Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-}
-
-/* ============ ACTIONS ============ */
-function editSelected(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
-  if(idx===-1)return;
-  var nn=prompt('نیا متن:',items[idx].content);
-  if(nn&&nn.trim()){
-    items[idx].content=nn.trim();
-    lsSet(NEWS_KEY,items);
-    selectedIds={};
-    renderList();
-    showMsg('✅ اپڈیٹ');
-  }
-}
-
-function deleteSelected(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  showConfirm('ڈیلیٹ',ids.length+' ریکارڈ ڈیلیٹ کریں؟ (بحال ہو سکتے)',function(){
-    var items=lsGet(NEWS_KEY,[]);
-    items.forEach(function(x){
-      if(ids.indexOf(String(x.id))!==-1){x.deleted=true;x.deletedAt=Date.now()}
-    });
-    lsSet(NEWS_KEY,items);
-    selectedIds={};
-    renderList();
-    showMsg('✅ '+ids.length+' ڈیلیٹ');
-  });
-}
-
-function deleteAll(){
-  var items=getFilteredRecords();
-  if(!items.length){showMsg('کوئی ریکارڈ نہیں',true);return}
-  showConfirm('سب ڈیلیٹ',items.length+' ریکارڈ ڈیلیٹ کریں؟ (بحال ہو سکتے)',function(){
-    var all=lsGet(NEWS_KEY,[]);
-    var ids=items.map(function(x){return x.id});
-    all.forEach(function(x){
-      if(ids.indexOf(x.id)!==-1){x.deleted=true;x.deletedAt=Date.now()}
-    });
-    lsSet(NEWS_KEY,all);
-    selectedIds={};
-    renderList();
-    showMsg('✅ سب ڈیلیٹ');
-  });
-}
-
-function clearAll(){
-  showConfirm('مستقل صاف','تمام ریکارڈ مستقل حذف ہو جائیں گے! واپس نہیں آ سکیں گے!',function(){
-    lsSet(NEWS_KEY,[]);
-    selectedIds={};
-    renderList();
-    showMsg('🧹 سب صاف');
-  });
-}
-
-function restoreSelected(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  var items=lsGet(NEWS_KEY,[]);
-  items.forEach(function(x){
-    if(ids.indexOf(String(x.id))!==-1){x.deleted=false;delete x.deletedAt}
-  });
-  lsSet(NEWS_KEY,items);
-  selectedIds={};
-  renderList();
-  showMsg('♻️ بحال');
-}
-
-function permanentDelete(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  showConfirm('مستقل ڈیلیٹ',ids.length+' ریکارڈ مستقل حذف؟ واپس نہیں!',function(){
-    lsSet(NEWS_KEY,lsGet(NEWS_KEY,[]).filter(function(x){return ids.indexOf(String(x.id))===-1}));
-    selectedIds={};
-    renderList();
-    showMsg('🗑️ مستقل ڈیلیٹ');
-  });
-}
-
-function restoreAll(){
-  var items=lsGet(NEWS_KEY,[]);
-  var cnt=0;
-  items.forEach(function(x){if(x.deleted){x.deleted=false;delete x.deletedAt;cnt++}});
-  lsSet(NEWS_KEY,items);
-  renderList();
-  showMsg('♻️ '+cnt+' بحال');
-}
-
-function emptyRecycle(){
-  var all=lsGet(NEWS_KEY,[]);
-  var cnt=all.filter(function(x){return x.deleted}).length;
-  if(!cnt){showMsg('کوئی ڈیلیٹ شدہ نہیں',true);return}
-  showConfirm('بن خالی',cnt+' ریکارڈ مستقل حذف؟ واپس نہیں!',function(){
-    lsSet(NEWS_KEY,all.filter(function(x){return !x.deleted}));
-    renderList();
-    showMsg('🗑️ بن خالی');
-  });
-}
-
-function moveUp(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
-  if(idx<=0){showMsg('مزید اوپر نہیں',true);return}
-  var t=items[idx];items[idx]=items[idx-1];items[idx-1]=t;
-  lsSet(NEWS_KEY,items);
-  selectedIds={};
-  renderList();
-  showMsg('🔼 اوپر');
-}
-
-function moveDown(){
-  var ids=getSelectedIds();
-  if(!ids.length){showMsg('پہلے منتخب کریں',true);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
-  if(idx===-1||idx>=items.length-1){showMsg('مزید نیچے نہیں',true);return}
-  var t=items[idx];items[idx]=items[idx+1];items[idx+1]=t;
-  lsSet(NEWS_KEY,items);
-  selectedIds={};
-  renderList();
-  showMsg('🔽 نیچے');
-}
-
-function setPassword(){
-  var p=prompt('نیا پاس ورڈ (خالی=ہٹائیں):');
-  if(p===null)return;
-  if(p){localStorage.setItem('ns_pwd',p);showMsg('✅ پاس ورڈ سیٹ')}
-  else{localStorage.removeItem('ns_pwd');showMsg('✅ ہٹا دیا')}
-}
-
-function toggleDark(){
-  document.body.classList.toggle('dark');
-  var on=document.body.classList.contains('dark');
-  $('darkBtn').classList.toggle('active',on);
-  lsSet('ns_dark',on);
-}
-
-/* ============ SETTINGS ============ */
-function openSettings(){
-  if(localStorage.getItem('ns_pwd')){
-    var p=prompt('🔑 پاس ورڈ:');
-    if(p!==localStorage.getItem('ns_pwd')){showMsg('❌ غلط پاس ورڈ',true);return}
-  }
-  renderList();
-  $('nsOverlay').classList.add('active');
-}
-
-function closeSettings(){$('nsOverlay').classList.remove('active')}
-
-function toggleAdvanced(){
-  var w=$('advWrap'),a=$('advArrow');
-  if(w.style.display==='none'){w.style.display='block';a.textContent='▲'}
-  else{w.style.display='none';a.textContent='▼'}
-}
-
-function toggleSub(n){
-  document.querySelectorAll('.ns-sub').forEach(function(el){
-    if(el.getAttribute('data-sub')==String(n)){
-      el.classList.toggle('open');
-      var ar=el.querySelector('.arrow');
-      ar.textContent=el.classList.contains('open')?'▼':'▶';
-    } else {
-      el.classList.remove('open');
-      var ar2=el.querySelector('.arrow');
-      if(ar2)ar2.textContent='▶';
+  var monthAgo=Date.now()-30*86400000;
+  return historyRecords.filter(function(r){
+    if(fMember!=='all' && r.memberName!==fMember)return false;
+    if(fDate==='today' && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))!==0)return false;
+    if(fDate==='yesterday'){
+      var yd=new Date(Date.now()-86400000);
+      if(r.dateStr.indexOf(pad(yd.getDate())+'/'+pad(yd.getMonth()+1))!==0)return false;
     }
+    if(fDate==='7days' && r.timestamp<weekAgo)return false;
+    if(fDate==='30days' && r.timestamp<monthAgo)return false;
+    return true;
   });
 }
 
-/* ============ REPORT ============ */
-function downloadReport(period){
-  var all=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted});
-  var now=Date.now();
-  var items;
-  if(period==='today'){var t=todayStr();items=all.filter(function(x){return x.date===t})}
-  else if(period==='week'){items=all.filter(function(x){return x.timestamp>=now-7*86400000})}
-  else if(period==='month'){items=all.filter(function(x){return x.timestamp>=now-30*86400000})}
-  else{items=all}
-
-  var newsN=items.filter(function(x){return x.type==='news'}).length;
-  var alertN=items.filter(function(x){return x.type==='alert'}).length;
-
-  var report='📊 نیوز/الرٹ رپورٹ\n';
-  report+='═════════════════\n';
-  report+='دورانیہ: '+(period==='today'?'آج':period==='week'?'ہفتہ':period==='month'?'مہینہ':'سب')+'\n';
-  report+='تاریخ: '+new Date().toLocaleString('ur-PK')+'\n';
-  report+='═════════════════\n\n';
-  report+='کل ریکارڈ: '+items.length+'\n';
-  report+='📰 News: '+newsN+'\n';
-  report+='🚨 Alert: '+alertN+'\n\n';
-  report+='═════════════════\n';
-  report+='تفصیلات:\n';
-  report+='═════════════════\n';
-  items.forEach(function(x,i){
-    report+=(i+1)+'. '+(x.type==='news'?'📰':'🚨')+' '+x.content+'\n';
-    report+='   📅 '+(x.dateStr||'')+(x.auto?' [خودکار]':' [دستی]')+'\n';
+function buildTextReport(records){
+  var grouped={};
+  records.forEach(function(r){
+    if(!grouped[r.memberName])grouped[r.memberName]={name:r.memberName,rank:r.rank,events:[]};
+    grouped[r.memberName].events.push(r);
   });
-
-  var blob=new Blob([report],{type:'text/plain;charset=utf-8'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='report_'+period+'_'+Date.now()+'.txt';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(function(){URL.revokeObjectURL(url)},1000);
-  showMsg('📥 رپورٹ ڈاؤن لوڈ');
-}
-
-/* ============ EXPORT ============ */
-function exportData(format){
-  var items=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted});
-  if(!items.length){showMsg('کوئی ریکارڈ نہیں',true);return}
-
-  var content,mime,ext;
-  if(format==='json'){
-    content=JSON.stringify(items,null,2);
-    mime='application/json';ext='json';
-  } else if(format==='csv'){
-    content='Index,Type,Content,Date,Time,Auto,Skipped\n';
-    items.forEach(function(x,i){
-      content+=(i+1)+','+
-        x.type+','+
-        '"'+x.content.replace(/"/g,'""')+'",'+
-        (x.date||'')+','+
-        (x.dateStr||'')+','+
-        (x.auto?'yes':'no')+','+
-        (x.skipped?'yes':'no')+'\n';
+  var txt='👤 ممبر ڈیوٹی ہسٹری\n';
+  txt+='═══════════════════════\n';
+  txt+='📅 '+new Date().toLocaleDateString('en-GB')+'\n';
+  txt+='═══════════════════════\n\n';
+  var i=1;
+  Object.keys(grouped).forEach(function(name){
+    var g=grouped[name];
+    txt+=(i++)+'. 👤 '+g.name+' ('+g.rank+')\n';
+    g.events.forEach(function(ev){
+      txt+='   '+ev.text+'\n';
+      if(ev.extra)txt+='   '+ev.extra+'\n';
+      txt+='   📅 '+ev.dateStr+'\n';
+      txt+='\n';
     });
-    mime='text/csv;charset=utf-8';ext='csv';
+    txt+='───────────────────────\n\n';
+  });
+  return txt.trim();
+}
+
+function shareRecords(){
+  var recs=getCurrentFiltered();
+  if(!recs.length){showMsg('کوئی ریکارڈ نہیں',true);return}
+  // Selected only if any selected
+  var selectedRecs=recs.filter(function(r){return selectedIds[r.id]});
+  if(selectedRecs.length>0)recs=selectedRecs;
+  var txt=buildTextReport(recs);
+  if(navigator.share){
+    navigator.share({title:'ممبر ڈیوٹی ہسٹری',text:txt}).catch(function(){});
   } else {
-    content='News/Alert Records\n';
-    content+='===================\n';
-    items.forEach(function(x,i){
-      content+=(i+1)+'. '+(x.type==='news'?'📰':'🚨')+' '+x.content+'\n';
-      content+='   '+(x.dateStr||'')+(x.auto?' [auto]':' [manual]')+'\n\n';
-    });
-    mime='text/plain;charset=utf-8';ext='txt';
+    copyToClipboard(txt);
+    showMsg('✅ کاپی ہو گیا (Share نہیں)');
   }
-
-  var blob=new Blob([content],{type:mime});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='news_history_'+Date.now()+'.'+ext;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(function(){URL.revokeObjectURL(url)},1000);
-  showMsg('📥 '+ext.toUpperCase()+' ڈاؤن لوڈ');
 }
 
-/* ============ MODAL ============ */
-var _modalCb=null;
-function showConfirm(title,body,cb){
-  $('modalTitle').textContent=title;
-  $('modalBody').textContent=body;
-  _modalCb=cb;
-  $('nsModal').classList.add('active');
-}
-function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
-function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
-
-/* ============ INIT ============ */
-document.addEventListener('DOMContentLoaded',function(){
-  if(lsGet('ns_dark',false)){document.body.classList.add('dark');$('darkBtn').classList.add('active')}
-  populateMembers();
-  renderList();
-});
-</script>
-</body>
-</html>
+function copyRecords(){
+  var recs=getCurrentFiltered();
+  if(!recs.length){showMsg('کوئی ریکارڈ نہیں',true);return}
+  var selectedRecs
