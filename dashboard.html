@@ -1,1 +1,460 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Task Manager — Entry</title>
+<style>
+:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
+.container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
+.section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
 
+/* SETTINGS — لسٹ اسٹائل */
+.settings-panel{display:none;background:#2c3e50;border:1px solid #1a252f;border-radius:8px;padding:6px;flex-direction:column;gap:3px}
+.settings-panel.open{display:flex}
+.settings-panel button{padding:9px 12px;font-size:11px;font-weight:700;border-radius:6px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit;text-align:right;display:flex;justify-content:space-between;align-items:center;transition:.15s}
+.settings-panel button:hover{background:#4a6278}
+.settings-panel button.del{color:#ff9999}
+.settings-panel button.active-mode{background:#10b981;border-color:#10b981}
+.settings-panel button .lbl{flex:1;text-align:right}
+.settings-panel button .ico{font-size:13px}
+
+/* ONE LINE ADD/EDIT */
+.add-edit-row{display:flex;gap:3px;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:2px}
+.add-edit-row input,.add-edit-row select{padding:7px 5px;border:1px solid #cbd5e1;border-radius:6px;font-size:10.5px;text-align:center;font-family:inherit;outline:none;min-width:0}
+.add-edit-row input[type="text"]{flex:2 1 80px}
+.add-edit-row input[type="number"]{flex:0 0 50px;max-width:50px}
+.add-edit-row select{flex:1 1 60px;max-width:75px}
+.add-edit-row .btn{padding:7px 8px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:12px;flex:0 0 auto;transition:.15s}
+.add-edit-row .btn:active{transform:scale(.94)}
+.add-edit-row select.task-sel{flex:1.5 1 80px;max-width:110px}
+.btn-add{background:var(--success);color:#fff}
+.btn-edit{background:#dbeafe;color:#1e40af}
+.btn-del{background:#fee2e2;color:#991b1b}
+.btn-edit,.btn-del{display:none}
+.btn-edit.show,.btn-del.show{display:inline-block}
+
+/* 2 COLUMNS */
+.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.mini-col{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:6px;font-size:10px;text-align:center;min-height:60px;max-height:200px;overflow-y:auto}
+.mini-col.daily-col{background:#f0fdf4;border-color:#86efac}
+.mini-col.kabhi-col{background:#eff6ff;border-color:#bfdbfe}
+.mini-col h4{font-size:10.5px;margin-bottom:4px;color:#475569;padding-bottom:3px;border-bottom:1px dashed #cbd5e1;font-weight:800}
+.mini-col .item{padding:4px 3px;border-bottom:1px dotted #e2e8f0;font-size:10px;display:flex;justify-content:space-between;align-items:center;gap:4px}
+.mini-col .item:last-child{border-bottom:none}
+.mini-col .item .name{flex:1;text-align:right;font-weight:700;color:#0f172a}
+.mini-col .item .pt{font-size:9px;font-weight:900;color:#d97706;background:#fef3c7;padding:1px 5px;border-radius:8px;flex-shrink:0}
+.mini-col .empty{color:#94a3b8;font-size:9.5px;padding:8px;font-weight:600}
+
+/* RECORD */
+.scroll-head{display:flex;justify-content:space-between;align-items:center}
+.scroll-head span{font-size:11px;font-weight:bold;color:#475569}
+.btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
+.scroll-list{max-height:260px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
+.record{padding:7px 8px;border-bottom:1px dotted #e2e8f0;display:flex;align-items:center;gap:6px;background:#fff;margin-bottom:3px;border-radius:5px;border-right:3px solid #94a3b8}
+.record:last-child{border-bottom:none;margin-bottom:0}
+.record.daily{border-right-color:#10b981;background:#f0fdf4}
+.record.kabhi{border-right-color:#3b82f6;background:#eff6ff}
+.record.sel{border-right-color:var(--accent);background:#eff6ff}
+.record .chk{width:15px;height:15px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.record .body{flex:1;min-width:0;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.record .nm{font-size:11.5px;font-weight:800;color:#0f172a;flex:1;text-align:right}
+.record .type-tag{font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px;flex-shrink:0}
+.record .type-tag.daily{background:#d1fae5;color:#059669;border:1px solid #10b981}
+.record .type-tag.kabhi{background:#dbeafe;color:#1e40af;border:1px solid #3b82f6}
+/* پوائنٹ موٹا */
+.record .pts{font-size:13px;font-weight:900;color:#d97706;background:#fef3c7;padding:2px 9px;border-radius:10px;flex-shrink:0;border:1px solid #fcd34d}
+.record-empty{text-align:center;color:#94a3b8;font-size:11px;padding:14px;font-weight:700}
+
+/* STATE */
+.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0;margin-top:6px}
+.state-item{flex:1;text-align:center;padding:4px 2px;border-radius:4px;font-size:9.5px;font-weight:800}
+.state-item .val{font-size:14px;font-weight:900;display:block;margin-top:1px}
+.state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
+.state-item:nth-child(2){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
+.state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
+
+/* MSG */
+.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
+.inline-msg.show{display:block}
+.inline-msg.error{background:#c0392b}
+
+/* MODAL */
+.ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.ns-modal.active{display:flex}
+.ns-modal-box{background:#fff;border-radius:12px;max-width:340px;width:100%}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0;text-align:center}
+.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600;text-align:center}
+.ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
+.ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+
+/* DARK */
+body.dark{background:#0f172a;color:#e2e8f0}
+body.dark .section-card{background:#1e293b;border-color:#334155}
+body.dark .mini-col{background:#0f172a;border-color:#334155}
+body.dark .mini-col h4{color:#cbd5e1;border-color:#334155}
+body.dark .mini-col .item .name{color:#f1f5f9}
+body.dark .record{background:#1e293b;border-color:#334155}
+body.dark .record.daily{background:#064e3b}
+body.dark .record.kabhi{background:#1e3a8a}
+body.dark .record .nm{color:#f1f5f9}
+body.dark .scroll-list{background:#0f172a}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="section-card">
+    <div class="section-header">
+      <span>📋 ٹاسک مینیجر</span>
+      <button onclick="toggleSettings('taskSettings')">⚙️</button>
+    </div>
+
+    <!-- SETTINGS — لسٹ اسٹائل -->
+    <div class="settings-panel" id="taskSettings">
+      <button onclick="toggleSelectMode()" id="selModeBtn"><span class="lbl">☑️ Select Mode</span><span class="ico">›</span></button>
+      <button onclick="allSelect()"><span class="lbl">✅ All Select</span><span class="ico">›</span></button>
+      <button onclick="editSelected()"><span class="lbl">✏️ Edit</span><span class="ico">›</span></button>
+      <button class="del" onclick="deleteSelected()"><span class="lbl">🗑️ Delete</span><span class="ico">›</span></button>
+      <button class="del" onclick="deleteAll()"><span class="lbl">❌ Delete All</span><span class="ico">›</span></button>
+      <button class="del" onclick="clearRecord()"><span class="lbl">🧹 Clear</span><span class="ico">›</span></button>
+      <button onclick="moveOrder(-1)"><span class="lbl">🔼 Oper</span><span class="ico">›</span></button>
+      <button onclick="moveOrder(1)"><span class="lbl">🔽 Nichy</span><span class="ico">›</span></button>
+      <button onclick="setPassword()"><span class="lbl">🔑 Password</span><span class="ico">›</span></button>
+      <button onclick="toggleDark()" id="darkBtn"><span class="lbl">🌙 Dark Mode</span><span class="ico">›</span></button>
+      <button onclick="toggleShow()"><span class="lbl">📊 Dash Show</span><span class="ico">›</span></button>
+      <button onclick="toggleHide()"><span class="lbl">📊 Dash Hide</span><span class="ico">›</span></button>
+      <button onclick="toggleSettings('taskSettings')"><span class="lbl">⬇️ Close</span><span class="ico">›</span></button>
+    </div>
+
+    <!-- ONE LINE ADD/EDIT -->
+    <div class="add-edit-row">
+      <input type="text" id="newTaskName" placeholder="ٹاسک...">
+      <select id="newTaskType">
+        <option value="Daily">🟢</option>
+        <option value="Occasional">🔵</option>
+      </select>
+      <input type="number" id="newTaskPoints" placeholder="5" value="5" min="1" max="100">
+      <button class="btn btn-add" onclick="addTask()">➕</button>
+      <select id="editTaskSelect" class="task-sel" onchange="onTaskSelectChange()">
+        <option value="">ٹاسک</option>
+      </select>
+      <button class="btn btn-edit" id="editTaskBtn" onclick="editTask()">✏️</button>
+      <button class="btn btn-del" id="delTaskBtn" onclick="deleteTask()">🗑️</button>
+    </div>
+
+    <!-- 2 COLUMNS -->
+    <div class="two-cols">
+      <div class="mini-col daily-col">
+        <h4>🟢 روزانہ</h4>
+        <div id="dailyTaskList"></div>
+      </div>
+      <div class="mini-col kabhi-col">
+        <h4>🔵 کبھی</h4>
+        <div id="occTaskList"></div>
+      </div>
+    </div>
+
+    <!-- RECORD -->
+    <div class="scroll-head">
+      <span>📋 ریکارڈ:</span>
+      <button class="btn-close" onclick="toggleClose('taskListContainer')">⬇️ Close</button>
+    </div>
+    <div class="scroll-list" id="taskListContainer"></div>
+
+    <!-- STATE — آخر میں، پوائنٹ سمیت -->
+    <div class="state-patti" id="statePatti">
+      <div class="state-item">🟢 روزانہ<span class="val" id="taskDaily">0</span></div>
+      <div class="state-item">🔵 کبھی<span class="val" id="taskOcc">0</span></div>
+      <div class="state-item">🏆 پوائنٹس<span class="val" id="taskTotalPoints">0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="ns-modal" id="nsModal">
+  <div class="ns-modal-box">
+    <div class="ns-modal-h" id="modalTitle">تصدیق</div>
+    <div class="ns-modal-b" id="modalBody">—</div>
+    <div class="ns-modal-f">
+      <button onclick="modalClose()" style="background:#e2e8f0;color:#64748b">✕ بند</button>
+      <button onclick="modalConfirm()" style="background:#dc2626;color:#fff">✓ ہاں</button>
+    </div>
+  </div>
+</div>
+
+<div class="inline-msg" id="inlineMsg"></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
+function toggleSettings(id){var el=$(id);if(el)el.classList.toggle('open')}
+function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
+
+var TASK_KEY='sec3_task_and_point_manager_data';
+
+var selectMode=false,selectedIds={};
+var _modalCb=null;
+
+function getTasks(){return lsGet(TASK_KEY,[])}
+function setTasks(t){lsSet(TASK_KEY,t)}
+
+/* ============ ADD ============ */
+function addTask(){
+  var name=$('newTaskName').value.trim();
+  var type=$('newTaskType').value;
+  var points=parseInt($('newTaskPoints').value)||5;
+  if(!name){showMsg('ٹاسک کا نام لکھیں',true);return}
+  if(points<1||points>100){showMsg('پوائنٹس 1-100',true);return}
+  var tasks=getTasks();
+  if(tasks.some(function(t){return t.title.toLowerCase()===name.toLowerCase()})){
+    showMsg('ٹاسک موجود ہے',true);return;
+  }
+  tasks.unshift({
+    id:Date.now(),
+    title:name,
+    type:type,
+    points:points,
+    createdAt:Date.now()
+  });
+  setTasks(tasks);
+  $('newTaskName').value='';
+  $('newTaskPoints').value='5';
+  renderAll();
+  showMsg('✅ شامل');
+}
+
+/* ============ VISIBILITY ============ */
+function onTaskSelectChange(){
+  var val=$('editTaskSelect').value;
+  if(val){$('editTaskBtn').classList.add('show');$('delTaskBtn').classList.add('show')}
+  else{$('editTaskBtn').classList.remove('show');$('delTaskBtn').classList.remove('show')}
+}
+
+/* ============ EDIT ============ */
+function editTask(){
+  var id=$('editTaskSelect').value;
+  if(!id){showMsg('ٹاسک منتخب کریں',true);return}
+  var tasks=getTasks();
+  var idx=tasks.findIndex(function(t){return String(t.id)===String(id)});
+  if(idx===-1){showMsg('نہیں ملا',true);return}
+  var task=tasks[idx];
+  var nn=prompt('نیا نام:',task.title);
+  if(nn===null)return;
+  if(nn.trim()){
+    task.title=nn.trim();
+    var nt=prompt('ٹائپ (Daily/Occasional):',task.type);
+    if(nt==='Daily'||nt==='Occasional')task.type=nt;
+    var np=prompt('پوائنٹس:',task.points);
+    var pn=parseInt(np);
+    if(!isNaN(pn)&&pn>=1&&pn<=100)task.points=pn;
+    setTasks(tasks);
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+/* ============ DELETE ============ */
+function deleteTask(){
+  var id=$('editTaskSelect').value;
+  if(!id){showMsg('ٹاسک منتخب کریں',true);return}
+  var tasks=getTasks();
+  var t=tasks.find(function(x){return String(x.id)===String(id)});
+  if(!t)return;
+  showConfirm('ڈیلیٹ','"'+t.title+'" ڈیلیٹ؟',function(){
+    setTasks(tasks.filter(function(x){return String(x.id)!==String(id)}));
+    $('editTaskSelect').value='';
+    onTaskSelectChange();
+    renderAll();
+    showMsg('✅ ڈیلیٹ');
+  });
+}
+
+/* ============ RENDER ============ */
+function renderAll(){
+  renderDropdown();
+  render2Cols();
+  renderRecord();
+  renderState();
+}
+
+function renderDropdown(){
+  var sel=$('editTaskSelect');
+  var cur=sel.value;
+  var tasks=getTasks();
+  sel.innerHTML='<option value="">ٹاسک</option>';
+  tasks.forEach(function(t){
+    var icon=t.type==='Daily'?'🟢':'🔵';
+    sel.innerHTML+='<option value="'+t.id+'">'+icon+' '+esc(t.title)+' ('+t.points+')</option>';
+  });
+  if(cur)sel.value=cur;
+  onTaskSelectChange();
+}
+
+function render2Cols(){
+  var tasks=getTasks();
+  var daily=tasks.filter(function(t){return t.type==='Daily'});
+  var occ=tasks.filter(function(t){return t.type==='Occasional'});
+  var dBox=$('dailyTaskList'),oBox=$('occTaskList');
+
+  dBox.innerHTML=daily.length?daily.map(function(t,i){
+    return '<div class="item"><span class="name">'+(i+1)+'. '+esc(t.title)+'</span><span class="pt">'+t.points+'</span></div>';
+  }).join(''):'<div class="empty">کوئی نہیں</div>';
+
+  oBox.innerHTML=occ.length?occ.map(function(t,i){
+    return '<div class="item"><span class="name">'+(i+1)+'. '+esc(t.title)+'</span><span class="pt">'+t.points+'</span></div>';
+  }).join(''):'<div class="empty">کوئی نہیں</div>';
+}
+
+function renderRecord(){
+  var tasks=getTasks();
+  var box=$('taskListContainer');
+  if(!tasks.length){
+    box.innerHTML='<div class="record-empty">📭 کوئی ٹاسک نہیں</div>';
+    return;
+  }
+  box.innerHTML=tasks.map(function(t,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[t.id]?'checked':'')+' onchange="toggleSel('+t.id+')">':'';
+    var cls=t.type==='Daily'?'daily':'kabhi';
+    var icon=t.type==='Daily'?'🟢':'🔵';
+    var typeLabel=t.type==='Daily'?'روزانہ':'کبھی';
+    return '<div class="record '+cls+(selectedIds[t.id]?' sel':'')+'">'+chk
+      +'<div class="body">'
+      +'<span class="nm">'+(i+1)+'️⃣ '+esc(t.title)+'</span>'
+      +'<span class="type-tag '+cls+'">'+icon+' '+typeLabel+'</span>'
+      +'<span class="pts">🏆 '+t.points+'</span>'
+      +'</div></div>';
+  }).join('');
+}
+
+function renderState(){
+  var tasks=getTasks();
+  var daily=tasks.filter(function(t){return t.type==='Daily'});
+  var occ=tasks.filter(function(t){return t.type==='Occasional'});
+  var totalPts=tasks.reduce(function(s,t){return s+(t.points||0)},0);
+  $('taskDaily').textContent=daily.length;
+  $('taskOcc').textContent=occ.length;
+  $('taskTotalPoints').textContent=totalPts;
+}
+
+/* ============ SELECT MODE ============ */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  $('selModeBtn').classList.toggle('active-mode',selectMode);
+  if(!selectMode)selectedIds={};
+  renderRecord();
+  showMsg(selectMode?'✅ Select ON':'☑️ OFF');
+}
+function toggleSel(id){selectedIds[id]=!selectedIds[id];renderRecord()}
+function getSelectedIds(){return Object.keys(selectedIds).filter(function(k){return selectedIds[k]})}
+function allSelect(){
+  if(!selectMode){showMsg('پہلے Select Mode',true);return}
+  getTasks().forEach(function(t){selectedIds[t.id]=true});
+  renderRecord();
+  showMsg('✅ سب');
+}
+
+/* ============ EDIT/DELETE Selected ============ */
+function editSelected(){
+  var ids=getSelectedIds();
+  if(!ids.length){showMsg('منتخب کریں',true);return}
+  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
+  var tasks=getTasks();
+  var idx=tasks.findIndex(function(t){return String(t.id)===ids[0]});
+  if(idx===-1)return;
+  var nn=prompt('نیا نام:',tasks[idx].title);
+  if(nn&&nn.trim()){
+    tasks[idx].title=nn.trim();
+    setTasks(tasks);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+function deleteSelected(){
+  var ids=getSelectedIds();
+  if(!ids.length){showMsg('منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ',ids.length+' ٹاسک ڈیلیٹ؟',function(){
+    setTasks(getTasks().filter(function(t){return ids.indexOf(String(t.id))===-1}));
+    selectedIds={};
+    renderAll();
+    showMsg('✅ '+ids.length+' ڈیلیٹ');
+  });
+}
+
+function deleteAll(){
+  showConfirm('سب ڈیلیٹ','تمام ٹاسک ڈیلیٹ؟',function(){
+    setTasks([]);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ سب ڈیلیٹ');
+  });
+}
+
+function clearRecord(){
+  showConfirm('صاف','تمام ٹاسک صاف؟',function(){
+    setTasks([]);
+    selectedIds={};
+    renderAll();
+    showMsg('🧹 صاف');
+  });
+}
+
+function moveOrder(dir){
+  var ids=getSelectedIds();
+  if(!ids.length){showMsg('منتخب کریں',true);return}
+  var tasks=getTasks();
+  var idx=tasks.findIndex(function(t){return String(t.id)===ids[0]});
+  if(idx===-1)return;
+  var ni=idx+dir;
+  if(ni<0||ni>=tasks.length){showMsg('مزید نہیں',true);return}
+  var t=tasks[idx];tasks[idx]=tasks[ni];tasks[ni]=t;
+  setTasks(tasks);
+  selectedIds={};
+  renderAll();
+  showMsg(dir===-1?'🔼':'🔽');
+}
+
+function setPassword(){
+  var p=prompt('پاس ورڈ (خالی=ہٹائیں):');
+  if(p===null)return;
+  if(p){localStorage.setItem('task_pwd',p);showMsg('✅ پاس ورڈ')}
+  else{localStorage.removeItem('task_pwd');showMsg('✅ ہٹا')}
+}
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  var on=document.body.classList.contains('dark');
+  $('darkBtn').classList.toggle('active-mode',on);
+  lsSet('task_dark',on);
+}
+
+function toggleShow(){$('statePatti').style.display='flex';showMsg('📊 Show',true)}
+function toggleHide(){$('statePatti').style.display='none';showMsg('📊 Hide',true)}
+
+/* ============ MODAL ============ */
+function showConfirm(title,body,cb){
+  $('modalTitle').textContent=title;
+  $('modalBody').textContent=body;
+  _modalCb=cb;
+  $('nsModal').classList.add('active');
+}
+function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
+function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded',function(){
+  if(lsGet('task_dark',false)){document.body.classList.add('dark');$('darkBtn').classList.add('active-mode')}
+  renderAll();
+});
+</script>
+</body>
+</html>
