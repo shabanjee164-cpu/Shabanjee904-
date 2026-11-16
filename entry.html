@@ -11,7 +11,8 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 .section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
 .section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
-.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:16px;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.section-header button:hover{background:#e2e8f0}
 .compact-row{display:flex;gap:4px;align-items:center;padding:2px}
 .compact-row input,.compact-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;min-width:0;flex:1}
 .compact-row .btn{padding:7px 10px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:11px;background:var(--success);color:#fff}
@@ -38,11 +39,16 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
 .inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
 .inline-msg.show{display:block}
+.inline-msg.error{background:#c0392b}
 body.dark{background:#0f172a;color:#e2e8f0}
 body.dark .section-card{background:#1e293b;border-color:#334155}
 body.dark .scroll-list{background:#0f172a;color:#e2e8f0}
 body.dark .record .txt{color:#f1f5f9}
 body.dark .record .meta{color:#94a3b8}
+
+/* FLOATING SHOW (when hidden) */
+.floating-show{position:fixed;bottom:16px;right:16px;background:#2563eb;color:#fff;padding:10px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:9997;display:none;font-family:inherit;border:none}
+.floating-show.show{display:block}
 
 /* QUICK SIDE PANEL */
 .panel-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:9998;opacity:0;visibility:hidden;transition:.3s}
@@ -55,9 +61,9 @@ body.dark .record .meta{color:#94a3b8}
 .quick-panel .side-btn.del{background:#7f1d1d;border-color:#991b1b}
 .quick-panel .side-btn.del:hover{background:#991b1b}
 .quick-panel .side-btn.active{background:#10b981;border-color:#059669}
+.quick-panel .side-btn.detailed{background:#2563eb;border-color:#1d4ed8}
 .quick-panel .side-btn .lbl{flex:1;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10.5px}
 .quick-panel .side-btn .arrow{color:#94a3b8;flex-shrink:0;font-weight:400;font-size:13px}
-.quick-panel .side-btn.detailed{background:#2563eb;border-color:#1d4ed8}
 
 /* DETAILED OVERLAY */
 .ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
@@ -108,7 +114,6 @@ body.dark .record .meta{color:#94a3b8}
 .ns-limit-row label{flex:1;font-weight:700}
 .ns-limit-row input{width:55px;padding:4px;border:1px solid #cbd5e1;border-radius:4px;font-size:10px;font-weight:700;text-align:center;font-family:inherit;outline:none}
 .ns-limit-row .unit{font-size:9px;color:#64748b;font-weight:700;min-width:40px}
-.ns-add-btn{width:100%;padding:8px;background:#ecfdf5;color:#059669;border:1.5px dashed #a7f3d0;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:6px}
 .ns-speed-row{display:flex;gap:3px;margin-top:4px}
 .ns-speed-btn{flex:1;padding:8px 2px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:7px;cursor:pointer;font-size:15px;font-family:inherit;color:#94a3b8}
 .ns-speed-btn.active{background:#eff6ff;border-color:#2563eb;color:#2563eb}
@@ -153,15 +158,38 @@ body.dark .record .meta{color:#94a3b8}
 .ns-history-item:last-child{border-bottom:none}
 .ns-history-item .tm{background:#2563eb;color:#fff;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:800;flex-shrink:0}
 .ns-history-item .tx{flex:1;font-weight:600}
+
+/* PASSWORD MODALS */
+.pwd-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.pwd-modal.active{display:flex}
+.pwd-box{background:#fff;border-radius:12px;max-width:340px;width:100%;overflow:hidden}
+.pwd-h{padding:14px;background:#2563eb;color:#fff;font-size:14px;font-weight:800;text-align:center}
+.pwd-body{padding:14px;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow-y:auto}
+.pwd-body input{padding:9px;border:1px solid #cbd5e1;border-radius:8px;font-size:12px;font-family:inherit;outline:none;width:100%}
+.pwd-body label{font-size:11px;font-weight:700;color:#475569;margin-top:4px}
+.pwd-body .link{background:none;border:none;color:#2563eb;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;text-align:right;padding:4px 0;text-decoration:underline}
+.pwd-body .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dotted #e2e8f0;font-size:11.5px;font-weight:700}
+.pwd-body .sec-title{font-size:11px;font-weight:800;color:#1e40af;background:#eff6ff;padding:6px 8px;border-radius:6px;margin-top:8px;border-right:3px solid #2563eb}
+.pwd-sw{position:relative;width:42px;height:24px;flex-shrink:0}
+.pwd-sw input{opacity:0;width:0;height:0}
+.pwd-sw span{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:24px;transition:.25s}
+.pwd-sw span:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s}
+.pwd-sw input:checked+span{background:#10b981}
+.pwd-sw input:checked+span:before{transform:translateX(18px)}
+.pwd-foot{display:flex;gap:6px;padding:0 14px 14px}
+.pwd-foot button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+.pwd-foot .cancel{background:#e2e8f0;color:#64748b}
+.pwd-foot .ok{background:#16a34a;color:#fff}
+.pwd-foot .danger{background:#dc2626;color:#fff}
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="a1MainContainer">
 <div class="section-card">
   <div class="section-header">
     <span>📰 نیوز اینڈ الرٹ مینیجر</span>
-    <button onclick="openQuickPanel()">⚙️</button>
+    <button onclick="openQuickPanel()" title="Settings">⚙️</button>
   </div>
   <div class="compact-row">
     <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option></select>
@@ -184,7 +212,9 @@ body.dark .record .meta{color:#94a3b8}
 </div>
 </div>
 
-<!-- QUICK SIDE PANEL (180px, no bg) -->
+<button class="floating-show" id="floatingShow" onclick="nsDashShow()">📊 A1 دکھائیں</button>
+
+<!-- QUICK SIDE PANEL -->
 <div class="panel-overlay" id="qOverlay" onclick="closeQuickPanel()"></div>
 <div class="quick-panel" id="qPanel">
   <button class="side-btn" onclick="nsSelectMode()" id="selModeBtn"><span class="lbl">☑️ Select</span><span class="arrow">›</span></button>
@@ -195,7 +225,7 @@ body.dark .record .meta{color:#94a3b8}
   <button class="side-btn del" onclick="nsClear()"><span class="lbl">🧹 Clear</span><span class="arrow">›</span></button>
   <button class="side-btn" onclick="nsMoveUp()"><span class="lbl">🔼 Oper</span><span class="arrow">›</span></button>
   <button class="side-btn" onclick="nsMoveDown()"><span class="lbl">🔽 Nichy</span><span class="arrow">›</span></button>
-  <button class="side-btn" onclick="nsSetPassword()"><span class="lbl">🔑 Pass</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="openPwdSetup()"><span class="lbl">🔑 Pass</span><span class="arrow">›</span></button>
   <button class="side-btn" onclick="nsToggleDark()" id="darkBtn"><span class="lbl">🌙 Dark</span><span class="arrow">›</span></button>
   <button class="side-btn" onclick="nsDashShow()"><span class="lbl">📊 Show</span><span class="arrow">›</span></button>
   <button class="side-btn" onclick="nsDashHide()"><span class="lbl">📊 Hide</span><span class="arrow">›</span></button>
@@ -294,7 +324,6 @@ body.dark .record .meta{color:#94a3b8}
         <div class="ns-sub" data-sub="3">
           <button class="ns-sub-h" onclick="nsToggleSub(3)">📋 چیک لسٹ (<span id="nsCheckCount">10</span>) <span class="arrow">▶</span></button>
           <div class="ns-sub-body">
-            <button class="ns-add-btn" onclick="nsAddCheck()">➕ نیا شامل</button>
             <div id="nsCheckList"></div>
             <div class="ns-tog"><span>🔁 Loop</span><label class="ns-sw"><input type="checkbox" id="nsLoop" onchange="nsSave()"><span></span></label></div>
             <label class="ns-lbl">Loop وقفہ</label>
@@ -379,6 +408,7 @@ body.dark .record .meta{color:#94a3b8}
   </div>
 </div>
 
+<!-- EDIT CHECK MODAL -->
 <div class="ns-modal" id="nsModal">
   <div class="ns-modal-box">
     <div class="ns-modal-h">✏️ تبدیل کریں</div>
@@ -396,6 +426,73 @@ body.dark .record .meta{color:#94a3b8}
   </div>
 </div>
 
+<!-- PASSWORD LOCK MODAL -->
+<div class="pwd-modal" id="pwdLockModal">
+  <div class="pwd-box">
+    <div class="pwd-h">🔒 A1 Locked</div>
+    <div class="pwd-body">
+      <label>پاس ورڈ درج کریں</label>
+      <input type="password" id="pwdLockInput" placeholder="••••••">
+      <button class="link" onclick="showForgotModal()">پاس ورڈ بھول گئے؟</button>
+    </div>
+    <div class="pwd-foot">
+      <button class="ok" onclick="tryUnlock()">🔓 Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD SETUP MODAL -->
+<div class="pwd-modal" id="pwdSetupModal">
+  <div class="pwd-box">
+    <div class="pwd-h">🔑 Password Settings</div>
+    <div class="pwd-body">
+      <div class="toggle-row">
+        <span>پاس ورڈ چالو (پورا سیکشن)</span>
+        <label class="pwd-sw"><input type="checkbox" id="pwdOnChk" onchange="togglePwdOn()"><span></span></label>
+      </div>
+
+      <div class="sec-title">🆕 نیا پاس ورڈ</div>
+      <label>نیا پاس ورڈ</label>
+      <input type="password" id="pwdNewInp" placeholder="خالی = تبدیل نہیں">
+      <label>دوبارہ لکھیں</label>
+      <input type="password" id="pwdNewInp2" placeholder="دوبارہ">
+      <button class="link" onclick="saveNewPwdOnly()" style="color:#16a34a">💾 صرف پاس ورڈ محفوظ کریں</button>
+
+      <div class="sec-title">🔐 بھول جانے پر (سیکیورٹی سوال)</div>
+      <label>سیکیورٹی سوال</label>
+      <input type="text" id="pwdQInp" placeholder="مثلاً: ماں کا نام؟">
+      <label>جواب</label>
+      <input type="text" id="pwdAInp" placeholder="جواب">
+      <button class="link" onclick="saveSecurityQA()" style="color:#16a34a">💾 سوال/جواب محفوظ کریں</button>
+
+      <div class="sec-title">🗑️ مکمل ری سیٹ</div>
+      <button class="link" onclick="resetPasswordFull()" style="color:#dc2626">⚠️ پاس ورڈ + سوال + جواب سب ہٹا دیں</button>
+    </div>
+    <div class="pwd-foot">
+      <button class="cancel" onclick="closePwdSetup()">✕ بند</button>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="pwd-modal" id="pwdForgotModal">
+  <div class="pwd-box">
+    <div class="pwd-h">🔐 Forgot Password</div>
+    <div class="pwd-body">
+      <label id="forgotQLabel">سیکیورٹی سوال</label>
+      <input type="text" id="forgotAInp" placeholder="جواب">
+      <div id="forgotNewWrap" style="display:none">
+        <label>نیا پاس ورڈ</label>
+        <input type="password" id="forgotNewInp" placeholder="نیا پاس ورڈ">
+      </div>
+    </div>
+    <div class="pwd-foot">
+      <button class="cancel" onclick="closeForgotModal()">✕</button>
+      <button class="ok" id="forgotOkBtn" onclick="checkForgotAnswer()">✓ جواب</button>
+    </div>
+  </div>
+</div>
+
 <div class="inline-msg" id="inlineMsg"></div>
 
 <script>
@@ -404,17 +501,31 @@ function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.par
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function pad(n){return String(n).padStart(2,'0')}
-function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
-function showMsg(t,s){var el=$('inlineMsg');el.textContent=t;el.style.background=s===false?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
+function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'':'none'}
+function showMsg(t,ok){var el=$('inlineMsg');el.textContent=t;el.style.background=ok===false?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function makeId(){return 'r_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)}
 
+/* ===== KEYS ===== */
 var NEWS_KEY='sec10_news_alerts_data';
 var NS_KEY='ns_settings_v7';
 var NS_AUDIO_KEY='ns_audio_v3';
 var NS_HISTORY_KEY='ns_history_v1';
 var NS_SKIP_KEY='ns_skip_v2';
-var NS_LAST_RUN='ns_last_run_v2';
+
+var A1_PWD_KEY='a1_pwd';
+var A1_PWD_ON='a1_pwd_on';
+var A1_PWD_Q='a1_pwd_q';
+var A1_PWD_A='a1_pwd_a';
+
+/* ===== AUDIO CONTEXT (shared) ===== */
+var _audioCtx=null;
+function getAudioCtx(){
+  if(!_audioCtx){try{_audioCtx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  if(_audioCtx&&_audioCtx.state==='suspended')_audioCtx.resume();
+  return _audioCtx;
+}
 
 var TUNES=[
   {name:"بیپ سادہ",p:[[800,200]]},{name:"بیپ ڈبل",p:[[800,150],[0,50],[800,150]]},
@@ -436,14 +547,141 @@ var nsAudio={news:null,alert:null};
 var nsEditIdx=-1,nsModalType_='alert';
 var mediaRec={},recChunks={};
 var tuneNewsIdx=0,tuneAlertIdx=0;
-var pattyRunning=false,pattyQueue=[],pattyIdx=0,pattyTimer=null;
 var checkRunning=false;
 var _priority='mixed',_prefMember='';
 
+/* ===== PASSWORD SYSTEM ===== */
+function pwdIsOn(){return localStorage.getItem(A1_PWD_ON)==='1'&&!!localStorage.getItem(A1_PWD_KEY)}
+function pwdCheck(input){return input===localStorage.getItem(A1_PWD_KEY)}
+function pwdSet(p){localStorage.setItem(A1_PWD_KEY,p);localStorage.setItem(A1_PWD_ON,'1')}
+function pwdDisable(){localStorage.removeItem(A1_PWD_ON)}
+function pwdResetAll(){
+  localStorage.removeItem(A1_PWD_KEY);
+  localStorage.removeItem(A1_PWD_ON);
+  localStorage.removeItem(A1_PWD_Q);
+  localStorage.removeItem(A1_PWD_A);
+  sessionStorage.removeItem('a1_unlocked');
+}
+
+function tryLockOnBoot(){
+  if(!pwdIsOn())return;
+  if(sessionStorage.getItem('a1_unlocked')==='1')return;
+  $('a1MainContainer').style.display='none';
+  $('pwdLockModal').classList.add('active');
+  setTimeout(function(){var el=$('pwdLockInput');if(el)el.focus()},300);
+}
+function tryUnlock(){
+  var v=$('pwdLockInput').value;
+  if(!v){showMsg('پاس ورڈ لکھیں',false);return}
+  if(pwdCheck(v)){
+    sessionStorage.setItem('a1_unlocked','1');
+    $('pwdLockModal').classList.remove('active');
+    $('a1MainContainer').style.display='flex';
+    $('pwdLockInput').value='';
+    showMsg('🔓 کھل گیا',true);
+  } else showMsg('❌ غلط',false);
+}
+
+function openPwdSetup(){
+  closeQuickPanel();
+  $('pwdOnChk').checked=pwdIsOn();
+  $('pwdNewInp').value='';
+  $('pwdNewInp2').value='';
+  $('pwdQInp').value=localStorage.getItem(A1_PWD_Q)||'';
+  $('pwdAInp').value=localStorage.getItem(A1_PWD_A)||'';
+  $('pwdSetupModal').classList.add('active');
+}
+function closePwdSetup(){$('pwdSetupModal').classList.remove('active')}
+
+function togglePwdOn(){
+  var on=$('pwdOnChk').checked;
+  if(on){
+    if(!localStorage.getItem(A1_PWD_KEY)&&!$('pwdNewInp').value){
+      showMsg('پہلے پاس ورڈ سیٹ کریں',false);
+      $('pwdOnChk').checked=false;
+      return;
+    }
+    localStorage.setItem(A1_PWD_ON,'1');
+    showMsg('🔒 پاس ورڈ چالو',true);
+  } else {
+    pwdDisable();
+    sessionStorage.removeItem('a1_unlocked');
+    showMsg('🔓 پاس ورڈ بند',true);
+  }
+}
+
+function saveNewPwdOnly(){
+  var np=$('pwdNewInp').value.trim();
+  var np2=$('pwdNewInp2').value.trim();
+  if(!np){showMsg('نیا پاس ورڈ لکھیں',false);return}
+  if(np!==np2){showMsg('❌ دونوں مختلف ہیں',false);return}
+  pwdSet(np);
+  sessionStorage.setItem('a1_unlocked','1');
+  $('pwdOnChk').checked=true;
+  $('pwdNewInp').value='';
+  $('pwdNewInp2').value='';
+  showMsg('✅ نیا پاس ورڈ محفوظ',true);
+}
+
+function saveSecurityQA(){
+  var q=$('pwdQInp').value.trim();
+  var a=$('pwdAInp').value.trim();
+  if(!q||!a){showMsg('سوال اور جواب دونوں لکھیں',false);return}
+  localStorage.setItem(A1_PWD_Q,q);
+  localStorage.setItem(A1_PWD_A,a);
+  showMsg('✅ سوال/جواب محفوظ',true);
+}
+
+function resetPasswordFull(){
+  if(!confirm('⚠️ پاس ورڈ + سیکیورٹی سوال + جواب سب ہٹ جائیں گے۔ جاری رکھیں؟'))return;
+  pwdResetAll();
+  $('pwdOnChk').checked=false;
+  $('pwdNewInp').value='';
+  $('pwdNewInp2').value='';
+  $('pwdQInp').value='';
+  $('pwdAInp').value='';
+  sessionStorage.setItem('a1_unlocked','1');
+  showMsg('🗑️ مکمل ری سیٹ',true);
+}
+
+function showForgotModal(){
+  var q=localStorage.getItem(A1_PWD_Q);
+  if(!q){showMsg('سیکیورٹی سوال سیٹ نہیں — مکمل ری سیٹ کریں',false);return}
+  $('forgotQLabel').textContent='سوال: '+q;
+  $('forgotAInp').value='';
+  $('forgotNewInp').value='';
+  $('forgotNewWrap').style.display='none';
+  $('forgotOkBtn').textContent='✓ جواب';
+  $('pwdForgotModal').setAttribute('data-step','1');
+  $('pwdForgotModal').classList.add('active');
+}
+function closeForgotModal(){$('pwdForgotModal').classList.remove('active')}
+function checkForgotAnswer(){
+  var step=$('pwdForgotModal').getAttribute('data-step')||'1';
+  if(step==='1'){
+    var ans=($('forgotAInp').value||'').trim();
+    var real=localStorage.getItem(A1_PWD_A);
+    if(!real||!ans){showMsg('جواب لکھیں',false);return}
+    if(ans.toLowerCase()!==real.toLowerCase()){showMsg('❌ غلط جواب',false);return}
+    $('forgotNewWrap').style.display='block';
+    $('forgotOkBtn').textContent='💾 سیٹ';
+    $('pwdForgotModal').setAttribute('data-step','2');
+  } else {
+    var np=$('forgotNewInp').value.trim();
+    if(!np){showMsg('نیا پاس ورڈ لکھیں',false);return}
+    pwdSet(np);
+    sessionStorage.setItem('a1_unlocked','1');
+    closeForgotModal();
+    $('pwdLockModal').classList.remove('active');
+    $('a1MainContainer').style.display='flex';
+    showMsg('✅ نیا پاس ورڈ سیٹ',true);
+  }
+}
+
+/* ===== QUICK PANEL ===== */
 function openQuickPanel(){
-  if(localStorage.getItem('ns_pwd')){
-    var p=prompt('🔑 پاس ورڈ:');
-    if(p!==localStorage.getItem('ns_pwd')){showMsg('❌ غلط',false);return}
+  if(pwdIsOn()&&sessionStorage.getItem('a1_unlocked')!=='1'){
+    showMsg('پہلے پاس ورڈ کھولیں',false);return;
   }
   $('qOverlay').classList.add('active');
   $('qPanel').classList.add('active');
@@ -461,25 +699,35 @@ function openDetailedSettings(){
 }
 function closeDetailedSettings(){$('nsOverlay').classList.remove('active')}
 
+/* ===== ENTRY ===== */
 function saveNews(){
   var type=$('newsType').value,content=$('newsContent').value.trim();
   if(!content){showMsg('متن لکھیں',false);return}
   var items=lsGet(NEWS_KEY,[]);
-  items.unshift({id:Date.now(),type:type,content:content,timestamp:Date.now(),dateStr:pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1)+' '+pad(new Date().getHours())+':'+pad(new Date().getMinutes()),date:todayStr(),auto:false,skipped:false,deleted:false});
+  var d=new Date();
+  items.unshift({
+    id:makeId(),
+    type:type,content:content,timestamp:Date.now(),
+    dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes()),
+    date:todayStr(),auto:false,skipped:false,deleted:false
+  });
   lsSet(NEWS_KEY,items);
   $('newsContent').value='';
   renderRecords();
   showMsg('✅ محفوظ',true);
 }
 
+/* ===== RENDER ===== */
 function renderRecords(){
   var all=lsGet(NEWS_KEY,[]);
-  var skips=lsGet(NS_SKIP_KEY,{});
   var today=todayStr();
+  all.forEach(function(x){if(!x.date&&x.timestamp){var d=new Date(x.timestamp);x.date=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}});
+
   var items;
   if(filterMode==='today')items=all.filter(function(x){return x.date===today&&!x.deleted});
   else if(filterMode==='all')items=all.filter(function(x){return !x.deleted});
   else items=all.filter(function(x){return x.deleted});
+
   var box=$('newsRecordList');
   if(!items.length){
     box.innerHTML='<div style="text-align:center;color:#94a3b8;padding:8px">کوئی ریکارڈ نہیں</div>';
@@ -489,13 +737,13 @@ function renderRecords(){
     box.innerHTML=items.map(function(x){
       var icon=x.type==='news'?'📰':'🚨';
       var sel=selectedIds[x.id]?' sel':'';
-      var skipped=x.skipped;
-      var blurCls=(skipped&&blurOn&&!x.deleted)?' faded':'';
+      var blurCls=(x.skipped&&blurOn&&!x.deleted)?' faded':'';
       var delCls=x.deleted?' deleted':'';
-      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[x.id]?'checked':'')+' onchange="toggleSelect('+x.id+')">':'';
-      return '<div class="record'+sel+blurCls+delCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta">📅 '+(x.dateStr||'')+(skipped?' · ❌':'')+(x.deleted?' · 🗑️':'')+'</div></div></div>';
+      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[x.id]?'checked':'')+' onchange="toggleSelect(\''+x.id+'\')">':'';
+      return '<div class="record'+sel+blurCls+delCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta">📅 '+(x.dateStr||'')+(x.skipped?' · ❌':'')+(x.deleted?' · 🗑️':'')+'</div></div></div>';
     }).join('');
   }
+
   var todayAll=all.filter(function(x){return x.date===today&&!x.deleted});
   $('newsCount').textContent=todayAll.filter(function(x){return x.type==='news'}).length;
   $('alertCount').textContent=todayAll.filter(function(x){return x.type==='alert'}).length;
@@ -514,6 +762,7 @@ function cycleFilter(){
 }
 function toggleSelect(id){selectedIds[id]=!selectedIds[id];renderRecords()}
 
+/* ===== SELECT / EDIT / DELETE / MOVE ===== */
 function nsSelectMode(){
   selectMode=!selectMode;
   $('selModeBtn').classList.toggle('active',selectMode);
@@ -554,9 +803,10 @@ function nsDeleteSelected(){
   selectedIds={};renderRecords();showMsg('✅ '+ids.length+' ڈیلیٹ',true);
 }
 function nsDeleteAll(){
-  if(!confirm('سب ڈیلیٹ؟'))return;
+  if(!confirm('آج کے سب ڈیلیٹ؟'))return;
+  var today=todayStr();
   var items=lsGet(NEWS_KEY,[]);
-  items.forEach(function(x){if(!x.deleted){x.deleted=true;x.deletedAt=Date.now()}});
+  items.forEach(function(x){if(x.date===today&&!x.deleted){x.deleted=true;x.deletedAt=Date.now()}});
   lsSet(NEWS_KEY,items);
   selectedIds={};renderRecords();showMsg('✅ سب ڈیلیٹ',true);
 }
@@ -582,21 +832,28 @@ function nsMoveDown(){
   var t=items[idx];items[idx]=items[idx+1];items[idx+1]=t;
   lsSet(NEWS_KEY,items);selectedIds={};renderRecords();showMsg('🔽',true);
 }
-function nsSetPassword(){
-  var p=prompt('نیا پاس ورڈ (خالی=ہٹائیں):');
-  if(p===null)return;
-  if(p){localStorage.setItem('ns_pwd',p);showMsg('✅ پاس ورڈ',true)}
-  else{localStorage.removeItem('ns_pwd');showMsg('✅ ہٹا',true)}
-}
+
+/* ===== DARK / SHOW / HIDE ===== */
 function nsToggleDark(){
   document.body.classList.toggle('dark');
   var on=document.body.classList.contains('dark');
   $('darkBtn').classList.toggle('active',on);
   lsSet('ns_dark',on);
 }
-function nsDashShow(){showMsg('📊 Show — dashboard پر نظر آئے گا',true)}
-function nsDashHide(){showMsg('📊 Hide — dashboard پر چھپے گا',true)}
+function nsDashShow(){
+  $('a1MainContainer').style.display='flex';
+  $('floatingShow').classList.remove('show');
+  closeQuickPanel();
+  showMsg('📊 دکھایا',true);
+}
+function nsDashHide(){
+  $('a1MainContainer').style.display='none';
+  $('floatingShow').classList.add('show');
+  closeQuickPanel();
+  showMsg('📊 چھپایا',true);
+}
 
+/* ===== CHECKS DATA ===== */
 var DEFAULT_CHECKS=[
   {id:1,key:"leaves",name:"زیادہ چھٹیاں",type:"alert",enabled:true,limit:3,unit:"دن"},
   {id:2,key:"points",name:"کم پوائنٹس",type:"alert",enabled:true,limit:10,unit:"پوائنٹس"},
@@ -632,7 +889,6 @@ function nsLoad(){
     if(s.alertDelay!==undefined)$('nsAlertDelay').value=s.alertDelay;
     if(s.expiryHours!==undefined)$('nsExpiryHours').value=s.expiryHours;
     nsChecks=s.checks||JSON.parse(JSON.stringify(DEFAULT_CHECKS));
-    nsChecks.forEach(function(c){if(!c.key){var d=DEFAULT_CHECKS.find(function(x){return x.name===c.name});if(d)c.key=d.key}});
     nsSpeed=s.speed||{news:3,alert:3};
     nsMode=s.mode||{news:'auto',alert:'auto'};
     tuneNewsIdx=s.tuneNewsIdx||0;
@@ -656,7 +912,11 @@ function nsPopulateMembers(){
   var mem=lsGet('sec4_duty_manager_data_v4',[]);
   var cur=sel.value;
   sel.innerHTML='<option value="">کوئی نہیں</option>';
-  mem.forEach(function(m){sel.innerHTML+='<option value="'+esc(m.name)+'">'+esc(m.name)+'</option>'});
+  mem.forEach(function(m){
+    var op=document.createElement('option');
+    op.value=m.name;op.textContent=m.name;
+    sel.appendChild(op);
+  });
   if(cur)sel.value=cur;
 }
 
@@ -665,7 +925,6 @@ function nsToggleAll(){
   if(w.style.display==='none'){w.style.display='block';a.textContent='▲'}
   else{w.style.display='none';a.textContent='▼'}
 }
-
 function nsToggleSub(n){
   document.querySelectorAll('.ns-sub').forEach(function(el){
     if(el.getAttribute('data-sub')==String(n)){el.classList.toggle('open');var ar=el.querySelector('.arrow');ar.textContent=el.classList.contains('open')?'▼':'▶'}
@@ -686,57 +945,29 @@ function nsRenderChecks(){
   }).join('');
   $('nsCheckCount').textContent=nsChecks.length;
 }
-
 function nsRenderLimits(){
   $('nsLimitsList').innerHTML=nsChecks.map(function(c,i){
     return '<div class="ns-limit-row"><label>'+(i+1)+'. '+esc(c.name)+'</label><input type="number" value="'+(c.limit||0)+'" onchange="nsUpdLimit('+i+',this.value)"><span class="unit">'+esc(c.unit||'')+'</span></div>';
   }).join('');
 }
-
 function nsRenderTunes(){
   ['news','alert'].forEach(function(t){
     var box=$('tunes'+t.charAt(0).toUpperCase()+t.slice(1)+'Grid');
     var sel=t==='news'?tuneNewsIdx:tuneAlertIdx;
     box.innerHTML=TUNES.map(function(tune,i){
-      return '<div class="ns-tune '+(i===sel?'sel':'')+'"><span class="num">'+(i+1)+'</span><span class="nm">'+tune.name+'</span><button onclick="playTune('+i+',\''+t+'\')">▶️</button><button class="choose" onclick="chooseTune(\''+t+'\','+i+')">✓</button></div>';
+      return '<div class="ns-tune '+(i===sel?'sel':'')+'"><span class="num">'+(i+1)+'</span><span class="nm">'+tune.name+'</span><button onclick="playTuneSeq('+i+',\''+t+'\')">▶️</button><button class="choose" onclick="chooseTune(\''+t+'\','+i+')">✓</button></div>';
     }).join('');
   });
 }
-
 function chooseTune(t,i){
   if(t==='news')tuneNewsIdx=i;else tuneAlertIdx=i;
   nsRenderTunes();nsSave();showMsg('✅ دھن',true);
-}
-
-function playTune(i,t){playTuneSeq(i,t)}
-
-function playTuneSeq(i,t){
-  var tune=TUNES[i];if(!tune)return;
-  var vol=(t==='news'?parseInt($('nsVolNews').value):parseInt($('nsVolAlert').value))/100;
-  var spd=(parseInt($('nsTuneSpeed').value)||10)/10;
-  try{
-    var ctx=new (window.AudioContext||window.webkitAudioContext)();
-    var time=ctx.currentTime;
-    tune.p.forEach(function(n){
-      var freq=n[0],dur=(n[1]/1000)/spd;
-      if(freq>0){
-        var o=ctx.createOscillator(),g=ctx.createGain();
-        o.connect(g);g.connect(ctx.destination);
-        o.frequency.value=freq;
-        g.gain.setValueAtTime(vol,time);
-        g.gain.exponentialRampToValueAtTime(0.001,time+dur);
-        o.start(time);o.stop(time+dur);
-      }
-      time+=dur+0.05;
-    });
-  }catch(e){}
 }
 
 function nsUpdLimit(i,v){nsChecks[i].limit=parseInt(v)||0;nsSave()}
 function nsToggleCheck(i){nsChecks[i].enabled=!nsChecks[i].enabled;nsRenderChecks();nsRenderLimits();nsSave()}
 function nsToggleType(i){nsChecks[i].type=nsChecks[i].type==='alert'?'news':'alert';nsRenderChecks();nsSave()}
 function nsDelCheck(i){if(!confirm('ڈیلیٹ؟'))return;nsChecks.splice(i,1);nsRenderChecks();nsRenderLimits();nsSave()}
-function nsAddCheck(){nsChecks.push({id:Date.now(),key:'custom_'+Date.now(),name:"نیا",type:"alert",enabled:true,limit:1,unit:"گنتی",custom:true});nsRenderChecks();nsRenderLimits();nsSave()}
 function nsEditCheck(i){
   nsEditIdx=i;
   $('nsModalName').value=nsChecks[i].name;
@@ -788,6 +1019,7 @@ function nsSave(){
   lsSet(NS_KEY,s);
 }
 
+/* ===== AUDIO ===== */
 function nsUpdAudioUI(){
   ['news','alert'].forEach(function(t){
     var s=$('audio'+t.charAt(0).toUpperCase()+t.slice(1)+'Status');
@@ -795,7 +1027,6 @@ function nsUpdAudioUI(){
     else{s.textContent='سیٹ نہیں';s.className='ns-audio-status unset'}
   });
 }
-
 function nsUploadAudio(t,e){
   var f=e.target.files[0];if(!f)return;
   if(f.size>2*1024*1024){showMsg('❌ 2MB سے کم',false);return}
@@ -803,7 +1034,6 @@ function nsUploadAudio(t,e){
   r.onload=function(ev){nsAudio[t]=ev.target.result;lsSet(NS_AUDIO_KEY,nsAudio);nsUpdAudioUI();showMsg('✅',true)};
   r.readAsDataURL(f);
 }
-
 function nsToggleRecord(t){
   var btn=$('rec'+t.charAt(0).toUpperCase()+t.slice(1)+'Btn');
   var status=$('audio'+t.charAt(0).toUpperCase()+t.slice(1)+'Status');
@@ -828,7 +1058,6 @@ function nsToggleRecord(t){
     status.textContent='ریکارڈنگ...';status.className='ns-audio-status rec';
   }).catch(function(e){showMsg('❌ مائیک نہیں',false)});
 }
-
 function nsPlayCustom(t){
   if(!nsAudio[t]){playTuneSeq(t==='news'?tuneNewsIdx:tuneAlertIdx,t);return}
   try{
@@ -843,6 +1072,29 @@ function nsDelAudio(t){
   nsAudio[t]=null;lsSet(NS_AUDIO_KEY,nsAudio);nsUpdAudioUI();showMsg('✅',true);
 }
 
+function playTuneSeq(i,t){
+  var tune=TUNES[i];if(!tune)return;
+  var vol=(t==='news'?parseInt($('nsVolNews').value):parseInt($('nsVolAlert').value))/100;
+  var spd=(parseInt($('nsTuneSpeed').value)||10)/10;
+  var ctx=getAudioCtx();if(!ctx)return;
+  try{
+    var time=ctx.currentTime;
+    tune.p.forEach(function(n){
+      var freq=n[0],dur=(n[1]/1000)/spd;
+      if(freq>0){
+        var o=ctx.createOscillator(),g=ctx.createGain();
+        o.connect(g);g.connect(ctx.destination);
+        o.frequency.value=freq;
+        g.gain.setValueAtTime(vol,time);
+        g.gain.exponentialRampToValueAtTime(0.001,time+dur);
+        o.start(time);o.stop(time+dur);
+      }
+      time+=dur+0.05;
+    });
+  }catch(e){}
+}
+
+/* ===== CHECK ENGINE — collect all texts ===== */
 function nsRunCheck(){
   if(checkRunning){showMsg('پہلے سے چل رہا',false);return}
   checkRunning=true;
@@ -854,34 +1106,34 @@ function nsRunCheck(){
   var skips=lsGet(NS_SKIP_KEY,{});
 
   nsChecks.forEach(function(c){
-    if(!c.enabled||!c.key||c.custom)return;
+    if(!c.enabled||!c.key)return;
+    var texts=[];
     try{
-      var text=null;
       if(c.key==='leaves'){
         var leaves=lsGet('sec4_duty_leaves_data_v4',[]);
         var cnt={};
         leaves.forEach(function(l){cnt[l.name]=(cnt[l.name]||0)+1});
-        Object.keys(cnt).forEach(function(n){if(cnt[n]>=(c.limit||3))text=n+' نے '+cnt[n]+' چھٹیاں لیں'});
+        Object.keys(cnt).forEach(function(n){if(cnt[n]>=(c.limit||3))texts.push(n+' نے '+cnt[n]+' چھٹیاں لیں')});
       }
       else if(c.key==='points'){
         var recs=lsGet('sec12_task_records',[]);
         var pts={};
         recs.forEach(function(r){pts[r.member]=(pts[r.member]||0)+(r.points||0)});
-        Object.keys(pts).forEach(function(n){if(pts[n]<(c.limit||10))text=n+' کے پوائنٹس کم ('+pts[n]+')'});
+        Object.keys(pts).forEach(function(n){if(pts[n]<(c.limit||10))texts.push(n+' کے پوائنٹس کم ('+pts[n]+')')});
       }
       else if(c.key==='skips'){
         var sk=lsGet('sec4_duty_skipped_data',[]);
         var cnt2={};
         sk.forEach(function(x){if(!x.hasReason)cnt2[x.member]=(cnt2[x.member]||0)+1});
-        Object.keys(cnt2).forEach(function(n){if(cnt2[n]>=(c.limit||3))text=n+' نے '+cnt2[n]+' skip'});
+        Object.keys(cnt2).forEach(function(n){if(cnt2[n]>=(c.limit||3))texts.push(n+' نے '+cnt2[n]+' skip')});
       }
       else if(c.key==='attendance'){
         var mem=lsGet('sec4_duty_manager_data_v4',[]);
-        mem.forEach(function(m){if(!m.onLeave&&!m.onDuty&&(!m.dutyEndedAt||m.dutyEndedAt<today))text=m.name+' نے آج حاضری نہیں لگائی'});
+        mem.forEach(function(m){if(!m.onLeave&&!m.onDuty&&(!m.dutyEndedAt||m.dutyEndedAt<today))texts.push(m.name+' نے آج حاضری نہیں لگائی')});
       }
       else if(c.key==='rashan'){
         var rash=lsGet('sec11_rashan_data_v2',[]);
-        if(!rash.some(function(r){return r.timestamp>=today}))text='آج کوئی راشن add نہیں';
+        if(!rash.some(function(r){return r.timestamp>=today}))texts.push('آج کوئی راشن add نہیں');
       }
       else if(c.key==='duty_partial'){
         var mem2=lsGet('sec4_duty_manager_data_v4',[]);
@@ -889,7 +1141,7 @@ function nsRunCheck(){
           if(m.onDuty&&m.dutyStart){
             var mins=Math.floor((Date.now()-m.dutyStart)/60000);
             var lim=c.unit==='گھنٹہ'?(c.limit||1)*60:(c.limit||30);
-            if(mins<lim&&mins>5)text=m.name+' کی ڈیوٹی ادھوری ('+mins+' منٹ)';
+            if(mins<lim&&mins>5)texts.push(m.name+' کی ڈیوٹی ادھوری ('+mins+' منٹ)');
           }
         });
       }
@@ -897,26 +1149,27 @@ function nsRunCheck(){
         var bud=lsGet('sec11_rashan_budget_v2',0);
         var rash2=lsGet('sec11_rashan_data_v2',[]);
         var tot=0;rash2.forEach(function(r){tot+=(r.qty||1)*(r.rate||0)});
-        if(bud>0&&tot/bud*100>=(c.limit||80))text='راشن بجٹ '+Math.round(tot/bud*100)+'%';
+        if(bud>0&&tot/bud*100>=(c.limit||80))texts.push('راشن بجٹ '+Math.round(tot/bud*100)+'%');
       }
       else if(c.key==='complaints'){
         var comp=lsGet('member_complain_data_v4',[]);
-        var todayComp=comp.filter(function(x){return x.timestamp>=today&&x.status===null});
-        if(todayComp.length>0)text=todayComp.length+' نئی شکایات pending';
+        var tc=comp.filter(function(x){return x.timestamp>=today&&x.status===null});
+        if(tc.length>0)texts.push(tc.length+' نئی شکایات pending');
       }
       else if(c.key==='sixdays'){
         var mem3=lsGet('sec4_duty_manager_data_v4',[]);
-        mem3.forEach(function(m){if((m.dutyCount||0)>=(c.limit||6))text=m.name+' نے '+m.dutyCount+' دن کام — آرام'});
+        mem3.forEach(function(m){if((m.dutyCount||0)>=(c.limit||6))texts.push(m.name+' نے '+m.dutyCount+' دن کام — آرام')});
       }
       else if(c.key==='good_duty'){
         var mem4=lsGet('sec4_duty_manager_data_v4',[]);
-        mem4.forEach(function(m){if(m.dutyEndedAt&&m.dutyEndedAt>=today&&!m.onLeave)text=m.name+' نے آج اچھی ڈیوٹی کی ⭐'});
+        mem4.forEach(function(m){if(m.dutyEndedAt&&m.dutyEndedAt>=today&&!m.onLeave)texts.push(m.name+' نے آج اچھی ڈیوٹی کی ⭐')});
       }
-      if(text){
+
+      texts.forEach(function(text){
         var skipKey='chk_'+c.id;
         if(s.skipPerm&&skips[skipKey])return;
-        results.push({text:text,type:c.type,id:c.id,key:c.key});
-      }
+        results.push({text:text,type:c.type,id:c.id});
+      });
     }catch(e){}
   });
 
@@ -931,30 +1184,21 @@ function nsRunCheck(){
 
   if(s.saveHist){
     var items=lsGet(NEWS_KEY,[]);
+    var d=new Date();
     results.forEach(function(r){
-      items.unshift({id:Date.now()+Math.random(),type:r.type,content:r.text,timestamp:Date.now(),dateStr:pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1)+' '+pad(new Date().getHours())+':'+pad(new Date().getMinutes()),date:todayD,auto:true,skipped:false,deleted:false});
+      items.unshift({
+        id:makeId(),type:r.type,content:r.text,timestamp:Date.now(),
+        dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes()),
+        date:todayD,auto:true,skipped:false,deleted:false
+      });
     });
     lsSet(NEWS_KEY,items);
     renderRecords();
   }
-
-  if(s.priority==='alert')results.sort(function(a,b){return a.type==='alert'?-1:1});
-  else if(s.priority==='news')results.sort(function(a,b){return a.type==='news'?-1:1});
-
-  if(s.prefMember){
-    results.sort(function(a,b){
-      var pa=a.text.indexOf(s.prefMember)!==-1;
-      var pb=b.text.indexOf(s.prefMember)!==-1;
-      if(pa&&!pb)return -1;if(pb&&!pa)return 1;return 0;
-    });
-  }
-
-  pattyQueue=results;pattyIdx=0;
   showMsg('✅ '+results.length+' پیغام',true);
-  renderRecords();
 }
 
-function nsStopCheck(){pattyRunning=false;clearTimeout(pattyTimer);showMsg('⏹️ رکا',true)}
+function nsStopCheck(){checkRunning=false;showMsg('⏹️ رکا',true)}
 function nsTestTune(){playTuneSeq(tuneNewsIdx,'news')}
 function nsTestTuneAlert(){playTuneSeq(tuneAlertIdx,'alert')}
 function nsTestVib(){if(navigator.vibrate)navigator.vibrate([200,100,200])}
@@ -983,6 +1227,7 @@ function nsRenderHistory(){
 }
 function nsClearHistory(){if(!confirm('صاف؟'))return;lsSet(NS_HISTORY_KEY,[]);nsRenderHistory();showMsg('🧹',true)}
 
+/* ===== AUTO CLEANUP ===== */
 function autoCleanup(){
   var s=lsGet(NS_KEY,{});
   var items=lsGet(NEWS_KEY,[]);
@@ -998,10 +1243,15 @@ function autoCleanup(){
   if(items.length!==before){lsSet(NEWS_KEY,items);renderRecords()}
 }
 
+/* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded',function(){
   nsLoad();
+  tryLockOnBoot();
   autoCleanup();
-  renderRecords();
+  if(sessionStorage.getItem('a1_unlocked')==='1'||!pwdIsOn()){
+    $('a1MainContainer').style.display='flex';
+    renderRecords();
+  }
 });
 
 setInterval(autoCleanup,3600000);
