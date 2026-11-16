@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Member Duty History</title>
+<title>A3 — News/Alert History</title>
 <style>
 :root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -17,7 +17,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .filter-row{display:flex;gap:4px}
 .filter-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-family:inherit;outline:none;flex:1;text-align:center;font-weight:700;background:#fff}
 
-/* SHARE/COPY ROW */
+/* ACTION ROW */
 .action-row{display:flex;justify-content:space-between;align-items:center;gap:4px;margin-top:4px}
 .action-row span{font-size:11px;font-weight:bold;color:#475569}
 .action-btns{display:flex;gap:3px}
@@ -26,27 +26,23 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .btn-copy{background:#fef3c7;color:#92400e}
 .btn-close{background:#64748b;color:#fff}
 
-/* RECORD */
-.record-list{max-height:400px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
-.member-block{padding:8px 6px;border-bottom:2px solid #cbd5e1;margin-bottom:4px}
-.member-block:last-child{border-bottom:none;margin-bottom:0}
-.member-hdr{display:flex;align-items:center;gap:4px;margin-bottom:6px;background:#eff6ff;padding:5px 6px;border-radius:5px}
-.member-hdr .chk{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
-.member-hdr .nm{font-size:12px;font-weight:800;color:#1e40af;flex:1}
-.member-hdr .rk{font-size:9.5px;color:#64748b;font-weight:700}
-.event-item{padding:5px 8px;margin-bottom:3px;border-radius:5px;display:flex;align-items:flex-start;gap:4px;background:#fff;border-right:3px solid #94a3b8}
-.event-item .chk{width:14px;height:14px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin-top:2px}
-.event-item .body{flex:1;min-width:0}
-.event-item .txt{font-size:10.5px;font-weight:700;color:#0f172a}
-.event-item .extra{font-size:9.5px;color:#64748b;margin-top:2px}
-.event-item .dt{font-size:9px;color:#94a3b8;margin-top:2px;font-weight:600}
-/* Event colors */
-.event-item.ev-done{border-right-color:#10b981;background:#f0fdf4}
-.event-item.ev-partial{border-right-color:#dc2626;background:#fef2f2}
-.event-item.ev-leave{border-right-color:#d97706;background:#fffbeb}
-.event-item.ev-active{border-right-color:#2563eb;background:#eff6ff}
-.event-item.ev-new{border-right-color:#8b5cf6;background:#f5f3ff}
-.event-item.ev-change{border-right-color:#6b7280;background:#f9fafb}
+/* RECORD LIST */
+.record-list{max-height:420px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
+.record-item{padding:8px 6px;border-bottom:1px dotted #e2e8f0;display:flex;gap:6px;background:#fff;margin-bottom:4px;border-radius:5px;border-right:3px solid #94a3b8;align-items:flex-start}
+.record-item.news{border-right-color:#059669;background:#f0fdf4}
+.record-item.alert{border-right-color:#dc2626;background:#fef2f2}
+.record-item.deleted{opacity:.5;background:#f8fafc;border-right-color:#64748b}
+.record-item.deleted .line1{text-decoration:line-through}
+.record-item.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+.record-item .chk{width:15px;height:15px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;margin-top:2px}
+.record-item .body{flex:1;min-width:0}
+.record-item .line1{font-size:11.5px;font-weight:800;color:#0f172a;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.record-item .line1 .type-tag{font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px}
+.record-item .line1 .type-tag.news{background:#d1fae5;color:#059669}
+.record-item .line1 .type-tag.alert{background:#fee2e2;color:#dc2626}
+.record-item .line1 .auto-tag{font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:6px;background:#fef3c7;color:#92400e}
+.record-item .meta{font-size:9.5px;color:#64748b;margin-top:3px;font-weight:600;display:flex;gap:4px;flex-wrap:wrap}
+.record-item .meta .tag{background:#f1f5f9;padding:1px 6px;border-radius:3px}
 .record-empty{text-align:center;color:#94a3b8;padding:16px;font-size:11px;font-weight:700}
 
 /* STATE */
@@ -55,21 +51,21 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .state-item .val{font-size:14px;font-weight:900;display:block;margin-top:1px}
 .state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
 .state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
-.state-item:nth-child(3){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
+.state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
 
-/* SETTINGS */
-.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
-.ns-overlay.active{display:block}
-.ns-box{max-width:520px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
-.ns-head{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800}
-.ns-head button{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;font-family:inherit}
-.ns-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px}
-.ns-old{background:#2c3e50;border-radius:10px;padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.ns-old button{padding:8px 3px;font-size:9px;font-weight:bold;border-radius:5px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit}
-.ns-old button.del{color:#ff9999}
-.ns-old button.active{background:#10b981;border-color:#10b981}
-.ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:12px;display:flex;gap:8px}
-.ns-foot button{flex:1;padding:12px;border:none;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;background:#f1f5f9;color:#64748b}
+/* QUICK PANEL 180px */
+.panel-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:9998;opacity:0;visibility:hidden;transition:.3s}
+.panel-overlay.active{opacity:1;visibility:visible}
+.quick-panel{position:fixed;top:0;right:0;width:180px;height:100vh;z-index:9999;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding:8px 6px;gap:4px;overflow-y:auto;background:transparent}
+.quick-panel.active{transform:translateX(0)}
+.quick-panel .side-btn{width:100%;padding:10px 12px;background:#2c3e50;color:#fff;border:1px solid #1a252f;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;text-align:right;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.15s;flex-shrink:0}
+.quick-panel .side-btn:hover{background:#34495e;transform:translateX(-2px)}
+.quick-panel .side-btn:active{transform:scale(.97)}
+.quick-panel .side-btn.del{background:#7f1d1d;border-color:#991b1b}
+.quick-panel .side-btn.del:hover{background:#991b1b}
+.quick-panel .side-btn.active{background:#10b981;border-color:#059669}
+.quick-panel .side-btn .lbl{flex:1;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10.5px}
+.quick-panel .side-btn .arrow{color:#94a3b8;flex-shrink:0;font-weight:400;font-size:13px}
 
 /* MODAL */
 .ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
@@ -77,7 +73,6 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .ns-modal-box{background:#fff;border-radius:12px;max-width:340px;width:100%}
 .ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0;text-align:center}
 .ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600;text-align:center}
-.ns-modal-b input{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:inherit;outline:none;margin-top:8px;text-align:center;font-weight:800}
 .ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
 .ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
 
@@ -86,90 +81,74 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .inline-msg.show{display:block}
 .inline-msg.error{background:#c0392b}
 
-/* DARK */
 body.dark{background:#0f172a;color:#e2e8f0}
 body.dark .section-card{background:#1e293b;border-color:#334155}
 body.dark .record-list{background:#0f172a}
-body.dark .member-hdr{background:#1e3a5f}
-body.dark .member-hdr .nm{color:#60a5fa}
-body.dark .event-item{background:#1e293b;border-right-color:#475569}
-body.dark .event-item .txt{color:#f1f5f9}
-body.dark .event-item.ev-done{background:#064e3b}
-body.dark .event-item.ev-partial{background:#7f1d1d}
-body.dark .event-item.ev-leave{background:#78350f}
-body.dark .event-item.ev-active{background:#1e3a8a}
-body.dark .event-item.ev-new{background:#4c1d95}
-body.dark .event-item.ev-change{background:#334155}
+body.dark .record-item{background:#1e293b;color:#e2e8f0}
+body.dark .record-item.news{background:#064e3b}
+body.dark .record-item.alert{background:#7f1d1d}
+body.dark .record-item .line1{color:#f1f5f9}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="section-card">
+  <div class="section-card" id="histSection">
     <div class="section-header">
-      <span>👤 ممبر ڈیوٹی ہسٹری</span>
-      <button onclick="openSettings()">⚙️</button>
+      <span>📜 News/Alert History</span>
+      <button onclick="openQuickPanel()">⚙️</button>
     </div>
 
-    <!-- FILTER -->
     <div class="filter-row">
-      <select id="filterMember" onchange="renderHistory()">
-        <option value="all">👤 تمام ممبران</option>
+      <select id="filterType" onchange="renderHistory()">
+        <option value="all">📰 سب</option>
+        <option value="news">📰 News</option>
+        <option value="alert">🚨 Alert</option>
       </select>
       <select id="filterDate" onchange="renderHistory()">
-        <option value="all">📅 تمام دن</option>
         <option value="today">📅 آج</option>
         <option value="yesterday">📅 کل</option>
         <option value="7days">📅 7 دن</option>
         <option value="30days">📅 30 دن</option>
+        <option value="all">📅 سب</option>
       </select>
     </div>
 
-    <!-- SHARE / COPY -->
     <div class="action-row">
       <span>📋 ریکارڈ: <span id="recCount">0</span></span>
       <div class="action-btns">
         <button class="btn-share" onclick="shareRecords()">📤 Share</button>
         <button class="btn-copy" onclick="copyRecords()">📋 Copy</button>
-        <button class="btn-close" onclick="toggleClose('historyList')">⬇️</button>
+        <button class="btn-close" onclick="toggleClose('recordList')">⬇️ Close</button>
       </div>
     </div>
 
-    <!-- RECORD LIST -->
-    <div class="record-list" id="historyList"></div>
+    <div class="record-list" id="recordList"></div>
 
-    <!-- STATE -->
     <div class="state-patti">
-      <div class="state-item">👤 Members<span class="val" id="stateMembers">0</span></div>
-      <div class="state-item">✅ Done<span class="val" id="stateDone">0</span></div>
-      <div class="state-item">🏖️ Leave<span class="val" id="stateLeave">0</span></div>
+      <div class="state-item">📰 News<span class="val" id="stateNews">0</span></div>
+      <div class="state-item">🚨 Alert<span class="val" id="stateAlert">0</span></div>
+      <div class="state-item">📋 Total<span class="val" id="stateTotal">0</span></div>
     </div>
   </div>
 </div>
 
-<!-- SETTINGS -->
-<div class="ns-overlay" id="nsOverlay">
-  <div class="ns-box">
-    <div class="ns-head">
-      <span>⚙️ سیٹنگز</span>
-      <button onclick="closeSettings()">✕</button>
-    </div>
-    <div class="ns-body">
-      <div class="ns-old">
-        <button onclick="toggleSelectMode()" id="selModeBtn">☑️ Select</button>
-        <button onclick="allSelect()">✅ All</button>
-        <button onclick="editSelected()">✏️ Edit</button>
-        <button class="del" onclick="deleteSelected()">🗑️ Delete</button>
-        <button class="del" onclick="deleteAll()">❌ Del All</button>
-        <button class="del" onclick="clearAll()">🧹 Clear</button>
-        <button onclick="moveUp()">🔼 Oper</button>
-        <button onclick="moveDown()">🔽 Nichy</button>
-        <button onclick="setPassword()">🔑 Pass</button>
-        <button onclick="toggleDark()" id="darkBtn">🌙 Dark</button>
-      </div>
-    </div>
-    <div class="ns-foot"><button onclick="closeSettings()">✕ بند</button></div>
-  </div>
+<!-- QUICK SIDE PANEL -->
+<div class="panel-overlay" id="qOverlay" onclick="closeQuickPanel()"></div>
+<div class="quick-panel" id="qPanel">
+  <button class="side-btn" onclick="toggleSelectMode()" id="selModeBtn"><span class="lbl">☑️ Select</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="allSelect()"><span class="lbl">✅ All</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="editSelected()"><span class="lbl">✏️ Edit</span><span class="arrow">›</span></button>
+  <button class="side-btn del" onclick="deleteSelected()"><span class="lbl">🗑️ Delete</span><span class="arrow">›</span></button>
+  <button class="side-btn del" onclick="deleteAll()"><span class="lbl">❌ Del All</span><span class="arrow">›</span></button>
+  <button class="side-btn del" onclick="clearAll()"><span class="lbl">🧹 Clear</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="moveUp()"><span class="lbl">🔼 Oper</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="moveDown()"><span class="lbl">🔽 Nichy</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="setPassword()"><span class="lbl">🔑 Pass</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="toggleDark()" id="darkBtn"><span class="lbl">🌙 Dark</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="dashShow()"><span class="lbl">📊 Show</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="dashHide()"><span class="lbl">📊 Hide</span><span class="arrow">›</span></button>
+  <button class="side-btn" onclick="closeSection()"><span class="lbl">⬇️ Close Section</span><span class="arrow">›</span></button>
 </div>
 
 <!-- MODAL -->
@@ -192,269 +171,290 @@ function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.par
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function pad(n){return String(n).padStart(2,'0')}
-function fmtHourMin(ms){var s=Math.floor(ms/1000);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return h+':'+pad(m)}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function yesterdayStr(){var d=new Date(Date.now()-86400000);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
 function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
 
-/* ============ KEYS ============ */
-var DUTY_KEY='sec4_duty_manager_data_v4';
-var LEAVE_KEY='sec4_duty_leaves_data_v4';
-var DUTY_LOG_KEY='sec4_duty_logs_v1';
-var HIST_RECORDS='duty_history_records_v1';
-var DS_KEY='duty_history_settings_v1';
+/* ============ KEYS — Same as A1 ============ */
+var NEWS_KEY='sec10_news_alerts_data';
 
-/* ============ STATE ============ */
 var selectMode=false,selectedIds={};
 var _modalCb=null;
-var historyRecords=[];
 
-/* ============ BUILD RECORDS ============ */
-function buildHistoryRecords(){
-  var records=[];
+/* ============ MODAL ============ */
+function showConfirm(title,body,cb){
+  $('modalTitle').textContent=title;
+  $('modalBody').textContent=body;
+  _modalCb=cb;
+  $('nsModal').classList.add('active');
+}
+function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
+function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
 
-  // 1. Duty logs (new, active, done, partial, change)
-  var logs=lsGet(DUTY_LOG_KEY,[]);
-  logs.forEach(function(l){
-    var d=new Date(l.endTime||l.startTime||Date.now());
-    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-    var txt,evClass,extra;
-    if(l.status==='done'){
-      txt='✅ اس ممبر نے آج ڈیوٹی پوری کی';
-      evClass='ev-done';
-      var pts=getTaskPoints(l.memberName);
-      extra='⭐ '+pts+' پوائنٹس';
-    } else if(l.status==='partial'){
-      txt='❌ اس ممبر نے آج ڈیوٹی پوری نہیں کی';
-      evClass='ev-partial';
-      extra='';
-    } else if(l.status==='active'){
-      txt='🟢 ڈیوٹی جاری ہے';
-      evClass='ev-active';
-      extra='';
-    } else if(l.status==='new'){
-      txt='🆕 ڈیوٹی تفویض کی گئی';
-      evClass='ev-new';
-      extra='';
-    } else {
-      txt='⚪ ڈیوٹی ختم';
-      evClass='ev-change';
-      extra='';
-    }
-    records.push({
-      id:'log_'+l.id,
-      type:'log',
-      memberName:l.memberName,
-      rank:l.rank,
-      text:txt,
-      extra:extra,
-      dateStr:dateStr,
-      timestamp:l.endTime||l.startTime||Date.now(),
-      evClass:evClass,
-      original:l,
-      source:'duty_log'
-    });
-  });
-
-  // 2. Leaves
-  var leaves=lsGet(LEAVE_KEY,[]);
-  leaves.forEach(function(lv){
-    var d=new Date(lv.timestamp||Date.now());
-    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-    records.push({
-      id:'leave_'+lv.id,
-      type:'leave',
-      memberName:lv.name,
-      rank:lv.rank,
-      text:'🏖️ اس ممبر نے آج چھٹی کی ہے',
-      extra:'📝 وجہ: '+esc(lv.reason||'—')+' · ⏱️ '+(lv.duration||1)+' دن',
-      dateStr:dateStr,
-      timestamp:lv.timestamp||Date.now(),
-      evClass:'ev-leave',
-      original:lv,
-      source:'leave'
-    });
-  });
-
-  // 3. History events (junior change, senior return)
-  var histEvents=lsGet('duty_history_events_v1',[]);
-  histEvents.forEach(function(ev){
-    var d=new Date(ev.timestamp||Date.now());
-    var dateStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-    records.push({
-      id:'ev_'+ev.id,
-      type:'event',
-      memberName:ev.memberName,
-      rank:ev.rank||'',
-      text:ev.text,
-      extra:ev.extra||'',
-      dateStr:dateStr,
-      timestamp:ev.timestamp||Date.now(),
-      evClass:'ev-change',
-      original:ev,
-      source:'event'
-    });
-  });
-
-  // Sort by timestamp desc
-  records.sort(function(a,b){return b.timestamp-a.timestamp});
-  return records;
+/* ============ QUICK PANEL ============ */
+function openQuickPanel(){
+  if(localStorage.getItem('nh_pwd')){
+    var p=prompt('🔑 پاس ورڈ:');
+    if(p!==localStorage.getItem('nh_pwd')){showMsg('❌ غلط',true);return}
+  }
+  $('qOverlay').classList.add('active');
+  $('qPanel').classList.add('active');
+}
+function closeQuickPanel(){
+  $('qOverlay').classList.remove('active');
+  $('qPanel').classList.remove('active');
 }
 
-function getTaskPoints(memberName){
-  var recs=lsGet('sec12_task_records',[]);
-  var total=0;
-  recs.forEach(function(r){if(r.member===memberName && r.status==='done'){total+=(r.points||0)}});
-  return total;
-}
-
-/* ============ RENDER ============ */
-function renderHistory(){
-  var all=buildHistoryRecords();
-  historyRecords=all;
-
-  // Filter
-  var fMember=$('filterMember').value;
+/* ============ FILTER ============ */
+function getFiltered(){
+  var all=lsGet(NEWS_KEY,[]);
+  var fType=$('filterType').value;
   var fDate=$('filterDate').value;
   var today=todayStr();
   var yesterday=yesterdayStr();
   var weekAgo=Date.now()-7*86400000;
   var monthAgo=Date.now()-30*86400000;
 
-  var filtered=all.filter(function(r){
-    if(fMember!=='all' && r.memberName!==fMember)return false;
-    if(fDate==='today' && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))!==0)return false;
-    if(fDate==='yesterday'){
-      var yd=new Date(Date.now()-86400000);
-      if(r.dateStr.indexOf(pad(yd.getDate())+'/'+pad(yd.getMonth()+1))!==0)return false;
-    }
+  return all.filter(function(r){
+    if(fType!=='all' && r.type!==fType)return false;
+    if(fDate==='today' && r.date!==today)return false;
+    if(fDate==='yesterday' && r.date!==yesterday)return false;
     if(fDate==='7days' && r.timestamp<weekAgo)return false;
     if(fDate==='30days' && r.timestamp<monthAgo)return false;
     return true;
   });
+}
 
-  // Group by member
-  var grouped={};
-  filtered.forEach(function(r){
-    if(!grouped[r.memberName])grouped[r.memberName]={name:r.memberName,rank:r.rank,events:[]};
-    grouped[r.memberName].events.push(r);
-  });
-
-  // Sort groups by total events count desc or member order
-  var groupArr=Object.keys(grouped).map(function(k){return grouped[k]});
-
-  var box=$('historyList');
-  if(!groupArr.length){
+/* ============ RENDER ============ */
+function renderHistory(){
+  var all=lsGet(NEWS_KEY,[]);
+  var filtered=getFiltered();
+  var box=$('recordList');
+  if(!filtered.length){
     box.innerHTML='<div class="record-empty">📭 کوئی ریکارڈ نہیں</div>';
     $('recCount').textContent=0;
-    renderState(filtered,groupArr);
+    $('stateNews').textContent=0;
+    $('stateAlert').textContent=0;
+    $('stateTotal').textContent=0;
     return;
   }
-
-  box.innerHTML=groupArr.map(function(g,gi){
-    var memberChk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds['member_'+g.name]?'checked':'')+' onchange="toggleSel(\'member_'+g.name+'\')">':'';
-    var eventsHtml=g.events.map(function(ev,ei){
-      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[ev.id]?'checked':'')+' onchange="toggleSel(\''+ev.id+'\')">':'';
-      return '<div class="event-item '+ev.evClass+'">'+chk+'<div class="body">'
-        +'<div class="txt">'+ev.text+'</div>'
-        +(ev.extra?'<div class="extra">'+ev.extra+'</div>':'')
-        +'<div class="dt">📅 '+ev.dateStr+'</div>'
-        +'</div></div>';
-    }).join('');
-    return '<div class="member-block">'
-      +'<div class="member-hdr">'+memberChk+'<span class="nm">'+(gi+1)+'️⃣ 👤 '+esc(g.name)+'</span><span class="rk">('+(g.rank||'')+')</span></div>'
-      +eventsHtml
-      +'</div>';
+  box.innerHTML=filtered.map(function(r,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[r.id]?'checked':'')+' onchange="toggleSel('+r.id+')">':'';
+    var cls=r.type==='news'?'news':'alert';
+    var icon=r.type==='news'?'📰':'🚨';
+    var typeLabel=r.type==='news'?'News':'Alert';
+    var delCls=r.deleted?' deleted':'';
+    var selCls=selectedIds[r.id]?' sel':'';
+    var autoTag=r.auto?'<span class="auto-tag">🤖 خودکار</span>':'';
+    return '<div class="record-item '+cls+delCls+selCls+'">'+chk+'<div class="body">'
+      +'<div class="line1">'
+        +'<span>'+(i+1)+'.</span>'
+        +'<span class="type-tag '+cls+'">'+icon+' '+typeLabel+'</span>'
+        +'<span>'+esc(r.content)+'</span>'
+        +autoTag
+      +'</div>'
+      +'<div class="meta"><span class="tag">📅 '+(r.dateStr||r.date||'')+'</span>'+(r.deleted?'<span class="tag" style="background:#fee2e2;color:#991b1b">🗑️ ڈیلیٹ</span>':'')+'</div>'
+      +'</div></div>';
   }).join('');
 
+  var newsCount=filtered.filter(function(r){return r.type==='news'&&!r.deleted}).length;
+  var alertCount=filtered.filter(function(r){return r.type==='alert'&&!r.deleted}).length;
   $('recCount').textContent=filtered.length;
-  renderState(filtered,groupArr);
-  populateMemberFilter(all);
+  $('stateNews').textContent=newsCount;
+  $('stateAlert').textContent=alertCount;
+  $('stateTotal').textContent=newsCount+alertCount;
 }
 
-function renderState(filtered,groups){
-  $('stateMembers').textContent=groups.length;
-  $('stateDone').textContent=filtered.filter(function(r){
-    return r.text.indexOf('✅')!==-1;
-  }).length;
-  $('stateLeave').textContent=filtered.filter(function(r){
-    return r.text.indexOf('🏖️')!==-1;
-  }).length;
+/* ============ SELECT MODE ============ */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  $('selModeBtn').classList.toggle('active',selectMode);
+  if(!selectMode)selectedIds={};
+  renderHistory();
+  showMsg(selectMode?'✅ Select ON':'☑️ OFF');
+}
+function toggleSel(id){selectedIds[id]=!selectedIds[id];renderHistory()}
+function getSelectedIds(){return Object.keys(selectedIds).filter(function(k){return selectedIds[k]})}
+
+function allSelect(){
+  if(!selectMode){showMsg('پہلے Select Mode',true);return}
+  getFiltered().forEach(function(r){selectedIds[r.id]=true});
+  renderHistory();
+  showMsg('✅ سب');
 }
 
-function populateMemberFilter(all){
-  var sel=$('filterMember');
-  var cur=sel.value;
-  var members={};
-  all.forEach(function(r){members[r.memberName]=r.rank});
-  sel.innerHTML='<option value="all">👤 تمام ممبران</option>';
-  Object.keys(members).forEach(function(name){
-    sel.innerHTML+='<option value="'+esc(name)+'">'+esc(name)+' ('+members[name]+')</option>';
+/* ============ EDIT ============ */
+function editSelected(){
+  var ids=getSelectedIds();
+  if(!ids.length){showMsg('منتخب کریں',true);return}
+  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
+  var items=lsGet(NEWS_KEY,[]);
+  var idx=items.findIndex(function(r){return String(r.id)===ids[0]});
+  if(idx===-1)return;
+  var nn=prompt('نیا متن:',items[idx].content);
+  if(nn&&nn.trim()){
+    items[idx].content=nn.trim();
+    lsSet(NEWS_KEY,items);
+    selectedIds={};
+    renderHistory();
+    showMsg('✅ اپڈیٹ');
+  }
+}
+
+/* ============ DELETE ============ */
+function deleteSelected(){
+  var ids=getSelectedIds();
+  if(!ids.length){showMsg('منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ',ids.length+' ریکارڈ ڈیلیٹ؟',function(){
+    var items=lsGet(NEWS_KEY,[]);
+    items.forEach(function(r){
+      if(ids.indexOf(String(r.id))!==-1){r.deleted=true;r.deletedAt=Date.now()}
+    });
+    lsSet(NEWS_KEY,items);
+    selectedIds={};
+    renderHistory();
+    showMsg('✅ '+ids.length+' ڈیلیٹ');
   });
-  if(cur)sel.value=cur;
+}
+
+function deleteAll(){
+  var items=getFiltered();
+  if(!items.length){showMsg('کوئی ریکارڈ نہیں',true);return}
+  showConfirm('سب ڈیلیٹ',items.length+' ریکارڈ ڈیلیٹ؟',function(){
+    var ids=items.map(function(r){return String(r.id)});
+    var all=lsGet(NEWS_KEY,[]);
+    all.forEach(function(r){if(ids.indexOf(String(r.id))!==-1){r.deleted=true;r.deletedAt=Date.now()}});
+    lsSet(NEWS_KEY,all);
+    selectedIds={};
+    renderHistory();
+    showMsg('✅ سب ڈیلیٹ');
+  });
+}
+
+function clearAll(){
+  showConfirm('مستقل صاف','تمام ریکارڈ مستقل صاف؟ واپس نہیں!',function(){
+    lsSet(NEWS_KEY,[]);
+    selectedIds={};
+    renderHistory();
+    showMsg('🧹 صاف');
+  });
+}
+
+/* ============ MOVE ============ */
+function moveUp(){
+  var id=getSelectedIds()[0];
+  if(!id){showMsg('منتخب کریں',true);return}
+  var items=lsGet(NEWS_KEY,[]);
+  var idx=items.findIndex(function(r){return String(r.id)===id});
+  if(idx<=0)return;
+  var t=items[idx];items[idx]=items[idx-1];items[idx-1]=t;
+  lsSet(NEWS_KEY,items);
+  selectedIds={};
+  renderHistory();
+  showMsg('🔼');
+}
+
+function moveDown(){
+  var id=getSelectedIds()[0];
+  if(!id){showMsg('منتخب کریں',true);return}
+  var items=lsGet(NEWS_KEY,[]);
+  var idx=items.findIndex(function(r){return String(r.id)===id});
+  if(idx===-1||idx>=items.length-1)return;
+  var t=items[idx];items[idx]=items[idx+1];items[idx+1]=t;
+  lsSet(NEWS_KEY,items);
+  selectedIds={};
+  renderHistory();
+  showMsg('🔽');
+}
+
+/* ============ PASSWORD / DARK ============ */
+function setPassword(){
+  var p=prompt('نیا پاس ورڈ (خالی=ہٹائیں):');
+  if(p===null)return;
+  if(p){localStorage.setItem('nh_pwd',p);showMsg('✅ پاس ورڈ')}
+  else{localStorage.removeItem('nh_pwd');showMsg('✅ ہٹا')}
+}
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  var on=document.body.classList.contains('dark');
+  $('darkBtn').classList.toggle('active',on);
+  lsSet('nh_dark',on);
+}
+
+/* ============ SHOW/HIDE/SECTION ============ */
+function dashShow(){
+  $('histSection').style.display='flex';
+  showMsg('📊 Show');
+}
+function dashHide(){
+  $('histSection').style.display='none';
+  showMsg('📊 Hide');
+}
+function closeSection(){
+  closeQuickPanel();
+  $('histSection').style.display='none';
+  showMsg('✅ سیکشن بند');
 }
 
 /* ============ SHARE / COPY ============ */
-function getCurrentFiltered(){
-  var fMember=$('filterMember').value;
-  var fDate=$('filterDate').value;
-  var weekAgo=Date.now()-7*86400000;
-  var monthAgo=Date.now()-30*86400000;
-  return historyRecords.filter(function(r){
-    if(fMember!=='all' && r.memberName!==fMember)return false;
-    if(fDate==='today' && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))!==0)return false;
-    if(fDate==='yesterday'){
-      var yd=new Date(Date.now()-86400000);
-      if(r.dateStr.indexOf(pad(yd.getDate())+'/'+pad(yd.getMonth()+1))!==0)return false;
-    }
-    if(fDate==='7days' && r.timestamp<weekAgo)return false;
-    if(fDate==='30days' && r.timestamp<monthAgo)return false;
-    return true;
-  });
-}
-
-function buildTextReport(records){
-  var grouped={};
-  records.forEach(function(r){
-    if(!grouped[r.memberName])grouped[r.memberName]={name:r.memberName,rank:r.rank,events:[]};
-    grouped[r.memberName].events.push(r);
-  });
-  var txt='👤 ممبر ڈیوٹی ہسٹری\n';
+function buildReport(){
+  var recs=getFiltered();
+  var sel=recs.filter(function(r){return selectedIds[r.id]});
+  if(sel.length>0)recs=sel;
+  var txt='📜 News/Alert History\n';
   txt+='═══════════════════════\n';
   txt+='📅 '+new Date().toLocaleDateString('en-GB')+'\n';
   txt+='═══════════════════════\n\n';
-  var i=1;
-  Object.keys(grouped).forEach(function(name){
-    var g=grouped[name];
-    txt+=(i++)+'. 👤 '+g.name+' ('+g.rank+')\n';
-    g.events.forEach(function(ev){
-      txt+='   '+ev.text+'\n';
-      if(ev.extra)txt+='   '+ev.extra+'\n';
-      txt+='   📅 '+ev.dateStr+'\n';
-      txt+='\n';
-    });
-    txt+='───────────────────────\n\n';
+  recs.forEach(function(r,i){
+    var icon=r.type==='news'?'📰':'🚨';
+    txt+=(i+1)+'. '+icon+' '+r.content+'\n';
+    txt+='   📅 '+(r.dateStr||r.date)+' · '+(r.type==='news'?'News':'Alert')+(r.auto?' [خودکار]':'')+'\n\n';
   });
-  return txt.trim();
+  var newsN=recs.filter(function(r){return r.type==='news'}).length;
+  var alertN=recs.filter(function(r){return r.type==='alert'}).length;
+  txt+='📊 News: '+newsN+' | Alert: '+alertN+' | Total: '+recs.length;
+  return txt;
 }
 
 function shareRecords(){
-  var recs=getCurrentFiltered();
-  if(!recs.length){showMsg('کوئی ریکارڈ نہیں',true);return}
-  // Selected only if any selected
-  var selectedRecs=recs.filter(function(r){return selectedIds[r.id]});
-  if(selectedRecs.length>0)recs=selectedRecs;
-  var txt=buildTextReport(recs);
+  var txt=buildReport();
   if(navigator.share){
-    navigator.share({title:'ممبر ڈیوٹی ہسٹری',text:txt}).catch(function(){});
+    navigator.share({title:'News/Alert History',text:txt}).catch(function(){});
   } else {
     copyToClipboard(txt);
-    showMsg('✅ کاپی ہو گیا (Share نہیں)');
+    showMsg('✅ کاپی ہو گیا');
   }
 }
 
 function copyRecords(){
-  var recs=getCurrentFiltered();
-  if(!recs.length){showMsg('کوئی ریکارڈ نہیں',true);return}
-  var selectedRecs
+  copyToClipboard(buildReport());
+  showMsg('✅ کاپی ہو گیا');
+}
+
+function copyToClipboard(txt){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).catch(function(){fallbackCopy(txt)});
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  var ta=document.createElement('textarea');
+  ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy')}catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded',function(){
+  if(lsGet('nh_dark',false)){document.body.classList.add('dark');$('darkBtn').classList.add('active')}
+  renderHistory();
+});
+
+setInterval(function(){
+  if(document.visibilityState==='visible')renderHistory();
+},5000);
+</script>
+</body>
+</html>
