@@ -9,15 +9,23 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
-.ticker-bar{background:#fffbeb;border:1px solid #fde68a;color:#d97706;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap}
+
+/* NEWS TICKER */
+.ticker-bar{background:#fffbeb;border:1px solid #fde68a;color:#d97706;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;min-height:38px;display:flex;align-items:center}
 .ticker-text{display:inline-block;animation:customTickerRight 35s linear infinite;padding-right:100%}
 @keyframes customTickerRight{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.alert-ticker-bar{background:#fef2f2;border:1px solid #fecaca;color:#ef4444;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;transition:all .3s}
+
+/* ALERT TICKER */
+.alert-ticker-bar{background:#fef2f2;border:1px solid #fecaca;color:#ef4444;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;transition:all .3s;min-height:38px}
 .alert-ticker-bar.blink{animation:fastBlink 0.8s infinite alternate}
 @keyframes fastBlink{0%{opacity:1}100%{opacity:.35;background-color:#ef4444;color:white}}
 .alert-skip-btn{background:#ef4444;color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit}
+
+/* SECTION */
 .section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
-.section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
+.section-header{font-weight:bold;color:var(--primary);font-size:13px;padding-bottom:6px;border-bottom:1px solid #e2e8f0;text-align:center;user-select:none;cursor:default}
+
+/* DUTY PANEL */
 .duty-panel{background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--golden);border-radius:12px;padding:12px;color:#fff}
 .duty-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .duty-col{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 6px;text-align:center}
@@ -26,11 +34,14 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .duty-col .role{font-size:10px;color:#94a3b8;margin-bottom:3px;font-weight:700}
 .duty-col .name{font-size:14px;font-weight:900;color:#fff;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .duty-col .end-btn{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;width:100%}
+.duty-col .end-btn:active{transform:scale(.96)}
 .duty-col .end-btn:disabled{background:#64748b;opacity:.5;cursor:not-allowed}
-.big-timer{text-align:center;font-size:24px;font-weight:900;color:#fbbf24;background:rgba(0,0,0,.4);padding:10px;border-radius:10px;letter-spacing:3px;border:2px solid #fbbf24}
-.big-timer.senior-only{border-color:#60a5fa;color:#60a5fa}
-.big-timer.junior-on{border-color:#34d399;color:#34d399}
-.big-timer.stopped{color:#94a3b8;border-color:#475569}
+.big-timer{text-align:center;font-size:24px;font-weight:900;color:#fbbf24;background:rgba(0,0,0,.4);padding:10px;border-radius:10px;letter-spacing:3px;text-shadow:0 0 15px rgba(251,191,36,.6);border:2px solid #fbbf24}
+.big-timer.senior-only{border-color:#60a5fa;color:#60a5fa;text-shadow:0 0 15px rgba(96,165,250,.6)}
+.big-timer.junior-on{border-color:#34d399;color:#34d399;text-shadow:0 0 15px rgba(52,211,153,.6)}
+.big-timer.stopped{color:#94a3b8;border-color:#475569;text-shadow:none}
+
+/* LEAVE */
 .leave-submit{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:6px;display:flex;gap:4px;align-items:center;flex-wrap:nowrap;overflow-x:auto}
 .leave-submit select,.leave-submit input{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;background:#fff;min-width:0}
 .leave-submit select{flex:1;max-width:100px}
@@ -38,69 +49,92 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .leave-submit input.dur{flex:0 0 50px;max-width:50px}
 .leave-submit button{flex:0 0 auto;padding:7px 10px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:12px}
 .leave-list{max-height:220px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
-.leave-item{padding:7px 6px;border-bottom:1px dotted #e2e8f0}
+.leave-item{padding:7px 6px;border-bottom:1px dotted #e2e8f0;display:flex;align-items:flex-start;gap:6px}
 .leave-item:last-child{border-bottom:none}
+.leave-item .chk{width:15px;height:15px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;margin-top:2px}
+.leave-item .body{flex:1;min-width:0}
 .leave-item .nm{font-size:11px;font-weight:800;color:#0f172a;margin-bottom:2px}
 .leave-item .reason{font-size:10px;color:#dc2626;font-weight:700;margin-bottom:2px}
 .leave-item .meta{font-size:9.5px;color:#64748b;font-weight:600}
 .leave-empty{text-align:center;color:#94a3b8;font-size:11px;padding:12px;font-weight:700}
-.task-top-row{display:flex;gap:4px}
-.task-top-row select{flex:1;padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:12px;text-align:center;font-family:inherit;outline:none;background:#fff;font-weight:700}
-.task-display{background:#eafaf1;border:2px solid #82e0aa;border-radius:8px;padding:12px;text-align:center}
-.task-display .lbl{font-size:10px;color:#1e8449;font-weight:700;margin-bottom:4px}
-.task-display .task-row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}
-.task-display .nm{font-size:15px;font-weight:800;color:#145a32}
-.task-display .pts{background:#1e8449;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800}
-.task-display .type-badge{font-size:10.5px;font-weight:800;padding:2px 10px;border-radius:12px;display:inline-block}
-.task-display .type-badge.daily{background:#d1fae5;color:#059669;border:1px solid #10b981}
-.task-display .type-badge.kabhi{background:#dbeafe;color:#1e40af;border:1px solid #3b82f6}
-.task-display .empty-nm{font-size:13px;font-weight:700;color:#1e8449;margin:8px 0}
-.task-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
-.task-btns button{padding:10px 4px;font-size:11px;font-weight:bold;border:none;border-radius:6px;cursor:pointer;color:#fff;font-family:inherit}
-.task-btns .done{background:#2e8b57}
-.task-btns .notdone{background:#c0392b}
-.task-btns .skip{background:#7f8c8d}
-.task-btns button:disabled{opacity:.4;cursor:not-allowed}
-.task-hist{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
-.task-hist-item{padding:6px 8px;border-bottom:1px dotted #e2e8f0}
-.task-hist-item:last-child{border-bottom:none}
-.task-hist-item .line1{font-size:11px;font-weight:800;color:#0f172a;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
-.task-hist-item .line1 .pts-badge{background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:8px;font-size:9.5px;font-weight:800}
-.task-hist-item .line1 .type-tag{font-size:9px;font-weight:800;padding:1px 6px;border-radius:8px}
-.task-hist-item .line1 .type-tag.daily{background:#d1fae5;color:#059669}
-.task-hist-item .line1 .type-tag.kabhi{background:#dbeafe;color:#1e40af}
-.task-hist-item .meta{font-size:9.5px;color:#64748b;margin-top:3px;font-weight:600}
-.task-hist-empty{text-align:center;color:#94a3b8;font-size:11px;padding:12px;font-weight:700}
-.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0;margin-top:4px}
+
+/* STATE */
+.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
 .state-item{flex:1;text-align:center;padding:4px 2px;border-radius:4px;font-size:9.5px;font-weight:800}
 .state-item .val{font-size:14px;font-weight:900;display:block;margin-top:1px}
 .state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
 .state-item:nth-child(2){background:#fffbeb;color:#d97706;border:1px solid #f59e0b}
 .state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
+
+/* HEAD */
 .scroll-head{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
 .scroll-head span{font-size:11px;font-weight:bold;color:#475569}
 .btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
+
+/* MSG */
 .inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
 .inline-msg.show{display:block}
 .inline-msg.error{background:#c0392b}
+
+/* HIDDEN SETTINGS PANEL */
+.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.ns-overlay.active{display:flex}
+.ns-box{background:#2c3e50;border-radius:12px;max-width:320px;width:100%;padding:10px}
+.ns-box-title{color:#fbbf24;font-size:12px;font-weight:800;text-align:center;margin-bottom:8px}
+.ns-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.ns-grid button{padding:10px 4px;font-size:10px;font-weight:bold;border-radius:6px;border:1px solid #34495e;background:#34495e;color:#fff;cursor:pointer;font-family:inherit}
+.ns-grid button.active{background:#10b981;border-color:#10b981}
+.ns-grid button.del{color:#ff9999}
+.ns-grid button.full{grid-column:span 2}
+.ns-close{margin-top:8px;width:100%;padding:8px;background:#1a252f;border:1px solid #34495e;color:#fff;border-radius:6px;font-weight:800;cursor:pointer;font-family:inherit;font-size:11px}
+
+/* MODAL */
+.ns-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;align-items:center;justify-content:center;padding:16px}
+.ns-modal.active{display:flex}
+.ns-modal-box{background:#fff;border-radius:12px;max-width:340px;width:100%}
+.ns-modal-h{padding:12px;background:#2563eb;color:#fff;font-size:13px;font-weight:800;border-radius:12px 12px 0 0;text-align:center}
+.ns-modal-b{padding:14px;font-size:12px;color:#334155;line-height:1.6;font-weight:600;text-align:center}
+.ns-modal-f{display:flex;gap:8px;padding:0 14px 14px}
+.ns-modal-f button{flex:1;padding:10px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="ticker-bar"><div class="ticker-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div></div>
-  <div class="alert-ticker-bar" id="alertBar"><span id="alertMsg">🚨 اہم الرٹ...</span><button class="alert-skip-btn" onclick="skipAlert()">اسکیپ ❌</button></div>
 
-  <!-- DUTY -->
-  <div class="section-card">
-    <div class="section-header"><span>👮 آج کی ڈیوٹی</span></div>
+  <!-- NEWS TICKER -->
+  <div class="ticker-bar" id="newsTickerBar">
+    <div class="ticker-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div>
+  </div>
+
+  <!-- ALERT TICKER -->
+  <div class="alert-ticker-bar" id="alertBar" style="display:none">
+    <span id="alertMsg">🚨 اہم الرٹ...</span>
+    <button class="alert-skip-btn" onclick="skipAlert()">اسکیپ ❌</button>
+  </div>
+
+  <!-- AJ KI DUTY SECTION -->
+  <div class="section-card" id="dutySection">
+    <div class="section-header" id="dutyHeader" onmousedown="startLongPress('duty')" onmouseup="cancelLongPress()" onmouseleave="cancelLongPress()" ontouchstart="startLongPress('duty')" ontouchend="cancelLongPress()" ontouchcancel="cancelLongPress()">
+      👮 آج کی ڈیوٹی
+    </div>
+
     <div class="duty-panel">
       <div class="duty-cols">
-        <div class="duty-col senior"><div class="role">🟢 سینئر</div><div class="name" id="dashSenior">—</div><button class="end-btn" id="endSeniorBtn" onclick="endDuty('Senior')" disabled>⏹️ ختم</button></div>
-        <div class="duty-col junior"><div class="role">🔵 جونیئر</div><div class="name" id="dashJunior">—</div><button class="end-btn" id="endJuniorBtn" onclick="endDuty('Junior')" disabled>⏹️ ختم</button></div>
+        <div class="duty-col senior">
+          <div class="role">🟢 سینئر</div>
+          <div class="name" id="dashSenior">—</div>
+          <button class="end-btn" id="endSeniorBtn" onclick="endDuty('Senior')" disabled>⏹️ ختم</button>
+        </div>
+        <div class="duty-col junior">
+          <div class="role">🔵 جونیئر</div>
+          <div class="name" id="dashJunior">—</div>
+          <button class="end-btn" id="endJuniorBtn" onclick="endDuty('Junior')" disabled>⏹️ ختم</button>
+        </div>
       </div>
       <div class="big-timer stopped" id="bigTimer">00:00:00</div>
     </div>
+
     <div class="scroll-head"><span>🏖️ چھٹی دیں:</span></div>
     <div class="leave-submit">
       <select id="leaveMember"><option value="">ممبر...</option></select>
@@ -108,8 +142,13 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
       <input type="number" id="leaveDuration" class="dur" value="1" min="1">
       <button onclick="submitLeave()">✅</button>
     </div>
-    <div class="scroll-head"><span>📋 چھٹی ریکارڈ:</span><button class="btn-close" onclick="toggleClose('leaveRecordBox')">⬇️</button></div>
+
+    <div class="scroll-head">
+      <span>📋 چھٹی ریکارڈ:</span>
+      <button class="btn-close" onclick="toggleClose('leaveRecordBox')">⬇️ Close</button>
+    </div>
     <div class="leave-list" id="leaveRecordBox"></div>
+
     <div class="state-patti">
       <div class="state-item">👤 Members<span class="val" id="stateMembers">0</span></div>
       <div class="state-item">🟢 Active<span class="val" id="stateActive">0</span></div>
@@ -117,29 +156,31 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
     </div>
   </div>
 
-  <!-- TASK TRACKER -->
-  <div class="section-card">
-    <div class="section-header"><span>📋 ٹاسک ٹریکر</span></div>
-    <div class="task-top-row">
-      <select id="taskMemberSelect" onchange="onFilterChange()"><option value="">-- ممبر --</option></select>
-      <select id="taskTypeFilter" onchange="onFilterChange()">
-        <option value="all">📋 سب</option>
-        <option value="Daily">🟢 روزانہ</option>
-        <option value="Occasional">🔵 کبھی</option>
-      </select>
+</div>
+
+<!-- HIDDEN SETTINGS -->
+<div class="ns-overlay" id="nsOverlay">
+  <div class="ns-box">
+    <div class="ns-box-title">⚙️ چھٹی سیٹنگز</div>
+    <div class="ns-grid">
+      <button onclick="toggleSelectMode()" id="selModeBtn">☑️ Select</button>
+      <button onclick="editSelected()">✏️ Edit</button>
+      <button class="del" onclick="deleteSelected()">🗑️ Delete</button>
+      <button class="del" onclick="clearAll()">🧹 Clear</button>
+      <button class="full" onclick="closeSection()">⬇️ Close Section</button>
     </div>
-    <div class="task-display" id="taskCurrent"><div class="lbl">📌 موجودہ ٹاسک</div><div class="empty-nm">پہلے ممبر منتخب کریں</div></div>
-    <div class="task-btns">
-      <button class="done" id="btnDone" onclick="submitTask('done')" disabled>✅ ہو گیا</button>
-      <button class="notdone" id="btnNotDone" onclick="submitTask('notdone')" disabled>❌ نہیں ہوا</button>
-      <button class="skip" id="btnSkip" onclick="submitTask('skip')" disabled>⚪ چھوڑا</button>
-    </div>
-    <div class="scroll-head"><span>📜 ریکارڈ:</span><button class="btn-close" onclick="toggleClose('taskHistBox')">⬇️</button></div>
-    <div class="task-hist" id="taskHistBox"></div>
-    <div class="state-patti">
-      <div class="state-item">🏆 Points<span class="val" id="taskPts">0</span></div>
-      <div class="state-item">✅ Done<span class="val" id="taskDoneCount">0</span></div>
-      <div class="state-item">📋 Total<span class="val" id="taskTotalCount">0</span></div>
+    <button class="ns-close" onclick="closeSettings()">✕ بند</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="ns-modal" id="nsModal">
+  <div class="ns-modal-box">
+    <div class="ns-modal-h" id="modalTitle">تصدیق</div>
+    <div class="ns-modal-b" id="modalBody">—</div>
+    <div class="ns-modal-f">
+      <button onclick="modalClose()" style="background:#e2e8f0;color:#64748b">✕ بند</button>
+      <button onclick="modalConfirm()" style="background:#dc2626;color:#fff">✓ ہاں</button>
     </div>
   </div>
 </div>
@@ -154,9 +195,11 @@ function esc(s){var d=document.createElement('div');d.textContent=s==null?'':Str
 function pad(n){return String(n).padStart(2,'0')}
 function fmtTimer(ms){var s=Math.floor(ms/1000);return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60)}
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
 function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
 function showMsg(t,err){var el=$('inlineMsg');el.textContent=t;el.style.background=err?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2500)}
 
+/* ========== KEYS ========== */
 var DUTY_KEY='sec4_duty_manager_data_v4';
 var LEAVE_KEY='sec4_duty_leaves_data_v4';
 var DUTY_LOG_KEY='sec4_duty_logs_v1';
@@ -165,51 +208,80 @@ var TASK_KEY='sec3_task_and_point_manager_data';
 var NEWS_KEY='sec10_news_alerts_data';
 
 var currentTimerStart=null,timerRunning=false;
-var currentTaskMember='',currentTaskIndex=0,taskQueue=[];
+var selectMode=false,selectedIds={};
+var _modalCb=null;
 
+/* ========== LONG PRESS ========== */
+var longPressTimer=null;
+function startLongPress(sec){
+  longPressTimer=setTimeout(function(){
+    openSettings();
+  },800);
+}
+function cancelLongPress(){
+  if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null}
+}
+
+/* ========== MEMBERS ========== */
 function getMembers(){return lsGet(DUTY_KEY,[]).filter(function(x){return !x.deleted})}
 function setMembers(m){lsSet(DUTY_KEY,m)}
 function getLeaves(){return lsGet(LEAVE_KEY,[])}
 function setLeaves(l){lsSet(LEAVE_KEY,l)}
 function getLogs(){return lsGet(DUTY_LOG_KEY,[])}
 
-/* ========== TICKERS ========== */
+/* ========== NEWS/ALERT TICKERS ========== */
 var newsIndex=0,newsTimer=null;
-function renderTickers(){
+var alertIndex=0,alertTimer=null;
+
+function renderNewsAlert(){
   var items=lsGet(NEWS_KEY,[]);
-  var news=items.filter(function(x){return x.type==='news'&&!x.deleted});
-  var alerts=items.filter(function(x){return x.type==='alert'&&!x.deleted});
+  var news=items.filter(function(x){return x.type==='news' && !x.deleted});
+  var alerts=items.filter(function(x){return x.type==='alert' && !x.deleted});
+
+  // News ticker
   if($('newsBar')){
     if(news.length){
       if(newsIndex>=news.length)newsIndex=0;
       var showNews=function(){
         var n=news[newsIndex%news.length];
-        $('newsBar').textContent='📰 '+n.content;
-        $('newsBar').style.animation='none';
-        void $('newsBar').offsetWidth;
-        $('newsBar').style.animation='customTickerRight 35s linear infinite';
+        var el=$('newsBar');
+        el.textContent='📰 '+n.content;
+        el.style.animation='none';
+        void el.offsetWidth;
+        el.style.animation='customTickerRight 35s linear infinite';
         newsIndex++;
       };
       showNews();
       if(newsTimer)clearInterval(newsTimer);
       newsTimer=setInterval(showNews,40000);
-    } else { $('newsBar').textContent='📰 کوئی نیوز نہیں'; }
+    } else {
+      $('newsBar').textContent='📰 کوئی نیوز نہیں';
+      $('newsBar').style.animation='none';
+    }
   }
+
+  // Alert ticker
   if($('alertBar')){
     if(alerts.length){
       $('alertBar').style.display='flex';
       $('alertBar').classList.add('blink');
       $('alertMsg').textContent='🚨 '+alerts[Math.floor(Math.random()*alerts.length)].content;
-    } else { $('alertBar').style.display='none'; }
+    } else {
+      $('alertBar').style.display='none';
+    }
   }
 }
-function skipAlert(){var ab=$('alertBar');if(ab){ab.style.display='none';ab.classList.remove('blink');}}
 
-/* ========== LEAVE ========== */
+function skipAlert(){
+  var ab=$('alertBar');
+  if(ab){ab.style.display='none';ab.classList.remove('blink')}
+}
+
+/* ========== LEAVE SUBMIT ========== */
 function populateLeaveMembers(){
   var sel=$('leaveMember');if(!sel)return;
   var cur=sel.value;
-  var m=getMembers().filter(function(x){return !x.onLeave&&!x.onDuty});
+  var m=getMembers().filter(function(x){return !x.onLeave && !x.onDuty});
   sel.innerHTML='<option value="">ممبر...</option>';
   m.forEach(function(x){sel.innerHTML+='<option value="'+x.id+'">'+esc(x.name)+' ('+x.rank+')</option>'});
   if(cur)sel.value=cur;
@@ -226,14 +298,19 @@ function submitLeave(){
   if(!mem)return;
   var leaves=getLeaves();
   var d=new Date();
-  leaves.unshift({id:Date.now(),name:mem.name,rank:mem.rank,reason:reason,duration:duration,date:todayStr(),time:pad(d.getHours())+':'+pad(d.getMinutes()),timestamp:Date.now()});
+  leaves.unshift({
+    id:Date.now(),name:mem.name,rank:mem.rank,reason:reason,duration:duration,
+    date:todayStr(),time:pad(d.getHours())+':'+pad(d.getMinutes()),timestamp:Date.now()
+  });
   setLeaves(leaves);
   mem.onLeave=true;mem.onDuty=false;mem.dutyStart=null;
   mem.leaveCount=(mem.leaveCount||0)+1;
   mem.currentLeaveReason=reason;
   mem.leaveStart=Date.now();
   setMembers(allM);
-  $('leaveMember').value='';$('leaveReason').value='';$('leaveDuration').value='1';
+  $('leaveMember').value='';
+  $('leaveReason').value='';
+  $('leaveDuration').value='1';
   renderAll();
   showMsg('✅ چھٹی دی گئی');
 }
@@ -268,11 +345,15 @@ function endDuty(rank){
   var now=Date.now();
   var duration=active.dutyStart?now-active.dutyStart:0;
   var logs=getLogs();
-  logs.unshift({id:Date.now(),memberName:active.name,rank:active.rank,date:todayStr(),startTime:active.dutyStart,endTime:now,durationMs:duration,status:taskDone?'done':'partial'});
+  logs.unshift({
+    id:Date.now(),memberName:active.name,rank:active.rank,
+    date:todayStr(),startTime:active.dutyStart,endTime:now,
+    durationMs:duration,status:taskDone?'done':'partial'
+  });
   lsSet(DUTY_LOG_KEY,logs);
   active.onDuty=false;active.dutyStart=null;active.dutyEndedAt=now;active.partialMarked=false;
   setMembers(allM);
-  var stillActive=allM.some(function(x){return x.onDuty&&!x.deleted});
+  var stillActive=allM.some(function(x){return x.onDuty && !x.deleted});
   if(!stillActive){timerRunning=false;currentTimerStart=null}
   renderAll();
   showMsg(taskDone?'✅ ڈیوٹی مکمل':'❌ ادھوری');
@@ -290,125 +371,23 @@ function updateTimer(){
     if(junior){bt.classList.add('junior-on');bt.classList.remove('senior-only')}
     else if(senior){bt.classList.add('senior-only');bt.classList.remove('junior-on')}
     else{bt.classList.remove('junior-on','senior-only')}
-  } else { bt.textContent='00:00:00';bt.classList.add('stopped');bt.classList.remove('junior-on','senior-only') }
-}
-
-/* ========== TASK ========== */
-function populateTaskMembers(){
-  var sel=$('taskMemberSelect');if(!sel)return;
-  var cur=sel.value;
-  sel.innerHTML='<option value="">-- ممبر --</option>';
-  getMembers().forEach(function(x){
-    var s=x.onLeave?' 🏖️':(x.onDuty?' 🟢':'');
-    sel.innerHTML+='<option value="'+esc(x.name)+'">'+esc(x.name)+' ('+x.rank+')'+s+'</option>';
-  });
-  if(cur)sel.value=cur;
-}
-
-function onFilterChange(){
-  currentTaskMember=$('taskMemberSelect').value;
-  buildQueue();
-}
-
-function buildQueue(){
-  if(!currentTaskMember){taskQueue=[];currentTaskIndex=0;updateTaskDisplay();renderTaskRecord();return}
-  var typeFilter=$('taskTypeFilter').value;
-  var tasks=lsGet(TASK_KEY,[]);
-  var recs=lsGet(REC_KEY,[]);
-  var today=todayStr();
-  var todayDone={};
-  recs.forEach(function(r){
-    if(r.member!==currentTaskMember||r.status!=='done')return;
-    if(r.date===today || (r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0))todayDone[r.task]=true;
-  });
-  var filtered=tasks.filter(function(t){if(typeFilter==='all')return true;return t.type===typeFilter});
-  taskQueue=filtered.filter(function(t){return !todayDone[t.title]});
-  taskQueue.sort(function(a,b){if(a.type===b.type)return 0;return a.type==='Daily'?-1:1});
-  currentTaskIndex=0;
-  updateTaskDisplay();
-  renderTaskRecord();
-}
-
-function updateTaskDisplay(){
-  var box=$('taskCurrent');
-  var bD=$('btnDone'),bN=$('btnNotDone'),bS=$('btnSkip');
-  if(!currentTaskMember){
-    box.innerHTML='<div class="lbl">📌 موجودہ ٹاسک</div><div class="empty-nm">پہلے ممبر منتخب کریں</div>';
-    bD.disabled=true;bN.disabled=true;bS.disabled=true;return;
+  } else {
+    bt.textContent='00:00:00';
+    bt.classList.add('stopped');
+    bt.classList.remove('junior-on','senior-only');
   }
-  if(currentTaskIndex>=taskQueue.length){
-    box.innerHTML='<div class="lbl">📌 موجودہ ٹاسک</div><div class="empty-nm">🎉 تمام کام مکمل!</div>';
-    bD.disabled=true;bN.disabled=true;bS.disabled=true;return;
-  }
-  var task=taskQueue[currentTaskIndex];
-  var isDaily=task.type==='Daily';
-  var icon=isDaily?'🟢':'🔵';
-  var label=isDaily?'روزانہ':'کبھی';
-  var cls=isDaily?'daily':'kabhi';
-  box.innerHTML='<div class="lbl">📌 موجودہ ٹاسک ('+(currentTaskIndex+1)+'/'+taskQueue.length+')</div>'
-    +'<div class="task-row"><span class="nm">'+icon+' '+esc(task.title)+'</span><span class="pts">🏆 '+task.points+'</span></div>'
-    +'<span class="type-badge '+cls+'">'+label+'</span>';
-  bD.disabled=false;bN.disabled=false;bS.disabled=false;
 }
 
-function submitTask(status){
-  if(!currentTaskMember){showMsg('ممبر منتخب کریں',true);return}
-  if(currentTaskIndex>=taskQueue.length){showMsg('تمام مکمل',true);return}
-  var task=taskQueue[currentTaskIndex];
-  var recs=lsGet(REC_KEY,[]);
-  var d=new Date();
-  var points=(status==='done')?(task.points||0):0;
-  recs.unshift({id:Date.now()+Math.random(),member:currentTaskMember,task:task.title,taskType:task.type,points:points,status:status,timestamp:Date.now(),date:todayStr(),dateStr:pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes())});
-  lsSet(REC_KEY,recs);
-  currentTaskIndex++;
-  updateTaskDisplay();
-  renderTaskRecord();
-  var lbl=status==='done'?'✅':(status==='notdone'?'❌':'⚪');
-  showMsg(lbl+' '+task.title);
+/* ========== RENDER ========== */
+function renderAll(){
+  var m=getMembers();
+  populateLeaveMembers();
+  renderDutyPanel(m);
+  renderLeaveRecord();
+  renderState(m);
+  updateTimer();
 }
 
-function renderTaskRecord(){
-  var box=$('taskHistBox');if(!box)return;
-  if(!currentTaskMember){
-    box.innerHTML='<div class="task-hist-empty">پہلے ممبر منتخب کریں</div>';
-    $('taskPts').textContent=0;$('taskDoneCount').textContent=0;$('taskTotalCount').textContent=0;
-    return;
-  }
-  var recs=lsGet(REC_KEY,[]);
-  var today=todayStr();
-  var typeFilter=$('taskTypeFilter').value;
-  var my=recs.filter(function(r){
-    if(r.member!==currentTaskMember)return false;
-    var isToday=(r.date===today)||(r.dateStr && r.dateStr.indexOf(pad(new Date().getDate())+'/'+pad(new Date().getMonth()+1))===0);
-    if(!isToday)return false;
-    if(typeFilter!=='all'){
-      var tt=r.taskType;
-      if(!tt){var t=lsGet(TASK_KEY,[]).find(function(x){return x.title===r.task});if(t)tt=t.type}
-      if(tt!==typeFilter)return false;
-    }
-    return true;
-  });
-  if(!my.length){box.innerHTML='<div class="task-hist-empty">آج کا کوئی ریکارڈ نہیں</div>'}
-  else{
-    box.innerHTML=my.map(function(r,i){
-      var lbl=r.status==='done'?'✅':(r.status==='notdone'?'❌':'⚪');
-      var tt=r.taskType;
-      if(!tt){var t=lsGet(TASK_KEY,[]).find(function(x){return x.title===r.task});if(t)tt=t.type}
-      var tLabel=tt==='Daily'?'روزانہ':(tt==='Occasional'?'کبھی':'');
-      var tCls=tt==='Daily'?'daily':(tt==='Occasional'?'kabhi':'');
-      return '<div class="task-hist-item"><div class="body">'
-        +'<div class="line1"><span>'+(i+1)+'. '+lbl+' '+esc(r.task)+'</span><span class="pts-badge">+'+r.points+'</span>'
-        +(tLabel?'<span class="type-tag '+tCls+'">'+tLabel+'</span>':'')+'</div>'
-        +'<div class="meta">📅 '+esc(r.dateStr||'')+'</div>'
-        +'</div></div>';
-    }).join('');
-  }
-  var pts=my.reduce(function(s,r){return s+(r.points||0)},0);
-  var done=my.filter(function(r){return r.status==='done'}).length;
-  $('taskPts').textContent=pts;$('taskDoneCount').textContent=done;$('taskTotalCount').textContent=my.length;
-}
-
-/* ========== DUTY RENDER ========== */
 function renderDutyPanel(m){
   var s=m.find(function(x){return x.onDuty&&x.rank==='Senior'});
   var j=m.find(function(x){return x.onDuty&&x.rank==='Junior'});
@@ -421,16 +400,20 @@ function renderDutyPanel(m){
 function renderLeaveRecord(){
   var leaves=getLeaves();
   var today=todayStr();
-  var recent=leaves.filter(function(l){return l.date===today||(l.timestamp && l.timestamp>=Date.now()-7*86400000)})
-    .sort(function(a,b){return (b.timestamp||0)-(a.timestamp||0)}).slice(0,15);
+  var recent=leaves.filter(function(l){
+    return l.date===today || (l.timestamp && l.timestamp>=Date.now()-7*86400000);
+  }).sort(function(a,b){return (b.timestamp||0)-(a.timestamp||0)}).slice(0,15);
   var box=$('leaveRecordBox');
   if(!recent.length){box.innerHTML='<div class="leave-empty">📭 کوئی چھٹی نہیں</div>';return}
   box.innerHTML=recent.map(function(l,i){
+    var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[l.id]?'checked':'')+' onchange="toggleSel('+l.id+')">':'';
     var d=new Date(l.timestamp||Date.now());
     var dtStr=pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
-    return '<div class="leave-item"><div class="nm">'+(i+1)+'️⃣ 👤 '+esc(l.name)+' ('+l.rank+')</div>'
+    return '<div class="leave-item">'+chk+'<div class="body">'
+      +'<div class="nm">'+(i+1)+'️⃣ 👤 '+esc(l.name)+' ('+l.rank+')</div>'
       +'<div class="reason">🏖️ "'+esc(l.reason||'—')+'"</div>'
-      +'<div class="meta">⏱️ '+(l.duration||1)+' دن · 📅 '+dtStr+'</div></div>';
+      +'<div class="meta">⏱️ '+(l.duration||1)+' دن · 📅 '+dtStr+'</div>'
+      +'</div></div>';
   }).join('');
 }
 
@@ -440,24 +423,91 @@ function renderState(m){
   $('stateLeave').textContent=m.filter(function(x){return x.onLeave}).length;
 }
 
-function renderAll(){
-  var m=getMembers();
-  populateLeaveMembers();
-  populateTaskMembers();
-  renderDutyPanel(m);
-  renderLeaveRecord();
-  renderState(m);
-  updateTimer();
-  renderTaskRecord();
+/* ========== SELECT / SETTINGS ========== */
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  $('selModeBtn').classList.toggle('active',selectMode);
+  if(!selectMode)selectedIds={};
+  renderAll();
+  showMsg(selectMode?'✅ Select ON':'☑️ OFF');
+}
+function toggleSel(id){selectedIds[id]=!selectedIds[id];renderAll()}
+
+function editSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
+  if(!ids.length){showMsg('چھٹی منتخب کریں',true);return}
+  if(ids.length>1){showMsg('ایک وقت میں ایک',true);return}
+  var id=parseInt(ids[0]);
+  var leaves=getLeaves();
+  var idx=leaves.findIndex(function(l){return l.id===id});
+  if(idx===-1)return;
+  var nr=prompt('نیا وجہ:',leaves[idx].reason);
+  if(nr&&nr.trim()){
+    leaves[idx].reason=nr.trim();
+    setLeaves(leaves);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ اپڈیٹ');
+  }
 }
 
+function deleteSelected(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]}).map(function(k){return parseInt(k)});
+  if(!ids.length){showMsg('چھٹی منتخب کریں',true);return}
+  showConfirm('ڈیلیٹ',ids.length+' چھٹی ڈیلیٹ؟',function(){
+    var leaves=getLeaves().filter(function(l){return ids.indexOf(l.id)===-1});
+    setLeaves(leaves);
+    var m=getMembers();
+    m.forEach(function(mem){
+      var stillOnLeave=leaves.some(function(l){
+        return l.name===mem.name && (l.date===todayStr()||(l.timestamp && l.timestamp>=todayTs()))
+      });
+      if(!stillOnLeave && mem.onLeave){mem.onLeave=false;mem.currentLeaveReason=null;mem.leaveStart=null}
+    });
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('✅ ڈیلیٹ');
+  });
+}
+
+function clearAll(){
+  showConfirm('صاف','تمام چھٹی ریکارڈ صاف؟',function(){
+    setLeaves([]);
+    var m=getMembers();
+    m.forEach(function(mem){mem.onLeave=false;mem.currentLeaveReason=null;mem.leaveStart=null});
+    setMembers(m);
+    selectedIds={};
+    renderAll();
+    showMsg('🧹 صاف');
+  });
+}
+
+function openSettings(){$('nsOverlay').classList.add('active')}
+function closeSettings(){$('nsOverlay').classList.remove('active')}
+function closeSection(){
+  closeSettings();
+  $('dutySection').style.display='none';
+  showMsg('✅ سیکشن بند');
+}
+
+function showConfirm(title,body,cb){
+  $('modalTitle').textContent=title;
+  $('modalBody').textContent=body;
+  _modalCb=cb;
+  $('nsModal').classList.add('active');
+}
+function modalClose(){$('nsModal').classList.remove('active');_modalCb=null}
+function modalConfirm(){var cb=_modalCb;modalClose();if(cb)cb()}
+
+/* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded',function(){
   var m=lsGet(DUTY_KEY,[]);
   var active=m.find(function(x){return x.onDuty&&x.dutyStart&&!x.deleted});
   if(active){currentTimerStart=active.dutyStart;timerRunning=true}
   renderAll();
-  renderTickers();
-  setInterval(renderTickers,60000);
+  renderNewsAlert();
+  setInterval(renderNewsAlert,60000);
 });
 
 setInterval(function(){
