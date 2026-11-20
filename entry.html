@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>A1 — نیوز اینڈ الرٹ مینیجر</title>
+<title>NA1 — نیوز اینڈ الرٹ مینیجر</title>
 <style>
 :root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -710,7 +710,9 @@ function saveNews(){
     date:todayStr(),
     auto:false,
     skipped:false,
-    deleted:false
+    deleted:false,
+    dashShown:false,
+    historyReady:false
   });
   lsSet(NEWS_KEY,items);
   $('newsContent').value='';
@@ -849,8 +851,20 @@ function nsToggleDark(){
   $('darkBtn').classList.toggle('active',on);
   lsSet('ns_dark',on);
 }
-function nsDashShow(){lsSet('ns_dash_visible',true);showMsg('📊 ڈیش بورڈ پٹی آن',true)}
-function nsDashHide(){lsSet('ns_dash_visible',false);showMsg('📊 ڈیش بورڈ پٹی آف',true)}
+function nsDashShow(){
+  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
+  if(ids.length){
+    var man=lsGet('a2_manual_sel',{});
+    ids.forEach(function(id){man[id]=true});
+    lsSet('a2_manual_sel',man);
+  }
+  lsSet('ns_dash_visible',true);
+  showMsg('📊 ڈیش بورڈ Show آن',true);
+}
+function nsDashHide(){
+  lsSet('ns_dash_visible',false);
+  showMsg('📊 ڈیش بورڈ Hide آن',true);
+}
 
 /* PART 01: FIX ITEMS & AUTO TIME CHECK */
 function renderFixItems(){
@@ -1001,13 +1015,15 @@ function runAutoCheckNow(){
       date:todayD,
       auto:true,
       skipped:false,
-      deleted:false
+      deleted:false,
+      dashShown:false,
+      historyReady:false
     });
   });
   lsSet(NEWS_KEY,items);
   renderRecords();
   notifyNewItem(results[0].type,results[0].text);
-  showMsg('✅ '+results.length+' آئٹمز پٹی میں بھیج دیے گئے',true);
+  showMsg('✅ '+results.length+' آئٹمز ریکارڈ میں شامل کر دیے گئے',true);
 }
 
 /* PART 02: PATTI FILTER & SETTINGS */
