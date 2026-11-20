@@ -32,7 +32,7 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; line-heig
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* نیوز پٹی */
+/* نیوز پٹی — سنگل لائن، کوئی ڈبل ٹیکسٹ نہیں */
 .ticker-bar {
   background: #fffbeb; border: 1px solid #fde68a; color: var(--golden);
   padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
@@ -41,8 +41,8 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; line-heig
 .ticker-bar.show { display: flex; }
 .ticker-text {
   display: inline-block;
+  white-space: nowrap;
   animation: customTickerRight var(--news-dur, 35s) linear infinite;
-  padding-right: 100%;
 }
 
 @keyframes customTickerRight {
@@ -68,8 +68,6 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; line-heig
 .alert-text {
   display: inline-block;
   white-space: nowrap;
-  animation: customTickerRight var(--alert-dur, 25s) linear infinite;
-  padding-right: 100%;
 }
 .alert-skip-btn {
   background: var(--danger); color: #fff; border: none;
@@ -79,14 +77,14 @@ body { background-color: var(--bg); color: var(--text); padding: 10px; line-heig
 .alert-skip-btn:active { transform: scale(0.95); }
 
 /* NA1 اثرات */
-.eff-static { animation: none !important; white-space: normal !important; padding-right: 0 !important; }
+.eff-static { animation: none !important; white-space: normal !important; }
 .eff-reverse { animation-direction: reverse !important; }
-.eff-fade { animation: effFade 1.4s ease-in-out infinite alternate !important; white-space: normal !important; padding-right: 0 !important; }
-.eff-slide { animation: effSlide 0.8s ease-out !important; white-space: normal !important; padding-right: 0 !important; }
-.eff-blink { animation: effBlink 0.9s step-end infinite !important; white-space: normal !important; padding-right: 0 !important; }
-.eff-blur { animation: effBlur 1.5s ease-out !important; white-space: normal !important; padding-right: 0 !important; }
-.eff-bounce { animation: effBounce 1s ease-in-out infinite !important; white-space: normal !important; padding-right: 0 !important; }
-.eff-glow { text-shadow: 0 0 8px rgba(220,38,38,.45); animation: effGlow 1.1s ease-in-out infinite alternate !important; white-space: normal !important; padding-right: 0 !important; }
+.eff-fade { animation: effFade 1.4s ease-in-out infinite alternate !important; white-space: normal !important; }
+.eff-slide { animation: effSlide 0.8s ease-out !important; white-space: normal !important; }
+.eff-blink { animation: effBlink 0.9s step-end infinite !important; white-space: normal !important; }
+.eff-blur { animation: effBlur 1.5s ease-out !important; white-space: normal !important; }
+.eff-bounce { animation: effBounce 1s ease-in-out infinite !important; white-space: normal !important; }
+.eff-glow { text-shadow: 0 0 8px rgba(220,38,38,.45); animation: effGlow 1.1s ease-in-out infinite alternate !important; white-space: normal !important; }
 
 @keyframes effFade { 0% { opacity: .25; } 100% { opacity: 1; } }
 @keyframes effSlide { 0% { transform: translateX(35px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
@@ -275,6 +273,7 @@ function nextNewsStep() {
   var cfg = getNa1Config();
   if (!cfg.newsOn || !newsQueue.length) {
     $('newsPattiBox').classList.remove('show');
+    $('newsPattiText').textContent = '';
     activeNewsItem = null;
     return;
   }
@@ -297,7 +296,11 @@ function nextNewsStep() {
   clearTimeout(newsTimer);
   newsTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    nextNewsStep();
+    if (newsQueue.length > 1) {
+      nextNewsStep();
+    } else {
+      markHistoryReady(item.id, false);
+    }
   }, Math.max(cfg.newsSec, 2) * 1000);
 }
 
@@ -320,20 +323,17 @@ function nextAlertStep() {
   if (!effCls || effCls === 'eff-blink') box.classList.add('blink');
   else box.classList.remove('blink');
 
-  var dur = Math.max(8, 55 - (cfg.alertSpeed * 3.5));
-  el.style.setProperty('--alert-dur', dur + 's');
   el.textContent = '🚨 ' + item.content;
   el.className = 'alert-text ' + effCls;
-  el.style.animation = 'none';
-  void el.offsetWidth;
-  el.style.animation = '';
 
   playNa1Feedback('alert', item.content, cfg);
 
   clearTimeout(alertTimer);
   alertTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    nextAlertStep();
+    if (validAlerts.length > 1) {
+      nextAlertStep();
+    }
   }, Math.max(cfg.alertSec, 2) * 1000);
 }
 
@@ -368,15 +368,15 @@ function syncWithNa1() {
   }
 
   var cfg = getNa1Config();
-  var items = lsGet(NEWS_KEY, []).filter(function(x) { return !x.deleted && !x.skipped; });
+  var allItems = lsGet(NEWS_KEY, []).filter(function(x) { return !x.deleted && !x.skipped; });
   var man = lsGet(MAN_KEY, {});
   var selIds = Object.keys(man).filter(function(k) { return man[k]; });
-  if (selIds.length) {
-    items = items.filter(function(x) { return selIds.indexOf(String(x.id)) !== -1; });
-  }
+  var matched = selIds.length
+    ? allItems.filter(function(x) { return selIds.indexOf(String(x.id)) !== -1; })
+    : allItems;
 
-  var nextNews = cfg.newsOn ? items.filter(function(x) { return x.type === 'news'; }) : [];
-  var nextAlerts = cfg.alertOn ? items.filter(function(x) { return x.type === 'alert'; }) : [];
+  var nextNews = cfg.newsOn ? matched.filter(function(x) { return x.type === 'news'; }) : [];
+  var nextAlerts = cfg.alertOn ? matched.filter(function(x) { return x.type === 'alert'; }) : [];
 
   var nSig = nextNews.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.newsSpeed + '|' + cfg.newsSec + '|' + JSON.stringify(cfg.newsEffects) + '|' + cfg.newsOn;
   var aSig = nextAlerts.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.alertSpeed + '|' + cfg.alertSec + '|' + JSON.stringify(cfg.alertEffects) + '|' + cfg.alertOn;
