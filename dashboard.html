@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NA2 — News & Alert Patti</title>
+<title>Dashboard</title>
 <style>
 :root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -11,8 +11,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
 
 /* NEWS TICKER */
-.ticker-bar{background:#fffbeb;border:1px solid #fde68a;color:#d97706;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;min-height:38px;display:none;align-items:center}
-.ticker-bar.active{display:flex}
+.ticker-bar{background:#fffbeb;border:1px solid #fde68a;color:#d97706;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;min-height:38px;display:flex;align-items:center}
 .ticker-text{display:inline-block;animation:customTickerRight var(--news-dur,35s) linear infinite;padding-right:100%}
 @keyframes customTickerRight{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
@@ -21,22 +20,24 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .alert-ticker-bar.active{display:flex}
 .alert-ticker-bar.blink{animation:fastBlink 0.8s infinite alternate}
 @keyframes fastBlink{0%{opacity:1}100%{opacity:.35;background-color:#ef4444;color:white}}
-.alert-skip-btn{background:#ef4444;color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit;flex-shrink:0}
+.alert-skip-btn{background:#ef4444;color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit}
 </style>
 </head>
 <body>
 
 <div class="container">
+
   <!-- NEWS TICKER -->
   <div class="ticker-bar" id="newsTickerBar">
-    <div class="ticker-text" id="newsBar"></div>
+    <div class="ticker-text" id="newsBar">📰 لوڈ ہو رہا ہے...</div>
   </div>
 
   <!-- ALERT TICKER -->
-  <div class="alert-ticker-bar" id="alertBar">
-    <span id="alertMsg"></span>
+  <div class="alert-ticker-bar" id="alertBar" style="display:none">
+    <span id="alertMsg">🚨 اہم الرٹ...</span>
     <button class="alert-skip-btn" onclick="skipAlert()">اسکیپ ❌</button>
   </div>
+
 </div>
 
 <script>
@@ -44,6 +45,7 @@ function $(id){return document.getElementById(id)}
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
 
+/* ========== KEYS ========== */
 var NEWS_KEY='sec10_news_alerts_data';
 var NA1_SET_KEY='ns_modular_settings_v1';
 var NA1_AUD_KEY='ns_modular_audio_v1';
@@ -80,13 +82,13 @@ var ALERT_TUNES=[
   {n:"ڈبل وارننگ 13",p:[[850,220],[0,80],[1150,260]]},{n:"گہرا الرٹ 14",p:[[300,300],[0,80],[300,350]]},
   {n:"ہائی الرٹ 15",p:[[1500,180],[1200,180],[1500,220]]},{n:"بزر 16",p:[[240,500]]},
   {n:"نبض 17",p:[[800,120],[0,120],[800,120],[0,120],[800,120]]},
-  {n:"چوکنا 18",p:[[950,150],[1250,150],[950,150],[1250,200]]},
-  {n:"ریڈ الرٹ 19",p:[[1050,200],[520,200],[1050,250]]},{n:"فائنل الارم 20",p:[[1200,160],[0,60],[1200,160],[0,60],[800,320]]}
+  {n:"چوکنا 18",p:[[950,150],[1250,150],[950,150],[1250,200]]},{n:"ریڈ الرٹ 19",p:[[1050,200],[520,200],[1050,250]]},{n:"فائنل الارم 20",p:[[1200,160],[0,60],[1200,160],[0,60],[800,320]]}
 ];
 
-var newsList=[], newsIndex=0, newsTimer=null, activeNewsItem=null;
-var alertList=[], alertIndex=0, alertTimer=null, activeAlertItem=null;
-var running=false;
+/* ========== NEWS / ALERT TICKERS (CONNECTED TO NA1 & NA3) ========== */
+var newsIndex=0, newsTimer=null, currentNewsItem=null;
+var alertIndex=0, alertTimer=null, currentAlertItem=null;
+var lastNewsSig='', lastAlertSig='';
 
 function getNa1Cfg(){
   var c=lsGet(NA1_SET_KEY,{});
@@ -106,7 +108,7 @@ function getNa1Cfg(){
   };
 }
 
-function markHistoryReady(itemId){
+function markForNa3History(itemId){
   if(!itemId)return;
   var all=lsGet(NEWS_KEY,[]);
   var changed=false;
@@ -121,7 +123,7 @@ function markHistoryReady(itemId){
   if(changed)lsSet(NEWS_KEY,all);
 }
 
-function triggerFeedback(type,text,cfg){
+function playNa1Feedback(type,text,cfg){
   if(cfg.soundsOn){
     var aud=lsGet(NA1_AUD_KEY,{news:null,alert:null});
     var vol=(type==='alert'?cfg.alertVol:cfg.newsVol)/100;
@@ -162,121 +164,111 @@ function triggerFeedback(type,text,cfg){
   }
 }
 
-function runNextNews(){
-  if(!running)return;
-  var cfg=getNa1Cfg();
-  if(!cfg.newsOn || !newsList.length || newsIndex>=newsList.length){
-    $('newsTickerBar').classList.remove('active');
-    activeNewsItem=null;
+function renderNewsAlert(){
+  var visible=lsGet('ns_dash_visible',null);
+  if(visible===false){
+    clearTimeout(newsTimer);
+    clearTimeout(alertTimer);
+    if($('newsBar')){$('newsBar').textContent='📰 ڈیش بورڈ Hide ہے';$('newsBar').style.animation='none'}
+    if($('alertBar')){$('alertBar').style.display='none';$('alertBar').classList.remove('blink')}
+    lastNewsSig='hidden';
+    lastAlertSig='hidden';
     return;
   }
-  var n=newsList[newsIndex++];
-  activeNewsItem=n;
-  var bar=$('newsTickerBar'), el=$('newsBar');
-  bar.classList.add('active');
-  var dur=Math.max(8,55-(cfg.newsSpeed*3));
-  el.style.setProperty('--news-dur',dur+'s');
-  el.textContent='📰 '+n.content;
-  el.style.animation='none';
-  void el.offsetWidth;
-  el.style.animation='customTickerRight '+dur+'s linear infinite';
 
-  triggerFeedback('news',n.content,cfg);
-
-  clearTimeout(newsTimer);
-  newsTimer=setTimeout(function(){
-    markHistoryReady(n.id);
-    activeNewsItem=null;
-    runNextNews();
-  },Math.max(cfg.newsSec,2)*1000);
-}
-
-function runNextAlert(){
-  if(!running)return;
   var cfg=getNa1Cfg();
-  if(!cfg.alertOn || !alertList.length || alertIndex>=alertList.length){
-    $('alertBar').classList.remove('active');
-    $('alertBar').classList.remove('blink');
-    activeAlertItem=null;
-    return;
+  var items=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted && !x.skipped});
+  var man=lsGet(MAN_KEY,{});
+  var selIds=Object.keys(man).filter(function(k){return man[k]});
+  if(selIds.length){
+    items=items.filter(function(x){return selIds.indexOf(String(x.id))!==-1});
   }
-  var a=alertList[alertIndex++];
-  activeAlertItem=a;
-  var bar=$('alertBar');
-  bar.classList.add('active');
-  bar.classList.add('blink');
-  $('alertMsg').textContent='🚨 '+a.content;
 
-  triggerFeedback('alert',a.content,cfg);
+  var news=cfg.newsOn?items.filter(function(x){return x.type==='news'}):[];
+  var alerts=cfg.alertOn?items.filter(function(x){return x.type==='alert'}):[];
 
-  clearTimeout(alertTimer);
-  alertTimer=setTimeout(function(){
-    markHistoryReady(a.id);
-    activeAlertItem=null;
-    runNextAlert();
-  },Math.max(cfg.alertSec,2)*1000);
+  var nSig=news.map(function(x){return x.id+':'+x.content}).join('|')+'|'+cfg.newsSpeed+'|'+cfg.newsSec;
+  var aSig=alerts.map(function(x){return x.id+':'+x.content}).join('|')+'|'+cfg.alertSec;
+
+  /* NEWS TICKER */
+  if($('newsBar') && nSig!==lastNewsSig){
+    lastNewsSig=nSig;
+    clearTimeout(newsTimer);
+    if(news.length){
+      newsIndex=0;
+      var showNews=function(){
+        var n=news[newsIndex%news.length];
+        currentNewsItem=n;
+        var el=$('newsBar');
+        var dur=Math.max(8,55-(cfg.newsSpeed*3));
+        el.style.setProperty('--news-dur',dur+'s');
+        el.textContent='📰 '+n.content;
+        el.style.animation='none';
+        void el.offsetWidth;
+        el.style.animation='customTickerRight '+dur+'s linear infinite';
+        playNa1Feedback('news',n.content,cfg);
+        newsTimer=setTimeout(function(){
+          markForNa3History(n.id);
+          newsIndex++;
+          showNews();
+        },Math.max(cfg.newsSec,2)*1000);
+      };
+      showNews();
+    } else {
+      currentNewsItem=null;
+      $('newsBar').textContent='📰 کوئی نیوز نہیں';
+      $('newsBar').style.animation='none';
+    }
+  }
+
+  /* ALERT TICKER */
+  if($('alertBar') && aSig!==lastAlertSig){
+    lastAlertSig=aSig;
+    clearTimeout(alertTimer);
+    if(alerts.length){
+      alertIndex=0;
+      var showAlert=function(){
+        var a=alerts[alertIndex%alerts.length];
+        currentAlertItem=a;
+        $('alertBar').style.display='flex';
+        $('alertBar').classList.add('active');
+        $('alertBar').classList.add('blink');
+        $('alertMsg').textContent='🚨 '+a.content;
+        playNa1Feedback('alert',a.content,cfg);
+        alertTimer=setTimeout(function(){
+          markForNa3History(a.id);
+          alertIndex++;
+          showAlert();
+        },Math.max(cfg.alertSec,2)*1000);
+      };
+      showAlert();
+    } else {
+      currentAlertItem=null;
+      $('alertBar').style.display='none';
+      $('alertBar').classList.remove('active');
+      $('alertBar').classList.remove('blink');
+    }
+  }
 }
 
 function skipAlert(){
   clearTimeout(alertTimer);
-  if(activeAlertItem){
-    markHistoryReady(activeAlertItem.id);
-    activeAlertItem=null;
+  if(currentAlertItem){
+    markForNa3History(currentAlertItem.id);
+    currentAlertItem=null;
   }
-  runNextAlert();
+  var ab=$('alertBar');
+  if(ab){ab.style.display='none';ab.classList.remove('active');ab.classList.remove('blink')}
+  lastAlertSig='';
+  renderNewsAlert();
 }
 
-function stopPattis(){
-  running=false;
-  clearTimeout(newsTimer);
-  clearTimeout(alertTimer);
-  activeNewsItem=null;
-  activeAlertItem=null;
-  $('newsTickerBar').classList.remove('active');
-  $('alertBar').classList.remove('active');
-  $('alertBar').classList.remove('blink');
-}
-
-function syncDashPattis(){
-  var visible=lsGet('ns_dash_visible',false)===true;
-  if(!visible){
-    stopPattis();
-    return;
-  }
-  var man=lsGet(MAN_KEY,{});
-  var selIds=Object.keys(man).filter(function(k){return man[k]});
-  if(!selIds.length){
-    stopPattis();
-    return;
-  }
-  var items=lsGet(NEWS_KEY,[]).filter(function(x){
-    return !x.deleted && !x.skipped && selIds.indexOf(String(x.id))!==-1;
-  });
-
-  var nextNews=items.filter(function(x){return x.type==='news'});
-  var nextAlerts=items.filter(function(x){return x.type==='alert'});
-
-  var newsChanged=JSON.stringify(nextNews.map(function(x){return x.id}))!==JSON.stringify(newsList.map(function(x){return x.id}));
-  var alertChanged=JSON.stringify(nextAlerts.map(function(x){return x.id}))!==JSON.stringify(alertList.map(function(x){return x.id}));
-
-  if(!running || newsChanged || alertChanged){
-    running=true;
-    newsList=nextNews;
-    alertList=nextAlerts;
-    newsIndex=0;
-    alertIndex=0;
-    clearTimeout(newsTimer);
-    clearTimeout(alertTimer);
-    runNextAlert();
-    runNextNews();
-  }
-}
-
+/* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded',function(){
-  syncDashPattis();
+  renderNewsAlert();
   setInterval(function(){
-    if(document.visibilityState==='visible')syncDashPattis();
-  },1500);
+    if(document.visibilityState==='visible')renderNewsAlert();
+  },2000);
 });
 </script>
 </body>
