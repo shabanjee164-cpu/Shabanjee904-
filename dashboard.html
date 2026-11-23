@@ -132,9 +132,14 @@ var MAN_KEY = 'a2_manual_sel';
 var LIVE_TRIG_KEY = 'a2_live_trigger';
 
 var _ctx = null;
-function getCtx() {
-  if (!_ctx) {
-    try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+var _dashAudioEl = null;
+var _pendingAudio = null;
+
+function ensureAudioCtx() {
+  var Ctor = window.AudioContext || window.webkitAudioContext;
+  if (!Ctor) return null;
+  if (!_ctx || _ctx.state === 'closed') {
+    try { _ctx = new Ctor(); } catch (e) { _ctx = null; }
   }
   if (_ctx && _ctx.state === 'suspended') {
     try { _ctx.resume(); } catch (e) {}
@@ -243,29 +248,34 @@ function markHistoryReady(id, wasSkipped) {
   if (changed) lsSet(NEWS_KEY, all);
 }
 
-function playNa1Feedback(type, text, cfg) {
+function runAudioNow(type, text, cfg) {
+  var vol = Math.min(1, Math.max(0.05, ((type === 'alert' ? cfg.alertVol : cfg.newsVol) || 85) / 100));
   if (cfg.soundsOn) {
     var aud = lsGet(NA1_AUD_KEY, { news: null, alert: null });
-    var vol = (type === 'alert' ? cfg.alertVol : cfg.newsVol) / 100;
-    if (aud[type]) {
+    if (aud && aud[type]) {
       try {
-        var a = new Audio(aud[type]);
-        a.volume = Math.min(1, Math.max(0, vol));
-        a.play().catch(function() {});
+        if (_dashAudioEl) { _dashAudioEl.pause(); }
+        _dashAudioEl = new Audio(aud[type]);
+        _dashAudioEl.volume = vol;
+        var p = _dashAudioEl.play();
+        if (p && p.catch) {
+          p.catch(function() { _pendingAudio = { type: type, text: text, cfg: cfg }; });
+        }
       } catch (e) {}
     } else {
       var tune = (type === 'alert' ? ALERT_TUNES : NEWS_TUNES)[type === 'alert' ? cfg.alertTune : cfg.newsTune] || NEWS_TUNES[0];
-      var ctx = getCtx();
+      var ctx = ensureAudioCtx();
       if (ctx) {
         try {
-          var t = ctx.currentTime;
+          var t = ctx.currentTime + 0.02;
           tune.p.forEach(function(n) {
             var freq = n[0], dur = n[1] / 1000;
             if (freq > 0) {
               var o = ctx.createOscillator(), g = ctx.createGain();
+              o.type = 'sine';
               o.connect(g); g.connect(ctx.destination);
-              o.frequency.value = freq;
-              g.gain.setValueAtTime(Math.max(0.01, vol), t);
+              o.frequency.setValueAtTime(freq, t);
+              g.gain.setValueAtTime(Math.max(0.05, vol), t);
               g.gain.exponentialRampToValueAtTime(0.001, t + dur);
               o.start(t); o.stop(t + dur);
             }
@@ -275,7 +285,9 @@ function playNa1Feedback(type, text, cfg) {
       }
     }
   }
-  if (cfg.vib && navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  if (cfg.vib && navigator.vibrate) {
+    try { navigator.vibrate([200, 100, 200]); } catch (e) {}
+  }
   if (cfg.voice && ('speechSynthesis' in window)) {
     try {
       window.speechSynthesis.cancel();
@@ -288,7 +300,7 @@ function playNa1Feedback(type, text, cfg) {
       var pitches = [1.1, 1.0, 0.75, 1.2, 0.95, 1.0, 1.1, 0.9, 1.05, 1.0];
       u.rate = rates[slot - 1] || 1.0;
       u.pitch = pitches[slot - 1] || 1.0;
-      u.volume = Math.min(1, Math.max(0, ((type === 'alert' ? cfg.alertVol : cfg.newsVol) || 70) / 100));
+      u.volume = vol;
       window.speechSynthesis.speak(u);
     } catch (e) {}
   }
@@ -297,6 +309,10 @@ function playNa1Feedback(type, text, cfg) {
       new Notification(type === 'alert' ? '🚨 Alert' : '📰 News', { body: text });
     } catch (e) {}
   }
+}
+
+function playNa1Feedback(type, text, cfg) {
+  runAudioNow(type, text, cfg);
 }
 
 function orderAndFilterQueue(list, type, cfg) {
@@ -313,12 +329,18 @@ function orderAndFilterQueue(list, type, cfg) {
   }
 
   var counts = shownCounts[type] || {};
+  var filtered = arr;
   if (cfg.repeatMode === 'once') {
-    arr = arr.filter(function(x) { return (counts[String(x.id)] || 0) < 1; });
+    filtered = arr.filter(function(x) { return (counts[String(x.id)] || 0) < 1; });
   } else if (cfg.repeatMode === 'fixed' || mode === 'fixed') {
-    arr = arr.filter(function(x) { return (counts[String(x.id)] || 0) < maxShow; });
+    filtered = arr.filter(function(x) { return (counts[String(x.id)] || 0) < maxShow; });
   }
-  return arr;
+
+  if (!filtered.length && arr.length > 0 && cfg.repeatMode !== 'loop') {
+    shownCounts[type] = {};
+    filtered = arr;
+  }
+  return filtered;
 }
 
 function nextNewsStep(forcePlay) {
@@ -355,9 +377,7 @@ function nextNewsStep(forcePlay) {
   clearTimeout(newsTimer);
   newsTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    if (cfg.repeatMode === 'loop' || eligible.length > 1 || orderAndFilterQueue(newsQueue, 'news', cfg).length > 0) {
-      nextNewsStep(false);
-    }
+    nextNewsStep(false);
   }, Math.max(cfg.newsSec, 2) * 1000);
 }
 
@@ -396,9 +416,7 @@ function nextAlertStep(forcePlay) {
   clearTimeout(alertTimer);
   alertTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    if (cfg.repeatMode === 'loop' || validAlerts.length > 1 || orderAndFilterQueue(baseAlerts, 'alert', cfg).length > 0) {
-      nextAlertStep(false);
-    }
+    nextAlertStep(false);
   }, Math.max(cfg.alertSec, 2) * 1000);
 }
 
@@ -484,6 +502,7 @@ function syncWithNa1() {
   var matched = selIds.length
     ? allItems.filter(function(x) { return selIds.indexOf(String(x.id)) !== -1; })
     : allItems;
+  if (!matched.length && allItems.length) matched = allItems;
 
   var nextNews = cfg.newsOn ? matched.filter(function(x) { return x.type === 'news'; }) : [];
   var nextAlerts = cfg.alertOn ? matched.filter(function(x) { return x.type === 'alert'; }) : [];
@@ -510,6 +529,15 @@ function syncWithNa1() {
     nextAlertStep(false);
   }
 }
+
+document.addEventListener('pointerdown', function() {
+  ensureAudioCtx();
+  if (_pendingAudio) {
+    var pa = _pendingAudio;
+    _pendingAudio = null;
+    runAudioNow(pa.type, pa.text, pa.cfg);
+  }
+}, { passive: true });
 
 document.addEventListener('DOMContentLoaded', function() {
   syncWithNa1();
