@@ -94,7 +94,7 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .quick-panel .side-btn.active{background:#10b981;border-color:#059669}
 .quick-panel .side-btn.detailed{background:#2563eb;border-color:#1d4ed8}
 
-/* DETAILED SETTINGS OVERLAY - CLEAN LIST STYLE */
+/* DETAILED SETTINGS OVERLAY */
 .ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
 .ns-overlay.active{display:block}
 .ns-box{max-width:540px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
@@ -106,7 +106,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .patti-tab.active.alert{background:#fef2f2;border-color:#dc2626;color:#dc2626}
 .ns-body{flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:10px}
 
-/* PART CARD */
 .part-card{background:#fff;border:1px solid #cbd5e1;border-radius:10px;overflow:hidden}
 .part-head{background:#f8fafc;padding:9px 12px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}
 .part-num{background:#1e293b;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px}
@@ -116,7 +115,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .part-body{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
 .part-card.collapsed .part-body{display:none}
 
-/* CLEAN LIST ROWS & DIRECT SWITCH */
 .list-row{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;border-bottom:1px solid #f1f5f9;font-size:11.5px;font-weight:700;gap:8px}
 .list-row:last-child{border-bottom:none}
 .list-row .sub-txt{display:block;font-size:9.5px;color:#64748b;font-weight:600;margin-top:1px}
@@ -131,7 +129,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .time-box input,.time-box select{padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11.5px;font-weight:700;text-align:center;font-family:inherit;outline:none;width:48px}
 .time-box select{width:58px}
 
-/* ADD BOX & FIX ITEMS LIST */
 .add-item-box{display:flex;gap:4px;background:#f8fafc;padding:6px;border-radius:8px;border:1px solid #e2e8f0}
 .add-item-box input,.add-item-box select{padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-family:inherit;outline:none}
 .add-item-box input{flex:1}
@@ -157,12 +154,10 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .inline-edit-row input{flex:1}
 .inline-edit-row button{padding:5px 8px;border:none;border-radius:5px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;background:#10b981;color:#fff}
 
-/* 10 EFFECTS LIST */
 .effect-grid{display:flex;flex-direction:column;gap:4px}
 .effect-row{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;font-size:11px;font-weight:700}
 .effect-row.active{background:#eff6ff;border-color:#2563eb;color:#1e40af}
 
-/* SOUNDS GRID (25 NEWS / 20 ALERT) */
 .tunes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
 .tune-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:6px;display:flex;align-items:center;gap:4px}
 .tune-card.sel{background:#eff6ff;border-color:#2563eb}
@@ -175,7 +170,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .tune-card .t-sel{background:#64748b}
 .tune-card.sel .t-sel{background:#2563eb}
 
-/* AUDIO UPLOAD & VOLUME */
 .audio-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px}
 .audio-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .audio-actions button{padding:6px 10px;border:none;border-radius:6px;font-size:10.5px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff}
@@ -184,7 +178,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .btn-play-aud{background:#0284c7}
 .btn-del-aud{background:#dc2626}
 
-/* TEST BUTTONS */
 .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .test-btn{padding:9px 6px;border:1px solid #bfdbfe;background:#eff6ff;color:#1e40af;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center}
 .test-btn:active{transform:scale(.97)}
@@ -192,7 +185,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 .ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:10px 12px;display:flex;gap:8px;z-index:20}
 .ns-foot button{flex:1;padding:11px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;background:#1e293b;color:#fff}
 
-/* PASSWORD BAR IN PANEL */
 .pwd-bar{display:none;background:#1e293b;padding:6px;border-radius:8px;gap:4px;flex-direction:column}
 .pwd-bar.show{display:flex}
 .pwd-bar input{padding:6px;border:1px solid #475569;border-radius:5px;font-size:11px;background:#0f172a;color:#fff;font-family:inherit;outline:none}
@@ -201,7 +193,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 </head>
 <body>
 
-<!-- FULL SECTION LOCK WALL (4 FEATURES: NEW PASSWORD, FORGOT, ON/OFF, RESET) -->
 <div class="sec-lock-wall" id="secLockWall">
   <div class="sec-lock-box">
     <div style="font-size:24px">🔒</div>
@@ -228,14 +219,12 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
       <button onclick="openQuickPanel()">⚙️</button>
     </div>
 
-    <!-- INLINE PASSWORD CHECK BAR (NO JS PROMPT) -->
     <div class="inline-input-bar" id="pwdCheckBar">
       <input type="password" id="pwdCheckInput" placeholder="🔑 پاس ورڈ درج کریں...">
       <button style="background:#2563eb;color:#fff" onclick="verifyPanelPwd()">کھولیں</button>
       <button style="background:#64748b;color:#fff" onclick="closePwdBar()">✕</button>
     </div>
 
-    <!-- INLINE EDIT BAR FOR SELECTED RECORD (NO JS PROMPT) -->
     <div class="inline-input-bar" id="recEditBar">
       <input type="text" id="recEditInput" placeholder="نیا متن لکھیں...">
       <button style="background:#10b981;color:#fff" onclick="applyRecordEdit()">سیو</button>
@@ -248,7 +237,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
       <button class="btn" onclick="saveNews()">💾</button>
     </div>
 
-    <!-- LIVE NEWS & ALERT PATTI TICKER -->
     <div class="live-patti-wrap" id="livePattiWrap">
       <div class="live-patti-bar alert-bar" id="liveAlertPatti">
         <span class="live-patti-tag alert">🚨 Alert</span>
@@ -274,7 +262,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
       </div>
     </div>
 
-    <!-- TYPE FILTER (ALL / NEWS / ALERT) & PERIOD FILTER (DAILY / WEEKLY / MONTHLY / YEARLY) -->
     <div class="scroll-head">
       <span>📋 ریکارڈ: <span id="recFilterLabel">آج</span></span>
       <div style="display:flex;gap:3px;flex-wrap:wrap">
@@ -304,7 +291,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
   </div>
 </div>
 
-<!-- QUICK SIDE PANEL -->
 <div class="panel-overlay" id="qOverlay" onclick="closeQuickPanel()"></div>
 <div class="quick-panel" id="qPanel">
   <button class="side-btn" onclick="nsSelectMode()" id="selModeBtn"><span>☑️ Select</span><span>›</span></button>
@@ -330,7 +316,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
   <button class="side-btn" onclick="closeQuickPanel()"><span>⬇️ Close</span><span>›</span></button>
 </div>
 
-<!-- DETAILED SETTINGS OVERLAY -->
 <div class="ns-overlay" id="nsOverlay">
   <div class="ns-box">
     <div class="ns-head">
@@ -338,7 +323,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
       <button onclick="closeDetailedSettings()">✕</button>
     </div>
 
-    <!-- PATTI FILTER BAR -->
     <div class="patti-filter-bar">
       <button class="patti-tab active news" id="tabNewsPatti" onclick="switchPattiFilter('news')">📰 News Patti</button>
       <button class="patti-tab alert" id="tabAlertPatti" onclick="switchPattiFilter('alert')">🚨 Alert Patti</button>
@@ -346,7 +330,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
 
     <div class="ns-body">
 
-      <!-- PART 01: ایپ آٹو فکس ٹائم چیک -->
       <div class="part-card" id="partCard1">
         <div class="part-head">
           <span class="part-num">01</span>
@@ -382,7 +365,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
         </div>
       </div>
 
-      <!-- PART 02: نیوز پٹی / الرٹ پٹی سیٹنگز -->
       <div class="part-card" id="partCard2">
         <div class="part-head">
           <span class="part-num">02</span>
@@ -392,7 +374,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
         <div class="part-body">
           <div style="font-size:11px;font-weight:800;color:#2563eb" id="activeFilterBanner">منتخب فلٹر: 📰 News Patti</div>
 
-          <!-- RECORD PLAY ORDER / REPEAT / SKIP -->
           <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px;padding-top:8px;border-top:1px dashed #cbd5e1">🔁 ریکارڈ ترتیب، تکرار اور اسکیپ (Play Order / Repeat / Skip)</div>
 
           <div class="list-row">
@@ -466,7 +447,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
         </div>
       </div>
 
-      <!-- PART 03: آل سیٹنگز، 10 آوازیں اور ٹیسٹ -->
       <div class="part-card" id="partCard3">
         <div class="part-head">
           <span class="part-num">03</span>
@@ -523,7 +503,6 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
         </div>
       </div>
 
-      <!-- PART 04: دیگر سیٹنگز (OTHERS SETTING) -->
       <div class="part-card" id="partCard4">
         <div class="part-head">
           <span class="part-num">04</span>
@@ -585,6 +564,7 @@ var AUDIO_STORE_KEY='ns_modular_audio_v1';
 var LAST_AUTO_KEY='ns_last_auto_run_v1';
 var LOCK_STATE_KEY='na1_full_lock_v1';
 var LIVE_TRIG_KEY='a2_live_trigger';
+var MAN_SEL_KEY='a2_manual_sel';
 
 var NEWS_TUNES=[
   {name:"نیوز بیپ 1",p:[[780,180]]},{name:"نیوز ڈبل 2",p:[[780,130],[0,50],[920,150]]},
@@ -650,6 +630,18 @@ var _audioTimers=[];
 var _previewAudioEl=null;
 var _activeAudioToken=null;
 
+function ensureAudioContext(){
+  var Ctor=window.AudioContext||window.webkitAudioContext;
+  if(!Ctor)return null;
+  if(!_audioCtx||_audioCtx.state==='closed'){
+    try{_audioCtx=new Ctor()}catch(e){_audioCtx=null}
+  }
+  if(_audioCtx&&_audioCtx.state==='suspended'){
+    try{_audioCtx.resume()}catch(e){}
+  }
+  return _audioCtx;
+}
+
 function emitLiveTrigger(item){
   if(!item)return;
   lsSet(LIVE_TRIG_KEY,{
@@ -667,10 +659,6 @@ function stopAllAudio(){
   if(_previewAudioEl){
     try{_previewAudioEl.pause();_previewAudioEl.currentTime=0}catch(e){}
     _previewAudioEl=null;
-  }
-  if(_audioCtx){
-    try{_audioCtx.close()}catch(e){}
-    _audioCtx=null;
   }
   updateAudioButtonsUI();
 }
@@ -977,7 +965,6 @@ function closeDetailedSettings(){
 }
 function togglePartCard(id){$(id).classList.toggle('collapsed')}
 
-/* LIVE PATTI ENGINE IN NA1 */
 function getPattiCandidateItems(type){
   var all=lsGet(NEWS_KEY,[]);
   var today=todayStr();
@@ -985,7 +972,7 @@ function getPattiCandidateItems(type){
   var list=all.filter(function(x){
     if(x.deleted)return false;
     if(x.type!==type)return false;
-    if(x.date!==today)return false;
+    if(x.date && x.date!==today)return false;
     if(x.skipped)return false;
     if(rt.onceSkipped[String(x.id)])return false;
     return true;
@@ -1005,9 +992,7 @@ function getPattiCandidateItems(type){
   var rep=cfg.repeatMode||'once';
   if(rep==='once'){
     list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<1});
-  } else if(rep==='fixed'){
-    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<maxShow});
-  } else if(mode==='fixed'){
+  } else if(rep==='fixed' || mode==='fixed'){
     list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<maxShow});
   }
   return list;
@@ -1114,7 +1099,10 @@ function nextLivePattiItem(type){
   rt.idx=(rt.idx+1)%items.length;
   renderSinglePatti(type);
   var cur=items[rt.idx];
-  if(cur)emitLiveTrigger(cur);
+  if(cur){
+    emitLiveTrigger(cur);
+    notifyNewItem(cur.type,cur.content);
+  }
 }
 
 function skipLivePattiItem(type,mode){
@@ -1137,7 +1125,6 @@ function skipLivePattiItem(type,mode){
   refreshLivePattis();
 }
 
-/* MAIN RECORD CRUD & FILTERS */
 function saveNews(){
   var type=$('newsType').value,content=$('newsContent').value.trim();
   if(!content){showMsg('متن لکھیں',false);return}
@@ -1158,12 +1145,15 @@ function saveNews(){
   };
   items.unshift(newItem);
   lsSet(NEWS_KEY,items);
+  lsSet(SETTINGS_KEY,cfg);
+  lsSet(AUDIO_STORE_KEY,savedLocalAudio);
+  lsSet('ns_dash_visible',true);
   $('newsContent').value='';
   renderRecords();
   refreshLivePattis();
   emitLiveTrigger(newItem);
   notifyNewItem(type,content);
-  showMsg('✅ محفوظ ہو گیا',true);
+  showMsg('✅ محفوظ ہو گیا اور ڈیش بورڈ پر بھیجا گیا',true);
 }
 
 function applyPeriodFilter(list,period,mode){
@@ -1324,13 +1314,17 @@ function nsToggleDark(){
 function nsDashShow(){
   var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
   if(ids.length){
-    var man=lsGet('a2_manual_sel',{});
+    var man=lsGet(MAN_SEL_KEY,{});
     ids.forEach(function(id){man[id]=true});
-    lsSet('a2_manual_sel',man);
+    lsSet(MAN_SEL_KEY,man);
+  } else {
+    lsSet(MAN_SEL_KEY,{});
   }
   lsSet('ns_dash_visible',true);
   $('livePattiWrap').style.display='flex';
   refreshLivePattis();
+  var all=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted&&!x.skipped});
+  if(all.length)emitLiveTrigger(all[0]);
   showMsg('📊 ڈیش بورڈ Show آن',true);
 }
 function nsDashHide(){
@@ -1339,7 +1333,6 @@ function nsDashHide(){
   showMsg('📊 ڈیش بورڈ Hide آن',true);
 }
 
-/* PART 01: FIX ITEMS & AUTO TIME CHECK */
 function renderFixItems(){
   var box=$('fixItemsContainer');
   box.innerHTML=cfg.fixItems.map(function(item,i){
@@ -1510,6 +1503,8 @@ function runAutoCheckNow(){
   }
 
   lsSet(NEWS_KEY,items);
+  lsSet(SETTINGS_KEY,cfg);
+  lsSet('ns_dash_visible',true);
   renderRecords();
   refreshLivePattis();
   emitLiveTrigger(addedItems[0]);
@@ -1517,7 +1512,6 @@ function runAutoCheckNow(){
   showMsg('✅ '+addedItems.length+' نئے آٹو ریکارڈ شامل ہو گئے',true);
 }
 
-/* PART 02: PATTI FILTER & SETTINGS */
 function switchPattiFilter(p){
   activePatti=p;
   $('tabNewsPatti').classList.toggle('active',p==='news');
@@ -1584,6 +1578,7 @@ function selectTuneForPatti(p,idx){
   pObj.tuneIdx=idx;
   saveAllSettings();
   renderPattiSection();
+  playTuneByIndex(p,idx,pObj.volume,'tune_'+p+'_'+idx);
   showMsg('✅ دھن سیو ہو گئی',true);
 }
 
@@ -1599,20 +1594,21 @@ function playTuneByIndex(p,idx,customVol,tokenName){
   var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
   var vol=(customVol!==undefined?customVol:pObj.volume)/100;
   try{
-    var ctx=new (window.AudioContext||window.webkitAudioContext)();
-    _audioCtx=ctx;
+    var ctx=ensureAudioContext();
+    if(!ctx){stopAllAudio();return}
     _activeAudioToken=tok;
     updateAudioButtonsUI();
-    var t=ctx.currentTime;
+    var t=ctx.currentTime+0.02;
     var totalMs=0;
     tune.p.forEach(function(n){
       var freq=n[0],dur=n[1]/1000;
-      totalMs+=n[1]+40;
+      totalMs+=n[1]+45;
       if(freq>0){
         var osc=ctx.createOscillator(),g=ctx.createGain();
+        osc.type='sine';
         osc.connect(g);g.connect(ctx.destination);
-        osc.frequency.value=freq;
-        g.gain.setValueAtTime(Math.max(0.01,vol),t);
+        osc.frequency.setValueAtTime(freq,t);
+        g.gain.setValueAtTime(Math.max(0.02,vol),t);
         g.gain.exponentialRampToValueAtTime(0.001,t+dur);
         osc.start(t);osc.stop(t+dur);
       }
@@ -1620,7 +1616,7 @@ function playTuneByIndex(p,idx,customVol,tokenName){
     });
     var tid=setTimeout(function(){
       if(_activeAudioToken===tok)stopAllAudio();
-    },totalMs+80);
+    },totalMs+100);
     _audioTimers.push(tid);
   }catch(e){stopAllAudio()}
 }
@@ -1714,7 +1710,6 @@ function onVolumeSlide(val){
   },220);
 }
 
-/* PART 03: ALL SETTINGS, 10 VOICES & TESTS */
 function onBrowserNotifToggle(cb){
   saveAllSettings();
   if(cb.checked && 'Notification' in window && Notification.permission==='default'){
@@ -1764,7 +1759,6 @@ function testSelectedSound(){
   playCurrentPattiAudio(activePatti,undefined,'test_sound_btn');
 }
 
-/* PART 04: OTHERS & AUTO SCHEDULER */
 function resetAllToDefault(){
   stopAllAudio();
   localStorage.removeItem(SETTINGS_KEY);
@@ -1806,6 +1800,8 @@ function checkScheduledTime(){
     runAutoCheckNow();
   }
 }
+
+document.addEventListener('pointerdown',function(){ensureAudioContext()},{passive:true});
 
 document.addEventListener('DOMContentLoaded',function(){
   loadAllSettings();
