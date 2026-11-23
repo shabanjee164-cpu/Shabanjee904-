@@ -33,7 +33,7 @@ body.dark { background-color: #0f172a; color: #e2e8f0; }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* نیوز پٹی — سنگل لائن، کوئی ڈبل ٹیکسٹ نہیں */
+/* مخصوص جگہ: نیوز پٹی */
 .ticker-bar {
   background: #fffbeb; border: 1px solid #fde68a; color: var(--golden);
   padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
@@ -51,7 +51,7 @@ body.dark { background-color: #0f172a; color: #e2e8f0; }
   100% { transform: translateX(100%); }
 }
 
-/* الرٹ پٹی */
+/* مخصوص جگہ: الرٹ پٹی */
 .alert-ticker-bar {
   background: #fef2f2; border: 1px solid #fecaca; color: var(--danger);
   padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
@@ -100,10 +100,12 @@ body.dark { background-color: #0f172a; color: #e2e8f0; }
 <div class="container" id="dashMain">
   <div class="app-header">⚡ Smart Management And Life Tracker</div>
 
+  <!-- مخصوص جگہ 1: نیوز پٹی -->
   <div class="ticker-bar" id="newsPattiBox">
     <div class="ticker-text" id="newsPattiText"></div>
   </div>
 
+  <!-- مخصوص جگہ 2: الرٹ پٹی -->
   <div class="alert-ticker-bar" id="alertPattiBox">
     <div class="alert-text-wrap">
       <span class="alert-text" id="alertPattiText"></span>
@@ -122,16 +124,12 @@ function lsSet(k, v) {
   try { localStorage.setItem(k, JSON.stringify(v)); return true; }
   catch (e) { return false; }
 }
-function pad(n) { return String(n).padStart(2, '0'); }
-function todayStr() {
-  var d = new Date();
-  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-}
 
 var NEWS_KEY = 'sec10_news_alerts_data';
 var NA1_SET_KEY = 'ns_modular_settings_v1';
 var NA1_AUD_KEY = 'ns_modular_audio_v1';
 var MAN_KEY = 'a2_manual_sel';
+var LIVE_TRIG_KEY = 'a2_live_trigger';
 
 var _ctx = null;
 function getCtx() {
@@ -182,6 +180,7 @@ var shownCounts = { news: {}, alert: {} };
 var voiceSeqCounter = 0;
 var lastNewsSig = '', lastAlertSig = '';
 var lastAnnouncedId = { news: null, alert: null };
+var handledTriggerTs = 0;
 
 function getNa1Config() {
   var c = lsGet(NA1_SET_KEY, {});
@@ -322,7 +321,7 @@ function orderAndFilterQueue(list, type, cfg) {
   return arr;
 }
 
-function nextNewsStep() {
+function nextNewsStep(forcePlay) {
   var cfg = getNa1Config();
   var eligible = orderAndFilterQueue(newsQueue, 'news', cfg);
   if (!cfg.newsOn || !eligible.length) {
@@ -348,7 +347,7 @@ function nextNewsStep() {
   void el.offsetWidth;
   el.style.animation = '';
 
-  if (lastAnnouncedId.news !== idKey) {
+  if (forcePlay || lastAnnouncedId.news !== idKey) {
     lastAnnouncedId.news = idKey;
     playNa1Feedback('news', item.content, cfg);
   }
@@ -357,12 +356,12 @@ function nextNewsStep() {
   newsTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
     if (cfg.repeatMode === 'loop' || eligible.length > 1 || orderAndFilterQueue(newsQueue, 'news', cfg).length > 0) {
-      nextNewsStep();
+      nextNewsStep(false);
     }
   }, Math.max(cfg.newsSec, 2) * 1000);
 }
 
-function nextAlertStep() {
+function nextAlertStep(forcePlay) {
   var cfg = getNa1Config();
   var baseAlerts = alertQueue.filter(function(x) { return !skippedAlertIds[String(x.id)]; });
   var validAlerts = orderAndFilterQueue(baseAlerts, 'alert', cfg);
@@ -389,7 +388,7 @@ function nextAlertStep() {
   el.textContent = '🚨 ' + item.content;
   el.className = 'alert-text ' + effCls;
 
-  if (lastAnnouncedId.alert !== idKey) {
+  if (forcePlay || lastAnnouncedId.alert !== idKey) {
     lastAnnouncedId.alert = idKey;
     playNa1Feedback('alert', item.content, cfg);
   }
@@ -398,7 +397,7 @@ function nextAlertStep() {
   alertTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
     if (cfg.repeatMode === 'loop' || validAlerts.length > 1 || orderAndFilterQueue(baseAlerts, 'alert', cfg).length > 0) {
-      nextAlertStep();
+      nextAlertStep(false);
     }
   }, Math.max(cfg.alertSec, 2) * 1000);
 }
@@ -414,10 +413,50 @@ function skipAlertItem() {
   var cfg = getNa1Config();
   var remaining = alertQueue.filter(function(x) { return !skippedAlertIds[String(x.id)]; });
   if (cfg.alertOn && remaining.length > 0) {
-    nextAlertStep();
+    nextAlertStep(false);
   } else {
     $('alertPattiBox').classList.remove('show', 'blink');
     $('alertPattiText').textContent = '';
+  }
+}
+
+function handleLiveTriggerFromNa1() {
+  var trig = lsGet(LIVE_TRIG_KEY, null);
+  if (!trig || !trig.ts || trig.ts === handledTriggerTs) return;
+  handledTriggerTs = trig.ts;
+
+  var cfg = getNa1Config();
+  var allItems = lsGet(NEWS_KEY, []).filter(function(x) { return !x.deleted && !x.skipped; });
+
+  if (trig.type === 'alert' && cfg.alertOn) {
+    delete skippedAlertIds[String(trig.id)];
+    delete shownCounts.alert[String(trig.id)];
+    var freshAlerts = allItems.filter(function(x) { return x.type === 'alert'; });
+    var target = freshAlerts.find(function(x) { return String(x.id) === String(trig.id); }) || {
+      id: trig.id || Date.now(),
+      type: 'alert',
+      content: trig.content || '',
+      timestamp: trig.ts
+    };
+    alertQueue = [target].concat(freshAlerts.filter(function(x) { return String(x.id) !== String(target.id); }));
+    alertIdx = 0;
+    lastAlertSig = '';
+    clearTimeout(alertTimer);
+    nextAlertStep(true);
+  } else if (trig.type === 'news' && cfg.newsOn) {
+    delete shownCounts.news[String(trig.id)];
+    var freshNews = allItems.filter(function(x) { return x.type === 'news'; });
+    var targetN = freshNews.find(function(x) { return String(x.id) === String(trig.id); }) || {
+      id: trig.id || Date.now(),
+      type: 'news',
+      content: trig.content || '',
+      timestamp: trig.ts
+    };
+    newsQueue = [targetN].concat(freshNews.filter(function(x) { return String(x.id) !== String(targetN.id); }));
+    newsIdx = 0;
+    lastNewsSig = '';
+    clearTimeout(newsTimer);
+    nextNewsStep(true);
   }
 }
 
@@ -435,6 +474,8 @@ function syncWithNa1() {
     lastAlertSig = 'hidden';
     return;
   }
+
+  handleLiveTriggerFromNa1();
 
   var cfg = getNa1Config();
   var allItems = lsGet(NEWS_KEY, []).filter(function(x) { return !x.deleted && !x.skipped; });
@@ -457,7 +498,7 @@ function syncWithNa1() {
     shownCounts.news = {};
     lastAnnouncedId.news = null;
     clearTimeout(newsTimer);
-    nextNewsStep();
+    nextNewsStep(false);
   }
   if (aSig !== lastAlertSig) {
     lastAlertSig = aSig;
@@ -466,7 +507,7 @@ function syncWithNa1() {
     shownCounts.alert = {};
     lastAnnouncedId.alert = null;
     clearTimeout(alertTimer);
-    nextAlertStep();
+    nextAlertStep(false);
   }
 }
 
@@ -475,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('storage', syncWithNa1);
   setInterval(function() {
     if (document.visibilityState === 'visible') syncWithNa1();
-  }, 1500);
+  }, 800);
 });
 </script>
 
