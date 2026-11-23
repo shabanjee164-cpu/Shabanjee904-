@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Management And Life Tracker</title>
+<title>Smart Management And Life Tracker — NA2</title>
 <style>
 :root {
   --primary: #1e293b;
@@ -22,6 +22,7 @@
 
 * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { background-color: var(--bg); color: var(--text); padding: 10px; line-height: 1.4; font-size: 13px; direction: rtl; }
+body.dark { background-color: #0f172a; color: #e2e8f0; }
 
 .container { max-width: 750px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
 
@@ -121,6 +122,11 @@ function lsSet(k, v) {
   try { localStorage.setItem(k, JSON.stringify(v)); return true; }
   catch (e) { return false; }
 }
+function pad(n) { return String(n).padStart(2, '0'); }
+function todayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+}
 
 var NEWS_KEY = 'sec10_news_alerts_data';
 var NA1_SET_KEY = 'ns_modular_settings_v1';
@@ -132,7 +138,9 @@ function getCtx() {
   if (!_ctx) {
     try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
   }
-  if (_ctx && _ctx.state === 'suspended') _ctx.resume();
+  if (_ctx && _ctx.state === 'suspended') {
+    try { _ctx.resume(); } catch (e) {}
+  }
   return _ctx;
 }
 
@@ -170,7 +178,10 @@ var ALERT_TUNES = [
 var newsQueue = [], newsIdx = 0, newsTimer = null, activeNewsItem = null;
 var alertQueue = [], alertIdx = 0, alertTimer = null, activeAlertItem = null;
 var skippedAlertIds = {};
+var shownCounts = { news: {}, alert: {} };
+var voiceSeqCounter = 0;
 var lastNewsSig = '', lastAlertSig = '';
+var lastAnnouncedId = { news: null, alert: null };
 
 function getNa1Config() {
   var c = lsGet(NA1_SET_KEY, {});
@@ -180,6 +191,7 @@ function getNa1Config() {
     soundsOn: c.allOpts ? c.allOpts.soundsOn !== false : true,
     vib: c.allOpts ? c.allOpts.vibrate !== false : true,
     voice: c.allOpts ? c.allOpts.voice !== false : true,
+    browserNotif: c.allOpts ? !!c.allOpts.browserNotif : false,
     newsSpeed: c.newsPatti ? (parseInt(c.newsPatti.speed) || 5) : 5,
     alertSpeed: c.alertPatti ? (parseInt(c.alertPatti.speed) || 6) : 6,
     newsSec: c.newsPatti ? (parseInt(c.newsPatti.seconds) || 3) : 3,
@@ -190,7 +202,15 @@ function getNa1Config() {
     alertTune: c.alertPatti ? (parseInt(c.alertPatti.tuneIdx) || 0) : 0,
     newsVol: c.newsPatti ? (parseInt(c.newsPatti.volume) || 70) : 70,
     alertVol: c.alertPatti ? (parseInt(c.alertPatti.volume) || 85) : 85,
-    skipPerm: c.others ? c.others.skipPerm !== false : true
+    playOrder: c.playOrder ? {
+      mode: c.playOrder.mode || 'record',
+      fixedCount: Math.max(1, parseInt(c.playOrder.fixedCount, 10) || 1)
+    } : { mode: 'record', fixedCount: 1 },
+    repeatMode: c.repeatMode || 'once',
+    skipMode: c.skipMode || 'once',
+    voiceSlot: parseInt(c.voiceSlot, 10) || 1,
+    skipPerm: c.others ? c.others.skipPerm !== false : true,
+    saveHist: c.others ? c.others.saveHist !== false : true
   };
 }
 
@@ -209,15 +229,15 @@ function getEffectClass(type, cfg) {
 
 function markHistoryReady(id, wasSkipped) {
   if (!id) return;
+  var cfg = getNa1Config();
   var all = lsGet(NEWS_KEY, []);
   var changed = false;
-  var cfg = getNa1Config();
   all.forEach(function(r) {
     if (String(r.id) === String(id)) {
       r.dashShown = true;
-      r.historyReady = true;
+      if (cfg.saveHist) r.historyReady = true;
       r.completedAt = Date.now();
-      if (wasSkipped && cfg.skipPerm) r.skipped = true;
+      if (wasSkipped && (cfg.skipPerm || cfg.skipMode === 'perm')) r.skipped = true;
       changed = true;
     }
   });
@@ -260,26 +280,63 @@ function playNa1Feedback(type, text, cfg) {
   if (cfg.voice && ('speechSynthesis' in window)) {
     try {
       window.speechSynthesis.cancel();
+      var slot = cfg.voiceSlot || 1;
+      if (slot === 10) { voiceSeqCounter = (voiceSeqCounter % 10) + 1; slot = voiceSeqCounter; }
       var prefix = (type === 'alert') ? 'Alert. ' : 'News. ';
       var u = new SpeechSynthesisUtterance(prefix + text);
-      u.lang = 'ur-PK';
+      u.lang = (slot === 6 || slot === 7) ? 'en-US' : 'ur-PK';
+      var rates = [0.9, 1.15, 0.8, 1.1, 1.0, 0.95, 1.05, 0.85, 1.0, 1.0];
+      var pitches = [1.1, 1.0, 0.75, 1.2, 0.95, 1.0, 1.1, 0.9, 1.05, 1.0];
+      u.rate = rates[slot - 1] || 1.0;
+      u.pitch = pitches[slot - 1] || 1.0;
       u.volume = Math.min(1, Math.max(0, ((type === 'alert' ? cfg.alertVol : cfg.newsVol) || 70) / 100));
       window.speechSynthesis.speak(u);
     } catch (e) {}
   }
+  if (cfg.browserNotif && ('Notification' in window) && Notification.permission === 'granted') {
+    try {
+      new Notification(type === 'alert' ? '🚨 Alert' : '📰 News', { body: text });
+    } catch (e) {}
+  }
+}
+
+function orderAndFilterQueue(list, type, cfg) {
+  var arr = list.slice();
+  var mode = cfg.playOrder.mode || 'record';
+  var maxShow = cfg.playOrder.fixedCount || 1;
+
+  if (mode === 'old') {
+    arr.sort(function(a, b) { return (a.timestamp || 0) - (b.timestamp || 0); });
+  } else if (mode === 'sorted') {
+    arr.sort(function(a, b) { return String(a.content || '').localeCompare(String(b.content || ''), 'ur'); });
+  } else if (mode === 'mix') {
+    arr.sort(function(a, b) { return String(a.id).slice(-1).localeCompare(String(b.id).slice(-1)); });
+  }
+
+  var counts = shownCounts[type] || {};
+  if (cfg.repeatMode === 'once') {
+    arr = arr.filter(function(x) { return (counts[String(x.id)] || 0) < 1; });
+  } else if (cfg.repeatMode === 'fixed' || mode === 'fixed') {
+    arr = arr.filter(function(x) { return (counts[String(x.id)] || 0) < maxShow; });
+  }
+  return arr;
 }
 
 function nextNewsStep() {
   var cfg = getNa1Config();
-  if (!cfg.newsOn || !newsQueue.length) {
+  var eligible = orderAndFilterQueue(newsQueue, 'news', cfg);
+  if (!cfg.newsOn || !eligible.length) {
     $('newsPattiBox').classList.remove('show');
     $('newsPattiText').textContent = '';
     activeNewsItem = null;
     return;
   }
-  var item = newsQueue[newsIdx % newsQueue.length];
+  var item = eligible[newsIdx % eligible.length];
   newsIdx++;
   activeNewsItem = item;
+
+  var idKey = String(item.id);
+  shownCounts.news[idKey] = (shownCounts.news[idKey] || 0) + 1;
 
   var box = $('newsPattiBox'), el = $('newsPattiText');
   box.classList.add('show');
@@ -291,22 +348,25 @@ function nextNewsStep() {
   void el.offsetWidth;
   el.style.animation = '';
 
-  playNa1Feedback('news', item.content, cfg);
+  if (lastAnnouncedId.news !== idKey) {
+    lastAnnouncedId.news = idKey;
+    playNa1Feedback('news', item.content, cfg);
+  }
 
   clearTimeout(newsTimer);
   newsTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    if (newsQueue.length > 1) {
+    if (cfg.repeatMode === 'loop' || eligible.length > 1 || orderAndFilterQueue(newsQueue, 'news', cfg).length > 0) {
       nextNewsStep();
-    } else {
-      markHistoryReady(item.id, false);
     }
   }, Math.max(cfg.newsSec, 2) * 1000);
 }
 
 function nextAlertStep() {
   var cfg = getNa1Config();
-  var validAlerts = alertQueue.filter(function(x) { return !skippedAlertIds[String(x.id)]; });
+  var baseAlerts = alertQueue.filter(function(x) { return !skippedAlertIds[String(x.id)]; });
+  var validAlerts = orderAndFilterQueue(baseAlerts, 'alert', cfg);
+
   if (!cfg.alertOn || !validAlerts.length) {
     $('alertPattiBox').classList.remove('show', 'blink');
     $('alertPattiText').textContent = '';
@@ -317,6 +377,9 @@ function nextAlertStep() {
   alertIdx++;
   activeAlertItem = item;
 
+  var idKey = String(item.id);
+  shownCounts.alert[idKey] = (shownCounts.alert[idKey] || 0) + 1;
+
   var box = $('alertPattiBox'), el = $('alertPattiText');
   box.classList.add('show');
   var effCls = getEffectClass('alert', cfg);
@@ -326,12 +389,15 @@ function nextAlertStep() {
   el.textContent = '🚨 ' + item.content;
   el.className = 'alert-text ' + effCls;
 
-  playNa1Feedback('alert', item.content, cfg);
+  if (lastAnnouncedId.alert !== idKey) {
+    lastAnnouncedId.alert = idKey;
+    playNa1Feedback('alert', item.content, cfg);
+  }
 
   clearTimeout(alertTimer);
   alertTimer = setTimeout(function() {
     markHistoryReady(item.id, false);
-    if (validAlerts.length > 1) {
+    if (cfg.repeatMode === 'loop' || validAlerts.length > 1 || orderAndFilterQueue(baseAlerts, 'alert', cfg).length > 0) {
       nextAlertStep();
     }
   }, Math.max(cfg.alertSec, 2) * 1000);
@@ -356,6 +422,9 @@ function skipAlertItem() {
 }
 
 function syncWithNa1() {
+  if (lsGet('ns_dark', false)) document.body.classList.add('dark');
+  else document.body.classList.remove('dark');
+
   var vis = lsGet('ns_dash_visible', null);
   if (vis === false) {
     clearTimeout(newsTimer);
@@ -378,13 +447,15 @@ function syncWithNa1() {
   var nextNews = cfg.newsOn ? matched.filter(function(x) { return x.type === 'news'; }) : [];
   var nextAlerts = cfg.alertOn ? matched.filter(function(x) { return x.type === 'alert'; }) : [];
 
-  var nSig = nextNews.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.newsSpeed + '|' + cfg.newsSec + '|' + JSON.stringify(cfg.newsEffects) + '|' + cfg.newsOn;
-  var aSig = nextAlerts.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.alertSpeed + '|' + cfg.alertSec + '|' + JSON.stringify(cfg.alertEffects) + '|' + cfg.alertOn;
+  var nSig = nextNews.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.newsSpeed + '|' + cfg.newsSec + '|' + JSON.stringify(cfg.newsEffects) + '|' + cfg.newsOn + '|' + cfg.playOrder.mode + '|' + cfg.playOrder.fixedCount + '|' + cfg.repeatMode;
+  var aSig = nextAlerts.map(function(x) { return x.id + ':' + x.content; }).join('|') + '|' + cfg.alertSpeed + '|' + cfg.alertSec + '|' + JSON.stringify(cfg.alertEffects) + '|' + cfg.alertOn + '|' + cfg.playOrder.mode + '|' + cfg.playOrder.fixedCount + '|' + cfg.repeatMode;
 
   if (nSig !== lastNewsSig) {
     lastNewsSig = nSig;
     newsQueue = nextNews;
     newsIdx = 0;
+    shownCounts.news = {};
+    lastAnnouncedId.news = null;
     clearTimeout(newsTimer);
     nextNewsStep();
   }
@@ -392,6 +463,8 @@ function syncWithNa1() {
     lastAlertSig = aSig;
     alertQueue = nextAlerts;
     alertIdx = 0;
+    shownCounts.alert = {};
+    lastAnnouncedId.alert = null;
     clearTimeout(alertTimer);
     nextAlertStep();
   }
@@ -399,6 +472,7 @@ function syncWithNa1() {
 
 document.addEventListener('DOMContentLoaded', function() {
   syncWithNa1();
+  window.addEventListener('storage', syncWithNa1);
   setInterval(function() {
     if (document.visibilityState === 'visible') syncWithNa1();
   }, 1500);
