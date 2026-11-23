@@ -27,6 +27,7 @@ body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;
 .rec-row.sel{background:#eff6ff;border-right:3px solid var(--accent)}
 .rec-row.deleted{opacity:.6;background:#fef2f2}
 .rec-row.faded{opacity:.4;filter:blur(1px)}
+.rec-row.auto-rec{background:#f0fdf4;border-right:3px solid #10b981}
 .rec-row .chk{width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:var(--accent);margin-top:3px}
 .rec-row .body{flex:1;min-width:0}
 .rec-row .txt{font-weight:700;font-size:11.5px;color:#0f172a}
@@ -49,6 +50,32 @@ body.dark .section-card{background:#1e293b;border-color:#334155}
 body.dark .scroll-list{background:#0f172a;color:#e2e8f0}
 body.dark .rec-row .txt{color:#f1f5f9}
 body.dark .rec-row .meta{color:#94a3b8}
+body.dark .rec-row.auto-rec{background:#052e16}
+
+/* LIVE PATTI TICKER */
+.live-patti-wrap{display:flex;flex-direction:column;gap:5px;margin-top:2px}
+.live-patti-bar{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;border:1px solid #e2e8f0;background:#f8fafc;overflow:hidden;min-height:34px}
+.live-patti-bar.news-bar{border-right:4px solid #10b981;background:#f0fdf4}
+.live-patti-bar.alert-bar{border-right:4px solid #ef4444;background:#fef2f2}
+body.dark .live-patti-bar{background:#0f172a;border-color:#334155}
+body.dark .live-patti-bar.news-bar{background:#052e16;border-right-color:#10b981}
+body.dark .live-patti-bar.alert-bar{background:#450a0a;border-right-color:#ef4444}
+.live-patti-tag{font-size:10px;font-weight:900;padding:2px 6px;border-radius:4px;flex-shrink:0}
+.live-patti-tag.news{background:#10b981;color:#fff}
+.live-patti-tag.alert{background:#ef4444;color:#fff}
+.live-patti-viewport{flex:1;overflow:hidden;position:relative;min-width:0;height:20px;display:flex;align-items:center}
+.live-patti-text{font-size:11px;font-weight:800;white-space:nowrap;display:inline-block;will-change:transform,opacity,filter}
+body.dark .live-patti-text{color:#f1f5f9}
+.live-patti-controls{display:flex;gap:3px;flex-shrink:0}
+.live-patti-btn{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit}
+body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
+
+@keyframes pattiFade{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes pattiBlink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes pattiBlurClear{0%{filter:blur(4px);opacity:.4}30%{filter:blur(0);opacity:1}100%{filter:blur(0);opacity:1}}
+@keyframes pattiSlideSide{0%{transform:translateX(60px);opacity:0}15%{transform:translateX(0);opacity:1}85%{transform:translateX(0);opacity:1}100%{transform:translateX(-60px);opacity:0}}
+@keyframes pattiUpDown{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes pattiGlow{0%,100%{text-shadow:none}50%{text-shadow:0 0 6px rgba(239,68,68,.55)}}
 
 /* FULL SECTION LOCK OVERLAY */
 .sec-lock-wall{display:none;position:fixed;inset:0;background:rgba(15,23,42,.92);z-index:100000;align-items:center;justify-content:center;padding:16px}
@@ -139,10 +166,12 @@ body.dark .rec-row .meta{color:#94a3b8}
 .tunes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
 .tune-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:6px;display:flex;align-items:center;gap:4px}
 .tune-card.sel{background:#eff6ff;border-color:#2563eb}
+.tune-card.playing{background:#ecfdf5;border-color:#10b981}
 .tune-card .num{font-size:9px;font-weight:800;color:#94a3b8;width:16px}
 .tune-card .nm{flex:1;font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tune-card button{border:none;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff}
 .tune-card .t-play{background:#10b981}
+.tune-card .t-play.stop{background:#dc2626}
 .tune-card .t-sel{background:#64748b}
 .tune-card.sel .t-sel{background:#2563eb}
 
@@ -219,6 +248,32 @@ body.dark .rec-row .meta{color:#94a3b8}
       <button class="btn" onclick="saveNews()">💾</button>
     </div>
 
+    <!-- LIVE NEWS & ALERT PATTI TICKER -->
+    <div class="live-patti-wrap" id="livePattiWrap">
+      <div class="live-patti-bar alert-bar" id="liveAlertPatti">
+        <span class="live-patti-tag alert">🚨 Alert</span>
+        <div class="live-patti-viewport">
+          <span class="live-patti-text" id="liveAlertText">کوئی الرٹ پیغام نہیں</span>
+        </div>
+        <div class="live-patti-controls">
+          <button class="live-patti-btn" onclick="skipLivePattiItem('alert','once')" title="اس بار Skip">⏭️</button>
+          <button class="live-patti-btn" onclick="skipLivePattiItem('alert','perm')" title="مستقل Skip">🚫</button>
+          <button class="live-patti-btn" onclick="nextLivePattiItem('alert')" title="اگلا">›</button>
+        </div>
+      </div>
+      <div class="live-patti-bar news-bar" id="liveNewsPatti">
+        <span class="live-patti-tag news">📰 News</span>
+        <div class="live-patti-viewport">
+          <span class="live-patti-text" id="liveNewsText">کوئی نیوز پیغام نہیں</span>
+        </div>
+        <div class="live-patti-controls">
+          <button class="live-patti-btn" onclick="skipLivePattiItem('news','once')" title="اس بار Skip">⏭️</button>
+          <button class="live-patti-btn" onclick="skipLivePattiItem('news','perm')" title="مستقل Skip">🚫</button>
+          <button class="live-patti-btn" onclick="nextLivePattiItem('news')" title="اگلا">›</button>
+        </div>
+      </div>
+    </div>
+
     <!-- TYPE FILTER (ALL / NEWS / ALERT) & PERIOD FILTER (DAILY / WEEKLY / MONTHLY / YEARLY) -->
     <div class="scroll-head">
       <span>📋 ریکارڈ: <span id="recFilterLabel">آج</span></span>
@@ -262,10 +317,10 @@ body.dark .rec-row .meta{color:#94a3b8}
   <button class="side-btn" onclick="nsMoveDown()"><span>🔽 Nichy</span><span>›</span></button>
   <button class="side-btn" onclick="toggleSetPwdBar()"><span>🔑 Pass</span><span>›</span></button>
   <div class="pwd-bar" id="setPwdBar">
-    <input type="text" id="newPwdInp" placeholder="New Password">
+    <input type="password" id="newPwdInp" placeholder="New Password">
     <input type="text" id="recAnsSetInp" placeholder="Forgot ریکوری لفظ">
     <button onclick="savePanelPwd()">محفوظ کریں</button>
-    <button onclick="toggleSectionLockOnOff()" style="background:#2563eb;margin-top:2px">🔒 Lock On/Off</button>
+    <button onclick="toggleSectionLockOnOff()" style="background:#2563eb;margin-top:2px" id="lockToggleBtn">🔒 Lock On/Off</button>
     <button onclick="resetPanelLock()" style="background:#dc2626;margin-top:2px">♻️ Reset Lock</button>
   </div>
   <button class="side-btn" onclick="nsToggleDark()" id="darkBtn"><span>🌙 Dark</span><span>›</span></button>
@@ -395,7 +450,7 @@ body.dark .rec-row .meta{color:#94a3b8}
             <div class="audio-actions">
               <input type="file" id="localAudioFile" accept="audio/*" style="display:none" onchange="onLocalAudioPicked(event)">
               <button class="btn-up" onclick="document.getElementById('localAudioFile').click()">📂 فائل منتخب کریں</button>
-              <button class="btn-play-aud" onclick="playCurrentPattiAudio()">▶️ سنیں</button>
+              <button class="btn-play-aud" id="btnPlayLocalAud" onclick="playCurrentPattiAudio()">▶️ سنیں</button>
               <button class="btn-save-aud" onclick="savePickedLocalAudio()">💾 سیو کریں</button>
               <button class="btn-del-aud" onclick="deleteSavedLocalAudio()">🗑️ ہٹائیں</button>
             </div>
@@ -448,11 +503,11 @@ body.dark .rec-row .meta{color:#94a3b8}
           </div>
           <div class="list-row">
             <div>🚨 الرٹ پٹی (Alert On/Off)</div>
-            <label class="sw"><input type="checkbox" id="optAlertOn" checked onchange="saveAllSettings()"><span></span></label>
+            <label class="sw"><input type="checkbox" id="optAlertOn" checked onchange="onPattiVisibilityToggle()"><span></span></label>
           </div>
           <div class="list-row">
             <div>📰 نیوز پٹی (News On/Off)</div>
-            <label class="sw"><input type="checkbox" id="optNewsOn" checked onchange="saveAllSettings()"><span></span></label>
+            <label class="sw"><input type="checkbox" id="optNewsOn" checked onchange="onPattiVisibilityToggle()"><span></span></label>
           </div>
           <div class="list-row">
             <div>🔊 آوازیں (Sounds On/Off)</div>
@@ -463,7 +518,7 @@ body.dark .rec-row .meta{color:#94a3b8}
           <div class="test-grid">
             <button class="test-btn" onclick="testSelectedVoice()">🗣️ وائس ٹیسٹ</button>
             <button class="test-btn" onclick="testSelectedVibrate()">📳 وائبریٹ ٹیسٹ</button>
-            <button class="test-btn" onclick="testSelectedSound()">🔊 آواز ٹیسٹ</button>
+            <button class="test-btn" id="btnTestSound" onclick="testSelectedSound()">🔊 آواز ٹیسٹ</button>
           </div>
         </div>
       </div>
@@ -584,6 +639,51 @@ var pendingLocalAudio={news:null,alert:null};
 var savedLocalAudio={news:null,alert:null};
 var voiceSeqCounter=0;
 
+/* LIVE PATTI STATE */
+var pattiRuntime={
+  news:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0},
+  alert:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0}
+};
+
+/* AUDIO PLAY / STOP TOGGLE STATE */
+var _audioCtx=null;
+var _audioTimers=[];
+var _previewAudioEl=null;
+var _activeAudioToken=null;
+
+function stopAllAudio(){
+  _activeAudioToken=null;
+  _audioTimers.forEach(function(id){clearTimeout(id)});
+  _audioTimers=[];
+  if(_previewAudioEl){
+    try{_previewAudioEl.pause();_previewAudioEl.currentTime=0}catch(e){}
+    _previewAudioEl=null;
+  }
+  if(_audioCtx){
+    try{_audioCtx.close()}catch(e){}
+    _audioCtx=null;
+  }
+  updateAudioButtonsUI();
+}
+
+function updateAudioButtonsUI(){
+  var playing=!!_activeAudioToken;
+  var pBtn=$('btnPlayLocalAud');
+  if(pBtn)pBtn.textContent=playing?'⏹️ روکیں':'▶️ سنیں';
+  var tBtn=$('btnTestSound');
+  if(tBtn)tBtn.textContent=playing?'⏹️ روکیں':'🔊 آواز ٹیسٹ';
+  var cards=document.querySelectorAll('.tune-card');
+  cards.forEach(function(c){
+    var isThis=_activeAudioToken && (c.getAttribute('data-token')===_activeAudioToken);
+    c.classList.toggle('playing',!!isThis);
+    var pb=c.querySelector('.t-play');
+    if(pb){
+      pb.textContent=isThis?'⏹️':'▶️';
+      pb.classList.toggle('stop',!!isThis);
+    }
+  });
+}
+
 function defaultSettings(){
   return {
     partNames:{
@@ -653,6 +753,12 @@ function saveAllSettings(){
   cfg.others.expiryHours=parseInt($('othExpiryHours').value)||24;
 
   lsSet(SETTINGS_KEY,cfg);
+  refreshLivePattis();
+}
+
+function onPattiVisibilityToggle(){
+  saveAllSettings();
+  refreshLivePattis();
 }
 
 function savePlayOrderCfg(){
@@ -660,13 +766,21 @@ function savePlayOrderCfg(){
     mode:$('playModeSel').value||'record',
     fixedCount:Math.max(1,parseInt($('fixedCountInp').value,10)||1)
   };
+  pattiRuntime.news.idx=0;
+  pattiRuntime.news.shownCount={};
+  pattiRuntime.alert.idx=0;
+  pattiRuntime.alert.shownCount={};
   lsSet(SETTINGS_KEY,cfg);
+  refreshLivePattis();
   showMsg('✅ ترتیب سیو ہو گئی',true);
 }
 
 function setRepeatOpt(m){
   cfg.repeatMode=m;
+  pattiRuntime.news.shownCount={};
+  pattiRuntime.alert.shownCount={};
   lsSet(SETTINGS_KEY,cfg);
+  refreshLivePattis();
   showMsg('🔁 Repeat: '+m,true);
 }
 
@@ -675,6 +789,7 @@ function setSkipOpt(m){
   cfg.others.skipPerm=(m==='perm');
   $('othSkipPerm').checked=cfg.others.skipPerm;
   lsSet(SETTINGS_KEY,cfg);
+  refreshLivePattis();
   showMsg(m==='perm'?'🚫 مستقل Skip سیو':'⏭️ اس بار Skip سیو',true);
 }
 
@@ -714,9 +829,10 @@ function syncSettingsToUI(){
 
   renderFixItems();
   renderPattiSection();
+  refreshLivePattis();
 }
 
-/* 4-FEATURE FULL SECTION LOCK (NEW PASSWORD, FORGOT, ON/OFF, RESET) */
+/* 1. 4-FEATURE FULL SECTION LOCK (NEW PASSWORD, FORGOT, ON/OFF, RESET) */
 function getLockState(){return lsGet(LOCK_STATE_KEY,{locked:false,pwd:'',hint:''})}
 function saveLockState(st){lsSet(LOCK_STATE_KEY,st)}
 
@@ -724,6 +840,8 @@ function checkFullSectionLock(){
   var st=getLockState();
   var isLocked=!!(st.locked && st.pwd);
   $('secLockWall').classList.toggle('active',isLocked);
+  var tBtn=$('lockToggleBtn');
+  if(tBtn)tBtn.textContent=isLocked?'🔓 Unlock Now':'🔒 Lock On/Off';
 }
 
 function unlockFullSection(){
@@ -764,11 +882,14 @@ function resetLockFromWall(){
 
 function toggleSectionLockOnOff(){
   var st=getLockState();
-  if(!st.pwd){showMsg('پہلے نیا پاس ورڈ لکھیں',false);return}
+  var pwd=st.pwd||localStorage.getItem('ns_pwd')||'';
+  if(!pwd){showMsg('پہلے نیا پاس ورڈ محفوظ کریں',false);return}
+  st.pwd=pwd;
   st.locked=!st.locked;
   saveLockState(st);
   closeQuickPanel();
   checkFullSectionLock();
+  showMsg(st.locked?'🔒 سیکشن لاک آن ہو گیا':'🔓 سیکشن لاک آف ہو گیا',true);
 }
 
 function resetPanelLock(){
@@ -782,8 +903,9 @@ function resetPanelLock(){
 
 /* QUICK PANEL & PASSWORD */
 function openQuickPanel(){
-  var pwd=localStorage.getItem('ns_pwd');
-  if(pwd){
+  var st=getLockState();
+  var pwd=st.pwd||localStorage.getItem('ns_pwd');
+  if(pwd && st.locked){
     $('pwdCheckInput').value='';
     $('pwdCheckBar').classList.add('show');
     $('pwdCheckInput').focus();
@@ -794,8 +916,12 @@ function openQuickPanel(){
 }
 function closePwdBar(){$('pwdCheckBar').classList.remove('show')}
 function verifyPanelPwd(){
-  var pwd=localStorage.getItem('ns_pwd');
+  var st=getLockState();
+  var pwd=st.pwd||localStorage.getItem('ns_pwd');
   if($('pwdCheckInput').value===pwd){
+    st.locked=false;
+    saveLockState(st);
+    checkFullSectionLock();
     closePwdBar();
     $('qOverlay').classList.add('active');
     $('qPanel').classList.add('active');
@@ -821,14 +947,14 @@ function savePanelPwd(){
   var v=$('newPwdInp').value.trim();
   var h=$('recAnsSetInp').value.trim();
   if(v){
+    var prev=getLockState();
     localStorage.setItem('ns_pwd',v);
-    saveLockState({locked:true,pwd:v,hint:h});
-    showMsg('✅ پاس ورڈ سیو اور لاک آن ہو گیا',true);
-    closeQuickPanel();
-    checkFullSectionLock();
+    saveLockState({locked:!!prev.locked,pwd:v,hint:h});
+    showMsg('✅ پاس ورڈ محفوظ ہو گیا (Lock On/Off سے لاک کریں)',true);
   } else {
     localStorage.removeItem('ns_pwd');
     saveLockState({locked:false,pwd:'',hint:''});
+    checkFullSectionLock();
     showMsg('✅ پاس ورڈ ہٹا دیا گیا',true);
   }
 }
@@ -838,8 +964,169 @@ function openDetailedSettings(){
   syncSettingsToUI();
   $('nsOverlay').classList.add('active');
 }
-function closeDetailedSettings(){$('nsOverlay').classList.remove('active')}
+function closeDetailedSettings(){
+  stopAllAudio();
+  $('nsOverlay').classList.remove('active');
+}
 function togglePartCard(id){$(id).classList.toggle('collapsed')}
+
+/* LIVE PATTI ENGINE (PLAY ORDER, REPEAT, SKIP, SPEED, SECONDS, EFFECTS) */
+function getPattiCandidateItems(type){
+  var all=lsGet(NEWS_KEY,[]);
+  var today=todayStr();
+  var rt=pattiRuntime[type];
+  var list=all.filter(function(x){
+    if(x.deleted)return false;
+    if(x.type!==type)return false;
+    if(x.date!==today)return false;
+    if(x.skipped)return false;
+    if(rt.onceSkipped[String(x.id)])return false;
+    return true;
+  });
+
+  var mode=(cfg.playOrder && cfg.playOrder.mode)||'record';
+  var maxShow=(cfg.playOrder && cfg.playOrder.fixedCount)||1;
+
+  if(mode==='old'){
+    list=list.slice().sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0)});
+  } else if(mode==='sorted'){
+    list=list.slice().sort(function(a,b){return String(a.content||'').localeCompare(String(b.content||''),'ur')});
+  } else if(mode==='mix'){
+    list=list.slice().sort(function(a,b){return String(a.id).slice(-1).localeCompare(String(b.id).slice(-1))});
+  }
+
+  var rep=cfg.repeatMode||'once';
+  if(rep==='once'){
+    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<1});
+  } else if(rep==='fixed'){
+    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<maxShow});
+  } else if(mode==='fixed'){
+    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<maxShow});
+  }
+  return list;
+}
+
+function applyPattiEffectsStyle(el,type,pObj){
+  el.style.animation='none';
+  el.style.filter='none';
+  el.style.transform='none';
+  var eff=pObj.effects||[];
+  var dur=Math.max(1.2,Number(pObj.seconds)||3)+'s';
+  if(type==='news'){
+    if(eff[6])el.style.animation='pattiFade '+dur+' ease-in-out infinite';
+    else if(eff[7])el.style.animation='pattiSlideSide '+dur+' ease-in-out infinite';
+    else if(eff[5])el.style.animation='pattiBlink '+Math.max(0.6,(11-(pObj.speed||5))*0.15)+'s infinite';
+    else if(eff[9])el.style.animation='pattiFade '+(Number(pObj.seconds)||3)+'s steps(2,end) infinite';
+  } else {
+    if(eff[1])el.style.animation='pattiBlurClear '+dur+' ease-out infinite';
+    else if(eff[2])el.style.animation='pattiBlink '+Math.max(0.5,(11-(pObj.speed||5))*0.14)+'s infinite';
+    else if(eff[4])el.style.animation='pattiSlideSide '+dur+' ease-in-out infinite';
+    else if(eff[6])el.style.animation='pattiGlow 1.4s ease-in-out infinite';
+    else if(eff[7])el.style.animation='pattiUpDown 1.2s ease-in-out infinite';
+  }
+}
+
+function startScrollMotion(type,el,viewport,pObj){
+  var rt=pattiRuntime[type];
+  if(rt.scrollTimer){clearInterval(rt.scrollTimer);rt.scrollTimer=null}
+  rt.scrollPos=0;
+  el.style.transform='translateX(0px)';
+
+  var eff=pObj.effects||[];
+  var shouldScroll=(type==='news' && (eff[0]||eff[1]||eff[4]||eff[8])) || (type==='alert' && eff[5]);
+  var reverse=(type==='news' && eff[4]);
+  if(!shouldScroll)return;
+
+  var speed=Math.min(10,Math.max(1,Number(pObj.speed)||5));
+  var stepPx=(speed*0.45)*(reverse?-1:1);
+  rt.scrollTimer=setInterval(function(){
+    if(!el||!viewport)return;
+    var textW=el.scrollWidth||0;
+    var viewW=viewport.clientWidth||200;
+    if(textW<=viewW)return;
+    rt.scrollPos+=stepPx;
+    if(!reverse && rt.scrollPos>textW)rt.scrollPos=-viewW;
+    if(reverse && rt.scrollPos<-viewW)rt.scrollPos=textW;
+    el.style.transform='translateX('+Math.round(rt.scrollPos)+'px)';
+  },30);
+}
+
+function renderSinglePatti(type){
+  var bar=$(type==='news'?'liveNewsPatti':'liveAlertPatti');
+  var textEl=$(type==='news'?'liveNewsText':'liveAlertText');
+  var viewport=textEl?textEl.parentElement:null;
+  var enabled=(type==='news')?cfg.allOpts.newsOn:cfg.allOpts.alertOn;
+
+  if(!bar||!textEl)return;
+  var rt=pattiRuntime[type];
+  if(rt.timer){clearTimeout(rt.timer);rt.timer=null}
+  if(rt.scrollTimer){clearInterval(rt.scrollTimer);rt.scrollTimer=null}
+
+  if(!enabled){
+    bar.style.display='none';
+    return;
+  }
+  bar.style.display='flex';
+
+  var pObj=(type==='news')?cfg.newsPatti:cfg.alertPatti;
+  var items=getPattiCandidateItems(type);
+
+  if(!items.length){
+    textEl.textContent=(type==='news')?'کوئی نیوز پیغام نہیں':'کوئی الرٹ پیغام نہیں';
+    textEl.style.animation='none';
+    textEl.style.transform='none';
+    return;
+  }
+
+  if(rt.idx>=items.length)rt.idx=0;
+  var cur=items[rt.idx];
+  textEl.textContent=(type==='news'?'📰 ':'🚨 ')+cur.content;
+
+  var idKey=String(cur.id);
+  rt.shownCount[idKey]=(rt.shownCount[idKey]||0)+1;
+
+  applyPattiEffectsStyle(textEl,type,pObj);
+  startScrollMotion(type,textEl,viewport,pObj);
+
+  var holdMs=Math.max(1000,(Number(pObj.seconds)||3)*1000);
+  rt.timer=setTimeout(function(){
+    rt.idx=(rt.idx+1)%Math.max(1,items.length);
+    renderSinglePatti(type);
+  },holdMs);
+}
+
+function refreshLivePattis(){
+  renderSinglePatti('alert');
+  renderSinglePatti('news');
+}
+
+function nextLivePattiItem(type){
+  var items=getPattiCandidateItems(type);
+  if(!items.length)return;
+  var rt=pattiRuntime[type];
+  rt.idx=(rt.idx+1)%items.length;
+  renderSinglePatti(type);
+}
+
+function skipLivePattiItem(type,mode){
+  var items=getPattiCandidateItems(type);
+  if(!items.length){showMsg('کوئی فعال آئٹم نہیں',false);return}
+  var rt=pattiRuntime[type];
+  var cur=items[rt.idx%items.length];
+  if(!cur)return;
+
+  if(mode==='perm' || cfg.others.skipPerm){
+    var all=lsGet(NEWS_KEY,[]);
+    var idx=all.findIndex(function(x){return x.id===cur.id});
+    if(idx!==-1){all[idx].skipped=true;lsSet(NEWS_KEY,all)}
+    renderRecords();
+    showMsg('🚫 مستقل Skip ہو گیا',true);
+  } else {
+    rt.onceSkipped[String(cur.id)]=true;
+    showMsg('⏭️ اس بار Skip ہو گیا',true);
+  }
+  refreshLivePattis();
+}
 
 /* MAIN RECORD CRUD & FILTERS */
 function saveNews(){
@@ -863,18 +1150,21 @@ function saveNews(){
   lsSet(NEWS_KEY,items);
   $('newsContent').value='';
   renderRecords();
+  refreshLivePattis();
   notifyNewItem(type,content);
   showMsg('✅ محفوظ ہو گیا',true);
 }
 
-function applyPeriodFilter(list,period){
+/* 2. FIXED TYPE + PERIOD + MODE FILTER */
+function applyPeriodFilter(list,period,mode){
   var now=Date.now();
   var day=86400000;
+  var today=todayStr();
   if(period==='weekly')return list.filter(function(x){return (now-(x.timestamp||now))<=7*day});
   if(period==='monthly')return list.filter(function(x){return (now-(x.timestamp||now))<=30*day});
   if(period==='yearly')return list.filter(function(x){return (now-(x.timestamp||now))<=365*day});
-  var today=todayStr();
-  return list.filter(function(x){return x.date===today});
+  if(mode==='today')return list.filter(function(x){return x.date===today});
+  return list;
 }
 
 function renderRecords(){
@@ -883,11 +1173,12 @@ function renderRecords(){
   var tFilt=$('typeFilterSel')?$('typeFilterSel').value:'all';
   var pFilt=$('periodFilterSel')?$('periodFilterSel').value:'daily';
 
-  var items;
-  if(filterMode==='today')items=applyPeriodFilter(all.filter(function(x){return !x.deleted}),pFilt);
-  else if(filterMode==='all')items=all.filter(function(x){return !x.deleted});
-  else items=all.filter(function(x){return x.deleted});
+  var baseList;
+  if(filterMode==='today')baseList=all.filter(function(x){return x.date===today && !x.deleted});
+  else if(filterMode==='all')baseList=all.filter(function(x){return !x.deleted});
+  else baseList=all.filter(function(x){return x.deleted});
 
+  var items=applyPeriodFilter(baseList,pFilt,filterMode);
   if(tFilt!=='all')items=items.filter(function(x){return x.type===tFilt});
 
   var box=$('newsRecordList');
@@ -899,8 +1190,10 @@ function renderRecords(){
       var sel=selectedIds[x.id]?' sel':'';
       var blurCls=(x.skipped&&!x.deleted)?' faded':'';
       var delCls=x.deleted?' deleted':'';
+      var autoCls=(x.auto&&!x.deleted)?' auto-rec':'';
+      var autoTag=x.auto?' · 🤖 آٹو چیک':'';
       var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[x.id]?'checked':'')+' onchange="toggleSelect('+x.id+')">':'';
-      return '<div class="rec-row'+sel+blurCls+delCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta">📅 '+(x.dateStr||'')+(x.deleted?' · 🗑️':'')+'</div></div></div>';
+      return '<div class="rec-row'+sel+blurCls+delCls+autoCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta">📅 '+(x.dateStr||'')+autoTag+(x.deleted?' · 🗑️':'')+'</div></div></div>';
     }).join('');
   }
 
@@ -910,7 +1203,8 @@ function renderRecords(){
   $('newsTotal').textContent=todayAll.length;
 
   var labels={today:'📅 آج',all:'📅 سب',deleted:'🗑️ ڈیلیٹ'};
-  $('recFilterLabel').textContent=labels[filterMode].replace('📅 ','').replace('🗑️ ','')+' ('+tFilt+'/'+pFilt+')';
+  var pLabels={daily:'Daily',weekly:'Weekly',monthly:'Monthly',yearly:'Yearly'};
+  $('recFilterLabel').textContent=labels[filterMode].replace('📅 ','').replace('🗑️ ','')+' · '+pLabels[pFilt]+(tFilt!=='all'?' · '+tFilt.toUpperCase():'');
   $('filterBtn').textContent=labels[filterMode];
 }
 
@@ -965,6 +1259,7 @@ function applyRecordEdit(){
   if(idx!==-1){items[idx].content=txt;lsSet(NEWS_KEY,items)}
   cancelRecordEdit();
   renderRecords();
+  refreshLivePattis();
   showMsg('✅ اپڈیٹ ہو گیا',true);
 }
 function cancelRecordEdit(){
@@ -977,16 +1272,16 @@ function nsDeleteSelected(){
   var items=lsGet(NEWS_KEY,[]);
   items.forEach(function(x){if(ids.indexOf(String(x.id))!==-1){x.deleted=true;x.deletedAt=Date.now()}});
   lsSet(NEWS_KEY,items);
-  selectedIds={};renderRecords();showMsg('✅ '+ids.length+' ڈیلیٹ ہو گئے',true);
+  selectedIds={};renderRecords();refreshLivePattis();showMsg('✅ '+ids.length+' ڈیلیٹ ہو گئے',true);
 }
 function nsDeleteAll(){
   var items=lsGet(NEWS_KEY,[]);
   items.forEach(function(x){if(!x.deleted){x.deleted=true;x.deletedAt=Date.now()}});
   lsSet(NEWS_KEY,items);
-  selectedIds={};renderRecords();showMsg('✅ سب ڈیلیٹ ہو گئے',true);
+  selectedIds={};renderRecords();refreshLivePattis();showMsg('✅ سب ڈیلیٹ ہو گئے',true);
 }
 function nsClear(){
-  lsSet(NEWS_KEY,[]);selectedIds={};renderRecords();showMsg('🧹 مکمل صاف ہو گیا',true);
+  lsSet(NEWS_KEY,[]);selectedIds={};renderRecords();refreshLivePattis();showMsg('🧹 مکمل صاف ہو گیا',true);
 }
 function nsMoveUp(){
   var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
@@ -995,7 +1290,7 @@ function nsMoveUp(){
   var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
   if(idx<=0){showMsg('مزید اوپر نہیں جا سکتا',false);return}
   var t=items[idx];items[idx]=items[idx-1];items[idx-1]=t;
-  lsSet(NEWS_KEY,items);renderRecords();showMsg('🔼 اوپر منتقل',true);
+  lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis();showMsg('🔼 اوپر منتقل',true);
 }
 function nsMoveDown(){
   var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
@@ -1004,7 +1299,7 @@ function nsMoveDown(){
   var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
   if(idx===-1||idx>=items.length-1){showMsg('مزید نیچے نہیں جا سکتا',false);return}
   var t=items[idx];items[idx]=items[idx+1];items[idx+1]=t;
-  lsSet(NEWS_KEY,items);renderRecords();showMsg('🔽 نیچے منتقل',true);
+  lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis();showMsg('🔽 نیچے منتقل',true);
 }
 function nsToggleDark(){
   document.body.classList.toggle('dark');
@@ -1020,10 +1315,13 @@ function nsDashShow(){
     lsSet('a2_manual_sel',man);
   }
   lsSet('ns_dash_visible',true);
+  $('livePattiWrap').style.display='flex';
+  refreshLivePattis();
   showMsg('📊 ڈیش بورڈ Show آن',true);
 }
 function nsDashHide(){
   lsSet('ns_dash_visible',false);
+  $('livePattiWrap').style.display='none';
   showMsg('📊 ڈیش بورڈ Hide آن',true);
 }
 
@@ -1102,6 +1400,7 @@ function deleteFixItem(i){
   showMsg('🗑️ حذف ہو گیا',true);
 }
 
+/* 4. AUTO CHECK PUSHES DISTINCT RECORDS INTO RECORD LIST (NO SAME-DAY DUPLICATE) */
 function runAutoCheckNow(){
   var results=[];
   var today=todayTs();
@@ -1156,7 +1455,7 @@ function runAutoCheckNow(){
         mem4.forEach(function(m){if(m.dutyEndedAt&&m.dutyEndedAt>=today&&!m.onLeave)msg=m.name+' نے آج اچھی ڈیوٹی مکمل کی'});
       }
     }catch(e){}
-    if(msg)results.push({type:c.type,text:msg});
+    if(msg)results.push({type:c.type,text:msg,key:c.key});
   });
 
   if(!results.length){
@@ -1166,25 +1465,41 @@ function runAutoCheckNow(){
 
   var items=lsGet(NEWS_KEY,[]);
   var now=new Date();
-  results.forEach(function(r){
+  var stamp=pad(now.getDate())+'/'+pad(now.getMonth()+1)+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  var addedCount=0;
+
+  results.forEach(function(r,idx){
+    var alreadyToday=items.some(function(existing){
+      return existing.date===todayD && !existing.deleted && existing.auto && existing.content===r.text;
+    });
+    if(alreadyToday)return;
     items.unshift({
-      id:Date.now()+Math.random(),
+      id:Date.now()+idx+Math.floor(Math.random()*1000),
       type:r.type,
       content:r.text,
-      timestamp:Date.now(),
-      dateStr:pad(now.getDate())+'/'+pad(now.getMonth()+1)+' '+pad(now.getHours())+':'+pad(now.getMinutes()),
+      timestamp:Date.now()+idx,
+      dateStr:stamp,
       date:todayD,
       auto:true,
+      autoSource:r.key||'auto',
       skipped:false,
       deleted:false,
       dashShown:false,
       historyReady:false
     });
+    addedCount++;
   });
+
+  if(!addedCount){
+    showMsg('ℹ️ آج کے آٹو ریکارڈز پہلے سے موجود ہیں',true);
+    return;
+  }
+
   lsSet(NEWS_KEY,items);
   renderRecords();
+  refreshLivePattis();
   notifyNewItem(results[0].type,results[0].text);
-  showMsg('✅ '+results.length+' آئٹمز شامل کر دیے گئے',true);
+  showMsg('✅ '+addedCount+' نئے آٹو ریکارڈ شامل ہو گئے',true);
 }
 
 /* PART 02: PATTI FILTER & SETTINGS */
@@ -1220,10 +1535,12 @@ function renderPattiSection(){
   $('soundsHeading').textContent=isNews?'🎵 News Patti آوازیں (25 دھنیں)':'🎵 Alert Patti آوازیں (20 دھنیں)';
   $('tunesContainer').innerHTML=tunes.map(function(t,idx){
     var sel=(pObj.tuneIdx===idx);
-    return '<div class="tune-card '+(sel?'sel':'')+'">'+
+    var tok='tune_'+activePatti+'_'+idx;
+    var isPl=(_activeAudioToken===tok);
+    return '<div class="tune-card '+(sel?'sel':'')+(isPl?' playing':'')+'" data-token="'+tok+'">'+
       '<span class="num">'+(idx+1)+'</span>'+
       '<span class="nm">'+t.name+'</span>'+
-      '<button class="t-play" onclick="playTuneByIndex(\''+activePatti+'\','+idx+')">▶️</button>'+
+      '<button class="t-play'+(isPl?' stop':'')+'" onclick="playTuneByIndex(\''+activePatti+'\','+idx+')">'+(isPl?'⏹️':'▶️')+'</button>'+
       '<button class="t-sel" onclick="selectTuneForPatti(\''+activePatti+'\','+idx+')">'+(sel?'منتخب':'سیو')+'</button>'+
     '</div>';
   }).join('');
@@ -1233,6 +1550,7 @@ function renderPattiSection(){
   if(hasPending)$('localAudioStatus').textContent='🎵 نئی آڈیو منتخب ہے — سیو کریں دبائیں';
   else if(hasSaved)$('localAudioStatus').textContent='✅ کسٹم آڈیو سیو ہے';
   else $('localAudioStatus').textContent='کوئی کسٹم آڈیو سیو نہیں (منتخب دھن چلے گی)';
+  updateAudioButtonsUI();
 }
 
 function savePattiMetric(key,val){
@@ -1254,16 +1572,28 @@ function selectTuneForPatti(p,idx){
   showMsg('✅ دھن سیو ہو گئی',true);
 }
 
-function playTuneByIndex(p,idx,customVol){
+/* 3. AUDIO PLAY ONCE ON PRESS, STOP ON SECOND PRESS */
+function playTuneByIndex(p,idx,customVol,tokenName){
+  var tok=tokenName||('tune_'+p+'_'+idx);
+  if(_activeAudioToken===tok){
+    stopAllAudio();
+    return;
+  }
+  stopAllAudio();
   var tunes=p==='news'?NEWS_TUNES:ALERT_TUNES;
   var tune=tunes[idx]||tunes[0];
   var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
   var vol=(customVol!==undefined?customVol:pObj.volume)/100;
   try{
     var ctx=new (window.AudioContext||window.webkitAudioContext)();
+    _audioCtx=ctx;
+    _activeAudioToken=tok;
+    updateAudioButtonsUI();
     var t=ctx.currentTime;
+    var totalMs=0;
     tune.p.forEach(function(n){
       var freq=n[0],dur=n[1]/1000;
+      totalMs+=n[1]+40;
       if(freq>0){
         var osc=ctx.createOscillator(),g=ctx.createGain();
         osc.connect(g);g.connect(ctx.destination);
@@ -1274,17 +1604,32 @@ function playTuneByIndex(p,idx,customVol){
       }
       t+=dur+0.04;
     });
-  }catch(e){}
+    var tid=setTimeout(function(){
+      if(_activeAudioToken===tok)stopAllAudio();
+    },totalMs+80);
+    _audioTimers.push(tid);
+  }catch(e){stopAllAudio()}
 }
 
-var _previewAudioEl=null;
-function playAudioDataUrl(dataUrl,volPct){
+function playAudioDataUrl(dataUrl,volPct,tokenName){
+  var tok=tokenName||'local_audio';
+  if(_activeAudioToken===tok){
+    stopAllAudio();
+    return;
+  }
+  stopAllAudio();
   try{
-    if(_previewAudioEl){_previewAudioEl.pause();_previewAudioEl=null}
-    _previewAudioEl=new Audio(dataUrl);
-    _previewAudioEl.volume=Math.min(1,Math.max(0,(volPct||70)/100));
-    _previewAudioEl.play();
-  }catch(e){}
+    var el=new Audio(dataUrl);
+    el.loop=false;
+    el.volume=Math.min(1,Math.max(0,(volPct||70)/100));
+    _previewAudioEl=el;
+    _activeAudioToken=tok;
+    updateAudioButtonsUI();
+    el.onended=function(){
+      if(_activeAudioToken===tok)stopAllAudio();
+    };
+    el.play().catch(function(){stopAllAudio()});
+  }catch(e){stopAllAudio()}
 }
 
 function onLocalAudioPicked(e){
@@ -1295,23 +1640,29 @@ function onLocalAudioPicked(e){
   r.onload=function(ev){
     pendingLocalAudio[activePatti]=ev.target.result;
     var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
-    playAudioDataUrl(pendingLocalAudio[activePatti],pObj.volume);
+    playAudioDataUrl(pendingLocalAudio[activePatti],pObj.volume,'local_audio');
     renderPattiSection();
-    showMsg('🔊 آڈیو چل رہی ہے — پسند آئے تو سیو کریں',true);
+    showMsg('🔊 آڈیو چل رہی ہے — دوبارہ دبائیں تو بند ہو گی',true);
   };
   r.readAsDataURL(f);
 }
 
 function savePickedLocalAudio(){
   if(!pendingLocalAudio[activePatti]){showMsg('پہلے آڈیو فائل منتخب کریں',false);return}
-  savedLocalAudio[activePatti]=pendingLocalAudio[activePatti];
+  var nextSaved=Object.assign({},savedLocalAudio);
+  nextSaved[activePatti]=pendingLocalAudio[activePatti];
+  if(!lsSet(AUDIO_STORE_KEY,nextSaved)){
+    showMsg('❌ اسٹوریج کی جگہ کم ہے، چھوٹی فائل منتخب کریں',false);
+    return;
+  }
+  savedLocalAudio=nextSaved;
   pendingLocalAudio[activePatti]=null;
-  lsSet(AUDIO_STORE_KEY,savedLocalAudio);
   renderPattiSection();
   showMsg('✅ کسٹم آڈیو سیو ہو گئی',true);
 }
 
 function deleteSavedLocalAudio(){
+  stopAllAudio();
   pendingLocalAudio[activePatti]=null;
   savedLocalAudio[activePatti]=null;
   lsSet(AUDIO_STORE_KEY,savedLocalAudio);
@@ -1319,13 +1670,18 @@ function deleteSavedLocalAudio(){
   showMsg('🗑️ کسٹم آڈیو ہٹا دی گئی',true);
 }
 
-function playCurrentPattiAudio(pOverride,volOverride){
+function playCurrentPattiAudio(pOverride,volOverride,tokenOverride){
   var p=pOverride||activePatti;
   var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
   var vol=volOverride!==undefined?volOverride:pObj.volume;
   var customSrc=pendingLocalAudio[p]||savedLocalAudio[p];
-  if(customSrc)playAudioDataUrl(customSrc,vol);
-  else playTuneByIndex(p,pObj.tuneIdx,vol);
+  var tok=tokenOverride||(customSrc?'local_audio':('tune_'+p+'_'+pObj.tuneIdx));
+  if(_activeAudioToken===tok){
+    stopAllAudio();
+    return;
+  }
+  if(customSrc)playAudioDataUrl(customSrc,vol,tok);
+  else playTuneByIndex(p,pObj.tuneIdx,vol,tok);
 }
 
 var _volDebounce=null;
@@ -1335,10 +1691,13 @@ function onVolumeSlide(val){
   var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
   pObj.volume=v;
   saveAllSettings();
+  if(_previewAudioEl){
+    try{_previewAudioEl.volume=Math.min(1,Math.max(0,v/100))}catch(e){}
+  }
   clearTimeout(_volDebounce);
   _volDebounce=setTimeout(function(){
-    playCurrentPattiAudio(activePatti,v);
-  },180);
+    if(!_activeAudioToken)playCurrentPattiAudio(activePatti,v);
+  },220);
 }
 
 /* PART 03: ALL SETTINGS, 10 VOICES & TESTS */
@@ -1388,12 +1747,12 @@ function testSelectedVibrate(){
   showMsg('📳 وائبریٹ ٹیسٹ',true);
 }
 function testSelectedSound(){
-  playCurrentPattiAudio(activePatti);
-  showMsg('🔊 منتخب آواز ٹیسٹ',true);
+  playCurrentPattiAudio(activePatti,undefined,'test_sound_btn');
 }
 
 /* PART 04: OTHERS & AUTO SCHEDULER */
 function resetAllToDefault(){
+  stopAllAudio();
   localStorage.removeItem(SETTINGS_KEY);
   localStorage.removeItem(AUDIO_STORE_KEY);
   cfg=defaultSettings();
@@ -1414,7 +1773,7 @@ function autoCleanup(){
     if(cfg.others.dailyReset && x.auto && x.date!==today)return false;
     return true;
   });
-  if(items.length!==before){lsSet(NEWS_KEY,items);renderRecords()}
+  if(items.length!==before){lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis()}
 }
 
 function checkScheduledTime(){
@@ -1438,6 +1797,8 @@ document.addEventListener('DOMContentLoaded',function(){
   loadAllSettings();
   autoCleanup();
   renderRecords();
+  refreshLivePattis();
+  if(cfg.others.catchup)checkScheduledTime();
   setInterval(checkScheduledTime,15000);
   setInterval(autoCleanup,3600000);
 });
