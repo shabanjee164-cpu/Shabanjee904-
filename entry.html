@@ -52,7 +52,7 @@ body.dark .rec-row .txt{color:#f1f5f9}
 body.dark .rec-row .meta{color:#94a3b8}
 body.dark .rec-row.auto-rec{background:#052e16}
 
-/* LIVE PATTI TICKER */
+/* LIVE PATTI TICKER IN NA1 */
 .live-patti-wrap{display:flex;flex-direction:column;gap:5px;margin-top:2px}
 .live-patti-bar{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;border:1px solid #e2e8f0;background:#f8fafc;overflow:hidden;min-height:34px}
 .live-patti-bar.news-bar{border-right:4px solid #10b981;background:#f0fdf4}
@@ -392,7 +392,7 @@ body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
         <div class="part-body">
           <div style="font-size:11px;font-weight:800;color:#2563eb" id="activeFilterBanner">منتخب فلٹر: 📰 News Patti</div>
 
-          <!-- RECORD PLAY ORDER / REPEAT / SKIP (moved from main screen) -->
+          <!-- RECORD PLAY ORDER / REPEAT / SKIP -->
           <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px;padding-top:8px;border-top:1px dashed #cbd5e1">🔁 ریکارڈ ترتیب، تکرار اور اسکیپ (Play Order / Repeat / Skip)</div>
 
           <div class="list-row">
@@ -584,6 +584,7 @@ var SETTINGS_KEY='ns_modular_settings_v1';
 var AUDIO_STORE_KEY='ns_modular_audio_v1';
 var LAST_AUTO_KEY='ns_last_auto_run_v1';
 var LOCK_STATE_KEY='na1_full_lock_v1';
+var LIVE_TRIG_KEY='a2_live_trigger';
 
 var NEWS_TUNES=[
   {name:"نیوز بیپ 1",p:[[780,180]]},{name:"نیوز ڈبل 2",p:[[780,130],[0,50],[920,150]]},
@@ -639,17 +640,25 @@ var pendingLocalAudio={news:null,alert:null};
 var savedLocalAudio={news:null,alert:null};
 var voiceSeqCounter=0;
 
-/* LIVE PATTI STATE */
 var pattiRuntime={
   news:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0},
   alert:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0}
 };
 
-/* AUDIO PLAY / STOP TOGGLE STATE */
 var _audioCtx=null;
 var _audioTimers=[];
 var _previewAudioEl=null;
 var _activeAudioToken=null;
+
+function emitLiveTrigger(item){
+  if(!item)return;
+  lsSet(LIVE_TRIG_KEY,{
+    id:item.id,
+    type:item.type,
+    content:item.content,
+    ts:Date.now()
+  });
+}
 
 function stopAllAudio(){
   _activeAudioToken=null;
@@ -832,7 +841,6 @@ function syncSettingsToUI(){
   refreshLivePattis();
 }
 
-/* 1. 4-FEATURE FULL SECTION LOCK (NEW PASSWORD, FORGOT, ON/OFF, RESET) */
 function getLockState(){return lsGet(LOCK_STATE_KEY,{locked:false,pwd:'',hint:''})}
 function saveLockState(st){lsSet(LOCK_STATE_KEY,st)}
 
@@ -901,7 +909,6 @@ function resetPanelLock(){
   showMsg('♻️ پاس ورڈ ری سیٹ ہو گیا',true);
 }
 
-/* QUICK PANEL & PASSWORD */
 function openQuickPanel(){
   var st=getLockState();
   var pwd=st.pwd||localStorage.getItem('ns_pwd');
@@ -970,7 +977,7 @@ function closeDetailedSettings(){
 }
 function togglePartCard(id){$(id).classList.toggle('collapsed')}
 
-/* LIVE PATTI ENGINE (PLAY ORDER, REPEAT, SKIP, SPEED, SECONDS, EFFECTS) */
+/* LIVE PATTI ENGINE IN NA1 */
 function getPattiCandidateItems(type){
   var all=lsGet(NEWS_KEY,[]);
   var today=todayStr();
@@ -1106,6 +1113,8 @@ function nextLivePattiItem(type){
   var rt=pattiRuntime[type];
   rt.idx=(rt.idx+1)%items.length;
   renderSinglePatti(type);
+  var cur=items[rt.idx];
+  if(cur)emitLiveTrigger(cur);
 }
 
 function skipLivePattiItem(type,mode){
@@ -1134,7 +1143,7 @@ function saveNews(){
   if(!content){showMsg('متن لکھیں',false);return}
   var items=lsGet(NEWS_KEY,[]);
   var now=new Date();
-  items.unshift({
+  var newItem={
     id:Date.now(),
     type:type,
     content:content,
@@ -1146,16 +1155,17 @@ function saveNews(){
     deleted:false,
     dashShown:false,
     historyReady:false
-  });
+  };
+  items.unshift(newItem);
   lsSet(NEWS_KEY,items);
   $('newsContent').value='';
   renderRecords();
   refreshLivePattis();
+  emitLiveTrigger(newItem);
   notifyNewItem(type,content);
   showMsg('✅ محفوظ ہو گیا',true);
 }
 
-/* 2. FIXED TYPE + PERIOD + MODE FILTER */
 function applyPeriodFilter(list,period,mode){
   var now=Date.now();
   var day=86400000;
@@ -1256,7 +1266,11 @@ function applyRecordEdit(){
   if(!txt){showMsg('متن خالی نہیں ہو سکتا',false);return}
   var items=lsGet(NEWS_KEY,[]);
   var idx=items.findIndex(function(x){return x.id===editingRecId});
-  if(idx!==-1){items[idx].content=txt;lsSet(NEWS_KEY,items)}
+  if(idx!==-1){
+    items[idx].content=txt;
+    lsSet(NEWS_KEY,items);
+    emitLiveTrigger(items[idx]);
+  }
   cancelRecordEdit();
   renderRecords();
   refreshLivePattis();
@@ -1325,7 +1339,7 @@ function nsDashHide(){
   showMsg('📊 ڈیش بورڈ Hide آن',true);
 }
 
-/* PART 01: FIX ITEMS & AUTO TIME CHECK (FULL APP + LOCALSTORAGE) */
+/* PART 01: FIX ITEMS & AUTO TIME CHECK */
 function renderFixItems(){
   var box=$('fixItemsContainer');
   box.innerHTML=cfg.fixItems.map(function(item,i){
@@ -1400,7 +1414,6 @@ function deleteFixItem(i){
   showMsg('🗑️ حذف ہو گیا',true);
 }
 
-/* 4. AUTO CHECK PUSHES DISTINCT RECORDS INTO RECORD LIST (NO SAME-DAY DUPLICATE) */
 function runAutoCheckNow(){
   var results=[];
   var today=todayTs();
@@ -1466,14 +1479,14 @@ function runAutoCheckNow(){
   var items=lsGet(NEWS_KEY,[]);
   var now=new Date();
   var stamp=pad(now.getDate())+'/'+pad(now.getMonth()+1)+' '+pad(now.getHours())+':'+pad(now.getMinutes());
-  var addedCount=0;
+  var addedItems=[];
 
   results.forEach(function(r,idx){
     var alreadyToday=items.some(function(existing){
       return existing.date===todayD && !existing.deleted && existing.auto && existing.content===r.text;
     });
     if(alreadyToday)return;
-    items.unshift({
+    var created={
       id:Date.now()+idx+Math.floor(Math.random()*1000),
       type:r.type,
       content:r.text,
@@ -1486,11 +1499,12 @@ function runAutoCheckNow(){
       deleted:false,
       dashShown:false,
       historyReady:false
-    });
-    addedCount++;
+    };
+    items.unshift(created);
+    addedItems.push(created);
   });
 
-  if(!addedCount){
+  if(!addedItems.length){
     showMsg('ℹ️ آج کے آٹو ریکارڈز پہلے سے موجود ہیں',true);
     return;
   }
@@ -1498,8 +1512,9 @@ function runAutoCheckNow(){
   lsSet(NEWS_KEY,items);
   renderRecords();
   refreshLivePattis();
-  notifyNewItem(results[0].type,results[0].text);
-  showMsg('✅ '+addedCount+' نئے آٹو ریکارڈ شامل ہو گئے',true);
+  emitLiveTrigger(addedItems[0]);
+  notifyNewItem(addedItems[0].type,addedItems[0].content);
+  showMsg('✅ '+addedItems.length+' نئے آٹو ریکارڈ شامل ہو گئے',true);
 }
 
 /* PART 02: PATTI FILTER & SETTINGS */
@@ -1572,7 +1587,6 @@ function selectTuneForPatti(p,idx){
   showMsg('✅ دھن سیو ہو گئی',true);
 }
 
-/* 3. AUDIO PLAY ONCE ON PRESS, STOP ON SECOND PRESS */
 function playTuneByIndex(p,idx,customVol,tokenName){
   var tok=tokenName||('tune_'+p+'_'+idx);
   if(_activeAudioToken===tok){
