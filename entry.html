@@ -1,1817 +1,1622 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NA1 — نیوز اینڈ الرٹ مینیجر</title>
-<style>
-:root{--primary:#1e293b;--accent:#2563eb;--danger:#ef4444;--success:#10b981;--golden:#d97706;--bg:#f8fafc}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);font-family:'Segoe UI',Tahoma,sans-serif;padding:12px;color:#334155;direction:rtl}
-.container{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
-.section-card{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 2px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:8px}
-.section-header{font-weight:bold;color:var(--primary);font-size:13px;display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px solid #e2e8f0}
-.section-header button{background:#f8fafc;border:1px solid #cbd5e1;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
-.compact-row{display:flex;gap:4px;align-items:center;padding:2px;flex-wrap:wrap}
-.compact-row input,.compact-row select{padding:7px 6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;text-align:center;font-family:inherit;outline:none;min-width:0;flex:1}
-.compact-row .btn{padding:7px 12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-family:inherit;font-size:11px;background:var(--success);color:#fff}
-.mini-btn{padding:5px 8px;border:none;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff;background:#475569}
-.mini-btn.blue{background:#2563eb}.mini-btn.green{background:#10b981}.mini-btn.red{background:#dc2626}.mini-btn.amber{background:#d97706}.mini-btn.purple{background:#7c3aed}
-.scroll-head{display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:wrap}
-.scroll-head span{font-size:11px;font-weight:bold;color:#475569}
-.filter-btn{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;padding:3px 8px;border-radius:4px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit}
-.btn-close{background:#64748b;color:#fff;border:none;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;cursor:pointer;font-family:inherit}
-.scroll-list{max-height:240px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px;padding:5px;background:#fafafa;font-size:11px}
-.rec-row{padding:6px 8px;border-bottom:1px dotted #e2e8f0;display:flex;align-items:flex-start;gap:6px}
-.rec-row:last-child{border-bottom:none}
-.rec-row.sel{background:#eff6ff;border-right:3px solid var(--accent)}
-.rec-row.deleted{opacity:.6;background:#fef2f2}
-.rec-row.faded{opacity:.4;filter:blur(1px)}
-.rec-row.auto-rec{background:#f0fdf4;border-right:3px solid #10b981}
-.rec-row .chk{width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:var(--accent);margin-top:3px}
-.rec-row .body{flex:1;min-width:0}
-.rec-row .txt{font-weight:700;font-size:11.5px;color:#0f172a}
-.rec-row .meta{font-size:9px;color:#64748b;margin-top:2px}
-.rec-row.deleted .txt{text-decoration:line-through}
-.state-patti{display:flex;justify-content:space-around;gap:4px;padding:6px 4px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
-.state-item{flex:1;text-align:center;padding:3px 2px;border-radius:4px;font-size:9px;font-weight:800}
-.state-item .val{font-size:12px;font-weight:900;display:block;margin-top:1px}
-.state-item:nth-child(1){background:#ecfdf5;color:#059669;border:1px solid #10b981}
-.state-item:nth-child(2){background:#fef2f2;color:#dc2626;border:1px solid #ef4444}
-.state-item:nth-child(3){background:#eff6ff;color:#2563eb;border:1px solid #3b82f6}
-.inline-msg{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2e8b57;color:#fff;padding:9px 18px;border-radius:6px;font-size:12px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:99999;display:none;font-family:inherit}
-.inline-msg.show{display:block}
-.inline-input-bar{display:none;gap:4px;padding:6px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;align-items:center}
-.inline-input-bar.show{display:flex}
-.inline-input-bar input{flex:1;padding:6px 8px;border:1px solid #cbd5e1;border-radius:5px;font-size:11px;font-family:inherit;outline:none}
-.inline-input-bar button{padding:6px 10px;border:none;border-radius:5px;font-size:11px;font-weight:bold;cursor:pointer;font-family:inherit}
-body.dark{background:#0f172a;color:#e2e8f0}
-body.dark .section-card{background:#1e293b;border-color:#334155}
-body.dark .scroll-list{background:#0f172a;color:#e2e8f0}
-body.dark .rec-row .txt{color:#f1f5f9}
-body.dark .rec-row .meta{color:#94a3b8}
-body.dark .rec-row.auto-rec{background:#052e16}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NA1 — نیوز اور الرٹ کنٹرول سینٹر</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-2: #162032;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --purple: #a855f7;
+    }
 
-/* LIVE PATTI TICKER IN NA1 */
-.live-patti-wrap{display:flex;flex-direction:column;gap:5px;margin-top:2px}
-.live-patti-bar{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;border:1px solid #e2e8f0;background:#f8fafc;overflow:hidden;min-height:34px}
-.live-patti-bar.news-bar{border-right:4px solid #10b981;background:#f0fdf4}
-.live-patti-bar.alert-bar{border-right:4px solid #ef4444;background:#fef2f2}
-body.dark .live-patti-bar{background:#0f172a;border-color:#334155}
-body.dark .live-patti-bar.news-bar{background:#052e16;border-right-color:#10b981}
-body.dark .live-patti-bar.alert-bar{background:#450a0a;border-right-color:#ef4444}
-.live-patti-tag{font-size:10px;font-weight:900;padding:2px 6px;border-radius:4px;flex-shrink:0}
-.live-patti-tag.news{background:#10b981;color:#fff}
-.live-patti-tag.alert{background:#ef4444;color:#fff}
-.live-patti-viewport{flex:1;overflow:hidden;position:relative;min-width:0;height:20px;display:flex;align-items:center}
-.live-patti-text{font-size:11px;font-weight:800;white-space:nowrap;display:inline-block;will-change:transform,opacity,filter}
-body.dark .live-patti-text{color:#f1f5f9}
-.live-patti-controls{display:flex;gap:3px;flex-shrink:0}
-.live-patti-btn{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit}
-body.dark .live-patti-btn{background:#1e293b;color:#e2e8f0;border-color:#475569}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-@keyframes pattiFade{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
-@keyframes pattiBlink{0%,100%{opacity:1}50%{opacity:.2}}
-@keyframes pattiBlurClear{0%{filter:blur(4px);opacity:.4}30%{filter:blur(0);opacity:1}100%{filter:blur(0);opacity:1}}
-@keyframes pattiSlideSide{0%{transform:translateX(60px);opacity:0}15%{transform:translateX(0);opacity:1}85%{transform:translateX(0);opacity:1}100%{transform:translateX(-60px);opacity:0}}
-@keyframes pattiUpDown{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@keyframes pattiGlow{0%,100%{text-shadow:none}50%{text-shadow:0 0 6px rgba(239,68,68,.55)}}
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding: 16px;
+    }
 
-/* FULL SECTION LOCK OVERLAY */
-.sec-lock-wall{display:none;position:fixed;inset:0;background:rgba(15,23,42,.92);z-index:100000;align-items:center;justify-content:center;padding:16px}
-.sec-lock-wall.active{display:flex}
-.sec-lock-box{background:#fff;color:#0f172a;max-width:360px;width:100%;border-radius:12px;padding:16px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.sec-lock-box input{width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:7px;font-size:12px;text-align:center;margin:8px 0;font-family:inherit}
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
 
-/* QUICK SIDE PANEL */
-.panel-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:9998;opacity:0;visibility:hidden;transition:.25s}
-.panel-overlay.active{opacity:1;visibility:visible}
-.quick-panel{position:fixed;top:0;right:0;width:180px;height:100vh;z-index:9999;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding:8px 6px;gap:4px;overflow-y:auto;background:transparent}
-.quick-panel.active{transform:translateX(0)}
-.quick-panel .side-btn{width:100%;padding:9px 12px;background:#2c3e50;color:#fff;border:1px solid #1a252f;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;text-align:right;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.15s;flex-shrink:0}
-.quick-panel .side-btn:hover{background:#34495e}
-.quick-panel .side-btn.del{background:#7f1d1d;border-color:#991b1b}
-.quick-panel .side-btn.active{background:#10b981;border-color:#059669}
-.quick-panel .side-btn.detailed{background:#2563eb;border-color:#1d4ed8}
+    header {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-/* DETAILED SETTINGS OVERLAY */
-.ns-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;overflow-y:auto}
-.ns-overlay.active{display:block}
-.ns-box{max-width:540px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
-.ns-head{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800}
-.ns-head button{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;font-family:inherit}
-.patti-filter-bar{position:sticky;top:54px;z-index:15;background:#f1f5f9;padding:8px 12px;border-bottom:1px solid #cbd5e1;display:flex;gap:6px}
-.patti-tab{flex:1;padding:9px;border:1.5px solid #cbd5e1;background:#fff;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;color:#475569;text-align:center}
-.patti-tab.active.news{background:#ecfdf5;border-color:#059669;color:#059669}
-.patti-tab.active.alert{background:#fef2f2;border-color:#dc2626;color:#dc2626}
-.ns-body{flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+    .brand h1 {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.part-card{background:#fff;border:1px solid #cbd5e1;border-radius:10px;overflow:hidden}
-.part-head{background:#f8fafc;padding:9px 12px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:6px}
-.part-num{background:#1e293b;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px}
-.part-name-inp{flex:1;border:1px solid transparent;background:transparent;font-size:12.5px;font-weight:800;color:#0f172a;font-family:inherit;padding:3px 6px;border-radius:5px;outline:none}
-.part-name-inp:focus{background:#fff;border-color:#2563eb}
-.part-toggle-btn{background:#e2e8f0;border:none;padding:4px 8px;border-radius:5px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;color:#334155}
-.part-body{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
-.part-card.collapsed .part-body{display:none}
+    .brand p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
 
-.list-row{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;border-bottom:1px solid #f1f5f9;font-size:11.5px;font-weight:700;gap:8px}
-.list-row:last-child{border-bottom:none}
-.list-row .sub-txt{display:block;font-size:9.5px;color:#64748b;font-weight:600;margin-top:1px}
-.sw{position:relative;width:42px;height:23px;flex-shrink:0;display:inline-block}
-.sw input{opacity:0;width:0;height:0}
-.sw span{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:23px;transition:.2s}
-.sw span:before{content:"";position:absolute;height:17px;width:17px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
-.sw input:checked + span{background:#10b981}
-.sw input:checked + span:before{transform:translateX(19px)}
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
 
-.time-box{display:flex;gap:4px;align-items:center}
-.time-box input,.time-box select{padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11.5px;font-weight:700;text-align:center;font-family:inherit;outline:none;width:48px}
-.time-box select{width:58px}
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+    }
 
-.add-item-box{display:flex;gap:4px;background:#f8fafc;padding:6px;border-radius:8px;border:1px solid #e2e8f0}
-.add-item-box input,.add-item-box select{padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-family:inherit;outline:none}
-.add-item-box input{flex:1}
-.add-item-box button{background:#10b981;color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      display: inline-block;
+    }
 
-.fix-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:7px 8px;display:flex;flex-direction:column;gap:5px}
-.fix-item.fixed-pin{border-color:#2563eb;background:#eff6ff}
-.fix-item.off{opacity:.55}
-.fix-top{display:flex;align-items:center;gap:6px}
-.fix-top .idx{font-size:10px;font-weight:800;color:#64748b;min-width:16px}
-.fix-top .title{flex:1;font-size:11px;font-weight:800;color:#0f172a}
-.fix-top .badge{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px}
-.fix-top .badge.news{background:#d1fae5;color:#065f46}
-.fix-top .badge.alert{background:#fee2e2;color:#991b1b}
-.fix-top .lim-inp{width:44px;padding:3px;border:1px solid #cbd5e1;border-radius:4px;font-size:10px;font-weight:800;text-align:center;font-family:inherit}
-.fix-top .unit{font-size:9px;color:#64748b;font-weight:700}
-.fix-drop-line{display:flex;gap:4px;padding-top:4px;border-top:1px dashed #cbd5e1;justify-content:flex-end}
-.drop-btn{padding:3px 8px;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:9.5px;font-weight:800;cursor:pointer;font-family:inherit;color:#334155}
-.drop-btn.fix.active{background:#2563eb;color:#fff;border-color:#2563eb}
-.drop-btn.del{color:#dc2626;border-color:#fecaca;background:#fef2f2}
-.inline-edit-row{display:flex;gap:4px;margin-top:4px}
-.inline-edit-row input,.inline-edit-row select{padding:5px;border:1px solid #93c5fd;border-radius:5px;font-size:10.5px;font-family:inherit}
-.inline-edit-row input{flex:1}
-.inline-edit-row button{padding:5px 8px;border:none;border-radius:5px;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit;background:#10b981;color:#fff}
+    .dot.warn { background: var(--warn); }
+    .dot.err { background: var(--danger); }
 
-.effect-grid{display:flex;flex-direction:column;gap:4px}
-.effect-row{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;font-size:11px;font-weight:700}
-.effect-row.active{background:#eff6ff;border-color:#2563eb;color:#1e40af}
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 8px 12px;
+    }
 
-.tunes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
-.tune-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:6px;display:flex;align-items:center;gap:4px}
-.tune-card.sel{background:#eff6ff;border-color:#2563eb}
-.tune-card.playing{background:#ecfdf5;border-color:#10b981}
-.tune-card .num{font-size:9px;font-weight:800;color:#94a3b8;width:16px}
-.tune-card .nm{flex:1;font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tune-card button{border:none;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff}
-.tune-card .t-play{background:#10b981}
-.tune-card .t-play.stop{background:#dc2626}
-.tune-card .t-sel{background:#64748b}
-.tune-card.sel .t-sel{background:#2563eb}
+    button {
+      cursor: pointer;
+      transition: 0.15s ease;
+      font-weight: 600;
+    }
 
-.audio-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px}
-.audio-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.audio-actions button{padding:6px 10px;border:none;border-radius:6px;font-size:10.5px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff}
-.btn-up{background:#2563eb}
-.btn-save-aud{background:#10b981}
-.btn-play-aud{background:#0284c7}
-.btn-del-aud{background:#dc2626}
+    button:hover { filter: brightness(1.12); }
+    button.primary { background: #0284c7; border-color: #0ea5e9; }
+    button.success { background: #15803d; border-color: #22c55e; }
+    button.warn { background: #b45309; border-color: #f59e0b; }
+    button.danger { background: #b91c1c; border-color: #ef4444; }
+    button.ghost { background: transparent; }
+    button.sm { padding: 5px 9px; font-size: 0.78rem; }
 
-.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.test-btn{padding:9px 6px;border:1px solid #bfdbfe;background:#eff6ff;color:#1e40af;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;text-align:center}
-.test-btn:active{transform:scale(.97)}
+    .grid-main {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
 
-.ns-foot{position:sticky;bottom:0;background:#fff;border-top:1px solid #e2e8f0;padding:10px 12px;display:flex;gap:8px;z-index:20}
-.ns-foot button{flex:1;padding:11px;border:none;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;background:#1e293b;color:#fff}
+    @media (max-width: 960px) {
+      .grid-main { grid-template-columns: 1fr; }
+    }
 
-.pwd-bar{display:none;background:#1e293b;padding:6px;border-radius:8px;gap:4px;flex-direction:column}
-.pwd-bar.show{display:flex}
-.pwd-bar input{padding:6px;border:1px solid #475569;border-radius:5px;font-size:11px;background:#0f172a;color:#fff;font-family:inherit;outline:none}
-.pwd-bar button{padding:5px;border:none;border-radius:5px;background:#10b981;color:#fff;font-size:10px;font-weight:800;cursor:pointer;font-family:inherit}
-</style>
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .form-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    textarea {
+      min-height: 78px;
+      resize: vertical;
+    }
+
+    /* Settings Drawer / Panel */
+    .settings-panel {
+      display: none;
+      gap: 14px;
+    }
+
+    .settings-panel.open {
+      display: grid;
+    }
+
+    .settings-block {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .settings-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--accent);
+    }
+
+    .hidden-section {
+      display: none;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .hidden-section.open {
+      display: grid;
+    }
+
+    .check-inline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.86rem;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .check-inline input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+
+    .status-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.55);
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    /* Snooze Banner */
+    .snooze-bar {
+      display: none;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid var(--warn);
+      border-radius: 10px;
+      padding: 10px 14px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .snooze-bar.active {
+      display: flex;
+    }
+
+    /* Filter Bar */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filters input[type="search"] {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    /* Records List */
+    .records-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .record-item {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      transition: 0.2s ease;
+    }
+
+    .record-item.priority-high {
+      border-right: 4px solid var(--danger);
+    }
+
+    .record-item.escaped-temp {
+      filter: blur(0.45px);
+      opacity: 0.72;
+      border-color: var(--warn);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .record-item.escaped-perm {
+      filter: blur(0.7px);
+      opacity: 0.58;
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .record-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.73rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: #334155;
+      color: #f8fafc;
+    }
+
+    .badge.news { background: #0369a1; }
+    .badge.alert { background: #b91c1c; }
+    .badge.prio { background: #be123c; }
+    .badge.restored { background: #15803d; }
+    .badge.esc-temp { background: #b45309; }
+    .badge.esc-perm { background: #991b1b; }
+    .badge.auto { background: #6d28d9; }
+
+    .record-text {
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    .record-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .record-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 14px;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 6px;
+      max-height: 210px;
+      overflow-y: auto;
+    }
+
+    .mini-row {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.82rem;
+    }
+  </style>
 </head>
 <body>
-
-<div class="sec-lock-wall" id="secLockWall">
-  <div class="sec-lock-box">
-    <div style="font-size:24px">🔒</div>
-    <div style="font-size:14px;font-weight:900;color:#dc2626;margin-top:4px">NA1 سیکشن لاک ہے</div>
-    <input type="password" id="lockUnlockInp" placeholder="پاس ورڈ درج کریں...">
-    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-      <button class="mini-btn blue" onclick="unlockFullSection()">🔓 ان لاک</button>
-      <button class="mini-btn amber" onclick="toggleForgotPanel()">❓ Forgot</button>
-      <button class="mini-btn red" onclick="resetLockFromWall()">♻️ Reset</button>
-    </div>
-    <div id="forgotPanel" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed #cbd5e1;font-size:11px">
-      <div>ریکوری لفظ درج کریں:</div>
-      <input type="text" id="forgotAnsInp" placeholder="ریکوری جواب...">
-      <button class="mini-btn green" onclick="doForgotRecovery()">پاس ورڈ دیکھیں</button>
-      <div id="forgotMsg" style="margin-top:5px;font-weight:800;color:#2563eb"></div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="section-card">
-    <div class="section-header">
-      <span>📰 نیوز اینڈ الرٹ مینیجر</span>
-      <button onclick="openQuickPanel()">⚙️</button>
-    </div>
-
-    <div class="inline-input-bar" id="pwdCheckBar">
-      <input type="password" id="pwdCheckInput" placeholder="🔑 پاس ورڈ درج کریں...">
-      <button style="background:#2563eb;color:#fff" onclick="verifyPanelPwd()">کھولیں</button>
-      <button style="background:#64748b;color:#fff" onclick="closePwdBar()">✕</button>
-    </div>
-
-    <div class="inline-input-bar" id="recEditBar">
-      <input type="text" id="recEditInput" placeholder="نیا متن لکھیں...">
-      <button style="background:#10b981;color:#fff" onclick="applyRecordEdit()">سیو</button>
-      <button style="background:#64748b;color:#fff" onclick="cancelRecordEdit()">✕</button>
-    </div>
-
-    <div class="compact-row">
-      <select id="newsType"><option value="news">📰 News</option><option value="alert">🚨 Alert</option></select>
-      <input type="text" id="newsContent" placeholder="متن لکھیں...">
-      <button class="btn" onclick="saveNews()">💾</button>
-    </div>
-
-    <div class="live-patti-wrap" id="livePattiWrap">
-      <div class="live-patti-bar alert-bar" id="liveAlertPatti">
-        <span class="live-patti-tag alert">🚨 Alert</span>
-        <div class="live-patti-viewport">
-          <span class="live-patti-text" id="liveAlertText">کوئی الرٹ پیغام نہیں</span>
-        </div>
-        <div class="live-patti-controls">
-          <button class="live-patti-btn" onclick="skipLivePattiItem('alert','once')" title="اس بار Skip">⏭️</button>
-          <button class="live-patti-btn" onclick="skipLivePattiItem('alert','perm')" title="مستقل Skip">🚫</button>
-          <button class="live-patti-btn" onclick="nextLivePattiItem('alert')" title="اگلا">›</button>
-        </div>
+  <div class="container">
+    <!-- Top Header -->
+    <header>
+      <div class="brand">
+        <h1>📡 NA1 کنٹرول پینل</h1>
+        <p>نیوز و الرٹ مینجمنٹ، ٹائم شیڈول، آڈیو کیو اور NA2 ڈیش بورڈ سنک</p>
       </div>
-      <div class="live-patti-bar news-bar" id="liveNewsPatti">
-        <span class="live-patti-tag news">📰 News</span>
-        <div class="live-patti-viewport">
-          <span class="live-patti-text" id="liveNewsText">کوئی نیوز پیغام نہیں</span>
+      <div class="header-actions">
+        <div class="sync-pill" id="headerSyncPill">
+          <span class="dot" id="headerSyncDot"></span>
+          <span id="headerSyncText">سنک فعال</span>
         </div>
-        <div class="live-patti-controls">
-          <button class="live-patti-btn" onclick="skipLivePattiItem('news','once')" title="اس بار Skip">⏭️</button>
-          <button class="live-patti-btn" onclick="skipLivePattiItem('news','perm')" title="مستقل Skip">🚫</button>
-          <button class="live-patti-btn" onclick="nextLivePattiItem('news')" title="اگلا">›</button>
-        </div>
+        <button class="primary" id="toggleSettingsBtn" type="button">⚙️ سیٹنگز</button>
+        <button class="ghost" id="openDashboardHintBtn" type="button">🖥️ NA2 اسٹیٹس</button>
+      </div>
+    </header>
+
+    <!-- Active Snooze Countdown Banner -->
+    <div class="snooze-bar" id="snoozeBanner">
+      <div>
+        <strong>⏸️ Snooze 5m فعال:</strong>
+        <span id="snoozeRecordTitle">---</span> — باقی وقت: <strong id="snoozeCountdown">05:00</strong>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="success sm" id="resumeSnoozeNowBtn" type="button">ابھی چلائیں</button>
+        <button class="danger sm" id="dismissSnoozeBtn" type="button">ابھی ڈسمس کریں</button>
       </div>
     </div>
 
-    <div class="scroll-head">
-      <span>📋 ریکارڈ: <span id="recFilterLabel">آج</span></span>
-      <div style="display:flex;gap:3px;flex-wrap:wrap">
-        <select id="typeFilterSel" onchange="renderRecords()" style="padding:2px 5px;border:1px solid #cbd5e1;border-radius:4px;font-size:9.5px;font-weight:800;font-family:inherit">
-          <option value="all">All</option>
-          <option value="news">News</option>
-          <option value="alert">Alert</option>
-        </select>
-        <select id="periodFilterSel" onchange="renderRecords()" style="padding:2px 5px;border:1px solid #cbd5e1;border-radius:4px;font-size:9.5px;font-weight:800;font-family:inherit">
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-        <button class="filter-btn" onclick="cycleFilter()" id="filterBtn">📅 آج</button>
-        <button class="btn-close" onclick="toggleClose('newsRecordList')">⬇️ Close</button>
+    <!-- Collapsible Settings Panel (Closed by default) -->
+    <section class="card settings-panel" id="settingsPanel">
+      <div class="card-title">
+        <span>⚙️ مکمل سیٹنگز پینل (`ns_modular_settings_v1`)</span>
+        <button class="ghost sm" id="closeSettingsBtn" type="button">بند کریں ✕</button>
       </div>
-    </div>
 
-    <div class="scroll-list" id="newsRecordList"></div>
-
-    <div class="state-patti">
-      <div class="state-item">📰 News<span class="val" id="newsCount">0</span></div>
-      <div class="state-item">🚨 Alert<span class="val" id="alertCount">0</span></div>
-      <div class="state-item">📋 Total<span class="val" id="newsTotal">0</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="panel-overlay" id="qOverlay" onclick="closeQuickPanel()"></div>
-<div class="quick-panel" id="qPanel">
-  <button class="side-btn" onclick="nsSelectMode()" id="selModeBtn"><span>☑️ Select</span><span>›</span></button>
-  <button class="side-btn" onclick="nsAllSelect()"><span>✅ All</span><span>›</span></button>
-  <button class="side-btn" onclick="nsEditSelected()"><span>✏️ Edit</span><span>›</span></button>
-  <button class="side-btn del" onclick="nsDeleteSelected()"><span>🗑️ Delete</span><span>›</span></button>
-  <button class="side-btn del" onclick="nsDeleteAll()"><span>❌ Del All</span><span>›</span></button>
-  <button class="side-btn del" onclick="nsClear()"><span>🧹 Clear</span><span>›</span></button>
-  <button class="side-btn" onclick="nsMoveUp()"><span>🔼 Oper</span><span>›</span></button>
-  <button class="side-btn" onclick="nsMoveDown()"><span>🔽 Nichy</span><span>›</span></button>
-  <button class="side-btn" onclick="toggleSetPwdBar()"><span>🔑 Pass</span><span>›</span></button>
-  <div class="pwd-bar" id="setPwdBar">
-    <input type="password" id="newPwdInp" placeholder="New Password">
-    <input type="text" id="recAnsSetInp" placeholder="Forgot ریکوری لفظ">
-    <button onclick="savePanelPwd()">محفوظ کریں</button>
-    <button onclick="toggleSectionLockOnOff()" style="background:#2563eb;margin-top:2px" id="lockToggleBtn">🔒 Lock On/Off</button>
-    <button onclick="resetPanelLock()" style="background:#dc2626;margin-top:2px">♻️ Reset Lock</button>
-  </div>
-  <button class="side-btn" onclick="nsToggleDark()" id="darkBtn"><span>🌙 Dark</span><span>›</span></button>
-  <button class="side-btn" onclick="nsDashShow()"><span>📊 Show</span><span>›</span></button>
-  <button class="side-btn" onclick="nsDashHide()"><span>📊 Hide</span><span>›</span></button>
-  <button class="side-btn detailed" onclick="openDetailedSettings()"><span>⚙️ Detailed</span><span>›</span></button>
-  <button class="side-btn" onclick="closeQuickPanel()"><span>⬇️ Close</span><span>›</span></button>
-</div>
-
-<div class="ns-overlay" id="nsOverlay">
-  <div class="ns-box">
-    <div class="ns-head">
-      <span>⚙️ مکمل سیٹنگز</span>
-      <button onclick="closeDetailedSettings()">✕</button>
-    </div>
-
-    <div class="patti-filter-bar">
-      <button class="patti-tab active news" id="tabNewsPatti" onclick="switchPattiFilter('news')">📰 News Patti</button>
-      <button class="patti-tab alert" id="tabAlertPatti" onclick="switchPattiFilter('alert')">🚨 Alert Patti</button>
-    </div>
-
-    <div class="ns-body">
-
-      <div class="part-card" id="partCard1">
-        <div class="part-head">
-          <span class="part-num">01</span>
-          <input type="text" class="part-name-inp" id="partName1" value="ایپ آٹو فکس ٹائم چیک" onchange="saveAllSettings()">
-          <button class="part-toggle-btn" onclick="togglePartCard('partCard1')">▲/▼</button>
+      <!-- Block #1: Fix Time & Auto Check -->
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <span>#1 فکس ٹائم اور آٹو چیک کنٹرول</span>
+          <span id="nextCheckStatus" class="badge">اگلا چیک: ---</span>
         </div>
-        <div class="part-body">
-          <div class="list-row">
-            <div>آٹو فکس ٹائم چیک چالو کریں<span class="sub-txt">مقررہ وقت پر پورے ایپ اور localStorage کی چیکنگ ہو کر News/Alert بنے گی</span></div>
-            <label class="sw"><input type="checkbox" id="autoCheckOn" onchange="saveAllSettings()"><span></span></label>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="fixTimeEnabled" />
+            فکس ٹائم شیڈول فعال
+          </label>
+          <div class="form-row">
+            <label for="fixTimeValue">فکس ٹائم (HH:MM)</label>
+            <input type="time" id="fixTimeValue" />
           </div>
-          <div class="list-row">
-            <div>چیک کا مقررہ وقت</div>
-            <div class="time-box">
-              <input type="number" id="checkHour" min="1" max="12" value="10" onchange="saveAllSettings()">
-              <span>:</span>
-              <input type="number" id="checkMin" min="0" max="59" value="00" onchange="saveAllSettings()">
-              <select id="checkAmPm" onchange="saveAllSettings()"><option value="AM">AM</option><option value="PM" selected>PM</option></select>
-            </div>
+        </div>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="autoCheckEnabled" />
+            آٹو چیک فعال
+          </label>
+          <div class="form-row">
+            <label for="autoCheckIntervalSec">آٹو چیک وقفہ (سیکنڈ)</label>
+            <input type="number" id="autoCheckIntervalSec" min="10" max="86400" value="60" />
           </div>
-          <div class="list-row">
-            <div>ابھی خودکار چیک چلائیں<span class="sub-txt">ڈیٹا چیک کر کے متعلقہ پٹی میں بھیجیں</span></div>
-            <button class="drop-btn fix active" onclick="runAutoCheckNow()">▶️ ابھی چلائیں</button>
-          </div>
-
-          <div class="add-item-box">
-            <select id="newFixType"><option value="alert">🚨 Alert</option><option value="news">📰 News</option></select>
-            <input type="text" id="newFixText" placeholder="خود نیا الرٹ یا نیوز لکھیں...">
-            <button onclick="addCustomFixItem()">➕ شامل کریں</button>
-          </div>
-
-          <div id="fixItemsContainer" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+        <label class="check-inline">
+          <input type="checkbox" id="catchUpMissedChecks" />
+          دیر سے کھلنے پر چھوٹے ہوئے آٹو چیکس کی خودکار کیچ اپ
+        </label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="primary sm" id="runAutoCheckNowBtn" type="button">ابھی آٹو چیک چلائیں</button>
+          <span class="status-note" id="lastAutoCheckNote">آخری چیک: ابھی نہیں ہوا</span>
         </div>
       </div>
 
-      <div class="part-card" id="partCard2">
-        <div class="part-head">
-          <span class="part-num">02</span>
-          <input type="text" class="part-name-inp" id="partName2" value="نیوز پٹی اور الرٹ پٹی سیٹنگز" onchange="saveAllSettings()">
-          <button class="part-toggle-btn" onclick="togglePartCard('partCard2')">▲/▼</button>
+      <!-- Block #2: Auto Expire & Auto Clean -->
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <span>#2 آٹو ایکسپائر اور آٹو کلین کنٹرول</span>
         </div>
-        <div class="part-body">
-          <div style="font-size:11px;font-weight:800;color:#2563eb" id="activeFilterBanner">منتخب فلٹر: 📰 News Patti</div>
-
-          <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px;padding-top:8px;border-top:1px dashed #cbd5e1">🔁 ریکارڈ ترتیب، تکرار اور اسکیپ (Play Order / Repeat / Skip)</div>
-
-          <div class="list-row">
-            <div>پلے آرڈر<span class="sub-txt">ریکارڈ کس ترتیب سے دکھائیں / چلائیں</span></div>
-            <select id="playModeSel" onchange="savePlayOrderCfg()" style="width:140px;padding:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:11px;font-weight:700;font-family:inherit">
-              <option value="record">1. ریکارڈ سے</option>
-              <option value="sorted">2. ترتیب سے</option>
-              <option value="mix">3. مکس (Mix)</option>
-              <option value="old">4. پرانا پہلے</option>
-              <option value="fixed">5. مقررہ بار</option>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="autoExpireEnabled" />
+            آٹو ایکسپائر فعال
+          </label>
+          <div class="form-row">
+            <label for="autoExpireMinutes">ایکسپائر مدت (منٹ)</label>
+            <input type="number" id="autoExpireMinutes" min="1" max="10080" value="120" />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="autoCleanEnabled" />
+            آٹو کلین فعال
+          </label>
+          <div class="form-row">
+            <label for="autoCleanScope">آٹو کلین کا دائرہ کار</label>
+            <select id="autoCleanScope">
+              <option value="auto_only">صرف آٹو ریکارڈز</option>
+              <option value="expired_only">صرف مدت گزرے / ایکسپائر ریکارڈز</option>
             </select>
           </div>
-
-          <div class="list-row">
-            <div>مقررہ تعداد<span class="sub-txt">صرف "مقررہ بار" موڈ کے لیے</span></div>
-            <input type="number" id="fixedCountInp" min="1" max="50" value="1" style="width:65px;padding:5px;border:1px solid #cbd5e1;border-radius:6px;text-align:center;font-weight:800;font-family:inherit" onchange="savePlayOrderCfg()">
-          </div>
-
-          <div class="list-row" style="flex-direction:column;align-items:stretch;gap:6px">
-            <div>تکرار (Repeat Mode)</div>
-            <div style="display:flex;gap:5px;flex-wrap:wrap">
-              <button class="mini-btn blue" onclick="setRepeatOpt('once')">1 بار</button>
-              <button class="mini-btn purple" onclick="setRepeatOpt('fixed')">مقررہ</button>
-              <button class="mini-btn green" onclick="setRepeatOpt('loop')">Loop</button>
-            </div>
-          </div>
-
-          <div class="list-row" style="flex-direction:column;align-items:stretch;gap:6px">
-            <div>اسکیپ (Skip Mode)</div>
-            <div style="display:flex;gap:5px;flex-wrap:wrap">
-              <button class="mini-btn amber" onclick="setSkipOpt('once')">⏭️ اس بار Skip</button>
-              <button class="mini-btn red" onclick="setSkipOpt('perm')">🚫 مستقل Skip</button>
-            </div>
-          </div>
-
-          <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px;padding-top:8px;border-top:1px dashed #cbd5e1">🎨 پٹی اسٹائل (Speed / Effects / Sounds)</div>
-
-          <div class="list-row">
-            <div>اسکرول اسپیڈ (رفتار 1 تا 10)</div>
-            <input type="number" id="pattiSpeedInp" min="1" max="10" value="5" style="width:65px;padding:5px;border:1px solid #cbd5e1;border-radius:6px;text-align:center;font-weight:800" onchange="savePattiMetric('speed',this.value)">
-          </div>
-          <div class="list-row">
-            <div>وقفہ / دورانیہ (سیکنڈز)</div>
-            <input type="number" id="pattiSecInp" min="1" max="120" value="3" style="width:65px;padding:5px;border:1px solid #cbd5e1;border-radius:6px;text-align:center;font-weight:800" onchange="savePattiMetric('seconds',this.value)">
-          </div>
-
-          <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px" id="effectsHeading">✨ اثرات (10 فیچرز — ڈائریکٹ آن/آف)</div>
-          <div class="effect-grid" id="effectsContainer"></div>
-
-          <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:6px" id="soundsHeading">🎵 آوازیں اور دھنیں</div>
-          <div class="tunes-grid" id="tunesContainer"></div>
-
-          <div class="audio-box">
-            <div style="font-size:11px;font-weight:800;color:#0f172a">📁 لوکل آڈیو فائل اپلوڈ</div>
-            <div class="audio-actions">
-              <input type="file" id="localAudioFile" accept="audio/*" style="display:none" onchange="onLocalAudioPicked(event)">
-              <button class="btn-up" onclick="document.getElementById('localAudioFile').click()">📂 فائل منتخب کریں</button>
-              <button class="btn-play-aud" id="btnPlayLocalAud" onclick="playCurrentPattiAudio()">▶️ سنیں</button>
-              <button class="btn-save-aud" onclick="savePickedLocalAudio()">💾 سیو کریں</button>
-              <button class="btn-del-aud" onclick="deleteSavedLocalAudio()">🗑️ ہٹائیں</button>
-            </div>
-            <div id="localAudioStatus" style="font-size:10px;font-weight:700;color:#64748b">کوئی کسٹم آڈیو سیو نہیں</div>
-          </div>
-
-          <div class="list-row">
-            <div style="flex:1">
-              🔊 والیوم کنٹرول: <span id="volPctLabel">70%</span>
-              <input type="range" id="pattiVolSlider" min="0" max="100" value="70" style="width:100%;margin-top:5px;accent-color:#2563eb" oninput="onVolumeSlide(this.value)">
-            </div>
-          </div>
+        </div>
+        <div class="form-row">
+          <label for="autoCleanAgeMinutes">کتنے منٹ پرانے ریکارڈز صاف ہوں</label>
+          <input type="number" id="autoCleanAgeMinutes" min="1" max="43200" value="1440" />
         </div>
       </div>
 
-      <div class="part-card" id="partCard3">
-        <div class="part-head">
-          <span class="part-num">03</span>
-          <input type="text" class="part-name-inp" id="partName3" value="آل سیٹنگز اور ٹیسٹ" onchange="saveAllSettings()">
-          <button class="part-toggle-btn" onclick="togglePartCard('partCard3')">▲/▼</button>
+      <!-- Block #3: Audio, Voice, Queue & Test -->
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <span>#3 آڈیو، وائس، اسپیچ کیو اور ٹیسٹ کنٹرول</span>
         </div>
-        <div class="part-body">
-          <div class="list-row">
-            <div>📳 وائبریٹ (Vibrate)</div>
-            <label class="sw"><input type="checkbox" id="optVibrate" checked onchange="saveAllSettings()"><span></span></label>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="soundEnabled" />
+            آواز (Sound / Speech) فعال
+          </label>
+          <label class="check-inline">
+            <input type="checkbox" id="vibrationEnabled" />
+            وائبریشن / الرٹ پلس فعال
+          </label>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label for="voiceSelect">وائس انتخاب (ur-PK فال بیک کے ساتھ)</label>
+            <select id="voiceSelect"></select>
           </div>
-          <div class="list-row">
-            <div>🗣️ وائس بول کر بتائے</div>
-            <label class="sw"><input type="checkbox" id="optVoice" checked onchange="saveAllSettings()"><span></span></label>
+          <div class="form-row">
+            <label for="speechRate">اسپیچ اسپیڈ</label>
+            <input type="number" id="speechRate" min="0.5" max="2" step="0.1" value="1" />
           </div>
-          <div class="list-row">
-            <div>🎙️ 10 آوازیں / لہجہ منتخب کریں</div>
-            <select id="voiceSlotSel" style="width:150px;padding:5px;border:1px solid #cbd5e1;border-radius:6px;font-size:10.5px;font-weight:700" onchange="saveVoiceSlotCfg()">
-              <option value="1">آواز 1 — نرم اردو</option>
-              <option value="2">آواز 2 — تیز اردو</option>
-              <option value="3">آواز 3 — گہرا لہجہ</option>
-              <option value="4">آواز 4 — الرٹ لہجہ</option>
-              <option value="5">آواز 5 — نیوز لہجہ</option>
-              <option value="6">آواز 6 — انگریزی 1</option>
-              <option value="7">آواز 7 — انگریزی 2</option>
-              <option value="8">آواز 8 — پرسکون</option>
-              <option value="9">آواز 9 — واضح انداز</option>
-              <option value="10">آواز 10 — ترتیب وار (1-10)</option>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <button class="primary sm" id="testAudioBtn" type="button">🔊 ٹیسٹ آڈیو / کیو</button>
+          <button class="danger sm" id="stopAudioBtn" type="button">⏹️ آواز روکیں (Stop Audio)</button>
+          <span class="status-note" id="audioQueueStatus">کیو اسٹیٹس: خاموش</span>
+        </div>
+      </div>
+
+      <!-- Block #4: News Patti & Alert Patti Control -->
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <span>#4 نیوز پٹی اور الرٹ پٹی کنٹرول</span>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label for="playOrder">چلنے کی ترتیب (Play Order)</label>
+            <select id="playOrder">
+              <option value="newest">تازہ ترین پہلے</option>
+              <option value="oldest">پرانے پہلے</option>
+              <option value="priority">ترجیح کے مطابق</option>
             </select>
           </div>
-          <div class="list-row">
-            <div>🔔 براؤزر نوٹیفکیشن</div>
-            <label class="sw"><input type="checkbox" id="optBrowserNotif" onchange="onBrowserNotifToggle(this)"><span></span></label>
+          <div class="form-row">
+            <label for="repeatMode">تکرار (Repeat Mode)</label>
+            <select id="repeatMode">
+              <option value="loop">مسلسل (Loop)</option>
+              <option value="once">ایک بار (Once)</option>
+            </select>
           </div>
-          <div class="list-row">
-            <div>🚨 الرٹ پٹی (Alert On/Off)</div>
-            <label class="sw"><input type="checkbox" id="optAlertOn" checked onchange="onPattiVisibilityToggle()"><span></span></label>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label for="pattiSpeed">پٹی اسپیڈ (px/sec)</label>
+            <input type="number" id="pattiSpeed" min="20" max="300" value="80" />
           </div>
-          <div class="list-row">
-            <div>📰 نیوز پٹی (News On/Off)</div>
-            <label class="sw"><input type="checkbox" id="optNewsOn" checked onchange="onPattiVisibilityToggle()"><span></span></label>
+          <div class="form-row">
+            <label for="pattiSeconds">ڈسپلے سیکنڈز فی آئٹم</label>
+            <input type="number" id="pattiSeconds" min="3" max="120" value="12" />
           </div>
-          <div class="list-row">
-            <div>🔊 آوازیں (Sounds On/Off)</div>
-            <label class="sw"><input type="checkbox" id="optSoundsOn" checked onchange="saveAllSettings()"><span></span></label>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label for="pattiEffect">ایفیکٹس (Effects)</label>
+            <select id="pattiEffect">
+              <option value="smooth">سموتھ اسکرول</option>
+              <option value="flash">فلیش ہائی لائٹ</option>
+              <option value="slide">سلائیڈ ٹرانزیشن</option>
+            </select>
           </div>
-
-          <div style="font-size:11px;font-weight:800;color:#1e293b;margin-top:4px">🧪 آخری ٹیسٹ سیکشن</div>
-          <div class="test-grid">
-            <button class="test-btn" onclick="testSelectedVoice()">🗣️ وائس ٹیسٹ</button>
-            <button class="test-btn" onclick="testSelectedVibrate()">📳 وائبریٹ ٹیسٹ</button>
-            <button class="test-btn" id="btnTestSound" onclick="testSelectedSound()">🔊 آواز ٹیسٹ</button>
+          <div class="form-row">
+            <label for="autoDismissSec">آٹو ڈسمس ٹائمر (سیکنڈ، 0 = بند)</label>
+            <input type="number" id="autoDismissSec" min="0" max="600" value="30" />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <label class="check-inline">
+            <input type="checkbox" id="alertPriorityEnabled" />
+            اہم الرٹ کو ترجیح (Alert Priority)
+          </label>
+          <div class="form-row">
+            <label for="snoozeMinutes">اسنوز دورانیہ (منٹ)</label>
+            <input type="number" id="snoozeMinutes" min="1" max="60" value="5" />
           </div>
         </div>
       </div>
 
-      <div class="part-card" id="partCard4">
-        <div class="part-head">
-          <span class="part-num">04</span>
-          <input type="text" class="part-name-inp" id="partName4" value="دیگر سیٹنگز (Others Setting)" onchange="saveAllSettings()">
-          <button class="part-toggle-btn" onclick="togglePartCard('partCard4')">▲/▼</button>
+      <!-- Block #5: Hidden Advanced / Escape / Restore / History / Sync Block (Collapsed by default) -->
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <span>#5 چھپا ہوا بلاک: اسکیپ، بحالی، ہسٹری/ڈیلیٹڈ اور سنک</span>
+          <button class="ghost sm" id="toggleHiddenAdvancedBtn" type="button">کھولیں / چھپائیں ▾</button>
         </div>
-        <div class="part-body">
-          <div class="list-row">
-            <div>App کھلنے پر Catch-up چیک</div>
-            <label class="sw"><input type="checkbox" id="othCatchup" checked onchange="saveAllSettings()"><span></span></label>
+
+        <div class="hidden-section" id="hiddenAdvancedSection">
+          <div class="form-grid-2">
+            <label class="check-inline">
+              <input type="checkbox" id="dashboardAutoHideEmpty" />
+              خالی ہونے پر NA2 ڈیش بورڈ پٹی چھپائیں / اسٹینڈ بائی
+            </label>
+            <label class="check-inline">
+              <input type="checkbox" id="dashboardHighlightNew" />
+              نئے آئٹم آنے پر نمایاں کریں
+            </label>
           </div>
-          <div class="list-row">
-            <div>Skip کے بعد دوبارہ نہ آئے</div>
-            <label class="sw"><input type="checkbox" id="othSkipPerm" checked onchange="saveAllSettings()"><span></span></label>
+
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+            <button class="primary sm" id="checkSyncNowBtn" type="button">🔄 سنک / اسٹیٹس چیک</button>
+            <button class="warn sm" id="resetSettingsBtn" type="button">↩️ سیٹنگز ری سیٹ</button>
+            <span class="status-note" id="syncDetailStatus">سنک تفصیل: تیار</span>
           </div>
-          <div class="list-row">
-            <div>آٹو ریکارڈ ہسٹری محفوظ رکھیں</div>
-            <label class="sw"><input type="checkbox" id="othSaveHist" checked onchange="saveAllSettings()"><span></span></label>
+
+          <!-- Today's Escaped Alerts (Hidden/Collapsible inside advanced) -->
+          <div class="settings-block">
+            <div class="settings-block-header">
+              <span>آج کے اسکیپڈ الرٹس</span>
+              <span class="badge" id="todayEscapedCount">0</span>
+            </div>
+            <div class="mini-list" id="todayEscapedList"></div>
           </div>
-          <div class="list-row">
-            <div>روزانہ پرانا آٹو ریکارڈ صاف کریں</div>
-            <label class="sw"><input type="checkbox" id="othDailyReset" checked onchange="saveAllSettings()"><span></span></label>
+
+          <!-- Deleted Records Safe Flow (Selective / Recent restore only) -->
+          <div class="settings-block">
+            <div class="settings-block-header">
+              <span>ڈیلیٹڈ ریکارڈز (منتخب یا حالیہ بحالی)</span>
+              <span class="badge" id="deletedCountBadge">0</span>
+            </div>
+            <div class="mini-list" id="deletedRecordsList"></div>
           </div>
-          <div class="list-row">
-            <div>پرانا الرٹ خود ہٹنے کا دورانیہ (گھنٹے)</div>
-            <input type="number" id="othExpiryHours" min="1" max="720" value="24" style="width:65px;padding:5px;border:1px solid #cbd5e1;border-radius:6px;text-align:center;font-weight:800" onchange="saveAllSettings()">
-          </div>
-          <div class="list-row">
-            <div>تمام سیٹنگز ڈیفالٹ پر واپس لائیں</div>
-            <button class="drop-btn del" onclick="resetAllToDefault()">↺ ڈیفالٹ ری سیٹ</button>
+
+          <!-- History Records Played on NA2 Dashboard -->
+          <div class="settings-block">
+            <div class="settings-block-header">
+              <span>ہسٹری (NA2 ڈیش بورڈ پر چل چکے ریکارڈز)</span>
+              <span class="badge" id="historyCountBadge">0</span>
+            </div>
+            <div class="mini-list" id="historyRecordsList"></div>
           </div>
         </div>
       </div>
 
-    </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button class="success" id="saveSettingsBtn" type="button">💾 سیٹنگز محفوظ کریں</button>
+      </div>
+    </section>
 
-    <div class="ns-foot">
-      <button onclick="closeDetailedSettings()">✕ بند کریں</button>
+    <!-- Main Workspace: Composer (Left) + Live Records List (Right) -->
+    <div class="grid-main">
+      <!-- Create / Edit Record Form -->
+      <section class="card">
+        <div class="card-title">
+          <span id="formHeading">➕ نیا نیوز یا الرٹ ریکارڈ</span>
+          <button class="ghost sm" id="cancelEditBtn" type="button" style="display:none;">منسوخ</button>
+        </div>
+
+        <form id="recordForm" style="display:grid;gap:10px;">
+          <input type="hidden" id="editRecordId" />
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label for="recordType">قسم (Type)</label>
+              <select id="recordType">
+                <option value="news">نیوز (News)</option>
+                <option value="alert">الرٹ (Alert)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="recordPriority">ترجیح</label>
+              <select id="recordPriority">
+                <option value="normal">عام (Normal)</option>
+                <option value="high">اہم / ہائی (High)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="recordText">پیغام / متن</label>
+            <textarea id="recordText" placeholder="یہاں نیوز یا الرٹ کا متن لکھیں..." required></textarea>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label for="recordScheduleTime">مقررہ وقت (اختیاری)</label>
+              <input type="datetime-local" id="recordScheduleTime" />
+            </div>
+            <div class="form-row">
+              <label for="recordSource">ماخذ / سورس</label>
+              <select id="recordSource">
+                <option value="manual">دستی (Manual)</option>
+                <option value="auto">آٹو (Auto)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:4px;">
+            <button class="primary" type="submit" id="submitRecordBtn">محفوظ کریں</button>
+            <button class="success" type="button" id="saveAndSendNa2Btn">محفوظ + NA2 پر بھیجیں</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Active & Filtered Records List -->
+      <section class="card">
+        <div class="card-title">
+          <span>📋 ریکارڈز لسٹ (`sec10_news_alerts_data`)</span>
+          <span class="badge" id="activeRecordsCount">0 ریکارڈز</span>
+        </div>
+
+        <!-- Smart Period Filter, Instant Search & Type Quick Filter -->
+        <div class="filters">
+          <input type="search" id="searchInput" placeholder="فوری سرچ کریں..." />
+          <select id="typeQuickFilter">
+            <option value="all">تمام اقسام</option>
+            <option value="news">صرف نیوز</option>
+            <option value="alert">صرف الرٹ</option>
+            <option value="escaped">اسکیپ شدہ</option>
+            <option value="restored">بحال شدہ</option>
+          </select>
+          <select id="periodFilter">
+            <option value="all">تمام وقت</option>
+            <option value="today">آج</option>
+            <option value="weekly">ہفتہ وار (Weekly)</option>
+            <option value="monthly">ماہانہ (Monthly)</option>
+            <option value="yearly">سالانہ (Yearly)</option>
+          </select>
+        </div>
+
+        <div class="records-list" id="recordsList"></div>
+      </section>
     </div>
   </div>
-</div>
 
-<div class="inline-msg" id="inlineMsg"></div>
-
-<script>
-function $(id){return document.getElementById(id)}
-function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
-function pad(n){return String(n).padStart(2,'0')}
-function toggleClose(id){var el=$(id);if(el)el.style.display=el.style.display==='none'?'block':'none'}
-function showMsg(t,ok){var el=$('inlineMsg');el.textContent=t;el.style.background=ok===false?'#c0392b':'#2e8b57';el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},2400)}
-function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
-function todayTs(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
-
-var NEWS_KEY='sec10_news_alerts_data';
-var SETTINGS_KEY='ns_modular_settings_v1';
-var AUDIO_STORE_KEY='ns_modular_audio_v1';
-var LAST_AUTO_KEY='ns_last_auto_run_v1';
-var LOCK_STATE_KEY='na1_full_lock_v1';
-var LIVE_TRIG_KEY='a2_live_trigger';
-var MAN_SEL_KEY='a2_manual_sel';
-
-var NEWS_TUNES=[
-  {name:"نیوز بیپ 1",p:[[780,180]]},{name:"نیوز ڈبل 2",p:[[780,130],[0,50],[920,150]]},
-  {name:"نرم گھنٹی 3",p:[[1100,250],[850,180]]},{name:"صبح بخیر 4",p:[[523,160],[659,160],[784,220]]},
-  {name:"پرندہ سر 5",p:[[1400,90],[1850,90],[1400,90]]},{name:"پانی قطرہ 6",p:[[600,220],[450,180]]},
-  {name:"پیانو نوٹ 7",p:[[523,200],[659,200],[784,200],[1046,260]]},{name:"گٹار تار 8",p:[[330,280],[440,280]]},
-  {name:"بانسری دھن 9",p:[[620,420]]},{name:"میٹھی ٹون 10",p:[[880,140],[1046,180]]},
-  {name:"ہلکی دستک 11",p:[[500,100],[0,60],[500,100]]},{name:"چاندنی 12",p:[[659,240],[587,240],[523,300]]},
-  {name:"ستارہ 13",p:[[988,120],[1175,120],[1318,180]]},{name:"نسیم 14",p:[[440,300],[554,300]]},
-  {name:"ترنگ 15",p:[[700,120],[900,120],[1100,150]]},{name:"کلاک ٹک 16",p:[[1200,80],[0,90],[1200,80]]},
-  {name:"موج 17",p:[[400,220],[600,220],[500,220]]},{name:"روشنی 18",p:[[800,150],[1000,150],[1200,200]]},
-  {name:"پیغام 19",p:[[660,140],[880,200]]},{name:"خبر نامہ 20",p:[[587,150],[784,150],[988,200]]},
-  {name:"سُر تال 21",p:[[523,140],[587,140],[659,140],[784,200]]},{name:"نغمہ 22",p:[[740,220],[880,260]]},
-  {name:"گونج 23",p:[[480,350]]},{name:"اشارہ 24",p:[[950,120],[0,50],[950,120]]},
-  {name:"نیوز کلاسک 25",p:[[659,160],[784,160],[659,160],[1046,250]]}
-];
-
-var ALERT_TUNES=[
-  {name:"الارم تیز 1",p:[[1000,180],[0,80],[1000,180],[0,80],[1000,220]]},
-  {name:"خطرہ بیپ 2",p:[[1200,250],[600,250]]},{name:"سائرن 3",p:[[700,220],[1100,220],[700,220],[1100,220]]},
-  {name:"ہنگامی 4",p:[[1400,120],[0,60],[1400,120],[0,60],[1400,120],[0,60],[1400,200]]},
-  {name:"وارننگ 5",p:[[900,300],[0,100],[900,300]]},{name:"ہارن 6",p:[[320,400],[420,400]]},
-  {name:"بجلی جھٹکا 7",p:[[180,250],[320,250],[180,250]]},{name:"ڈھول الرٹ 8",p:[[140,120],[0,50],[140,120],[0,50],[200,220]]},
-  {name:"زنگ الرٹ 9",p:[[420,650]]},{name:"تیز گھنٹی 10",p:[[1300,150],[900,150],[1300,150],[900,150]]},
-  {name:"فوری توجہ 11",p:[[1100,100],[0,50],[1100,100],[0,50],[1500,250]]},
-  {name:"الارم کلاک 12",p:[[1250,90],[0,70],[1250,90],[0,70],[1250,90],[0,70],[1250,90]]},
-  {name:"ڈبل وارننگ 13",p:[[850,220],[0,80],[1150,260]]},{name:"گہرا الرٹ 14",p:[[300,300],[0,80],[300,350]]},
-  {name:"ہائی الرٹ 15",p:[[1500,180],[1200,180],[1500,220]]},{name:"بزر 16",p:[[240,500]]},
-  {name:"نبض 17",p:[[800,120],[0,120],[800,120],[0,120],[800,120]]},
-  {name:"چوکنا 18",p:[[950,150],[1250,150],[950,150],[1250,200]]},{name:"ریڈ الرٹ 19",p:[[1050,200],[520,200],[1050,250]]},{name:"فائنل الارم 20",p:[[1200,160],[0,60],[1200,160],[0,60],[800,320]]}
-];
-
-var NEWS_EFFECTS=["ایک کے بعد ایک","پورا چل کر اگلی","درمیان میں رکا رہے","بیپ کے ساتھ","الٹی سمت میں چلے","بند ہو کر دوبارہ چلے","آہستہ ظاہر ہو","سائیڈ سے آئے","اسکرول ہو کر چلے","وقفے کے ساتھ بدلے"];
-var ALERT_EFFECTS=["بیپ کے ساتھ الرٹ","بلر سے صاف ہو","آن اور آف ہوتا رہے","آ کر رک جائے، پھر جائے","سلائیڈ ہو کر آئے","اسکرول ہو کر آئے","چمکدار نمایاں انداز","اوپر نیچے حرکت","وقفے کے بعد دوبارہ الرٹ","فوری نمایاں الرٹ"];
-
-var DEFAULT_FIX_ITEMS=[
-  {id:1,key:"leaves",name:"زیادہ چھٹیاں",type:"alert",enabled:true,fixed:true,limit:3,unit:"دن"},
-  {id:2,key:"points",name:"کم پوائنٹس",type:"alert",enabled:true,fixed:true,limit:10,unit:"پوائنٹس"},
-  {id:3,key:"skips",name:"اسکیپ زیادہ",type:"alert",enabled:true,fixed:true,limit:3,unit:"گنتی"},
-  {id:4,key:"attendance",name:"حاضری نہیں لگی",type:"alert",enabled:true,fixed:true,limit:1,unit:"دن"},
-  {id:5,key:"rashan",name:"راشن ایڈ نہیں ہوا",type:"alert",enabled:true,fixed:true,limit:1,unit:"دن"},
-  {id:6,key:"duty_partial",name:"ڈیوٹی ادھوری",type:"alert",enabled:true,fixed:true,limit:30,unit:"منٹ"},
-  {id:7,key:"budget",name:"بجٹ حد کے قریب/ختم",type:"alert",enabled:true,fixed:true,limit:80,unit:"%"},
-  {id:8,key:"complaints",name:"نئی شکایات",type:"alert",enabled:true,fixed:true,limit:1,unit:"گنتی"},
-  {id:9,key:"sixdays",name:"مسلسل 6 دن کام",type:"news",enabled:true,fixed:true,limit:6,unit:"دن"},
-  {id:10,key:"good_duty",name:"اچھی ڈیوٹی",type:"news",enabled:true,fixed:true,limit:6,unit:"دن"}
-];
-
-var selectMode=false,selectedIds={},filterMode='today',editingRecId=null;
-var activePatti='news';
-var editingFixId=null;
-var pendingLocalAudio={news:null,alert:null};
-var savedLocalAudio={news:null,alert:null};
-var voiceSeqCounter=0;
-
-var pattiRuntime={
-  news:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0},
-  alert:{idx:0,shownCount:{},onceSkipped:{},timer:null,scrollTimer:null,scrollPos:0}
-};
-
-var _audioCtx=null;
-var _audioTimers=[];
-var _previewAudioEl=null;
-var _activeAudioToken=null;
-
-function ensureAudioContext(){
-  var Ctor=window.AudioContext||window.webkitAudioContext;
-  if(!Ctor)return null;
-  if(!_audioCtx||_audioCtx.state==='closed'){
-    try{_audioCtx=new Ctor()}catch(e){_audioCtx=null}
-  }
-  if(_audioCtx&&_audioCtx.state==='suspended'){
-    try{_audioCtx.resume()}catch(e){}
-  }
-  return _audioCtx;
-}
-
-function emitLiveTrigger(item){
-  if(!item)return;
-  lsSet(LIVE_TRIG_KEY,{
-    id:item.id,
-    type:item.type,
-    content:item.content,
-    ts:Date.now()
-  });
-}
-
-function stopAllAudio(){
-  _activeAudioToken=null;
-  _audioTimers.forEach(function(id){clearTimeout(id)});
-  _audioTimers=[];
-  if(_previewAudioEl){
-    try{_previewAudioEl.pause();_previewAudioEl.currentTime=0}catch(e){}
-    _previewAudioEl=null;
-  }
-  updateAudioButtonsUI();
-}
-
-function updateAudioButtonsUI(){
-  var playing=!!_activeAudioToken;
-  var pBtn=$('btnPlayLocalAud');
-  if(pBtn)pBtn.textContent=playing?'⏹️ روکیں':'▶️ سنیں';
-  var tBtn=$('btnTestSound');
-  if(tBtn)tBtn.textContent=playing?'⏹️ روکیں':'🔊 آواز ٹیسٹ';
-  var cards=document.querySelectorAll('.tune-card');
-  cards.forEach(function(c){
-    var isThis=_activeAudioToken && (c.getAttribute('data-token')===_activeAudioToken);
-    c.classList.toggle('playing',!!isThis);
-    var pb=c.querySelector('.t-play');
-    if(pb){
-      pb.textContent=isThis?'⏹️':'▶️';
-      pb.classList.toggle('stop',!!isThis);
-    }
-  });
-}
-
-function defaultSettings(){
-  return {
-    partNames:{
-      p1:"ایپ آٹو فکس ٹائم چیک",
-      p2:"نیوز پٹی اور الرٹ پٹی سیٹنگز",
-      p3:"آل سیٹنگز اور ٹیسٹ",
-      p4:"دیگر سیٹنگز (Others Setting)"
-    },
-    autoCheckOn:false,
-    checkHour:10,
-    checkMin:"00",
-    checkAmPm:"PM",
-    fixItems:JSON.parse(JSON.stringify(DEFAULT_FIX_ITEMS)),
-    newsPatti:{speed:5,seconds:3,effects:[true,false,false,false,false,false,false,false,true,false],tuneIdx:0,volume:70},
-    alertPatti:{speed:6,seconds:4,effects:[true,false,true,false,false,false,false,false,false,false],tuneIdx:0,volume:85},
-    allOpts:{vibrate:true,voice:true,browserNotif:false,alertOn:true,newsOn:true,soundsOn:true},
-    others:{catchup:true,skipPerm:true,saveHist:true,dailyReset:true,expiryHours:24},
-    playOrder:{mode:'record',fixedCount:1},
-    repeatMode:'once',
-    skipMode:'once',
-    voiceSlot:1
-  };
-}
-
-var cfg=defaultSettings();
-
-function loadAllSettings(){
-  var saved=lsGet(SETTINGS_KEY,null);
-  if(saved){
-    cfg=Object.assign(defaultSettings(),saved);
-    cfg.partNames=Object.assign(defaultSettings().partNames,saved.partNames||{});
-    cfg.newsPatti=Object.assign(defaultSettings().newsPatti,saved.newsPatti||{});
-    cfg.alertPatti=Object.assign(defaultSettings().alertPatti,saved.alertPatti||{});
-    cfg.allOpts=Object.assign(defaultSettings().allOpts,saved.allOpts||{});
-    cfg.others=Object.assign(defaultSettings().others,saved.others||{});
-    cfg.playOrder=Object.assign(defaultSettings().playOrder,saved.playOrder||{});
-    if(!Array.isArray(cfg.fixItems))cfg.fixItems=JSON.parse(JSON.stringify(DEFAULT_FIX_ITEMS));
-  }
-  savedLocalAudio=lsGet(AUDIO_STORE_KEY,{news:null,alert:null});
-  if(lsGet('ns_dark',false)){document.body.classList.add('dark');$('darkBtn').classList.add('active')}
-  syncSettingsToUI();
-  checkFullSectionLock();
-}
-
-function saveAllSettings(){
-  cfg.partNames.p1=$('partName1').value.trim()||"ایپ آٹو فکس ٹائم چیک";
-  cfg.partNames.p2=$('partName2').value.trim()||"نیوز پٹی اور الرٹ پٹی سیٹنگز";
-  cfg.partNames.p3=$('partName3').value.trim()||"آل سیٹنگز اور ٹیسٹ";
-  cfg.partNames.p4=$('partName4').value.trim()||"دیگر سیٹنگز (Others Setting)";
-
-  cfg.autoCheckOn=$('autoCheckOn').checked;
-  cfg.checkHour=parseInt($('checkHour').value)||10;
-  cfg.checkMin=pad(parseInt($('checkMin').value)||0);
-  cfg.checkAmPm=$('checkAmPm').value;
-
-  cfg.allOpts.vibrate=$('optVibrate').checked;
-  cfg.allOpts.voice=$('optVoice').checked;
-  cfg.allOpts.browserNotif=$('optBrowserNotif').checked;
-  cfg.allOpts.alertOn=$('optAlertOn').checked;
-  cfg.allOpts.newsOn=$('optNewsOn').checked;
-  cfg.allOpts.soundsOn=$('optSoundsOn').checked;
-
-  cfg.others.catchup=$('othCatchup').checked;
-  cfg.others.skipPerm=$('othSkipPerm').checked;
-  cfg.others.saveHist=$('othSaveHist').checked;
-  cfg.others.dailyReset=$('othDailyReset').checked;
-  cfg.others.expiryHours=parseInt($('othExpiryHours').value)||24;
-
-  lsSet(SETTINGS_KEY,cfg);
-  refreshLivePattis();
-}
-
-function onPattiVisibilityToggle(){
-  saveAllSettings();
-  refreshLivePattis();
-}
-
-function savePlayOrderCfg(){
-  cfg.playOrder={
-    mode:$('playModeSel').value||'record',
-    fixedCount:Math.max(1,parseInt($('fixedCountInp').value,10)||1)
-  };
-  pattiRuntime.news.idx=0;
-  pattiRuntime.news.shownCount={};
-  pattiRuntime.alert.idx=0;
-  pattiRuntime.alert.shownCount={};
-  lsSet(SETTINGS_KEY,cfg);
-  refreshLivePattis();
-  showMsg('✅ ترتیب سیو ہو گئی',true);
-}
-
-function setRepeatOpt(m){
-  cfg.repeatMode=m;
-  pattiRuntime.news.shownCount={};
-  pattiRuntime.alert.shownCount={};
-  lsSet(SETTINGS_KEY,cfg);
-  refreshLivePattis();
-  showMsg('🔁 Repeat: '+m,true);
-}
-
-function setSkipOpt(m){
-  cfg.skipMode=m;
-  cfg.others.skipPerm=(m==='perm');
-  $('othSkipPerm').checked=cfg.others.skipPerm;
-  lsSet(SETTINGS_KEY,cfg);
-  refreshLivePattis();
-  showMsg(m==='perm'?'🚫 مستقل Skip سیو':'⏭️ اس بار Skip سیو',true);
-}
-
-function saveVoiceSlotCfg(){
-  cfg.voiceSlot=parseInt($('voiceSlotSel').value,10)||1;
-  lsSet(SETTINGS_KEY,cfg);
-  showMsg('🎙️ آواز '+cfg.voiceSlot+' منتخب ہو گئی',true);
-}
-
-function syncSettingsToUI(){
-  $('partName1').value=cfg.partNames.p1;
-  $('partName2').value=cfg.partNames.p2;
-  $('partName3').value=cfg.partNames.p3;
-  $('partName4').value=cfg.partNames.p4;
-
-  $('autoCheckOn').checked=cfg.autoCheckOn;
-  $('checkHour').value=cfg.checkHour;
-  $('checkMin').value=cfg.checkMin;
-  $('checkAmPm').value=cfg.checkAmPm;
-
-  $('optVibrate').checked=cfg.allOpts.vibrate;
-  $('optVoice').checked=cfg.allOpts.voice;
-  $('optBrowserNotif').checked=cfg.allOpts.browserNotif;
-  $('optAlertOn').checked=cfg.allOpts.alertOn;
-  $('optNewsOn').checked=cfg.allOpts.newsOn;
-  $('optSoundsOn').checked=cfg.allOpts.soundsOn;
-
-  $('othCatchup').checked=cfg.others.catchup;
-  $('othSkipPerm').checked=cfg.others.skipPerm;
-  $('othSaveHist').checked=cfg.others.saveHist;
-  $('othDailyReset').checked=cfg.others.dailyReset;
-  $('othExpiryHours').value=cfg.others.expiryHours;
-
-  $('playModeSel').value=cfg.playOrder.mode||'record';
-  $('fixedCountInp').value=cfg.playOrder.fixedCount||1;
-  $('voiceSlotSel').value=cfg.voiceSlot||1;
-
-  renderFixItems();
-  renderPattiSection();
-  refreshLivePattis();
-}
-
-function getLockState(){return lsGet(LOCK_STATE_KEY,{locked:false,pwd:'',hint:''})}
-function saveLockState(st){lsSet(LOCK_STATE_KEY,st)}
-
-function checkFullSectionLock(){
-  var st=getLockState();
-  var isLocked=!!(st.locked && st.pwd);
-  $('secLockWall').classList.toggle('active',isLocked);
-  var tBtn=$('lockToggleBtn');
-  if(tBtn)tBtn.textContent=isLocked?'🔓 Unlock Now':'🔒 Lock On/Off';
-}
-
-function unlockFullSection(){
-  var st=getLockState();
-  var val=($('lockUnlockInp').value||'').trim();
-  if(val && val===st.pwd){
-    st.locked=false;
-    saveLockState(st);
-    $('lockUnlockInp').value='';
-    checkFullSectionLock();
-    showMsg('🔓 سیکشن کھل گیا',true);
-  } else {
-    showMsg('❌ پاس ورڈ غلط ہے',false);
-  }
-}
-
-function toggleForgotPanel(){
-  var p=$('forgotPanel');
-  p.style.display=p.style.display==='none'?'block':'none';
-}
-
-function doForgotRecovery(){
-  var st=getLockState();
-  var ans=($('forgotAnsInp').value||'').trim().toLowerCase();
-  if(st.hint && ans===st.hint.toLowerCase()){
-    $('forgotMsg').textContent='پاس ورڈ: '+(st.pwd||'سیٹ نہیں');
-  } else {
-    $('forgotMsg').textContent='ریکوری جواب درست نہیں';
-  }
-}
-
-function resetLockFromWall(){
-  saveLockState({locked:false,pwd:'',hint:''});
-  localStorage.removeItem('ns_pwd');
-  checkFullSectionLock();
-  showMsg('♻️ لاک ری سیٹ ہو گیا',true);
-}
-
-function toggleSectionLockOnOff(){
-  var st=getLockState();
-  var pwd=st.pwd||localStorage.getItem('ns_pwd')||'';
-  if(!pwd){showMsg('پہلے نیا پاس ورڈ محفوظ کریں',false);return}
-  st.pwd=pwd;
-  st.locked=!st.locked;
-  saveLockState(st);
-  closeQuickPanel();
-  checkFullSectionLock();
-  showMsg(st.locked?'🔒 سیکشن لاک آن ہو گیا':'🔓 سیکشن لاک آف ہو گیا',true);
-}
-
-function resetPanelLock(){
-  saveLockState({locked:false,pwd:'',hint:''});
-  localStorage.removeItem('ns_pwd');
-  $('newPwdInp').value='';
-  $('recAnsSetInp').value='';
-  checkFullSectionLock();
-  showMsg('♻️ پاس ورڈ ری سیٹ ہو گیا',true);
-}
-
-function openQuickPanel(){
-  var st=getLockState();
-  var pwd=st.pwd||localStorage.getItem('ns_pwd');
-  if(pwd && st.locked){
-    $('pwdCheckInput').value='';
-    $('pwdCheckBar').classList.add('show');
-    $('pwdCheckInput').focus();
-    return;
-  }
-  $('qOverlay').classList.add('active');
-  $('qPanel').classList.add('active');
-}
-function closePwdBar(){$('pwdCheckBar').classList.remove('show')}
-function verifyPanelPwd(){
-  var st=getLockState();
-  var pwd=st.pwd||localStorage.getItem('ns_pwd');
-  if($('pwdCheckInput').value===pwd){
-    st.locked=false;
-    saveLockState(st);
-    checkFullSectionLock();
-    closePwdBar();
-    $('qOverlay').classList.add('active');
-    $('qPanel').classList.add('active');
-  } else {
-    showMsg('❌ پاس ورڈ غلط ہے',false);
-  }
-}
-function closeQuickPanel(){
-  $('qOverlay').classList.remove('active');
-  $('qPanel').classList.remove('active');
-  $('setPwdBar').classList.remove('show');
-}
-function toggleSetPwdBar(){
-  var b=$('setPwdBar');
-  b.classList.toggle('show');
-  if(b.classList.contains('show')){
-    var st=getLockState();
-    $('newPwdInp').value=st.pwd||localStorage.getItem('ns_pwd')||'';
-    $('recAnsSetInp').value=st.hint||'';
-  }
-}
-function savePanelPwd(){
-  var v=$('newPwdInp').value.trim();
-  var h=$('recAnsSetInp').value.trim();
-  if(v){
-    var prev=getLockState();
-    localStorage.setItem('ns_pwd',v);
-    saveLockState({locked:!!prev.locked,pwd:v,hint:h});
-    showMsg('✅ پاس ورڈ محفوظ ہو گیا (Lock On/Off سے لاک کریں)',true);
-  } else {
-    localStorage.removeItem('ns_pwd');
-    saveLockState({locked:false,pwd:'',hint:''});
-    checkFullSectionLock();
-    showMsg('✅ پاس ورڈ ہٹا دیا گیا',true);
-  }
-}
-
-function openDetailedSettings(){
-  closeQuickPanel();
-  syncSettingsToUI();
-  $('nsOverlay').classList.add('active');
-}
-function closeDetailedSettings(){
-  stopAllAudio();
-  $('nsOverlay').classList.remove('active');
-}
-function togglePartCard(id){$(id).classList.toggle('collapsed')}
-
-function getPattiCandidateItems(type){
-  var all=lsGet(NEWS_KEY,[]);
-  var today=todayStr();
-  var rt=pattiRuntime[type];
-  var list=all.filter(function(x){
-    if(x.deleted)return false;
-    if(x.type!==type)return false;
-    if(x.date && x.date!==today)return false;
-    if(x.skipped)return false;
-    if(rt.onceSkipped[String(x.id)])return false;
-    return true;
-  });
-
-  var mode=(cfg.playOrder && cfg.playOrder.mode)||'record';
-  var maxShow=(cfg.playOrder && cfg.playOrder.fixedCount)||1;
-
-  if(mode==='old'){
-    list=list.slice().sort(function(a,b){return (a.timestamp||0)-(b.timestamp||0)});
-  } else if(mode==='sorted'){
-    list=list.slice().sort(function(a,b){return String(a.content||'').localeCompare(String(b.content||''),'ur')});
-  } else if(mode==='mix'){
-    list=list.slice().sort(function(a,b){return String(a.id).slice(-1).localeCompare(String(b.id).slice(-1))});
-  }
-
-  var rep=cfg.repeatMode||'once';
-  if(rep==='once'){
-    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<1});
-  } else if(rep==='fixed' || mode==='fixed'){
-    list=list.filter(function(x){return (rt.shownCount[String(x.id)]||0)<maxShow});
-  }
-  return list;
-}
-
-function applyPattiEffectsStyle(el,type,pObj){
-  el.style.animation='none';
-  el.style.filter='none';
-  el.style.transform='none';
-  var eff=pObj.effects||[];
-  var dur=Math.max(1.2,Number(pObj.seconds)||3)+'s';
-  if(type==='news'){
-    if(eff[6])el.style.animation='pattiFade '+dur+' ease-in-out infinite';
-    else if(eff[7])el.style.animation='pattiSlideSide '+dur+' ease-in-out infinite';
-    else if(eff[5])el.style.animation='pattiBlink '+Math.max(0.6,(11-(pObj.speed||5))*0.15)+'s infinite';
-    else if(eff[9])el.style.animation='pattiFade '+(Number(pObj.seconds)||3)+'s steps(2,end) infinite';
-  } else {
-    if(eff[1])el.style.animation='pattiBlurClear '+dur+' ease-out infinite';
-    else if(eff[2])el.style.animation='pattiBlink '+Math.max(0.5,(11-(pObj.speed||5))*0.14)+'s infinite';
-    else if(eff[4])el.style.animation='pattiSlideSide '+dur+' ease-in-out infinite';
-    else if(eff[6])el.style.animation='pattiGlow 1.4s ease-in-out infinite';
-    else if(eff[7])el.style.animation='pattiUpDown 1.2s ease-in-out infinite';
-  }
-}
-
-function startScrollMotion(type,el,viewport,pObj){
-  var rt=pattiRuntime[type];
-  if(rt.scrollTimer){clearInterval(rt.scrollTimer);rt.scrollTimer=null}
-  rt.scrollPos=0;
-  el.style.transform='translateX(0px)';
-
-  var eff=pObj.effects||[];
-  var shouldScroll=(type==='news' && (eff[0]||eff[1]||eff[4]||eff[8])) || (type==='alert' && eff[5]);
-  var reverse=(type==='news' && eff[4]);
-  if(!shouldScroll)return;
-
-  var speed=Math.min(10,Math.max(1,Number(pObj.speed)||5));
-  var stepPx=(speed*0.45)*(reverse?-1:1);
-  rt.scrollTimer=setInterval(function(){
-    if(!el||!viewport)return;
-    var textW=el.scrollWidth||0;
-    var viewW=viewport.clientWidth||200;
-    if(textW<=viewW)return;
-    rt.scrollPos+=stepPx;
-    if(!reverse && rt.scrollPos>textW)rt.scrollPos=-viewW;
-    if(reverse && rt.scrollPos<-viewW)rt.scrollPos=textW;
-    el.style.transform='translateX('+Math.round(rt.scrollPos)+'px)';
-  },30);
-}
-
-function renderSinglePatti(type){
-  var bar=$(type==='news'?'liveNewsPatti':'liveAlertPatti');
-  var textEl=$(type==='news'?'liveNewsText':'liveAlertText');
-  var viewport=textEl?textEl.parentElement:null;
-  var enabled=(type==='news')?cfg.allOpts.newsOn:cfg.allOpts.alertOn;
-
-  if(!bar||!textEl)return;
-  var rt=pattiRuntime[type];
-  if(rt.timer){clearTimeout(rt.timer);rt.timer=null}
-  if(rt.scrollTimer){clearInterval(rt.scrollTimer);rt.scrollTimer=null}
-
-  if(!enabled){
-    bar.style.display='none';
-    return;
-  }
-  bar.style.display='flex';
-
-  var pObj=(type==='news')?cfg.newsPatti:cfg.alertPatti;
-  var items=getPattiCandidateItems(type);
-
-  if(!items.length){
-    textEl.textContent=(type==='news')?'کوئی نیوز پیغام نہیں':'کوئی الرٹ پیغام نہیں';
-    textEl.style.animation='none';
-    textEl.style.transform='none';
-    return;
-  }
-
-  if(rt.idx>=items.length)rt.idx=0;
-  var cur=items[rt.idx];
-  textEl.textContent=(type==='news'?'📰 ':'🚨 ')+cur.content;
-
-  var idKey=String(cur.id);
-  rt.shownCount[idKey]=(rt.shownCount[idKey]||0)+1;
-
-  applyPattiEffectsStyle(textEl,type,pObj);
-  startScrollMotion(type,textEl,viewport,pObj);
-
-  var holdMs=Math.max(1000,(Number(pObj.seconds)||3)*1000);
-  rt.timer=setTimeout(function(){
-    rt.idx=(rt.idx+1)%Math.max(1,items.length);
-    renderSinglePatti(type);
-  },holdMs);
-}
-
-function refreshLivePattis(){
-  renderSinglePatti('alert');
-  renderSinglePatti('news');
-}
-
-function nextLivePattiItem(type){
-  var items=getPattiCandidateItems(type);
-  if(!items.length)return;
-  var rt=pattiRuntime[type];
-  rt.idx=(rt.idx+1)%items.length;
-  renderSinglePatti(type);
-  var cur=items[rt.idx];
-  if(cur){
-    emitLiveTrigger(cur);
-    notifyNewItem(cur.type,cur.content);
-  }
-}
-
-function skipLivePattiItem(type,mode){
-  var items=getPattiCandidateItems(type);
-  if(!items.length){showMsg('کوئی فعال آئٹم نہیں',false);return}
-  var rt=pattiRuntime[type];
-  var cur=items[rt.idx%items.length];
-  if(!cur)return;
-
-  if(mode==='perm' || cfg.others.skipPerm){
-    var all=lsGet(NEWS_KEY,[]);
-    var idx=all.findIndex(function(x){return x.id===cur.id});
-    if(idx!==-1){all[idx].skipped=true;lsSet(NEWS_KEY,all)}
-    renderRecords();
-    showMsg('🚫 مستقل Skip ہو گیا',true);
-  } else {
-    rt.onceSkipped[String(cur.id)]=true;
-    showMsg('⏭️ اس بار Skip ہو گیا',true);
-  }
-  refreshLivePattis();
-}
-
-function saveNews(){
-  var type=$('newsType').value,content=$('newsContent').value.trim();
-  if(!content){showMsg('متن لکھیں',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var now=new Date();
-  var newItem={
-    id:Date.now(),
-    type:type,
-    content:content,
-    timestamp:Date.now(),
-    dateStr:pad(now.getDate())+'/'+pad(now.getMonth()+1)+' '+pad(now.getHours())+':'+pad(now.getMinutes()),
-    date:todayStr(),
-    auto:false,
-    skipped:false,
-    deleted:false,
-    dashShown:false,
-    historyReady:false
-  };
-  items.unshift(newItem);
-  lsSet(NEWS_KEY,items);
-  lsSet(SETTINGS_KEY,cfg);
-  lsSet(AUDIO_STORE_KEY,savedLocalAudio);
-  lsSet('ns_dash_visible',true);
-  $('newsContent').value='';
-  renderRecords();
-  refreshLivePattis();
-  emitLiveTrigger(newItem);
-  notifyNewItem(type,content);
-  showMsg('✅ محفوظ ہو گیا اور ڈیش بورڈ پر بھیجا گیا',true);
-}
-
-function applyPeriodFilter(list,period,mode){
-  var now=Date.now();
-  var day=86400000;
-  var today=todayStr();
-  if(period==='weekly')return list.filter(function(x){return (now-(x.timestamp||now))<=7*day});
-  if(period==='monthly')return list.filter(function(x){return (now-(x.timestamp||now))<=30*day});
-  if(period==='yearly')return list.filter(function(x){return (now-(x.timestamp||now))<=365*day});
-  if(mode==='today')return list.filter(function(x){return x.date===today});
-  return list;
-}
-
-function renderRecords(){
-  var all=lsGet(NEWS_KEY,[]);
-  var today=todayStr();
-  var tFilt=$('typeFilterSel')?$('typeFilterSel').value:'all';
-  var pFilt=$('periodFilterSel')?$('periodFilterSel').value:'daily';
-
-  var baseList;
-  if(filterMode==='today')baseList=all.filter(function(x){return x.date===today && !x.deleted});
-  else if(filterMode==='all')baseList=all.filter(function(x){return !x.deleted});
-  else baseList=all.filter(function(x){return x.deleted});
-
-  var items=applyPeriodFilter(baseList,pFilt,filterMode);
-  if(tFilt!=='all')items=items.filter(function(x){return x.type===tFilt});
-
-  var box=$('newsRecordList');
-  if(!items.length){
-    box.innerHTML='<div style="text-align:center;color:#94a3b8;padding:10px">کوئی ریکارڈ نہیں</div>';
-  } else {
-    box.innerHTML=items.map(function(x){
-      var icon=x.type==='news'?'📰':'🚨';
-      var sel=selectedIds[x.id]?' sel':'';
-      var blurCls=(x.skipped&&!x.deleted)?' faded':'';
-      var delCls=x.deleted?' deleted':'';
-      var autoCls=(x.auto&&!x.deleted)?' auto-rec':'';
-      var autoTag=x.auto?' · 🤖 آٹو چیک':'';
-      var chk=selectMode?'<input type="checkbox" class="chk" '+(selectedIds[x.id]?'checked':'')+' onchange="toggleSelect('+x.id+')">':'';
-      return '<div class="rec-row'+sel+blurCls+delCls+autoCls+'">'+chk+'<div class="body"><div class="txt">'+icon+' '+esc(x.content)+'</div><div class="meta">📅 '+(x.dateStr||'')+autoTag+(x.deleted?' · 🗑️':'')+'</div></div></div>';
-    }).join('');
-  }
-
-  var todayAll=all.filter(function(x){return x.date===today&&!x.deleted});
-  $('newsCount').textContent=todayAll.filter(function(x){return x.type==='news'}).length;
-  $('alertCount').textContent=todayAll.filter(function(x){return x.type==='alert'}).length;
-  $('newsTotal').textContent=todayAll.length;
-
-  var labels={today:'📅 آج',all:'📅 سب',deleted:'🗑️ ڈیلیٹ'};
-  var pLabels={daily:'Daily',weekly:'Weekly',monthly:'Monthly',yearly:'Yearly'};
-  $('recFilterLabel').textContent=labels[filterMode].replace('📅 ','').replace('🗑️ ','')+' · '+pLabels[pFilt]+(tFilt!=='all'?' · '+tFilt.toUpperCase():'');
-  $('filterBtn').textContent=labels[filterMode];
-}
-
-function cycleFilter(){
-  if(filterMode==='today')filterMode='all';
-  else if(filterMode==='all')filterMode='deleted';
-  else filterMode='today';
-  selectedIds={};
-  renderRecords();
-}
-function toggleSelect(id){selectedIds[id]=!selectedIds[id];renderRecords()}
-
-function nsSelectMode(){
-  selectMode=!selectMode;
-  $('selModeBtn').classList.toggle('active',selectMode);
-  if(!selectMode)selectedIds={};
-  renderRecords();
-  showMsg(selectMode?'✅ Select آن':'☑️ Select آف',true);
-}
-function nsAllSelect(){
-  if(!selectMode){showMsg('پہلے Select آن کریں',false);return}
-  var all=lsGet(NEWS_KEY,[]);
-  var today=todayStr();
-  all.forEach(function(x){
-    if(filterMode==='today'&&(x.date!==today||x.deleted))return;
-    if(filterMode==='all'&&x.deleted)return;
-    if(filterMode==='deleted'&&!x.deleted)return;
-    selectedIds[x.id]=true;
-  });
-  renderRecords();
-  showMsg('✅ سب منتخب ہو گئے',true);
-}
-function nsEditSelected(){
-  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-  if(!ids.length){showMsg('پہلے ایک ریکارڈ منتخب کریں',false);return}
-  if(ids.length>1){showMsg('ایک وقت میں صرف ایک منتخب کریں',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var item=items.find(function(x){return String(x.id)===ids[0]});
-  if(!item)return;
-  editingRecId=item.id;
-  $('recEditInput').value=item.content;
-  $('recEditBar').classList.add('show');
-  closeQuickPanel();
-  $('recEditInput').focus();
-}
-function applyRecordEdit(){
-  if(!editingRecId)return;
-  var txt=$('recEditInput').value.trim();
-  if(!txt){showMsg('متن خالی نہیں ہو سکتا',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return x.id===editingRecId});
-  if(idx!==-1){
-    items[idx].content=txt;
-    lsSet(NEWS_KEY,items);
-    emitLiveTrigger(items[idx]);
-  }
-  cancelRecordEdit();
-  renderRecords();
-  refreshLivePattis();
-  showMsg('✅ اپڈیٹ ہو گیا',true);
-}
-function cancelRecordEdit(){
-  editingRecId=null;
-  $('recEditBar').classList.remove('show');
-}
-function nsDeleteSelected(){
-  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-  if(!ids.length){showMsg('منتخب کریں',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  items.forEach(function(x){if(ids.indexOf(String(x.id))!==-1){x.deleted=true;x.deletedAt=Date.now()}});
-  lsSet(NEWS_KEY,items);
-  selectedIds={};renderRecords();refreshLivePattis();showMsg('✅ '+ids.length+' ڈیلیٹ ہو گئے',true);
-}
-function nsDeleteAll(){
-  var items=lsGet(NEWS_KEY,[]);
-  items.forEach(function(x){if(!x.deleted){x.deleted=true;x.deletedAt=Date.now()}});
-  lsSet(NEWS_KEY,items);
-  selectedIds={};renderRecords();refreshLivePattis();showMsg('✅ سب ڈیلیٹ ہو گئے',true);
-}
-function nsClear(){
-  lsSet(NEWS_KEY,[]);selectedIds={};renderRecords();refreshLivePattis();showMsg('🧹 مکمل صاف ہو گیا',true);
-}
-function nsMoveUp(){
-  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-  if(!ids.length){showMsg('منتخب کریں',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
-  if(idx<=0){showMsg('مزید اوپر نہیں جا سکتا',false);return}
-  var t=items[idx];items[idx]=items[idx-1];items[idx-1]=t;
-  lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis();showMsg('🔼 اوپر منتقل',true);
-}
-function nsMoveDown(){
-  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-  if(!ids.length){showMsg('منتخب کریں',false);return}
-  var items=lsGet(NEWS_KEY,[]);
-  var idx=items.findIndex(function(x){return String(x.id)===ids[0]});
-  if(idx===-1||idx>=items.length-1){showMsg('مزید نیچے نہیں جا سکتا',false);return}
-  var t=items[idx];items[idx]=items[idx+1];items[idx+1]=t;
-  lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis();showMsg('🔽 نیچے منتقل',true);
-}
-function nsToggleDark(){
-  document.body.classList.toggle('dark');
-  var on=document.body.classList.contains('dark');
-  $('darkBtn').classList.toggle('active',on);
-  lsSet('ns_dark',on);
-}
-function nsDashShow(){
-  var ids=Object.keys(selectedIds).filter(function(k){return selectedIds[k]});
-  if(ids.length){
-    var man=lsGet(MAN_SEL_KEY,{});
-    ids.forEach(function(id){man[id]=true});
-    lsSet(MAN_SEL_KEY,man);
-  } else {
-    lsSet(MAN_SEL_KEY,{});
-  }
-  lsSet('ns_dash_visible',true);
-  $('livePattiWrap').style.display='flex';
-  refreshLivePattis();
-  var all=lsGet(NEWS_KEY,[]).filter(function(x){return !x.deleted&&!x.skipped});
-  if(all.length)emitLiveTrigger(all[0]);
-  showMsg('📊 ڈیش بورڈ Show آن',true);
-}
-function nsDashHide(){
-  lsSet('ns_dash_visible',false);
-  $('livePattiWrap').style.display='none';
-  showMsg('📊 ڈیش بورڈ Hide آن',true);
-}
-
-function renderFixItems(){
-  var box=$('fixItemsContainer');
-  box.innerHTML=cfg.fixItems.map(function(item,i){
-    var isEditing=(editingFixId===item.id);
-    var editHtml='';
-    if(isEditing){
-      editHtml='<div class="inline-edit-row">'+
-        '<select id="editFixType_'+item.id+'"><option value="alert" '+(item.type==='alert'?'selected':'')+'>🚨 Alert</option><option value="news" '+(item.type==='news'?'selected':'')+'>📰 News</option></select>'+
-        '<input type="text" id="editFixName_'+item.id+'" value="'+esc(item.name)+'">'+
-        '<button onclick="saveFixItemEdit('+item.id+')">سیو</button>'+
-      '</div>';
-    }
-    return '<div class="fix-item '+(item.fixed?'fixed-pin':'')+' '+(item.enabled?'':'off')+'">'+
-      '<div class="fix-top">'+
-        '<label class="sw" style="width:34px;height:19px"><input type="checkbox" '+(item.enabled?'checked':'')+' onchange="toggleFixEnabled('+i+')"><span></span></label>'+
-        '<span class="idx">'+(i+1)+'.</span>'+
-        '<span class="title">'+esc(item.name)+'</span>'+
-        '<span class="badge '+item.type+'">'+(item.type==='alert'?'🚨 Alert':'📰 News')+'</span>'+
-        '<input type="number" class="lim-inp" value="'+(item.limit||1)+'" onchange="updateFixLimit('+i+',this.value)">'+
-        '<span class="unit">'+esc(item.unit||'گنتی')+'</span>'+
-      '</div>'+
-      '<div class="fix-drop-line">'+
-        '<button class="drop-btn" onclick="startEditFixItem('+item.id+')">✏️ Edit</button>'+
-        '<button class="drop-btn fix '+(item.fixed?'active':'')+'" onclick="togglePinFixItem('+i+')">📌 Fix</button>'+
-        '<button class="drop-btn del" onclick="deleteFixItem('+i+')">🗑️ Delete</button>'+
-      '</div>'+
-      editHtml+
-    '</div>';
-  }).join('');
-}
-
-function addCustomFixItem(){
-  var type=$('newFixType').value;
-  var txt=$('newFixText').value.trim();
-  if(!txt){showMsg('متن لکھیں',false);return}
-  cfg.fixItems.push({
-    id:Date.now(),
-    key:'custom_'+Date.now(),
-    name:txt,
-    type:type,
-    enabled:true,
-    fixed:true,
-    limit:1,
-    unit:'بار',
-    custom:true
-  });
-  $('newFixText').value='';
-  saveAllSettings();
-  renderFixItems();
-  showMsg('✅ نیا آئٹم شامل ہو گیا',true);
-}
-function toggleFixEnabled(i){cfg.fixItems[i].enabled=!cfg.fixItems[i].enabled;saveAllSettings();renderFixItems()}
-function updateFixLimit(i,v){cfg.fixItems[i].limit=parseInt(v)||1;saveAllSettings()}
-function togglePinFixItem(i){cfg.fixItems[i].fixed=!cfg.fixItems[i].fixed;saveAllSettings();renderFixItems();showMsg(cfg.fixItems[i].fixed?'📌 فکس کر دیا گیا':'📌 فکس ہٹا دیا گیا',true)}
-function startEditFixItem(id){editingFixId=(editingFixId===id)?null:id;renderFixItems()}
-function saveFixItemEdit(id){
-  var idx=cfg.fixItems.findIndex(function(x){return x.id===id});
-  if(idx===-1)return;
-  var nm=$('editFixName_'+id).value.trim();
-  var tp=$('editFixType_'+id).value;
-  if(nm)cfg.fixItems[idx].name=nm;
-  cfg.fixItems[idx].type=tp;
-  editingFixId=null;
-  saveAllSettings();
-  renderFixItems();
-  showMsg('✅ تبدیل ہو گیا',true);
-}
-function deleteFixItem(i){
-  cfg.fixItems.splice(i,1);
-  saveAllSettings();
-  renderFixItems();
-  showMsg('🗑️ حذف ہو گیا',true);
-}
-
-function runAutoCheckNow(){
-  var results=[];
-  var today=todayTs();
-  var todayD=todayStr();
-
-  cfg.fixItems.forEach(function(c){
-    if(!c.enabled)return;
-    var msg=null;
-    try{
-      if(c.custom){
-        msg=c.name;
-      } else if(c.key==='leaves'){
-        var leaves=lsGet('sec4_duty_leaves_data_v4',[]);
-        var cnt={};leaves.forEach(function(l){cnt[l.name]=(cnt[l.name]||0)+1});
-        Object.keys(cnt).forEach(function(n){if(cnt[n]>=(c.limit||3))msg='آج '+n+' کی چھٹی مقررہ حد ('+c.limit+') سے زیادہ ہو گئی ('+cnt[n]+')'});
-      } else if(c.key==='points'){
-        var recs=lsGet('sec12_task_records',[]);
-        var pts={};recs.forEach(function(r){pts[r.member]=(pts[r.member]||0)+(r.points||0)});
-        Object.keys(pts).forEach(function(n){if(pts[n]<(c.limit||10))msg=n+' کے پوائنٹس مقررہ حد سے کم ہیں ('+pts[n]+')'});
-      } else if(c.key==='skips'){
-        var sk=lsGet('sec4_duty_skipped_data',[]);
-        var cnt2={};sk.forEach(function(x){if(!x.hasReason)cnt2[x.member]=(cnt2[x.member]||0)+1});
-        Object.keys(cnt2).forEach(function(n){if(cnt2[n]>=(c.limit||3))msg=n+' کے اسکیپ مقررہ حد سے زیادہ ہو گئے ('+cnt2[n]+')'});
-      } else if(c.key==='attendance'){
-        var mem=lsGet('sec4_duty_manager_data_v4',[]);
-        mem.forEach(function(m){if(!m.onLeave&&!m.onDuty&&(!m.dutyEndedAt||m.dutyEndedAt<today))msg='آج '+m.name+' کی حاضری نہیں لگی'});
-      } else if(c.key==='rashan'){
-        var rash=lsGet('sec11_rashan_data_v2',[]);
-        if(!rash.some(function(r){return r.timestamp>=today}))msg='آج مقررہ وقت تک راشن ایڈ نہیں ہوا';
-      } else if(c.key==='duty_partial'){
-        var mem2=lsGet('sec4_duty_manager_data_v4',[]);
-        mem2.forEach(function(m){
-          if(m.onDuty&&m.dutyStart){
-            var mins=Math.floor((Date.now()-m.dutyStart)/60000);
-            if(mins>(c.limit||30))msg='آج '+m.name+' کی ڈیوٹی مقررہ حد سے زیادہ ہو گئی ('+mins+' منٹ)';
+  <script>
+    (function () {
+      "use strict";
+
+      const KEYS = {
+        RECORDS: "sec10_news_alerts_data",
+        SETTINGS: "ns_modular_settings_v1",
+        DELETED: "sec10_deleted_records_v1",
+        HISTORY: "sec10_played_history_v1",
+        LIVE_TRIGGER: "a2_live_trigger",
+        LAST_AUTO_CHECK: "ns_last_auto_check_ts",
+        LAST_FIX_RUN: "ns_last_fix_run_key"
+      };
+
+      const DEFAULT_SETTINGS = {
+        fixTimeEnabled: false,
+        fixTimeValue: "09:00",
+        autoCheckEnabled: true,
+        autoCheckIntervalSec: 60,
+        catchUpMissedChecks: true,
+        autoExpireEnabled: false,
+        autoExpireMinutes: 120,
+        autoCleanEnabled: false,
+        autoCleanScope: "auto_only",
+        autoCleanAgeMinutes: 1440,
+        soundEnabled: true,
+        vibrationEnabled: false,
+        voiceName: "",
+        speechRate: 1,
+        playOrder: "newest",
+        repeatMode: "loop",
+        pattiSpeed: 80,
+        pattiSeconds: 12,
+        pattiEffect: "smooth",
+        autoDismissSec: 30,
+        alertPriorityEnabled: true,
+        snoozeMinutes: 5,
+        dashboardAutoHideEmpty: true,
+        dashboardHighlightNew: true
+      };
+
+      let settings = loadJSON(KEYS.SETTINGS, DEFAULT_SETTINGS);
+      let records = loadJSON(KEYS.RECORDS, []);
+      let deletedRecords = loadJSON(KEYS.DELETED, []);
+      let historyRecords = loadJSON(KEYS.HISTORY, []);
+      let snoozeState = null; // { recordId, text, endsAt }
+      let snoozeInterval = null;
+      let autoCheckTimer = null;
+      let autoDismissTimeout = null;
+      let speechQueue = [];
+      let isSpeaking = false;
+
+      const el = (id) => document.getElementById(id);
+
+      function loadJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return structuredClone(fallback);
+          return { ...(typeof fallback === "object" && !Array.isArray(fallback) ? fallback : {}), ...JSON.parse(raw) };
+        } catch {
+          return structuredClone(fallback);
+        }
+      }
+
+      function loadArray(key) {
+        try {
+          const raw = localStorage.getItem(key);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveAllState(reason = "update") {
+        localStorage.setItem(KEYS.RECORDS, JSON.stringify(records));
+        localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
+        localStorage.setItem(KEYS.DELETED, JSON.stringify(deletedRecords));
+        localStorage.setItem(KEYS.HISTORY, JSON.stringify(historyRecords));
+        localStorage.setItem(
+          KEYS.LIVE_TRIGGER,
+          JSON.stringify({ ts: Date.now(), reason, source: "NA1" })
+        );
+        updateSyncIndicator("سنک فعال", "ok", `آخری اپڈیٹ: ${formatTime(new Date())} (${reason})`);
+      }
+
+      function updateSyncIndicator(label, status, detail) {
+        el("headerSyncText").textContent = label;
+        const dot = el("headerSyncDot");
+        dot.className = "dot";
+        if (status === "warn") dot.classList.add("warn");
+        if (status === "err") dot.classList.add("err");
+        if (detail && el("syncDetailStatus")) {
+          el("syncDetailStatus").textContent = detail;
+        }
+      }
+
+      function formatTime(dateInput) {
+        const d = dateInput instanceof Date ? dateInput : new Date(dateInput);
+        if (Number.isNaN(d.getTime())) return "---";
+        return d.toLocaleTimeString("ur-PK", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      }
+
+      function formatDateShort(ts) {
+        const d = new Date(ts);
+        if (Number.isNaN(d.getTime())) return "---";
+        return d.toLocaleDateString("en-CA") + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function isToday(ts) {
+        const d = new Date(ts);
+        const now = new Date();
+        return (
+          d.getFullYear() === now.getFullYear() &&
+          d.getMonth() === now.getMonth() &&
+          d.getDate() === now.getDate()
+        );
+      }
+
+      function matchesPeriod(ts, period) {
+        if (period === "all") return true;
+        const now = Date.now();
+        const diffDays = (now - ts) / (1000 * 60 * 60 * 24);
+        if (period === "today") return isToday(ts);
+        if (period === "weekly") return diffDays <= 7;
+        if (period === "monthly") return diffDays <= 30;
+        if (period === "yearly") return diffDays <= 365;
+        return true;
+      }
+
+      function uid() {
+        return "rec_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 7);
+      }
+
+      // --- Voice & Audio Queue (Single audio at a time + ur-PK fallback) ---
+      function populateVoices() {
+        const select = el("voiceSelect");
+        if (!("speechSynthesis" in window)) {
+          select.innerHTML = '<option value="">براؤزر اسپیچ دستیاب نہیں</option>';
+          return;
+        }
+        const voices = window.speechSynthesis.getVoices();
+        select.innerHTML = '<option value="">خودکار (ur-PK ترجیح + فال بیک)</option>';
+        voices.forEach((v) => {
+          const opt = document.createElement("option");
+          opt.value = v.name;
+          opt.textContent = `${v.name} (${v.lang})`;
+          select.appendChild(opt);
+        });
+        if (settings.voiceName) {
+          select.value = settings.voiceName;
+        }
+      }
+
+      function pickVoice() {
+        if (!("speechSynthesis" in window)) return null;
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) return null;
+        if (settings.voiceName) {
+          const exact = voices.find((v) => v.name === settings.voiceName);
+          if (exact) return exact;
+        }
+        const urVoice = voices.find((v) => (v.lang || "").toLowerCase().startsWith("ur"));
+        if (urVoice) return urVoice;
+        const hiOrAr = voices.find((v) => {
+          const l = (v.lang || "").toLowerCase();
+          return l.startsWith("hi") || l.startsWith("ar") || l.startsWith("en");
+        });
+        return hiOrAr || voices[0];
+      }
+
+      function enqueueSpeech(text) {
+        if (!settings.soundEnabled || !text || !text.trim()) return;
+        if (settings.vibrationEnabled && navigator.vibrate) {
+          try { navigator.vibrate(120); } catch {}
+        }
+        if (!("speechSynthesis" in window)) {
+          el("audioQueueStatus").textContent = "کیو اسٹیٹس: اسپیچ سپورٹ نہیں";
+          return;
+        }
+        speechQueue.push(text.trim());
+        updateQueueStatus();
+        processSpeechQueue();
+      }
+
+      function processSpeechQueue() {
+        if (isSpeaking || speechQueue.length === 0) return;
+        const nextText = speechQueue.shift();
+        isSpeaking = true;
+        updateQueueStatus();
+
+        const utter = new SpeechSynthesisUtterance(nextText);
+        const chosen = pickVoice();
+        if (chosen) utter.voice = chosen;
+        utter.rate = Number(settings.speechRate) || 1;
+
+        utter.onend = () => {
+          isSpeaking = false;
+          updateQueueStatus();
+          processSpeechQueue();
+        };
+        utter.onerror = () => {
+          isSpeaking = false;
+          updateQueueStatus();
+          processSpeechQueue();
+        };
+
+        try {
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utter);
+        } catch {
+          isSpeaking = false;
+          updateQueueStatus();
+        }
+      }
+
+      function stopAllAudio() {
+        speechQueue = [];
+        isSpeaking = false;
+        if ("speechSynthesis" in window) {
+          try { window.speechSynthesis.cancel(); } catch {}
+        }
+        updateQueueStatus();
+      }
+
+      function updateQueueStatus() {
+        const qCount = speechQueue.length;
+        if (isSpeaking) {
+          el("audioQueueStatus").textContent = `کیو اسٹیٹس: چل رہا ہے (مزید ${qCount} قطار میں)`;
+        } else if (qCount > 0) {
+          el("audioQueueStatus").textContent = `کیو اسٹیٹس: ${qCount} آئٹم قطار میں`;
+        } else {
+          el("audioQueueStatus").textContent = "کیو اسٹیٹس: خاموش";
+        }
+      }
+
+      // --- Fix Time, Auto Check, Catch-up, Expire & Clean ---
+      function runScheduledMaintenance(isManual = false) {
+        const now = Date.now();
+        let changed = false;
+
+        // 1. Auto Expire
+        if (settings.autoExpireEnabled) {
+          const expireMs = (Number(settings.autoExpireMinutes) || 120) * 60 * 1000;
+          const beforeLen = records.length;
+          const expired = [];
+          records = records.filter((r) => {
+            if (now - r.createdAt >= expireMs) {
+              expired.push({ ...r, expiredAt: now });
+              return false;
+            }
+            return true;
+          });
+          if (records.length !== beforeLen) {
+            deletedRecords.unshift(...expired);
+            changed = true;
+          }
+        }
+
+        // 2. Auto Clean
+        if (settings.autoCleanEnabled) {
+          const cleanAgeMs = (Number(settings.autoCleanAgeMinutes) || 1440) * 60 * 1000;
+          const beforeLen = records.length;
+          const cleaned = [];
+          records = records.filter((r) => {
+            const oldEnough = now - r.createdAt >= cleanAgeMs;
+            if (!oldEnough) return true;
+            if (settings.autoCleanScope === "auto_only") {
+              if (r.source === "auto") {
+                cleaned.push({ ...r, cleanedAt: now });
+                return false;
+              }
+              return true;
+            }
+            if (settings.autoCleanScope === "expired_only") {
+              if (r.status === "expired") {
+                cleaned.push({ ...r, cleanedAt: now });
+                return false;
+              }
+              return true;
+            }
+            return true;
+          });
+          if (records.length !== beforeLen) {
+            deletedRecords.unshift(...cleaned);
+            changed = true;
+          }
+        }
+
+        // 3. Scheduled items whose time has arrived
+        records.forEach((r) => {
+          if (r.scheduledAt && r.scheduledAt <= now && !r.pushedAtSchedule) {
+            r.pushedAtSchedule = true;
+            r.sentToNa2 = true;
+            addToHistory(r);
+            if (r.type === "alert") {
+              triggerAlertPlayback(r);
+            }
+            changed = true;
           }
         });
-      } else if(c.key==='budget'){
-        var bud=lsGet('sec11_rashan_budget_v2',0);
-        var rash2=lsGet('sec11_rashan_data_v2',[]);
-        var tot=0;rash2.forEach(function(r){tot+=(r.qty||1)*(r.rate||0)});
-        if(bud>0&&(tot/bud*100)>=(c.limit||80))msg='بجٹ حد کے قریب/آؤٹ ہونے لگا ہے ('+Math.round(tot/bud*100)+'%)';
-      } else if(c.key==='complaints'){
-        var comp=lsGet('member_complain_data_v4',[]);
-        var pend=comp.filter(function(x){return x.timestamp>=today&&x.status===null});
-        if(pend.length>=(c.limit||1))msg='آج '+pend.length+' نئی شکایات زیرِ التواء ہیں';
-      } else if(c.key==='sixdays'){
-        var mem3=lsGet('sec4_duty_manager_data_v4',[]);
-        mem3.forEach(function(m){if((m.dutyCount||0)>=(c.limit||6))msg=m.name+' نے مسلسل '+m.dutyCount+' دن کام مکمل کر لیا ہے'});
-      } else if(c.key==='good_duty'){
-        var mem4=lsGet('sec4_duty_manager_data_v4',[]);
-        mem4.forEach(function(m){if(m.dutyEndedAt&&m.dutyEndedAt>=today&&!m.onLeave)msg=m.name+' نے آج اچھی ڈیوٹی مکمل کی'});
+
+        // 4. Fix Time trigger & missed catch-up
+        if (settings.fixTimeEnabled && settings.fixTimeValue) {
+          const [hh, mm] = settings.fixTimeValue.split(":").map(Number);
+          if (!Number.isNaN(hh) && !Number.isNaN(mm)) {
+            const targetToday = new Date();
+            targetToday.setHours(hh, mm, 0, 0);
+            const runKey = `${new Date().toDateString()}_${settings.fixTimeValue}`;
+            const lastRunKey = localStorage.getItem(KEYS.LAST_FIX_RUN);
+            const shouldFire =
+              now >= targetToday.getTime() &&
+              (settings.catchUpMissedChecks || Math.abs(now - targetToday.getTime()) <= 120000) &&
+              lastRunKey !== runKey;
+
+            if (shouldFire) {
+              localStorage.setItem(KEYS.LAST_FIX_RUN, runKey);
+              const candidate = records.find((r) => !r.escaped);
+              if (candidate) {
+                candidate.sentToNa2 = true;
+                addToHistory(candidate);
+                enqueueSpeech(candidate.text);
+                changed = true;
+              }
+            }
+          }
+        }
+
+        localStorage.setItem(KEYS.LAST_AUTO_CHECK, String(now));
+        el("lastAutoCheckNote").textContent = `آخری چیک: ${formatTime(now)}${isManual ? " (دستی)" : ""}`;
+        updateNextCheckLabel();
+
+        if (changed) {
+          saveAllState("auto_check");
+          renderAll();
+        }
       }
-    }catch(e){}
-    if(msg)results.push({type:c.type,text:msg,key:c.key});
-  });
 
-  if(!results.length){
-    showMsg('✅ چیک مکمل: تمام سیکشنز/اسٹوریج نارمل ہیں',true);
-    return;
-  }
-
-  var items=lsGet(NEWS_KEY,[]);
-  var now=new Date();
-  var stamp=pad(now.getDate())+'/'+pad(now.getMonth()+1)+' '+pad(now.getHours())+':'+pad(now.getMinutes());
-  var addedItems=[];
-
-  results.forEach(function(r,idx){
-    var alreadyToday=items.some(function(existing){
-      return existing.date===todayD && !existing.deleted && existing.auto && existing.content===r.text;
-    });
-    if(alreadyToday)return;
-    var created={
-      id:Date.now()+idx+Math.floor(Math.random()*1000),
-      type:r.type,
-      content:r.text,
-      timestamp:Date.now()+idx,
-      dateStr:stamp,
-      date:todayD,
-      auto:true,
-      autoSource:r.key||'auto',
-      skipped:false,
-      deleted:false,
-      dashShown:false,
-      historyReady:false
-    };
-    items.unshift(created);
-    addedItems.push(created);
-  });
-
-  if(!addedItems.length){
-    showMsg('ℹ️ آج کے آٹو ریکارڈز پہلے سے موجود ہیں',true);
-    return;
-  }
-
-  lsSet(NEWS_KEY,items);
-  lsSet(SETTINGS_KEY,cfg);
-  lsSet('ns_dash_visible',true);
-  renderRecords();
-  refreshLivePattis();
-  emitLiveTrigger(addedItems[0]);
-  notifyNewItem(addedItems[0].type,addedItems[0].content);
-  showMsg('✅ '+addedItems.length+' نئے آٹو ریکارڈ شامل ہو گئے',true);
-}
-
-function switchPattiFilter(p){
-  activePatti=p;
-  $('tabNewsPatti').classList.toggle('active',p==='news');
-  $('tabAlertPatti').classList.toggle('active',p==='alert');
-  renderPattiSection();
-}
-
-function renderPattiSection(){
-  var isNews=(activePatti==='news');
-  var pObj=isNews?cfg.newsPatti:cfg.alertPatti;
-  $('activeFilterBanner').textContent=isNews?'منتخب فلٹر: 📰 News Patti':'منتخب فلٹر: 🚨 Alert Patti';
-  $('activeFilterBanner').style.color=isNews?'#059669':'#dc2626';
-
-  $('pattiSpeedInp').value=pObj.speed;
-  $('pattiSecInp').value=pObj.seconds;
-  $('pattiVolSlider').value=pObj.volume;
-  $('volPctLabel').textContent=pObj.volume+'%';
-
-  var effList=isNews?NEWS_EFFECTS:ALERT_EFFECTS;
-  $('effectsHeading').textContent=isNews?'✨ News Patti اثرات (10 فیچرز)':'✨ Alert Patti اثرات (10 فیچرز)';
-  $('effectsContainer').innerHTML=effList.map(function(name,idx){
-    var on=!!pObj.effects[idx];
-    return '<div class="effect-row '+(on?'active':'')+'">'+
-      '<span>'+(idx+1)+'. '+name+'</span>'+
-      '<label class="sw" style="width:38px;height:21px"><input type="checkbox" '+(on?'checked':'')+' onchange="togglePattiEffect('+idx+')"><span></span></label>'+
-    '</div>';
-  }).join('');
-
-  var tunes=isNews?NEWS_TUNES:ALERT_TUNES;
-  $('soundsHeading').textContent=isNews?'🎵 News Patti آوازیں (25 دھنیں)':'🎵 Alert Patti آوازیں (20 دھنیں)';
-  $('tunesContainer').innerHTML=tunes.map(function(t,idx){
-    var sel=(pObj.tuneIdx===idx);
-    var tok='tune_'+activePatti+'_'+idx;
-    var isPl=(_activeAudioToken===tok);
-    return '<div class="tune-card '+(sel?'sel':'')+(isPl?' playing':'')+'" data-token="'+tok+'">'+
-      '<span class="num">'+(idx+1)+'</span>'+
-      '<span class="nm">'+t.name+'</span>'+
-      '<button class="t-play'+(isPl?' stop':'')+'" onclick="playTuneByIndex(\''+activePatti+'\','+idx+')">'+(isPl?'⏹️':'▶️')+'</button>'+
-      '<button class="t-sel" onclick="selectTuneForPatti(\''+activePatti+'\','+idx+')">'+(sel?'منتخب':'سیو')+'</button>'+
-    '</div>';
-  }).join('');
-
-  var hasSaved=!!savedLocalAudio[activePatti];
-  var hasPending=!!pendingLocalAudio[activePatti];
-  if(hasPending)$('localAudioStatus').textContent='🎵 نئی آڈیو منتخب ہے — سیو کریں دبائیں';
-  else if(hasSaved)$('localAudioStatus').textContent='✅ کسٹم آڈیو سیو ہے';
-  else $('localAudioStatus').textContent='کوئی کسٹم آڈیو سیو نہیں (منتخب دھن چلے گی)';
-  updateAudioButtonsUI();
-}
-
-function savePattiMetric(key,val){
-  var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
-  pObj[key]=parseInt(val)||1;
-  saveAllSettings();
-}
-function togglePattiEffect(idx){
-  var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
-  pObj.effects[idx]=!pObj.effects[idx];
-  saveAllSettings();
-  renderPattiSection();
-}
-function selectTuneForPatti(p,idx){
-  var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
-  pObj.tuneIdx=idx;
-  saveAllSettings();
-  renderPattiSection();
-  playTuneByIndex(p,idx,pObj.volume,'tune_'+p+'_'+idx);
-  showMsg('✅ دھن سیو ہو گئی',true);
-}
-
-function playTuneByIndex(p,idx,customVol,tokenName){
-  var tok=tokenName||('tune_'+p+'_'+idx);
-  if(_activeAudioToken===tok){
-    stopAllAudio();
-    return;
-  }
-  stopAllAudio();
-  var tunes=p==='news'?NEWS_TUNES:ALERT_TUNES;
-  var tune=tunes[idx]||tunes[0];
-  var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
-  var vol=(customVol!==undefined?customVol:pObj.volume)/100;
-  try{
-    var ctx=ensureAudioContext();
-    if(!ctx){stopAllAudio();return}
-    _activeAudioToken=tok;
-    updateAudioButtonsUI();
-    var t=ctx.currentTime+0.02;
-    var totalMs=0;
-    tune.p.forEach(function(n){
-      var freq=n[0],dur=n[1]/1000;
-      totalMs+=n[1]+45;
-      if(freq>0){
-        var osc=ctx.createOscillator(),g=ctx.createGain();
-        osc.type='sine';
-        osc.connect(g);g.connect(ctx.destination);
-        osc.frequency.setValueAtTime(freq,t);
-        g.gain.setValueAtTime(Math.max(0.02,vol),t);
-        g.gain.exponentialRampToValueAtTime(0.001,t+dur);
-        osc.start(t);osc.stop(t+dur);
+      function updateNextCheckLabel() {
+        const intervalSec = Math.max(10, Number(settings.autoCheckIntervalSec) || 60);
+        const nextDate = new Date(Date.now() + intervalSec * 1000);
+        const fixPart = settings.fixTimeEnabled ? ` | فکس: ${settings.fixTimeValue}` : "";
+        el("nextCheckStatus").textContent = `اگلا چیک: ${formatTime(nextDate)}${fixPart}`;
       }
-      t+=dur+0.04;
-    });
-    var tid=setTimeout(function(){
-      if(_activeAudioToken===tok)stopAllAudio();
-    },totalMs+100);
-    _audioTimers.push(tid);
-  }catch(e){stopAllAudio()}
-}
 
-function playAudioDataUrl(dataUrl,volPct,tokenName){
-  var tok=tokenName||'local_audio';
-  if(_activeAudioToken===tok){
-    stopAllAudio();
-    return;
-  }
-  stopAllAudio();
-  try{
-    var el=new Audio(dataUrl);
-    el.loop=false;
-    el.volume=Math.min(1,Math.max(0,(volPct||70)/100));
-    _previewAudioEl=el;
-    _activeAudioToken=tok;
-    updateAudioButtonsUI();
-    el.onended=function(){
-      if(_activeAudioToken===tok)stopAllAudio();
-    };
-    el.play().catch(function(){stopAllAudio()});
-  }catch(e){stopAllAudio()}
-}
+      function restartAutoCheckTimer() {
+        if (autoCheckTimer) clearInterval(autoCheckTimer);
+        updateNextCheckLabel();
+        if (!settings.autoCheckEnabled) return;
+        const ms = Math.max(10, Number(settings.autoCheckIntervalSec) || 60) * 1000;
+        autoCheckTimer = setInterval(() => runScheduledMaintenance(false), ms);
+      }
 
-function onLocalAudioPicked(e){
-  var f=e.target.files[0];
-  if(!f)return;
-  if(f.size>2.5*1024*1024){showMsg('❌ فائل 2.5MB سے کم ہونی چاہیے',false);return}
-  var r=new FileReader();
-  r.onload=function(ev){
-    pendingLocalAudio[activePatti]=ev.target.result;
-    var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
-    playAudioDataUrl(pendingLocalAudio[activePatti],pObj.volume,'local_audio');
-    renderPattiSection();
-    showMsg('🔊 آڈیو چل رہی ہے — دوبارہ دبائیں تو بند ہو گی',true);
-  };
-  r.readAsDataURL(f);
-}
+      // --- Alert Priority, Auto-Dismiss & Snooze 5m ---
+      function triggerAlertPlayback(rec) {
+        enqueueSpeech(rec.text);
+        if (autoDismissTimeout) clearTimeout(autoDismissTimeout);
+        const dismissSec = Number(settings.autoDismissSec) || 0;
+        if (dismissSec > 0) {
+          autoDismissTimeout = setTimeout(() => {
+            el("audioQueueStatus").textContent = `آٹو ڈسمس (${dismissSec}s): ${rec.text.slice(0, 28)}...`;
+          }, dismissSec * 1000);
+        }
+      }
 
-function savePickedLocalAudio(){
-  if(!pendingLocalAudio[activePatti]){showMsg('پہلے آڈیو فائل منتخب کریں',false);return}
-  var nextSaved=Object.assign({},savedLocalAudio);
-  nextSaved[activePatti]=pendingLocalAudio[activePatti];
-  if(!lsSet(AUDIO_STORE_KEY,nextSaved)){
-    showMsg('❌ اسٹوریج کی جگہ کم ہے، چھوٹی فائل منتخب کریں',false);
-    return;
-  }
-  savedLocalAudio=nextSaved;
-  pendingLocalAudio[activePatti]=null;
-  renderPattiSection();
-  showMsg('✅ کسٹم آڈیو سیو ہو گئی',true);
-}
+      function startSnooze(rec) {
+        const mins = Math.max(1, Number(settings.snoozeMinutes) || 5);
+        snoozeState = {
+          recordId: rec.id,
+          text: rec.text,
+          endsAt: Date.now() + mins * 60 * 1000
+        };
+        el("snoozeRecordTitle").textContent = rec.text;
+        el("snoozeBanner").classList.add("active");
+        if (snoozeInterval) clearInterval(snoozeInterval);
 
-function deleteSavedLocalAudio(){
-  stopAllAudio();
-  pendingLocalAudio[activePatti]=null;
-  savedLocalAudio[activePatti]=null;
-  lsSet(AUDIO_STORE_KEY,savedLocalAudio);
-  renderPattiSection();
-  showMsg('🗑️ کسٹم آڈیو ہٹا دی گئی',true);
-}
+        const tick = () => {
+          if (!snoozeState) return;
+          const remMs = Math.max(0, snoozeState.endsAt - Date.now());
+          const totalSec = Math.ceil(remMs / 1000);
+          const m = String(Math.floor(totalSec / 60)).padStart(2, "0");
+          const s = String(totalSec % 60).padStart(2, "0");
+          el("snoozeCountdown").textContent = `${m}:${s}`;
 
-function playCurrentPattiAudio(pOverride,volOverride,tokenOverride){
-  var p=pOverride||activePatti;
-  var pObj=p==='news'?cfg.newsPatti:cfg.alertPatti;
-  var vol=volOverride!==undefined?volOverride:pObj.volume;
-  var customSrc=pendingLocalAudio[p]||savedLocalAudio[p];
-  var tok=tokenOverride||(customSrc?'local_audio':('tune_'+p+'_'+pObj.tuneIdx));
-  if(_activeAudioToken===tok){
-    stopAllAudio();
-    return;
-  }
-  if(customSrc)playAudioDataUrl(customSrc,vol,tok);
-  else playTuneByIndex(p,pObj.tuneIdx,vol,tok);
-}
+          if (remMs <= 0) {
+            const finished = snoozeState;
+            clearSnoozeUI();
+            const targetRec = records.find((x) => x.id === finished.recordId) || { text: finished.text };
+            targetRec.sentToNa2 = true;
+            addToHistory(targetRec);
+            triggerAlertPlayback(targetRec);
+            saveAllState("snooze_complete");
+            renderAll();
+          }
+        };
 
-var _volDebounce=null;
-function onVolumeSlide(val){
-  var v=parseInt(val)||0;
-  $('volPctLabel').textContent=v+'%';
-  var pObj=activePatti==='news'?cfg.newsPatti:cfg.alertPatti;
-  pObj.volume=v;
-  saveAllSettings();
-  if(_previewAudioEl){
-    try{_previewAudioEl.volume=Math.min(1,Math.max(0,v/100))}catch(e){}
-  }
-  clearTimeout(_volDebounce);
-  _volDebounce=setTimeout(function(){
-    if(!_activeAudioToken)playCurrentPattiAudio(activePatti,v);
-  },220);
-}
+        tick();
+        snoozeInterval = setInterval(tick, 500);
+      }
 
-function onBrowserNotifToggle(cb){
-  saveAllSettings();
-  if(cb.checked && 'Notification' in window && Notification.permission==='default'){
-    Notification.requestPermission();
-  }
-}
+      function clearSnoozeUI() {
+        snoozeState = null;
+        if (snoozeInterval) {
+          clearInterval(snoozeInterval);
+          snoozeInterval = null;
+        }
+        el("snoozeBanner").classList.remove("active");
+      }
 
-function speakAnnouncement(type,text){
-  if(!('speechSynthesis' in window))return;
-  try{
-    window.speechSynthesis.cancel();
-    var slot=cfg.voiceSlot||1;
-    if(slot===10){voiceSeqCounter=(voiceSeqCounter%10)+1;slot=voiceSeqCounter;}
-    var prefix=(type==='alert')?'Alert. ':'News. ';
-    var u=new SpeechSynthesisUtterance(prefix+text);
-    u.lang=(slot===6||slot===7)?'en-US':'ur-PK';
-    var rates=[0.9,1.15,0.8,1.1,1.0,0.95,1.05,0.85,1.0,1.0];
-    var pitches=[1.1,1.0,0.75,1.2,0.95,1.0,1.1,0.9,1.05,1.0];
-    u.rate=rates[slot-1]||1.0;
-    u.pitch=pitches[slot-1]||1.0;
-    window.speechSynthesis.speak(u);
-  }catch(e){}
-}
+      // --- Records CRUD, Escape, Restore & History ---
+      function addToHistory(rec) {
+        const entry = {
+          id: rec.id,
+          type: rec.type,
+          text: rec.text,
+          playedAt: Date.now()
+        };
+        historyRecords.unshift(entry);
+        if (historyRecords.length > 100) historyRecords.length = 100;
+      }
 
-function notifyNewItem(type,text){
-  if(type==='news'&&!cfg.allOpts.newsOn)return;
-  if(type==='alert'&&!cfg.allOpts.alertOn)return;
+      function sendRecordToNa2(rec) {
+        rec.sentToNa2 = true;
+        addToHistory(rec);
+        if (rec.type === "alert") {
+          triggerAlertPlayback(rec);
+        } else {
+          enqueueSpeech(rec.text);
+        }
+        saveAllState("send_na2");
+        renderAll();
+      }
 
-  if(cfg.allOpts.soundsOn)playCurrentPattiAudio(type);
-  if(cfg.allOpts.vibrate && navigator.vibrate)navigator.vibrate([220,100,220]);
-  if(cfg.allOpts.voice)speakAnnouncement(type,text);
-  if(cfg.allOpts.browserNotif && 'Notification' in window && Notification.permission==='granted'){
-    new Notification(type==='alert'?'🚨 Alert':'📰 News',{body:text});
-  }
-}
+      function toggleEscapeRecord(id, mode) {
+        const rec = records.find((r) => r.id === id);
+        if (!rec) return;
+        if (rec.escaped) {
+          rec.escaped = false;
+          rec.escapeType = null;
+          rec.escapedAt = null;
+          rec.restored = true;
+        } else {
+          rec.escaped = true;
+          rec.escapeType = mode || "temp"; // "temp" or "perm"
+          rec.escapedAt = Date.now();
+        }
+        saveAllState("escape_toggle");
+        renderAll();
+      }
 
-function testSelectedVoice(){
-  var sample=activePatti==='alert'?'یہ ایک ٹیسٹ الرٹ پیغام ہے':'یہ ایک ٹیسٹ نیوز پیغام ہے';
-  speakAnnouncement(activePatti,sample);
-  showMsg('🗣️ وائس ٹیسٹ چل رہا ہے',true);
-}
-function testSelectedVibrate(){
-  if(navigator.vibrate)navigator.vibrate([250,100,250]);
-  showMsg('📳 وائبریٹ ٹیسٹ',true);
-}
-function testSelectedSound(){
-  playCurrentPattiAudio(activePatti,undefined,'test_sound_btn');
-}
+      function restoreEscapedRecord(id) {
+        const rec = records.find((r) => r.id === id);
+        if (!rec) return;
+        rec.escaped = false;
+        rec.escapeType = null;
+        rec.escapedAt = null;
+        rec.restored = true;
+        rec.restoredAt = Date.now();
+        saveAllState("restore_escaped");
+        renderAll();
+      }
 
-function resetAllToDefault(){
-  stopAllAudio();
-  localStorage.removeItem(SETTINGS_KEY);
-  localStorage.removeItem(AUDIO_STORE_KEY);
-  cfg=defaultSettings();
-  savedLocalAudio={news:null,alert:null};
-  pendingLocalAudio={news:null,alert:null};
-  syncSettingsToUI();
-  showMsg('↺ تمام سیٹنگز ڈیفالٹ پر آ گئیں',true);
-}
+      function deleteRecordToTrash(id) {
+        const idx = records.findIndex((r) => r.id === id);
+        if (idx === -1) return;
+        const [removed] = records.splice(idx, 1);
+        deletedRecords.unshift({ ...removed, deletedAt: Date.now() });
+        if (deletedRecords.length > 100) deletedRecords.length = 100;
+        saveAllState("delete_record");
+        renderAll();
+      }
 
-function autoCleanup(){
-  var items=lsGet(NEWS_KEY,[]);
-  var today=todayStr();
-  var cutoff=Date.now()-((cfg.others.expiryHours||24)*3600000);
-  var before=items.length;
-  items=items.filter(function(x){
-    if(x.deleted)return true;
-    if(x.auto && x.timestamp<cutoff)return false;
-    if(cfg.others.dailyReset && x.auto && x.date!==today)return false;
-    return true;
-  });
-  if(items.length!==before){lsSet(NEWS_KEY,items);renderRecords();refreshLivePattis()}
-}
+      function restoreSingleDeletedRecord(id) {
+        const idx = deletedRecords.findIndex((r) => r.id === id);
+        if (idx === -1) return;
+        const [item] = deletedRecords.splice(idx, 1);
+        delete item.deletedAt;
+        delete item.expiredAt;
+        delete item.cleanedAt;
+        item.restored = true;
+        item.restoredAt = Date.now();
+        records.unshift(item);
+        saveAllState("restore_deleted");
+        renderAll();
+      }
 
-function checkScheduledTime(){
-  if(!cfg.autoCheckOn)return;
-  var now=new Date();
-  var h=parseInt(cfg.checkHour)||10;
-  var m=parseInt(cfg.checkMin)||0;
-  if(cfg.checkAmPm==='PM'&&h<12)h+=12;
-  if(cfg.checkAmPm==='AM'&&h===12)h=0;
+      // --- Rendering ---
+      function getSortedFilteredRecords() {
+        const q = (el("searchInput").value || "").trim().toLowerCase();
+        const typeFilter = el("typeQuickFilter").value;
+        const period = el("periodFilter").value;
 
-  var runStamp=todayStr()+'_'+pad(h)+':'+pad(m);
-  if(localStorage.getItem(LAST_AUTO_KEY)===runStamp)return;
+        let list = records.filter((r) => {
+          if (!matchesPeriod(r.createdAt, period)) return false;
+          if (typeFilter === "news" && r.type !== "news") return false;
+          if (typeFilter === "alert" && r.type !== "alert") return false;
+          if (typeFilter === "escaped" && !r.escaped) return false;
+          if (typeFilter === "restored" && !r.restored) return false;
+          if (q && !r.text.toLowerCase().includes(q)) return false;
+          return true;
+        });
 
-  if(now.getHours()===h && now.getMinutes()===m){
-    localStorage.setItem(LAST_AUTO_KEY,runStamp);
-    runAutoCheckNow();
-  }
-}
+        list.sort((a, b) => {
+          if (settings.alertPriorityEnabled || settings.playOrder === "priority") {
+            const pA = a.priority === "high" ? 1 : 0;
+            const pB = b.priority === "high" ? 1 : 0;
+            if (pA !== pB) return pB - pA;
+          }
+          if (settings.playOrder === "oldest") return a.createdAt - b.createdAt;
+          return b.createdAt - a.createdAt;
+        });
 
-document.addEventListener('pointerdown',function(){ensureAudioContext()},{passive:true});
+        return list;
+      }
 
-document.addEventListener('DOMContentLoaded',function(){
-  loadAllSettings();
-  autoCleanup();
-  renderRecords();
-  refreshLivePattis();
-  if(cfg.others.catchup)checkScheduledTime();
-  setInterval(checkScheduledTime,15000);
-  setInterval(autoCleanup,3600000);
-});
-</script>
+      function renderRecordsList() {
+        const container = el("recordsList");
+        const list = getSortedFilteredRecords();
+        el("activeRecordsCount").textContent = `${list.length} ریکارڈز`;
+
+        if (!list.length) {
+          container.innerHTML = '<div class="empty-state">کوئی ریکارڈ موجود نہیں ہے۔</div>';
+          return;
+        }
+
+        container.innerHTML = "";
+        list.forEach((r) => {
+          const item = document.createElement("div");
+          item.className = "record-item";
+          if (r.priority === "high") item.classList.add("priority-high");
+          if (r.escaped) {
+            item.classList.add(r.escapeType === "perm" ? "escaped-perm" : "escaped-temp");
+          }
+
+          const top = document.createElement("div");
+          top.className = "record-top";
+
+          const badges = document.createElement("div");
+          badges.className = "badges";
+          badges.innerHTML = `
+            <span class="badge ${r.type}">${r.type === "alert" ? "الرٹ" : "نیوز"}</span>
+            ${r.priority === "high" ? '<span class="badge prio">اہم</span>' : ""}
+            ${r.source === "auto" ? '<span class="badge auto">آٹو</span>' : ""}
+            ${r.restored ? '<span class="badge restored">بحال شدہ</span>' : ""}
+            ${r.escaped ? `<span class="badge ${r.escapeType === "perm" ? "esc-perm" : "esc-temp"}">${r.escapeType === "perm" ? "مستقل اسکیپ" : "عارضی اسکیپ"}</span>` : ""}
+          `;
+
+          const timeSpan = document.createElement("span");
+          timeSpan.style.fontSize = "0.76rem";
+          timeSpan.style.color = "var(--muted)";
+          timeSpan.textContent = formatDateShort(r.createdAt);
+
+          top.append(badges, timeSpan);
+
+          const textEl = document.createElement("div");
+          textEl.className = "record-text";
+          textEl.textContent = r.text;
+
+          const actions = document.createElement("div");
+          actions.className = "record-actions";
+
+          const sendBtn = document.createElement("button");
+          sendBtn.className = "success sm";
+          sendBtn.type = "button";
+          sendBtn.textContent = "NA2 پر بھیجیں";
+          sendBtn.onclick = () => sendRecordToNa2(r);
+
+          const editBtn = document.createElement("button");
+          editBtn.className = "ghost sm";
+          editBtn.type = "button";
+          editBtn.textContent = "ترمیم";
+          editBtn.onclick = () => startEditRecord(r);
+
+          const escTempBtn = document.createElement("button");
+          escTempBtn.className = "warn sm";
+          escTempBtn.type = "button";
+          escTempBtn.textContent = r.escaped ? "اسکیپ ہٹائیں" : "عارضی اسکیپ";
+          escTempBtn.onclick = () => toggleEscapeRecord(r.id, "temp");
+
+          const escPermBtn = document.createElement("button");
+          escPermBtn.className = "ghost sm";
+          escPermBtn.type = "button";
+          escPermBtn.textContent = "مستقل اسکیپ";
+          escPermBtn.onclick = () => toggleEscapeRecord(r.id, "perm");
+
+          const snoozeBtn = document.createElement("button");
+          snoozeBtn.className = "ghost sm";
+          snoozeBtn.type = "button";
+          snoozeBtn.textContent = `Snooze ${settings.snoozeMinutes || 5}m`;
+          snoozeBtn.onclick = () => startSnooze(r);
+
+          const delBtn = document.createElement("button");
+          delBtn.className = "danger sm";
+          delBtn.type = "button";
+          delBtn.textContent = "ڈیلیٹ";
+          delBtn.onclick = () => deleteRecordToTrash(r.id);
+
+          actions.append(sendBtn, editBtn, escTempBtn, escPermBtn, snoozeBtn, delBtn);
+          item.append(top, textEl, actions);
+          container.appendChild(item);
+        });
+      }
+
+      function renderHiddenSubsections() {
+        // Today's Escaped Alerts
+        const todayEscaped = records.filter((r) => r.escaped && isToday(r.escapedAt || r.createdAt));
+        el("todayEscapedCount").textContent = String(todayEscaped.length);
+        const escListEl = el("todayEscapedList");
+        escListEl.innerHTML = "";
+        if (!todayEscaped.length) {
+          escListEl.innerHTML = '<div class="status-note">آج کوئی اسکیپڈ الرٹ نہیں ہے۔</div>';
+        } else {
+          todayEscaped.forEach((r) => {
+            const row = document.createElement("div");
+            row.className = "mini-row";
+            const span = document.createElement("span");
+            span.textContent = `[${r.escapeType === "perm" ? "مستقل" : "عارضی"}] ${r.text}`;
+            const btn = document.createElement("button");
+            btn.className = "success sm";
+            btn.type = "button";
+            btn.textContent = "دوبارہ چلائیں / بحال کریں";
+            btn.onclick = () => restoreEscapedRecord(r.id);
+            row.append(span, btn);
+            escListEl.appendChild(row);
+          });
+        }
+
+        // Deleted Records (Selective / Recent restore only)
+        el("deletedCountBadge").textContent = String(deletedRecords.length);
+        const delListEl = el("deletedRecordsList");
+        delListEl.innerHTML = "";
+        if (!deletedRecords.length) {
+          delListEl.innerHTML = '<div class="status-note">کوئی ڈیلیٹڈ ریکارڈ نہیں ہے۔</div>';
+        } else {
+          deletedRecords.slice(0, 20).forEach((r) => {
+            const row = document.createElement("div");
+            row.className = "mini-row";
+            const span = document.createElement("span");
+            span.textContent = r.text;
+            const btn = document.createElement("button");
+            btn.className = "primary sm";
+            btn.type = "button";
+            btn.textContent = "بحال کریں";
+            btn.onclick = () => restoreSingleDeletedRecord(r.id);
+            row.append(span, btn);
+            delListEl.appendChild(row);
+          });
+        }
+
+        // History Records
+        el("historyCountBadge").textContent = String(historyRecords.length);
+        const histListEl = el("historyRecordsList");
+        histListEl.innerHTML = "";
+        if (!historyRecords.length) {
+          histListEl.innerHTML = '<div class="status-note">ابھی کوئی ریکارڈ NA2 ہسٹری میں درج نہیں ہوا۔</div>';
+        } else {
+          historyRecords.slice(0, 20).forEach((h) => {
+            const row = document.createElement("div");
+            row.className = "mini-row";
+            row.innerHTML = `<span>${h.text}</span><span style="color:var(--muted)">${formatTime(h.playedAt)}</span>`;
+            histListEl.appendChild(row);
+          });
+        }
+      }
+
+      function syncSettingsToInputs() {
+        el("fixTimeEnabled").checked = Boolean(settings.fixTimeEnabled);
+        el("fixTimeValue").value = settings.fixTimeValue || "09:00";
+        el("autoCheckEnabled").checked = Boolean(settings.autoCheckEnabled);
+        el("autoCheckIntervalSec").value = settings.autoCheckIntervalSec ?? 60;
+        el("catchUpMissedChecks").checked = Boolean(settings.catchUpMissedChecks);
+
+        el("autoExpireEnabled").checked = Boolean(settings.autoExpireEnabled);
+        el("autoExpireMinutes").value = settings.autoExpireMinutes ?? 120;
+        el("autoCleanEnabled").checked = Boolean(settings.autoCleanEnabled);
+        el("autoCleanScope").value = settings.autoCleanScope || "auto_only";
+        el("autoCleanAgeMinutes").value = settings.autoCleanAgeMinutes ?? 1440;
+
+        el("soundEnabled").checked = Boolean(settings.soundEnabled);
+        el("vibrationEnabled").checked = Boolean(settings.vibrationEnabled);
+        if (settings.voiceName) el("voiceSelect").value = settings.voiceName;
+        el("speechRate").value = settings.speechRate ?? 1;
+
+        el("playOrder").value = settings.playOrder || "newest";
+        el("repeatMode").value = settings.repeatMode || "loop";
+        el("pattiSpeed").value = settings.pattiSpeed ?? 80;
+        el("pattiSeconds").value = settings.pattiSeconds ?? 12;
+        el("pattiEffect").value = settings.pattiEffect || "smooth";
+        el("autoDismissSec").value = settings.autoDismissSec ?? 30;
+        el("alertPriorityEnabled").checked = Boolean(settings.alertPriorityEnabled);
+        el("snoozeMinutes").value = settings.snoozeMinutes ?? 5;
+
+        el("dashboardAutoHideEmpty").checked = Boolean(settings.dashboardAutoHideEmpty);
+        el("dashboardHighlightNew").checked = Boolean(settings.dashboardHighlightNew);
+        updateNextCheckLabel();
+      }
+
+      function readSettingsFromInputs() {
+        settings = {
+          fixTimeEnabled: el("fixTimeEnabled").checked,
+          fixTimeValue: el("fixTimeValue").value || "09:00",
+          autoCheckEnabled: el("autoCheckEnabled").checked,
+          autoCheckIntervalSec: Math.max(10, Number(el("autoCheckIntervalSec").value) || 60),
+          catchUpMissedChecks: el("catchUpMissedChecks").checked,
+          autoExpireEnabled: el("autoExpireEnabled").checked,
+          autoExpireMinutes: Math.max(1, Number(el("autoExpireMinutes").value) || 120),
+          autoCleanEnabled: el("autoCleanEnabled").checked,
+          autoCleanScope: el("autoCleanScope").value,
+          autoCleanAgeMinutes: Math.max(1, Number(el("autoCleanAgeMinutes").value) || 1440),
+          soundEnabled: el("soundEnabled").checked,
+          vibrationEnabled: el("vibrationEnabled").checked,
+          voiceName: el("voiceSelect").value,
+          speechRate: Number(el("speechRate").value) || 1,
+          playOrder: el("playOrder").value,
+          repeatMode: el("repeatMode").value,
+          pattiSpeed: Number(el("pattiSpeed").value) || 80,
+          pattiSeconds: Number(el("pattiSeconds").value) || 12,
+          pattiEffect: el("pattiEffect").value,
+          autoDismissSec: Number(el("autoDismissSec").value) || 0,
+          alertPriorityEnabled: el("alertPriorityEnabled").checked,
+          snoozeMinutes: Math.max(1, Number(el("snoozeMinutes").value) || 5),
+          dashboardAutoHideEmpty: el("dashboardAutoHideEmpty").checked,
+          dashboardHighlightNew: el("dashboardHighlightNew").checked
+        };
+      }
+
+      function startEditRecord(rec) {
+        el("editRecordId").value = rec.id;
+        el("recordType").value = rec.type;
+        el("recordPriority").value = rec.priority || "normal";
+        el("recordText").value = rec.text;
+        el("recordSource").value = rec.source || "manual";
+        el("recordScheduleTime").value = rec.scheduledAt
+          ? new Date(rec.scheduledAt - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+          : "";
+        el("formHeading").textContent = "✏️ ریکارڈ میں ترمیم";
+        el("cancelEditBtn").style.display = "inline-block";
+        el("recordText").focus();
+      }
+
+      function resetForm() {
+        el("editRecordId").value = "";
+        el("recordText").value = "";
+        el("recordScheduleTime").value = "";
+        el("formHeading").textContent = "➕ نیا نیوز یا الرٹ ریکارڈ";
+        el("cancelEditBtn").style.display = "none";
+      }
+
+      function handleSaveForm(sendToNa2After) {
+        const text = (el("recordText").value || "").trim();
+        if (!text) return;
+
+        const existingId = el("editRecordId").value;
+        const schedRaw = el("recordScheduleTime").value;
+        const scheduledAt = schedRaw ? new Date(schedRaw).getTime() : null;
+
+        let targetRec;
+        if (existingId) {
+          targetRec = records.find((r) => r.id === existingId);
+          if (targetRec) {
+            targetRec.type = el("recordType").value;
+            targetRec.priority = el("recordPriority").value;
+            targetRec.text = text;
+            targetRec.source = el("recordSource").value;
+            targetRec.scheduledAt = scheduledAt;
+            targetRec.updatedAt = Date.now();
+          }
+        }
+
+        if (!targetRec) {
+          targetRec = {
+            id: uid(),
+            type: el("recordType").value,
+            priority: el("recordPriority").value,
+            text,
+            source: el("recordSource").value,
+            scheduledAt,
+            createdAt: Date.now(),
+            escaped: false,
+            escapeType: null,
+            restored: false,
+            sentToNa2: false
+          };
+          records.unshift(targetRec);
+        }
+
+        resetForm();
+        if (sendToNa2After) {
+          sendRecordToNa2(targetRec);
+        } else {
+          saveAllState("save_record");
+          renderAll();
+        }
+      }
+
+      function renderAll() {
+        renderRecordsList();
+        renderHiddenSubsections();
+      }
+
+      // --- Event Listeners ---
+      el("toggleSettingsBtn").onclick = () => el("settingsPanel").classList.toggle("open");
+      el("closeSettingsBtn").onclick = () => el("settingsPanel").classList.remove("open");
+      el("toggleHiddenAdvancedBtn").onclick = () => el("hiddenAdvancedSection").classList.toggle("open");
+
+      el("saveSettingsBtn").onclick = () => {
+        readSettingsFromInputs();
+        saveAllState("settings_saved");
+        restartAutoCheckTimer();
+        renderAll();
+      };
+
+      el("resetSettingsBtn").onclick = () => {
+        settings = structuredClone(DEFAULT_SETTINGS);
+        syncSettingsToInputs();
+        saveAllState("settings_reset");
+        restartAutoCheckTimer();
+        renderAll();
+      };
+
+      el("runAutoCheckNowBtn").onclick = () => {
+        readSettingsFromInputs();
+        runScheduledMaintenance(true);
+      };
+
+      el("testAudioBtn").onclick = () => {
+        readSettingsFromInputs();
+        enqueueSpeech("NA1 آڈیو کیو ٹیسٹ کامیاب ہے");
+      };
+
+      el("stopAudioBtn").onclick = () => stopAllAudio();
+
+      el("resumeSnoozeNowBtn").onclick = () => {
+        if (!snoozeState) return;
+        const finished = snoozeState;
+        clearSnoozeUI();
+        const rec = records.find((x) => x.id === finished.recordId) || { text: finished.text };
+        sendRecordToNa2(rec);
+      };
+
+      el("dismissSnoozeBtn").onclick = () => clearSnoozeUI();
+
+      el("checkSyncNowBtn").onclick = () => {
+        records = loadArray(KEYS.RECORDS);
+        deletedRecords = loadArray(KEYS.DELETED);
+        historyRecords = loadArray(KEYS.HISTORY);
+        const trig = loadJSON(KEYS.LIVE_TRIGGER, {});
+        updateSyncIndicator(
+          "سنک تصدیق شدہ",
+          "ok",
+          `ریکارڈز: ${records.length} | آخری ٹرگر: ${trig.ts ? formatTime(trig.ts) : "کوئی نہیں"}`
+        );
+        renderAll();
+      };
+
+      el("openDashboardHintBtn").onclick = () => {
+        const trig = loadJSON(KEYS.LIVE_TRIGGER, {});
+        alert(
+          `NA2 ڈیش بورڈ سنک اسٹیٹس:\n` +
+          `فعال ریکارڈز: ${records.length}\n` +
+          `ہسٹری آئٹمز: ${historyRecords.length}\n` +
+          `آخری سنک ٹرگر: ${trig.ts ? formatDateShort(trig.ts) : "ابھی نہیں"}`
+        );
+      };
+
+      el("recordForm").onsubmit = (e) => {
+        e.preventDefault();
+        handleSaveForm(false);
+      };
+
+      el("saveAndSendNa2Btn").onclick = () => handleSaveForm(true);
+      el("cancelEditBtn").onclick = () => resetForm();
+
+      ["searchInput", "typeQuickFilter", "periodFilter"].forEach((id) => {
+        el(id).addEventListener("input", renderRecordsList);
+        el(id).addEventListener("change", renderRecordsList);
+      });
+
+      window.addEventListener("storage", (e) => {
+        if (!e.key) return;
+        if (e.key === KEYS.RECORDS) records = loadArray(KEYS.RECORDS);
+        if (e.key === KEYS.DELETED) deletedRecords = loadArray(KEYS.DELETED);
+        if (e.key === KEYS.HISTORY) historyRecords = loadArray(KEYS.HISTORY);
+        if (e.key === KEYS.SETTINGS) {
+          settings = loadJSON(KEYS.SETTINGS, DEFAULT_SETTINGS);
+          syncSettingsToInputs();
+        }
+        if (e.key === KEYS.LIVE_TRIGGER) {
+          const trig = loadJSON(KEYS.LIVE_TRIGGER, {});
+          updateSyncIndicator("سنک اپڈیٹ", "ok", `بیرونی اپڈیٹ: ${formatTime(trig.ts || Date.now())}`);
+        }
+        renderAll();
+      });
+
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.onvoiceschanged = populateVoices;
+      }
+
+      // Initial Boot
+      populateVoices();
+      syncSettingsToInputs();
+      restartAutoCheckTimer();
+      runScheduledMaintenance(false);
+      renderAll();
+    })();
+  </script>
 </body>
 </html>
